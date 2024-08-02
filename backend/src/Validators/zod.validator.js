@@ -26,3 +26,26 @@ export const userSchema = z.object({
   email: emailSchema,
   fullName: fullNameSchema
 });
+
+
+export const uniqueIdValidator = (userEmail)=>{
+
+    const uniqueId = emailSchema.safeParse(userEmail);
+    let query = {};
+    if(uniqueId.success){
+        query = {
+            email: uniqueId.data,
+        }
+    }
+    else{
+        query = {
+            username: userEmail
+        }
+    }
+    return query;
+}
+
+export const removePassword = (user)=> {
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}

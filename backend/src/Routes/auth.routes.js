@@ -9,6 +9,7 @@ import {
     updatePassword 
 } from '../Controllers/auth.controllers.js'; 
 import { upload } from '../Middlewares/multer.middleware.js';   
+import { isUserLoggedIn } from '../Middlewares/auth.middleware.js';
 const router = express.Router();
 
 // upload.none()
@@ -26,8 +27,8 @@ const router = express.Router();
 /*
 upload.fields([{name: "first", maxCount: 1}, {name: "second", maxCount: 1}])
 */
-router.route("/register").post(upload.none(), registerUser)
-
-
+router.route("/register").post(upload.none(), registerUser);
+router.route("/login").post(upload.none(), loginUser);
+router.route("/logout").post(isUserLoggedIn, logoutUser);
 export default router;
 
