@@ -1,7 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
-import { ApiResponse } from './Utils/apiResponse.js';
+import ApiResponse from './Utils/apiResponse.js';
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use((err, req, res, next)=>{
     res
     .status(err.statusCode||500)
     .json(
-        new ApiResponse(err.statusCode||400, err.message||"something went wrong", null)
+        new ApiResponse(err.statusCode||400, err.message||"something went wrong", err)
     );
 });
 export default app;
