@@ -1,12 +1,20 @@
-
-import { networkInterfaces } from "os";
 import User from "../Models/user.model.js";
-import { generateAccessAndRefreshToken, options } from "../Tokens/loginTokens.js";
+import { 
+    generateAccessAndRefreshToken, 
+    options 
+} from "../Tokens/loginTokens.js";
 import apiError from "../Utils/apiError.js";
 import ApiError  from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
-import { asyncHandler } from "../Utils/asyncHandler.js";
-import { emailSchema, passwordSchema, removePassword, uniqueIdValidator, userSchema } from "../Validators/zod.validator.js";
+import { 
+    asyncHandler 
+} from "../Utils/asyncHandler.js";
+import { 
+    emailSchema, 
+    passwordSchema, 
+    uniqueIdValidator, 
+    userSchema 
+} from "../Validators/zod.validator.js";
 import jwt from 'jsonwebtoken'
 
 
@@ -114,7 +122,6 @@ export const logoutUser = asyncHandler(async (req, res, next)=>{
 })
 
 export   const resetPassword = asyncHandler(async (req, res, next)=>{
-
 })
 
 export const updatePassword = asyncHandler(async (req, res, next)=>{
@@ -135,7 +142,7 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
         }
 
         currentUser.password = newPassword;
-        currentUser
+        await currentUser
             .save()
             .then((savedUser)=>{
                 res
@@ -151,8 +158,8 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
 })
 
 export const googleLogin = asyncHandler(async (req, res)=>{
-
 })
+
 export const deleteUser = asyncHandler(async (req, res)=>{
     try {
         await User
