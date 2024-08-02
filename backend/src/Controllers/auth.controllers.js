@@ -41,6 +41,7 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
 export const loginUser = asyncHandler(async (req, res, next)=>{
     const {userEmail, password: pass} = req.body;
     
@@ -81,6 +82,7 @@ export const loginUser = asyncHandler(async (req, res, next)=>{
     }
 
 })
+
 export const logoutUser = asyncHandler(async (req, res, next)=>{
     try {
         const currentUser = await User
@@ -107,6 +109,7 @@ export const logoutUser = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
 export   const resetPassword = asyncHandler(async (req, res)=>{
 
 })
