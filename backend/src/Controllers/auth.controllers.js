@@ -1,12 +1,15 @@
 
+import { networkInterfaces } from "os";
 import User from "../Models/user.model.js";
 import { generateAccessAndRefreshToken, options } from "../Tokens/loginTokens.js";
 import apiError from "../Utils/apiError.js";
 import ApiError  from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
-import { emailSchema, removePassword, uniqueIdValidator, userSchema } from "../Validators/zod.validator.js";
+import { emailSchema, passwordSchema, removePassword, uniqueIdValidator, userSchema } from "../Validators/zod.validator.js";
 import jwt from 'jsonwebtoken'
+
+
 export const registerUser = asyncHandler(async (req, res, next)=>{
     const {username, email, fullName, password, isAdmin} = req.body;
     const userData = [username, email, fullName, password];
@@ -110,11 +113,40 @@ export const logoutUser = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export   const resetPassword = asyncHandler(async (req, res)=>{
+export   const resetPassword = asyncHandler(async (req, res, next)=>{
 
 })
-export const updatePassword = asyncHandler(async (req, res)=>{
+export const updatePassword = asyncHandler(async (req, res, next)=>{
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    try {        
+        if(newPassword !== confirmPassword){
+            throw new apiError(404, "password didn't match");
+        }
+        
+        const result = passwordSchema.safeParse(newPassword);
+        if(!result.success){        
+            throw new apiError(406, result?.error?.errors[0]?.message)
+        }
+        
+        const currentUser = await User.findById(req.user?._id);
+        if(!currentUser.isPasswordCorrect(oldPassword)){
+            throw new apiError(404, "old password is wrong")
+        }
 
+        currentUser.password = newPassword;
+        currentUser
+            .save()
+            .then((savedUser)=>{
+                res
+                    .status(200)
+                    .json(
+                        new apiResponse(200, "password changed successfully!", savedUser)
+                    )
+            })
+            .catch(err=>next(err));
+    } catch (error) {
+        next(error)
+    }
 })
 export const googleLogin = asyncHandler(async (req, res)=>{
 
