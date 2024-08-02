@@ -14,9 +14,10 @@ app.use(cors({
 app.use(cookieParser());
 
 import authRouter from './Routes/auth.routes.js';
+import postRouter from './Routes/posts.routes.js';
 
 app.use('/api/v1/auth', authRouter);
-
+app.use('/api/v1/posts', postRouter)
 
 app.use((err, req, res, next)=>{
     res
