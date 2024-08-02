@@ -116,6 +116,7 @@ export const logoutUser = asyncHandler(async (req, res, next)=>{
 export   const resetPassword = asyncHandler(async (req, res, next)=>{
 
 })
+
 export const updatePassword = asyncHandler(async (req, res, next)=>{
     const { oldPassword, newPassword, confirmPassword } = req.body;
     try {        
@@ -148,9 +149,26 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
 export const googleLogin = asyncHandler(async (req, res)=>{
 
 })
 export const deleteUser = asyncHandler(async (req, res)=>{
+    try {
+        await User
+            .findByIdAndDelete(req.user?._id)
+            .then(()=>{
+                res
+                    .status(200)
+                    .clearCookie("accessToken", options)
+                    .clearCookie("refreshToken", options)
+                    .json(
+                        new apiResponse(200, "user deleted successfully.")
+                    )
+            })
+            .catch(err=>next(err))
 
+    } catch (error) {
+        next(error)
+    }
 })

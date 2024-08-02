@@ -31,7 +31,7 @@ router.route("/register").post(upload.none(), registerUser);
 router.route("/login").post(upload.none(), loginUser);
 router.route("/logout").post(isUserLoggedIn, logoutUser);
 router.route("/update-password").patch( upload.none(), isUserLoggedIn, updatePassword);
-
+router.route("/delete-user").delete(isUserLoggedIn, deleteUser);
 
 export default router;
 
