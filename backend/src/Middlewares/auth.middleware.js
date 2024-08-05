@@ -6,7 +6,7 @@ export const isUserLoggedIn = asyncHandler(async (req, res, next)=>{
     try {
         const { accessToken } = req.cookies;
         if(!accessToken){
-            throw new apiError(404, "access token is expired");
+            throw new apiError(404, "access token is expired, please login again.");
         }
         
         const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);

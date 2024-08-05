@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema({
         url: { 
             type: String 
         },
-        caption: { 
+        original_filename: { 
             type: String 
         }
       }],
@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema({
       url: {
           type: String,
       }, 
-      caption: {
+      original_filename: {
           type: String,
       }
     }]

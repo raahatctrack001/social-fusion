@@ -58,9 +58,10 @@ export const loginUser = asyncHandler(async (req, res, next)=>{
     
     try {
         const query = uniqueIdValidator(userEmail);
-        User
-            .findOne(query)
-            .then((user)=>{
+        await User
+        .findOne(query)
+        // .select("-password -refreshToken")
+        .then((user)=>{
                 if(user){
                     if(!user.isPasswordCorrect(pass)){
                         throw new apiError(403, "password didn't matched!")
@@ -69,16 +70,18 @@ export const loginUser = asyncHandler(async (req, res, next)=>{
                     generateAccessAndRefreshToken(user)
                        .then((tokens)=>{
                             const { accessToken, refreshToken } = tokens;
+                            // const {password, refreshToken, ...rest} = user;
+                            // console.log(password)
                             const userData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
                             const {iat, exp, ...rest} = userData;
                             res
-                                .status(202)
-                                .cookie('accessToken', accessToken, options)
-                                .cookie('refreshToken', refreshToken, options)
-                                .json(
-                                    new apiResponse(202, "user logged in", rest)
-                                )                        
-                       })
+                            .status(202)
+                            .cookie('accessToken', accessToken, options)
+                            .cookie('refreshToken', refreshToken, options)
+                            .json(
+                                new apiResponse(202, "user logged in", rest)
+                            )                        
+                        })
                        .catch(err=>next(err))
                 }
                 else{
