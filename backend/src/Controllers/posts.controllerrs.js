@@ -1,4 +1,4 @@
-import { error } from "console";
+
 import Post from "../Models/post.model.js"
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
@@ -86,6 +86,7 @@ export const getPost = asyncHandler(async (req, res, next)=>{
         next(error);
     }
 })
+
 export const deletePost = asyncHandler(async (req, res, next)=>{
 
     try {
@@ -115,5 +116,5 @@ export const deletePost = asyncHandler(async (req, res, next)=>{
 })
 
 export const editPost = asyncHandler(async(req, res, next)=>{
-
+    
 })
