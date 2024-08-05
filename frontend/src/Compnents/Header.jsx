@@ -31,9 +31,6 @@ const Header = () => {
                 <Button gradientDuoTone="purpleToBlue" className='flex justify-center items-center'> <HiLogin /> </Button>
             </div>
         </div>
-
-
-
     </div>
   )
 }
