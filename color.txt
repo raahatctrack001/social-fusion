@@ -1,0 +1,26 @@
+Sure! Here are concise statements for using colors in various components of your dark theme:
+
+1. **Background**:
+   - Use `bg-gray-900` for the main background color.
+
+2. **Header**:
+   - Use `bg-blue-900` for the header background.
+   - Use `text-gray-100` for the header text.
+
+3. **Main Content**:
+   - Use `bg-gray-800` for article backgrounds.
+   - Use `text-gray-300` for the main text within articles.
+
+4. **Article Headings**:
+   - Use `text-blue-400` for headings related to serenity and trust.
+   - Use `text-pink-400` for headings related to love and care.
+   - Use `text-teal-400` for headings related to happiness and harmony.
+
+5. **Footer**:
+   - Use `bg-gray-800` for the footer background.
+   - Use `text-gray-400` for the footer text.
+
+6. **General Text**:
+   - Use `text-gray-100` for general text to maintain readability.
+
+These guidelines ensure that your components maintain a coherent and visually appealing dark theme while representing serenity, peace, love, care, trust, and happiness.
