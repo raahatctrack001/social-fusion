@@ -43,7 +43,7 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
                 res
                     .status(201)
                     .json(
-                        new apiResponse(201, "new user created", newUser)
+                        new apiResponse(201, `welcome hoooooomannnnnn!!! ${newUser.fullName}`, newUser)
                     )
                 })
             .catch(error=>next(error))

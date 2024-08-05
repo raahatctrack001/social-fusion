@@ -1,3 +1,4 @@
+import { error } from "console";
 import Post from "../Models/post.model.js"
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
@@ -49,11 +50,15 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
     try {        
         await Post
             .find({})
+            .populate("author")
             .then((posts)=>{
+                if(!posts){
+                    throw new apiError(404, "posts doesn't exist!")
+                }
                 res
                     .status(200)
                     .json(
-                        new apiResponse(200, "posts fetched!, Populating", posts)
+                        new apiResponse(200, "posts fetched!, Populating", {posts, "posts length": posts.length})
                     )
             })
             .catch(error=>next(error));
@@ -62,6 +67,53 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
     }
 })
 
+export const getPost = asyncHandler(async (req, res, next)=>{
+    try {
+        await Post
+            .findById(req.params?.postId)
+            .then((post)=>{
+                if(!post){
+                    throw new apiError(404, "post doesn't exists!")
+                }
+                return res
+                        .status(200)
+                        .json(
+                            new apiResponse(200, "post fetched!", post)
+                        )
+            })
+            .catch(error=>next(error))
+    } catch (error) {
+        next(error);
+    }
+})
 export const deletePost = asyncHandler(async (req, res, next)=>{
-    console.log(req.user);
+
+    try {
+        const postToDelete = await Post.findById(req.params?.postId).populate("author")
+        if(!postToDelete){
+            throw new apiError(404, "post to be deleted doesn't exist");
+        }
+        if(req.user?._id != postToDelete?.author?._id){
+            throw new apiError(401, "Unauthorized Attempt!, You can only delete you own post")
+        }
+        await Post
+            .findByIdAndDelete(req.params?.postId)
+            .then((post)=>{
+                res
+                    .status(200)
+                    .json(
+                        new apiResponse(200,  `post with title "${post.title}" is deleted`, post)
+                    )
+
+            })
+            .catch(error=>next(error))
+
+    } catch (error) {
+        next(error)
+    }
+
+})
+
+export const editPost = asyncHandler(async(req, res, next)=>{
+
 })
