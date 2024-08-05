@@ -14,7 +14,7 @@ import {
     passwordSchema, 
     uniqueIdValidator, 
     userSchema 
-} from "../Validators/zod.validator.js";
+} from "../Validators/user.validator.js";
 import jwt from 'jsonwebtoken'
 
 
