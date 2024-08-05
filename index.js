@@ -1,7 +1,7 @@
 import express from 'express'
-import app from './src/app.js';
+import app from './backend/src/app.js';
 import dotenv from 'dotenv'
-import { databaseConnection } from './src/Databases/mongodb.connection.js';
+import { databaseConnection } from './backend/src/Databases/mongodb.connection.js';
 
 dotenv.config({path: './.env'})
 

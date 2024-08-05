@@ -26,16 +26,17 @@ const postSchema = new mongoose.Schema({
             type: String 
         }
       }],
-      videoURLs: [{
-        url: {
-            type: String,
-        }, 
-        caption: {
-            type: String,
-        }
-      }]
+    videoURLs: [{
+      url: {
+          type: String,
+      }, 
+      caption: {
+          type: String,
+      }
+    }]
 
 },
 { timestamps: true })
 
-export default Post = new mongoose.model("Post", postSchema);
+const Post = new mongoose.model("Post", postSchema);
+export default Post
