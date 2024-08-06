@@ -5,7 +5,8 @@ import {
     deletePost, 
     editPost, 
     getPost, 
-    getPosts 
+    getPosts, 
+    likePost
 } from "../Controllers/posts.controllerrs.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 
@@ -17,6 +18,6 @@ router.route("/get-posts").get(getPosts);
 router.route("/get-post/:postId").get(getPost);
 router.route("/delete-post/:postId").delete(isUserLoggedIn, deletePost);
 router.route("/edit-post/:postId").put(upload.any(), isUserLoggedIn, editPost);
-
+router.route("/like-post/:postId/:userId").post(isUserLoggedIn, likePost);
 
 export default router;

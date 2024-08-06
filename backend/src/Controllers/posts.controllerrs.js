@@ -1,4 +1,3 @@
-
 import Post from "../Models/post.model.js"
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
@@ -112,6 +111,34 @@ export const deletePost = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 
+})
+
+export const likePost = asyncHandler(async(req, res, next)=>{
+    const { userId, postId } = req.params;
+
+    try {
+        const currentPost = await Post.findById(postId);
+        if(!currentPost){
+            throw new apiError(404, "post doesn't exist");
+        }
+        const likes = currentPost.likes;
+        const index = likes.findIndex(item => item._id == userId);
+        if (index != -1) {
+            likes.splice(index, 1);
+        }
+        else{
+            likes.push(userId)
+        }
+        currentPost.save();
+        console.log('reached at the end')
+        res
+            .status(200)
+            .json(
+                new apiResponse(200, "post liked", currentPost)
+            )
+    } catch (error) {
+        next(error)
+    }
 })
 
 export const editPost = asyncHandler(async(req, res, next)=>{
