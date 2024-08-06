@@ -24,13 +24,11 @@ export const createPost = asyncHandler(async (req, res, next)=>{
         }   
 
         fileURLs.forEach(file=>console.log("files", file))
-
-        // return;/
         await Post.create({
             title,
             content,
             imagesURLs: fileURLs,
-            author: req.user
+            author: req.user?._id
         })
         .then((post)=>{
             res
@@ -50,9 +48,9 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
     try {        
         await Post
             .find({})
-            .populate("author")
+            .populate("author") //fix this ... password and refresh token is getting exposed!
             .then((posts)=>{
-                if(!posts){
+                if(posts.length == 0){
                     throw new apiError(404, "posts doesn't exist!")
                 }
                 res
@@ -71,6 +69,7 @@ export const getPost = asyncHandler(async (req, res, next)=>{
     try {
         await Post
             .findById(req.params?.postId)
+            .populate("comments")
             .then((post)=>{
                 if(!post){
                     throw new apiError(404, "post doesn't exists!")

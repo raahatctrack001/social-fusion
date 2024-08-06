@@ -6,5 +6,6 @@ export const databaseConnection = async ()=>{
         return connectionInstance;
     } catch (error) {
         console.log("mongodb connection error ", error);
+        setTimeout(databaseConnection, 5000);
     }
 }

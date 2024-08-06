@@ -13,11 +13,15 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
+
+
 import authRouter from './Routes/auth.routes.js';
 import postRouter from './Routes/posts.routes.js';
+import commentRouter from './Routes/comment.routes.js';
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter)
+app.use('/api/v1/comments', commentRouter)
 
 app.use((err, req, res, next)=>{
     res

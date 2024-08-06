@@ -35,7 +35,7 @@ export function FooterComp() {
           </div>
           <div className="">
           <Footer.Title title="Feedback" />
-          <div className="flex flex-col gap-2 p-3 rounded-lg border-2">
+          <form className="flex flex-col gap-2 p-3 rounded-lg border-2">
             <TextInput
                 icon={HiOutlineMail}
                 placeholder="your email or phone"
@@ -44,7 +44,7 @@ export function FooterComp() {
               placeholder="write your complain/concern"
              />
             <Button> send feedback </Button>
-          </div>
+          </form>
           </div>
         </div>
         <div className="w-full bg-gray-700 px-4 py-6 sm:flex sm:items-center sm:justify-between">
