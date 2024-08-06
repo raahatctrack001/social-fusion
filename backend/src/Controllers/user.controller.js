@@ -1,12 +1,36 @@
+import { createSecureContext } from "tls";
 import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
+import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 import { emailSchema, userSchema } from "../Validators/user.validator.js";
 import bcryptjs from 'bcryptjs'
 
 export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
-    console.log(req.files)
+    
+    try {
+        const response = await uploadOnCloudinary(req.file?.path)
+        if(!response){
+            throw new apiError(500, "failed to update profile")
+        }
+
+        const currentUser = await User.findById(req.params?.userId)
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist");
+        }
+
+        currentUser.profilePic = response.url;
+        currentUser.save();
+        res
+            .status(200)
+            .json(
+                new apiResponse(200, "profile picture updated!", currentUser)
+            )
+
+    } catch (error) {
+        next(error)
+    }
 })
 
 export const updateUser = asyncHandler(async (req, res, next)=>{
