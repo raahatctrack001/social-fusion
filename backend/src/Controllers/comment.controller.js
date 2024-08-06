@@ -62,13 +62,44 @@ export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
             .populate(["author parent"])
             .populate("replies")
             .then((comments)=>{
+                if(!comments){
+                    throw new apiError(404, "comment doesn't exist! ")
+                }
+
                 res.status(200).json(new apiResponse(200, "comments fetched", comments))
             })
 
 })
 
 export const deleteComment = asyncHandler(async (req, res, next)=>{
-    res.status(200).json({message: "we are ready delete comments!"})
+    const { commentId } = req.params;
+    const { _id : userId } = req.user;
+
+    try {
+        await Comment
+            .findById(commentId)
+            .then((comment)=>{
+                if(!comment){
+                    throw new apiError(404, "Comment doesn't exist");
+                }
+
+                if(userId != comment.author){
+                    throw new apiResponse(401, "unauthorized attempt, you can delete only your own comment")
+                }
+
+                Comment
+                    .findByIdAndDelete(commentId)
+                    .then((deletedComment)=>{
+                        res.status(200).json(
+                            new apiResponse(200, "comment deleted", deletedComment)
+                        )
+                    })
+
+            }) 
+    } catch (error) {
+        next(error);
+    }
+
 
 })
 
@@ -78,6 +109,6 @@ export const updateComment = asyncHandler(async (req, res, next)=>{
 })
 
 export const likeComment = asyncHandler(async (req, res, next)=>{
-    res.status(200).json({message: "we are ready like the comments!"})
+    
 
 })
