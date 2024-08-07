@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Home from "./Pages/Home"
 import Register from "./Pages/Register"
 import SignIn from "./Pages/SignIn"
-import Header from "./Compnents/Header"
 import { FooterComp } from "./Compnents/FooterComp"
+import { Header } from "./Compnents/Header"
 
 function App() {
   return   <BrowserRouter>
