@@ -1,29 +1,37 @@
 import React from 'react';
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-      <img
-        className="w-full"
-        src="https://via.placeholder.com/400x200"
-        alt="Card image"
-      />
+    <div className="min-w-96 md:min-w-52 rounded-2xl overflow-hidden shadow-lg bg-slate-300">
+      <div className="flex items-center p-4">
+      </div>
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">Card Title</div>
+        <div className="font-bold text-xl mb-2">{post.title}</div>
         <p className="text-gray-700 text-base">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque risus mi, tempus quis placerat ut, porta nec nulla.
+          {post.content}
         </p>
       </div>
-      <div className="px-6 py-4 flex items-center">
-        <img
-          className="w-10 h-10 rounded-full mr-4"
-          src="https://via.placeholder.com/150"
-          alt="Author"
-        />
-        <div className="text-sm">
-          <p className="text-gray-900 leading-none">Author Name</p>
-          <p className="text-gray-600">Author Title</p>
+      <div className="px-6 pt-4 pb-2">
+      <div className='flex justify-between'>
+        <div className='order-1'>
+          <img className="w-12 h-12 rounded-full mr-4" src={post.author.photo} alt="Author" />
+          <div className="text-sm">
+            <p className="text-gray-900 leading-none font-bold">{post.author.name}</p>
+            <p className="text-gray-600">{post.author.username}</p>
+          </div>
         </div>
+
+        <div>
+          {post.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </div>
       </div>
     </div>
   );

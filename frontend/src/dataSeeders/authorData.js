@@ -1,0 +1,73 @@
+const authors = [
+    {
+      name: 'Jane Smith',
+      photo: 'https://randomuser.me/api/portraits/women/1.jpg',
+      bio: 'Enthusiastic tech blogger and software engineer.',
+      twitter: 'https://twitter.com/janesmith',
+      linkedin: 'https://linkedin.com/in/janesmith',
+    },
+    {
+      name: 'Michael Johnson',
+      photo: 'https://randomuser.me/api/portraits/men/1.jpg',
+      bio: 'Full-stack developer and open-source enthusiast.',
+      twitter: 'https://twitter.com/michaeljohnson',
+      linkedin: 'https://linkedin.com/in/michaeljohnson',
+    },
+    {
+      name: 'Emily Davis',
+      photo: 'https://randomuser.me/api/portraits/women/2.jpg',
+      bio: 'Creative designer and front-end developer.',
+      twitter: 'https://twitter.com/emilydavis',
+      linkedin: 'https://linkedin.com/in/emilydavis',
+    },
+    {
+      name: 'David Wilson',
+      photo: 'https://randomuser.me/api/portraits/men/2.jpg',
+      bio: 'Data scientist with a love for machine learning.',
+      twitter: 'https://twitter.com/davidwilson',
+      linkedin: 'https://linkedin.com/in/davidwilson',
+    },
+    {
+      name: 'Sophia Martinez',
+      photo: 'https://randomuser.me/api/portraits/women/3.jpg',
+      bio: 'Passionate about AI and natural language processing.',
+      twitter: 'https://twitter.com/sophiamartinez',
+      linkedin: 'https://linkedin.com/in/sophiamartinez',
+    },
+    {
+      name: 'James Anderson',
+      photo: 'https://randomuser.me/api/portraits/men/3.jpg',
+      bio: 'Back-end developer and database specialist.',
+      twitter: 'https://twitter.com/jamesanderson',
+      linkedin: 'https://linkedin.com/in/jamesanderson',
+    },
+    {
+      name: 'Olivia Brown',
+      photo: 'https://randomuser.me/api/portraits/women/4.jpg',
+      bio: 'UI/UX designer with a focus on user experience.',
+      twitter: 'https://twitter.com/oliviabrown',
+      linkedin: 'https://linkedin.com/in/oliviabrown',
+    },
+    {
+      name: 'Christopher Lee',
+      photo: 'https://randomuser.me/api/portraits/men/4.jpg',
+      bio: 'Mobile app developer and technology enthusiast.',
+      twitter: 'https://twitter.com/christopherlee',
+      linkedin: 'https://linkedin.com/in/christopherlee',
+    },
+    {
+      name: 'Amelia Taylor',
+      photo: 'https://randomuser.me/api/portraits/women/5.jpg',
+      bio: 'Tech writer and blockchain advocate.',
+      twitter: 'https://twitter.com/ameliataylor',
+      linkedin: 'https://linkedin.com/in/ameliataylor',
+    },
+    {
+      name: 'Daniel Harris',
+      photo: 'https://randomuser.me/api/portraits/men/5.jpg',
+      bio: 'Cybersecurity expert and ethical hacker.',
+      twitter: 'https://twitter.com/danielharris',
+      linkedin: 'https://linkedin.com/in/danielharris',
+    },
+  ];
+  export default authors

@@ -3,7 +3,7 @@ import { HiArrowSmUp, HiDocumentSearch, HiLogin, HiOutlineDocumentSearch, HiOutl
 
 export function Header() {
   return (
-    <Navbar fluid rounded>
+    <Navbar fluid rounded className="border-b-4 border-b-gray-600">
       <Navbar.Brand href="">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
         <div className="border-2 border-teal-600 p-1 rounded-lg">          
@@ -19,7 +19,7 @@ export function Header() {
         />
       </form>
 
-      <div className="flex md:order-2 gap-2">        
+      <div className="flex md:order-2 gap-2 pl-1">        
         <Button> <span className="flex justify-center items-center pr-1"> <HiSun /> </span> </Button>
         <Button > <span className="flex justify-center items-center pr-1"> <HiLogin /> </span>  Sign In </Button>
         <Navbar.Toggle />
