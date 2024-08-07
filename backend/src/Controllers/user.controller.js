@@ -136,3 +136,47 @@ export const deleteUser = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
+export const followUnfollow = asyncHandler(async (req, res, next)=>{
+
+    // followerId: one who is following someone
+    // followingId: one who is followed by follower
+
+    const { followerId, followingId } = req.params;
+    try {
+        const follower = await User.findById(followerId);
+        const following = await User.findById(followingId);
+        const indexOfFollower = follower.followings.indexOf(following?._id)
+        const indexOfFollowing = following.followers.indexOf(follower?._id);
+
+
+        if(indexOfFollowing != -1){
+            follower.followings.splice(indexOfFollower, 1);
+            following.followers.splice(indexOfFollowing, 1);
+        }
+        else{
+            follower.followings.push(following?._id);
+            following.followers.push(follower?._id);
+        }
+        // console.log(indexOfFollower);
+        // console.log(indexOfFollowing);
+        
+        // return;
+        // follower.followings.push(following);
+        // following.followers.push(follower);
+        follower.save();
+        following.save();
+        return res.status(200).json(
+            new apiResponse(200, `${follower.fullName} followed ${following.fullName}`, {
+                "follower: ": follower,
+                "follwing: ": following
+            })
+        )
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const unfollow = asyncHandler(async (req, res, next)=>{
+
+})

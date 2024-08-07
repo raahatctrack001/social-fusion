@@ -1,7 +1,8 @@
 import express from 'express'
 import { isUserLoggedIn } from '../Middlewares/auth.middleware.js';
 import {
-    deleteUser, 
+    deleteUser,
+    followUnfollow, 
     getUser, 
     getUsers, 
     updateUser, 
@@ -16,6 +17,6 @@ router.route('/update-user/:userId').patch(isUserLoggedIn, upload.none(), update
 router.route('/get-users').get(isUserLoggedIn, getUsers);
 router.route('/get-user/:userId').get(isUserLoggedIn, getUser)
 router.route('/delete-user/:userId').delete(isUserLoggedIn, deleteUser);
-
+router.route('/follow/:followerId/:followingId').post(isUserLoggedIn, followUnfollow)
 
 export default router;

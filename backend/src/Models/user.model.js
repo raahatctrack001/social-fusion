@@ -30,6 +30,14 @@ const userSchema = mongoose.Schema({
         trim: true,
         default: "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"
     },
+    followers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    followings: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
     refreshToken: {
         type: String,
         default: "",
