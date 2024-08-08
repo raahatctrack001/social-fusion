@@ -18,7 +18,7 @@ const Home = () => {
       })
       .then((data)=>{
         const fetchedData = data.data;
-        // console.log("fetched data: ", fetchedData); 
+        console.log("fetched post"); 
         setPostData(fetchedData)
       })
       .catch((err)=>{
@@ -37,7 +37,8 @@ const Home = () => {
         return users.json();
       })
       .then((data)=>{
-        console.log(data);
+        console.log("fetched user")
+        // console.log(data);
         setUsers(data.data);
       })
       .catch((error)=>{
