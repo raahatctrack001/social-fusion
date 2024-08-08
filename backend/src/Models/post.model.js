@@ -3,7 +3,7 @@ const postSchema = new mongoose.Schema({
     title: {
         type: String,
         require: true,
-        unique: true,
+        unique: false,
         trim: true
     },
     content: {

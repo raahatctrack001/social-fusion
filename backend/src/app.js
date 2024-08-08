@@ -13,17 +13,17 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-
-
 import authRouter from './Routes/auth.routes.js';
 import postRouter from './Routes/posts.routes.js';
 import commentRouter from './Routes/comment.routes.js';
 import userRouter from './Routes/user.route.js';
+import dataSeederRouter from './Routes/data.seeder.js';
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter)
 app.use('/api/v1/comments', commentRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/data', dataSeederRouter)
 
 app.use((err, req, res, next)=>{
     res

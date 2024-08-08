@@ -1,39 +1,44 @@
+import { Button } from 'flowbite-react';
 import React from 'react';
+import { HiBookmark, HiChat, HiHeart, HiSearch, HiShare, HiUserAdd } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
+import { users } from '../dataSeeders/author50';
 
 const PostCard = ({ post }) => {
-  return (
-    <div className="min-w-full md:min-w-52 rounded-2xl overflow-hidden shadow-lg hover:bg-slate-300 hover:shadow-gray-400">
-      <div className="flex items-center p-4">
-      </div>
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{post.title}</div>
-        <p className="text-gray-700 text-base">
-          {post.content}
-        </p>
-      </div>
-      <div className="px-6 pt-4 pb-2">
-      <div className='flex justify-between'>
-        <div className='order-1'>
-          <img className="w-12 h-12 rounded-full mr-4" src={post.author.photo} alt="Author" />
-          <div className="text-sm">
-            <p className="text-gray-900 leading-none font-bold">{post.author.name}</p>
-            <p className="text-gray-600">{post.author.username}</p>
+  const author = users.find(user=>user?.username === post.author)
+  console.log("from postcard", author)
+  return (   
+      <div className='p-1 border-2 border-gray-800 rounded-xl max-w-80 min-h-72 bg-gray-300'>
+        <div className='flex justify-between'>
+          <Link to={'#'} className='flex items-center gap-2'>
+            <img className='h-8 rounded-full' src={author?.profilePic || post.author} alt="" />
+            <p className='text-xs font-semibold'> {author?.username ||post.username} </p>
+          </Link>
+          <Button outline pill> <HiUserAdd /> </Button>
+        </div>
+        <hr className='mt-2 border-gray-800'/>
+
+        <img src={"https://images.squarespace-cdn.com/content/v1/57263bf8f8baf385ff61bb09/1535668320137-NZQPOXCGLFT34I9E4Z1E/Screen+Shot+2018-08-30+at+6.17.10+PM.png"} alt="" />
+        
+        <div>
+          <p className='font-semibold md:text-sm font-serif'> {post.title} </p>
+          <p className='text-sm'> {post.content.substr(0,70)} <Link className='text-blue-400'> ...read more</Link>  </p>
+        </div>
+        
+        <div className='flex justify-between items-center mt-5 px-3'>  
+          <div className='flex items-center gap-3'>
+            <span className='hover:text-white'> <HiHeart /> </span>
+            <span className='hover:text-white'> <HiChat /> </span>
+            <span className='hover:text-white'> <HiShare /> </span>            
+
+          </div>
+          <div>
+            <span className='hover:text-gray-100'> <HiBookmark /> </span>
           </div>
         </div>
 
-        <div>
-          {post.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
       </div>
-      </div>
-    </div>
+      
   );
 };
 

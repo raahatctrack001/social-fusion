@@ -1,17 +1,21 @@
+import { Button } from 'flowbite-react';
 import React from 'react';
+import { HiUserAdd } from 'react-icons/hi';
 
 const AuthorCard = ({ author }) => {
   return (
-    <div className="min-w-56 rounded-3xl overflow-hidden shadow-lg p-4 shadow-lg hover:bg-slate-300 hover:shadow-gray-400 flex flex-col flex-nowrap">
-      <img className="w-32 h-32 rounded-full mx-auto" src={author.photo} alt={`${author.name} photo`} />
-      <div className="text-center mt-4">
-        <h2 className="text-xl font-semibold">{author.name}</h2>
-        <p className="text-gray-600">{author.bio}</p>
+    <div className='flex justify-between items-center gap-2 border-2 border-gray-500 p-1 rounded-xl min-w-64 max-w-96'>
+      <div className='flex justify-center items-center gap-5'>
+        <img className='rounded-full h-10' src={author.profilePic} alt="author's photo"/>
+        <div className='flex flex-col text-sm'>
+          <p> {author.fullName} </p>
+          <p> {author.username} </p>
+        </div>
       </div>
-      <div className="flex justify-center mt-4">
-        <a href={author.twitter} className="text-blue-500 hover:underline mx-2">Twitter</a>
-        <a href={author.linkedin} className="text-blue-500 hover:underline mx-2">LinkedIn</a>
-      </div>
+      <Button outline className='bg-gray-800 '> 
+        <span className='flex justify-center items-center'> <HiUserAdd /> </span>
+        <span className='hidden md:inline'> Follow </span>
+      </Button>
     </div>
   );
 };
