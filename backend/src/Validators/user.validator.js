@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const usernameSchema = z.string()
   .min(8, { message: "Username must be at least 8 characters long" })
-  .regex(/^[^A-Z]*$/, { message: "Username must not contain capital letters" });
+  .regex(/!@#$%^&*(),.?":{}|/, { message: "Username must not contain capital letters" });
 
 export const passwordSchema = z.string()
   .min(8, { message: "Password must be at least 8 characters long" })

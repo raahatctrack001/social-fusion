@@ -8,7 +8,7 @@ const PostCard = ({ post }) => {
   const { author } = post;
   // console.log(author)
   return (   
-      <div className='p-1 border-2 border-gray-800 rounded-xl max-w-80 min-h-72 bg-gray-300'>
+      <div className='p-1 border-2 border-gray-800 rounded-xl max-w-80 min-h-72  bg-gray-300'>
         <div className='flex justify-between'>
           <Link to={'#'} className='flex items-center gap-2'>
             <img className='h-8 rounded-full' src={author?.profilePic } alt="" />
@@ -18,7 +18,7 @@ const PostCard = ({ post }) => {
         </div>
         <hr className='mt-2 border-gray-800'/>
 
-        <img src={post?.imagesURLs[0]?.url || "https://images.squarespace-cdn.com/content/v1/57263bf8f8baf385ff61bb09/1535668320137-NZQPOXCGLFT34I9E4Z1E/Screen+Shot+2018-08-30+at+6.17.10+PM.png"} alt="" />
+        <img className='max-h-28 w-full flex justify-center items-center' src={post?.imagesURLs[0]?.url || "https://images.squarespace-cdn.com/content/v1/57263bf8f8baf385ff61bb09/1535668320137-NZQPOXCGLFT34I9E4Z1E/Screen+Shot+2018-08-30+at+6.17.10+PM.png"} alt="" />
         
         <div>
           <p className='font-semibold md:text-sm font-serif'> {post.title} </p>

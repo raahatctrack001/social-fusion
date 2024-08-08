@@ -8,7 +8,7 @@ export default function Header() {
   const path = useLocation().pathname;
   
   return (
-    <Navbar fluid rounded className="lg:px-10 border-b-2">
+    <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-10">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
         <span className="self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold border-x-2 border-x-gray-900 p-2 rounded-2xl text-gray-900">Soul Echo</span>
@@ -38,13 +38,13 @@ export default function Header() {
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}
       <Navbar.Collapse className="">
-          <Navbar.Link className="" href="#" active = {path === '/'} >
+          <Navbar.Link className="" href="/" active = {path === '/'} >
             Home
           </Navbar.Link>
-          <Navbar.Link className="" href="/about" active = {path === '/'} >About</Navbar.Link>
+          <Navbar.Link className="" href="/about" active = {path === '/about'} >About</Navbar.Link>
           <Navbar.Link className="" href="/services" active = {path === '/services'} >Services</Navbar.Link>
           <Navbar.Link className="" href="/prices" active = {path === '/prices'} >Pricing</Navbar.Link>
-          <Navbar.Link className="" href="contacts" active = {path === '/conta'} >Contact</Navbar.Link>
+          <Navbar.Link className="" href="/contacts" active = {path === '/contacts'} >Contact</Navbar.Link>
       </Navbar.Collapse>
         {/* </div> */}
     </Navbar>
