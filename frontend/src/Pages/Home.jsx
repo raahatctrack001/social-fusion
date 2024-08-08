@@ -3,19 +3,15 @@ import PostCard from '../Compnents/PostCard'
 import AuthorCard from '../Compnents/AuthorCard'
 import authorData from '../dataSeeders/authorData'
 import { shuffle } from 'lodash'
-import posts from '../dataSeeders/postData'
+// import posts from '../dataSeeders/postData'
 import { users } from '../dataSeeders/author50'
 // import { posts } from '../dataSeeders/post50'
 import { testPosts } from '../dataSeeders/post50'
+import { registerAddress } from '../API Calls/api.addresses'
 
 const Home = () => {
-  console.log(testPosts)
-  const shuffledAuthors = shuffle(authorData);
-  const authorsData = shuffledAuthors.slice(0, 8);
-
   
-  const shuffledPosts = shuffle(posts);
-  let postsData = shuffledPosts.slice(0, 8);
+
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     <div className='flex-3/4 flex flex-col border-2  m-2 px-2'>
