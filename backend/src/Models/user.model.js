@@ -25,6 +25,18 @@ const userSchema = mongoose.Schema({
         trim: true,
         required: true,
     },
+    bio: {
+        type: String,
+        trim: true,
+    },
+    links: [{
+        url: { 
+            type: String 
+        },
+        url_name: { 
+            type: String 
+        }
+      }],
     profilePic: {
         type: String, 
         trim: true,
