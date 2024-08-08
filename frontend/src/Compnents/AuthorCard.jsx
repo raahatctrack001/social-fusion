@@ -2,7 +2,7 @@ import React from 'react';
 
 const AuthorCard = ({ author }) => {
   return (
-    <div className="min-w-56 rounded-3xl overflow-hidden shadow-lg p-4 bg-slate-300 flex flex-col flex-nowrap">
+    <div className="min-w-56 rounded-3xl overflow-hidden shadow-lg p-4 shadow-lg hover:bg-slate-300 hover:shadow-gray-400 flex flex-col flex-nowrap">
       <img className="w-32 h-32 rounded-full mx-auto" src={author.photo} alt={`${author.name} photo`} />
       <div className="text-center mt-4">
         <h2 className="text-xl font-semibold">{author.name}</h2>

@@ -2,7 +2,7 @@ import React from 'react';
 
 const PostCard = ({ post }) => {
   return (
-    <div className="min-w-96 md:min-w-52 rounded-2xl overflow-hidden shadow-lg bg-slate-300">
+    <div className="min-w-full md:min-w-52 rounded-2xl overflow-hidden shadow-lg hover:bg-slate-300 hover:shadow-gray-400">
       <div className="flex items-center p-4">
       </div>
       <div className="px-6 py-4">
