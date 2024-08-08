@@ -55,7 +55,7 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
                 res
                     .status(200)
                     .json(
-                        new apiResponse(200, "posts fetched!, Populating", {posts, "posts length": posts.length})
+                        new apiResponse(200, "posts fetched!, Populating", posts)
                     )
             })
             .catch(error=>next(error));

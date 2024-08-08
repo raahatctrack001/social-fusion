@@ -3,7 +3,7 @@ const postSchema = new mongoose.Schema({
     title: {
         type: String,
         require: true,
-        unique: false,
+        unique: true,
         trim: true
     },
     content: {
@@ -12,7 +12,8 @@ const postSchema = new mongoose.Schema({
     }, 
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
