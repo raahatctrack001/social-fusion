@@ -5,11 +5,11 @@ import { Link, useNavigate } from 'react-router-dom'
 export default function CreateProfile() {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl ">
+    <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-10 lg:my-8 xl:my-10 ">
       
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
-            <h1 className=" flex lg:mb-10 justify-center items-center text-3xl tracking-widest md:tracking-normal md:text-6xl font-bold mb-2 flex-nowrap"> Introduce Yourself </h1>
+            <h1 className=" flex lg:mb-10 justify-center items-center text-3xl md:text-6xl font-bold mb-2 text-nowrap"> Introduce Yourself </h1>
             <div className="mt-5 flex justify-center items-center gap-5 mb-5 bg-gray-200 rounded-lg px-3">
               {/* <p className="flex-1 w-full self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold  p-2 rounded-2xl text-gray-900 mb-5 flex justify-center">Soul Echo </p> */}
               <span className="flex-3 font-semibold text-lg pb-4 text-gray-500">Hang on! We are setting up your space <span className="hidden md:inline">— Dont' forget to share your deepest thoughts and stories with us.</span></span>

@@ -27,13 +27,14 @@ function validatePassword(password) {
 export default function Register() {
   const [formData, setFormData] = useState({email: '', password: '', repeatPassword: ''})
   const [passwordFocus, setPasswordFocus] = useState(false)
+  const [seePassword, setSeePassword] = useState(false)
   const [repeatPasswordFocus, setRepeatPasswordFocus] = useState(false)
   const validationResults = validatePassword(formData.password);
   console.log(formData);
   console.log(formData.password == formData.repeatPassword)
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl ">
+    <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10 xl:m-52 xl:mt-28 ">
       
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
@@ -62,16 +63,18 @@ export default function Register() {
 
           <div>
             <div className="mb-2 block">
-            <div className="flex justify-between items-center">
-                <Label className="" htmlFor="password" value="Your password" />
-                {formData.password && ((formData.password.length >= 8) &&(validationResults.hasUpperCase && validationResults.hasLowerCase && validationResults.hasNumber && validationResults.hasSpecialChar) && formData.password?
-                 (<p className="text-green-700 font-bold"> Strong Password </p>) :
-                 (<p className="text-red-900 font-bold"> Week Password </p>))}
+              <div className="flex justify-between items-center">                
+                    <Label className="" htmlFor="password" value="Your password" />
+                    {formData.password && ((formData.password.length >= 8) &&(validationResults.hasUpperCase && validationResults.hasLowerCase && validationResults.hasNumber && validationResults.hasSpecialChar) && formData.password?
+                     (<p className="text-green-700 font-bold relative"> Strong Password 
+                    {(!seePassword ? <HiEye onClick={()=>setSeePassword(seePassword?false:true)} className="absolute top-11 right-5 z-10 text-gray-500 "/> : <HiEyeOff onClick={()=>setSeePassword(seePassword?false:true)} className="absolute  text-gray-500 top-11 right-5 z-10" />)} </p>) :
+                     (<p className="text-red-900 font-bold relative"> Week Password 
+                    {(!seePassword ? <HiEye onClick={()=>setSeePassword(seePassword?false:true)} className="absolute top-11 right-5 z-10 text-gray-500 "/> : <HiEyeOff onClick={()=>setSeePassword(seePassword?false:true)} className="absolute  text-gray-500 top-11 right-5 z-10" />)}</p>))}
               </div>
             </div>
             <TextInput 
               id="password"
-              type="password" 
+              type={seePassword?"text":"password"}
               placeholder="************" 
               required 
               shadow 
