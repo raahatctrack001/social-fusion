@@ -19,8 +19,12 @@ import jwt from 'jsonwebtoken'
 
 
 export const registerUser = asyncHandler(async (req, res, next)=>{
-    const {username, email, fullName, password, isAdmin} = req.body;
-    const userData = [username, email, fullName, password];
+    const {username, email, password, repeatPassword} = req.body;
+    if(password !== repeatPassword){
+        throw new apiError (404, "Password and confirm password should be same!")
+    }
+    
+    const userData = [username, email, password];
     
     try {
 
@@ -38,7 +42,7 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
         }
 
         User
-            .create({username, email, fullName, password, isAdmin})
+            .create({username, email, password})
             .then((newUser)=>{
                 res
                     .status(201)

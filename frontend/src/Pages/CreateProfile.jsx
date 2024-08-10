@@ -1,9 +1,19 @@
 import { Button, Checkbox, Label, Textarea, TextInput } from "flowbite-react";
+import { useState } from "react";
 import { HiArrowRight, HiGlobeAlt } from "react-icons/hi";
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function CreateProfile() {
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({fullName: '', bio: '', links: {}});
+  const [linkData, setLinkData] = useState({link1: '', link2: ''})
+  const handleInputChange = (e)=>{
+    setFormData({...formData, [e.target.id]: e.target.value});
+  }
+  const handleLinkInputChange = (e)=>{
+   setLinkData({...linkData, [e.target.id]: e.target.value})
+  }  // const navigate = useNavigate();
+  console.log(formData)
+  console.log(linkData)
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-10 lg:my-8 xl:my-10 ">
       
@@ -22,35 +32,35 @@ export default function CreateProfile() {
             <div className="mb-2 block">
               <Label htmlFor="fullName" value="Full Name" />
             </div>
-            <TextInput id="fullName" type="text" placeholder="Your Name" required shadow />
+            <TextInput onChange={handleInputChange} id="fullName" type="text" placeholder="Your Name"  required shadow />
           </div>
 
           <div>
             <div className="mb-2 block">
               <Label htmlFor="bio" value="Bio" />
             </div>
-            <Textarea className="h-32" id="bio" type="text" placeholder="Describe your passions and interests (max 250 characters)" required shadow />
+            <Textarea onChange={handleInputChange} className="h-32" id="bio" type="text" placeholder="Describe your passions and interests (max 250 characters)" required shadow />
           </div>
           <div>
             <div className="mb-2 block">
               <Label htmlFor="important links" value="Let the world connect with you (feel free to modify name and links)" />
             </div>
-            <div className="border-2 border-gray-600 rounded-lg">
+            <div className="border-2 border-gray-600 rounded-lg md:p-3">
                 <div className="flex w-full gap-1 ">
-                    <TextInput className="w-1/4 font-bold text-black" placeholder="Instagram" />
-                    <TextInput className="w-3/4" id="link1" type="text"  placeholder="Instagram account link" required shadow />
+                    <TextInput onChange={handleLinkInputChange} className="w-1/4 font-bold text-black" placeholder="Instagram" />
+                    <TextInput onChange={handleLinkInputChange} className="w-3/4" id="link1" type="text"  placeholder="Instagram account link" shadow />
                 </div> 
                 <div className="flex w-full gap-1 ">
-                    <TextInput className="w-1/4 font-bold text-black" placeholder="X" />
-                    <TextInput className="w-3/4" id="link1" type="text"  placeholder="x link" required shadow />
+                    <TextInput onChange={handleLinkInputChange} className="w-1/4 font-bold text-black" placeholder="X" />
+                    <TextInput onChange={handleLinkInputChange} className="w-3/4" id="link1" type="text"  placeholder="x link" shadow />
                 </div> 
                 <div className="flex w-full gap-1 ">
-                    <TextInput className="w-1/4 font-bold text-black" placeholder="YouTube" />
-                    <TextInput className="w-3/4" id="link1" type="text"  placeholder="youtube channel link" required shadow />
+                    <TextInput onChange={handleLinkInputChange} className="w-1/4 font-bold text-black" placeholder="YouTube" />
+                    <TextInput onChange={handleLinkInputChange} className="w-3/4" id="link1" type="text"  placeholder="youtube channel link" shadow />
                 </div> 
                 <div className="flex w-full gap-1 ">
-                    <TextInput className="w-1/4 font-bold text-black" placeholder="Other" />
-                    <TextInput className="w-3/4" id="link1" type="text"  placeholder="other account link" required shadow />
+                    <TextInput onChange={handleLinkInputChange} className="w-1/4 font-bold text-black" placeholder="Other" />
+                    <TextInput onChange={handleLinkInputChange} className="w-3/4" id="link1" type="text"  placeholder="other account link" shadow />
                 </div> 
 
             </div>

@@ -118,9 +118,7 @@ export default function Register() {
             <Checkbox id="agree" />
             <Label htmlFor="agree" className="flex">
               I agree with the&nbsp;
-              <Link href="#" className="text-cyan-600 hover:underline dark:text-cyan-500">
-                terms and conditions
-              </Link>
+              <Link to={"terms-and-conditions"} className="text-cyan-600 hover:underline dark:text-cyan-500" > Terms and Conditions </Link>
             </Label>
           </div>
           <Button  type="submit" outline className="hover:bg-gray-800">Register new account</Button>
