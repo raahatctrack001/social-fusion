@@ -2,16 +2,35 @@
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentSearch, HiLogin, HiLogout, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux'
-import { current } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from 'react-redux'
+// import { current } from "@reduxjs/toolkit";
 import { useRef } from "react";
+import { apiEndPoints } from "../apiEndPoints/api.addresses";
+import { signoutSuccess } from "../redux/slices/user.slice";
 export default function Header() {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state=>state.user);
   console.log(currentUser)
+  const dispatch = useDispatch();
+  const handleSignOut = async()=>{
+    try {
+        const response = await fetch(apiEndPoints.logoutAddress(), {
+          method: "POST",
+        });
 
+        // console.log(response);
+
+        const data = await response.json();
+        // console.log(data);
+        if(data.success){
+          dispatch(signoutSuccess())
+        }
+    } catch (error) {
+      console.log("error logging out!", error)
+    }
+  }
   
   return (
     <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-50">
@@ -42,7 +61,7 @@ export default function Header() {
             <Dropdown.Item icon={HiCog}>Edit Profile</Dropdown.Item>
             <Dropdown.Item icon={HiDatabase}>Statistics</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+            <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>
           </Dropdown>  
       </div>
           : 

@@ -76,15 +76,21 @@ export const getUsers = asyncHandler(async (req, res, next)=>{
     try {        
         await User
         .find({})
+        .select("-password")
         .then((users)=>{
             if(!users){
                 throw new apiError(404, "users doesn't exist")
             }
             
+            const safeUsers = users.map((user) => {
+                const { password, refreshToken, resetPasswordToken, ...safeUserData } = user._doc; 
+                return safeUserData;
+              });
+            
             res
             .status(200)
             .json(
-                new apiResponse(200, "users fetched", users)
+                new apiResponse(200, "users fetched", safeUsers)
                 )
             })
         } catch (error) {
@@ -100,11 +106,11 @@ export const getUser = asyncHandler(async (req, res, next)=>{
             if(!user){
                 throw new apiError(404, "user doesn't exist")
             }
-            
+            const {password, refreshToken, passwordResetToken, ...safeData} = user._doc;
             res
             .status(200)
             .json(
-                new apiResponse(200, "user fetched", user)
+                new apiResponse(200, "user fetched", safeData)
                 )
             })
         } catch (error) {

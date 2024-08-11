@@ -57,6 +57,7 @@ export default function SignIn() {
        const data = await response.json();
        console.log('Form submitted successfully:', data);
        if(data.success){
+        console.log(data.data)
         dispatch(signInSuccess(data.data));
         navigate("/")
        }
