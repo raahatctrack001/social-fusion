@@ -1,11 +1,17 @@
 
-import { Button, Navbar, TextInput } from "flowbite-react";
-import { HiDocumentSearch, HiLogin, HiSearch, HiSearchCircle, HiSun } from "react-icons/hi";
+import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
+import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentSearch, HiLogin, HiLogout, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import { useSelector } from 'react-redux'
+import { current } from "@reduxjs/toolkit";
+import { useRef } from "react";
 export default function Header() {
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const path = useLocation().pathname;
+  const { currentUser } = useSelector(state=>state.user);
+  console.log(currentUser)
+
   
   return (
     <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-50">
@@ -25,15 +31,32 @@ export default function Header() {
 
 
       <div className="flex gap-1 md:gap-2 md:order-2">
-      <Button 
+      {currentUser ?
+      <div className="" > 
+         <Dropdown label={currentUser.fullName.length > 10 ? currentUser.fullName.substr(0,10) : currentUser.fullName} outline arrowIcon={false}>
+            <Dropdown.Header>
+              <span className="block text-sm">{currentUser.username}</span>
+              <span className="block truncate text-sm font-medium">{currentUser.email}</span>
+            </Dropdown.Header>
+            <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
+            <Dropdown.Item icon={HiCog}>Edit Profile</Dropdown.Item>
+            <Dropdown.Item icon={HiDatabase}>Statistics</Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
+          </Dropdown>  
+      </div>
+          : 
+       
+       (
+        <Button 
         onClick={()=>{navigate("/sign-in")}}
         outline className="bg-gray-800"> 
         
           <span className="flex justify-center items-center pr-1"> <HiLogin /> </span>
           <span className="hidden md:inline"> Sign In </span> 
         
-        </Button>
-      <Button outline className="bg-gray-800"> <span className="flex justify-center items-center"><HiSun /></span> </Button>
+        </Button>)}
+        <Button outline className="bg-gray-800 hidden md:inline ml-12"> <span className="flex justify-center items-center"><HiSun /></span> </Button>
         <Navbar.Toggle />
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}
@@ -41,6 +64,8 @@ export default function Header() {
           <Navbar.Link className="" href="/" active = {path === '/'} >
             Home
           </Navbar.Link>
+          <Button outline className="md:hidden"> <span className="flex justify-center items-center gap-2"> switch to dark theme <HiSun /></span> </Button>
+
           <Navbar.Link className="" href="/about" active = {path === '/about'} >About</Navbar.Link>
           <Navbar.Link className="" href="/services" active = {path === '/services'} >Services</Navbar.Link>
           <Navbar.Link className="" href="/prices" active = {path === '/prices'} >Pricing</Navbar.Link>
