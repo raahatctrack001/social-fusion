@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { passwordSchema } from "../../../backend/src/Validators/user.validator";
 import { fromPairs } from "lodash";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
+import { useDispatch } from "react-redux";
+import { signInFailure, signInStart, signInSuccess } from "../redux/slices/user.slice";
 
 const hasUpperCase = /[A-Z]/;
 const hasLowerCase = /[a-z]/;
@@ -26,9 +28,11 @@ function validatePassword(password) {
 
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({userEmail: '', password: ''})
-  const [passwordFocus, setPasswordFocus] = useState(false)
-  const [seePassword, setSeePassword] = useState(true)
+  const [formData, setFormData] = useState({userEmail: '', password: ''});
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [seePassword, setSeePassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const validationResults = validatePassword(formData.password);
   // console.log(formData);
@@ -36,26 +40,29 @@ export default function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault(); // Prevent default form submission
 
-      try {
-     const response = await fetch(apiEndPoints.loginAddress(), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
+    try {
+      dispatch(signInStart());
+      const response = await fetch(apiEndPoints.loginAddress(), {
+           method: 'POST',
+           headers: {
+             'Content-Type': 'application/json',
+           },
+           body: JSON.stringify(formData),
+         });
 
-      if (!response.ok) {
-        throw new Error(`failed to logIn! status: ${response.status}`);
-      }
+       if (!response.ok) {
+         throw new Error(`failed to logIn! status: ${response.status}`);
+       }
 
-      const data = await response.json();
-      console.log('Form submitted successfully:', data);
-
-      // setResponseMessage('Form submitted successfully!');
-    } catch (error) {
+       const data = await response.json();
+       console.log('Form submitted successfully:', data);
+       if(data.success){
+        dispatch(signInSuccess(data.data));
+        navigate("/")
+       }
+    }  catch (error) {
       console.error('Error submitting form:', error);
-      // setResponseMessage('Error submitting form.');
+        dispatch(signInFailure(error));
     }
   };
 
