@@ -19,12 +19,12 @@ import jwt from 'jsonwebtoken'
 
 
 export const registerUser = asyncHandler(async (req, res, next)=>{
-    const {username, email, password, repeatPassword} = req.body;
+    const {username, email, password, repeatPassword, fullName} = req.body;
     if(password !== repeatPassword){
         throw new apiError (404, "Password and confirm password should be same!")
     }
     
-    const userData = [username, email, password];
+    const userData = [username, email, password, repeatPassword, fullName];
     
     try {
 
@@ -42,12 +42,19 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
         }
 
         User
-            .create({username, email, password})
+            .create(req.body)
             .then((newUser)=>{
+                if(!newUser){
+                    throw new apiError(401, "failed to register user");
+                }
+                console.log("newUser", newUser);
+                const {password, refreshToken, resetPasswordToken, ...data} = newUser._doc;
+
+                console.log("data", data);
                 res
                     .status(201)
                     .json(
-                        new apiResponse(201, `welcome hoooooomannnnnn!!! ${newUser.fullName}`, newUser)
+                        new apiResponse(201, `welcome hoooooomannnnnn!!! Human with name ${newUser.fullName} is in the team now!`, data)
                     )
                 })
             .catch(error=>next(error))
@@ -71,19 +78,16 @@ export const loginUser = asyncHandler(async (req, res, next)=>{
                         throw new apiError(403, "password didn't matched!")
                     }
                     
+                    const {password, refreshToken, resetPasswordToken, ...userData} = user._doc
                     generateAccessAndRefreshToken(user)
                        .then((tokens)=>{
                             const { accessToken, refreshToken } = tokens;
-                            // const {password, refreshToken, ...rest} = user;
-                            // console.log(password)
-                            const userData = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-                            const {iat, exp, ...rest} = userData;
                             res
                             .status(202)
                             .cookie('accessToken', accessToken, options)
                             .cookie('refreshToken', refreshToken, options)
                             .json(
-                                new apiResponse(202, "user logged in", rest)
+                                new apiResponse(202, "user logged in", userData)
                             )                        
                         })
                        .catch(err=>next(err))
