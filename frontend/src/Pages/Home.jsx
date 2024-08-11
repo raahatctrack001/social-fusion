@@ -5,15 +5,22 @@ import authorData from '../dataSeeders/authorData'
 import { shuffle } from 'lodash'
 import { testPosts } from '../dataSeeders/post50'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from 'flowbite-react'
+import { HiUserAdd } from 'react-icons/hi'
 
 const Home = () => {
   const [postData, setPostData] = useState([]);
   const [users, setUsers] = useState([]); 
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
-  
+  // const [authorId, setAuthorId] = useState(null);
+
+
+  const navigate = useNavigate();
+
   useEffect(()=>{
-    localStorage.removeItem("postData")
+    // localStorage.removeItem("postData")
     fetch(apiEndPoints.getPostsAddress())
       .then((posts)=>{
         if(!posts){
@@ -34,7 +41,7 @@ const Home = () => {
 
 
   useEffect(()=>{
-    localStorage.removeItem("authorData")
+    // localStorage.removeItem("authorData")
     fetch(apiEndPoints.getUsersAddress())
       .then((users)=>{
         if(!users){
@@ -56,30 +63,52 @@ const Home = () => {
 
 
   const handlePostSelect = (post) => {
-    if (selectedPost && selectedPost._id === post._id) {
+    // localStorage.removeItem("postToDisplay")
+    if (!(selectedPost && selectedPost._id === post._id)) {
+      localStorage.setItem("postToDisplay", JSON.stringify(post));
+      navigate(`/posts/post/${post._id}`)
       setSelectedPost(null); 
-    } else {
-      setSelectedPost(post);
     }
   };
 
   const handleAuthorSelect = (author) => {
-    if (selectedAuthor && selectedAuthor._id) {
-      setSelectedAuthor(null); 
-    } else {
-      setSelectedAuthor(author);
-    }
+    // localStorage.removeItem("authorToDisplay")
+    if (!(selectedAuthor && selectedAuthor._id)) {
+      localStorage.setItem("authorToDisplay", JSON.stringify(author));
+      navigate(`/authors/author/${author?._id}`)
+    } 
   };
-  console.log(selectedPost);
-  console.log(selectedAuthor);
+
+  
+  // console.log(selectedPost);
+  // console.log(selectedAuthor);
+  // console.log(postData[0])
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     <div className='flex-3/4 flex flex-col border-2  m-2 px-2'>
         <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Recent Posts </h1>
         <div className="flex flex-col justify-center items-center md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 bg-gray-100 gap-5 ">
         {postData && postData.map((post, index) => (
-              <div className='' key={index} onClick={() => handlePostSelect(post)}>
-                <PostCard post={post} />
+              <div className='p-1 border-2 border-gray-800 rounded-xl w-full md:max-w-96 h-96  bg-gray-300' key={index} >
+                {/* <AuthorCard author={post?.author} /> */}
+                <div className='flex justify-between'>
+                  <div 
+                  onClick={
+                    ()=>{
+                      localStorage.setItem("authorToDisplay", JSON.stringify(post?.author)) 
+                      navigate(`authors/author/${post?.author?._id}`)
+                      }
+                    } className='flex items-center gap-2 cursor-pointer'>                      
+                    <img className='h-8 rounded-full' src={post?.author?.profilePic } alt="" />
+                    <p className='text-xs font-semibold'> {post?.author?.username } </p>
+                  </div>
+                  <Button 
+                      onClick={()=>console.log("follow button from post got a click")}
+                      outline pill> <HiUserAdd /> </Button>
+                </div>
+                <div onClick={() => handlePostSelect(post)}>  
+                  <PostCard post={post}  />
+                </div>
               </div>
           ))}
       </div>
@@ -92,8 +121,19 @@ const Home = () => {
       <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors </h1>
       <div className="flex flex-col bg-gray-100 gap-3">
       {users && users.map((author, index) => (
-            <div className="" key={index} onClick={() => handleAuthorSelect(author)}>
+            <div 
+              className='flex justify-between items-center gap-2 border-2 border-gray-500 p-1 rounded-xl min-w-64 max-w-96 cursor-pointer'
+             key={index} >
+              <div onClick={() => handleAuthorSelect(author)}>
               <AuthorCard author={author}  />
+              </div>
+              <Button
+                onClick={()=>console.log("follow button got a click")} 
+                outline className='bg-gray-800 '> 
+                <span className='flex justify-center items-center'> <HiUserAdd /> </span>
+                <span className='hidden md:inline'> Follow </span>
+              </Button>
+             
             </div>
         ))}
       </div>        

@@ -10,14 +10,16 @@ import Services from "./Pages/Services"
 import CreateProfile from "./Pages/CreateProfile"
 import TermsAndConditions from "./Pages/TermsAndConditions"
 import PostRegistration from "./Pages/PostRegistration"
-import Author from "./Pages/Author"
+import AuthorPage from "./Pages/AuthorPage"
+import PostPage from "./Pages/PostPage"
 
 function App() {
   return   <BrowserRouter>
               <Header />
                 <Routes>
                   <Route path="/" element={<Home/>} />
-                  <Route path="/author/:authorId" element={<Author />} />
+                  <Route path="/authors/author/:authorId" element={<AuthorPage />} />
+                  <Route path="/posts/post/:postId" element={<PostPage />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/register/terms-and-conditions" element={<TermsAndConditions />}  />
                   <Route path="/register/post-registration" element={<PostRegistration /> } />
