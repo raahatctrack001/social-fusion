@@ -9,6 +9,7 @@ import Projects from "./Pages/Projects"
 import Services from "./Pages/Services"
 import CreateProfile from "./Pages/CreateProfile"
 import TermsAndConditions from "./Pages/TermsAndConditions"
+import PostRegistration from "./Pages/PostRegistration"
 
 function App() {
   return   <BrowserRouter>
@@ -17,6 +18,7 @@ function App() {
                   <Route path="/" element={<Home/>} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/register/terms-and-conditions" element={<TermsAndConditions />}  />
+                  <Route path="/register/post-registration" element={<PostRegistration /> } />
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
                   <Route path="/about" element={<About />} />

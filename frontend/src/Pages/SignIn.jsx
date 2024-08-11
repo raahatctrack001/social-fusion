@@ -38,12 +38,12 @@ export default function SignIn() {
 
       try {
      const response = await fetch(apiEndPoints.loginAddress(), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
 
       if (!response.ok) {
         throw new Error(`failed to logIn! status: ${response.status}`);
