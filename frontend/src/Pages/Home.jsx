@@ -78,6 +78,8 @@ const Home = () => {
       navigate(`/authors/author/${author?._id}`)
     } 
   };
+  console.log(users)
+  console.log(postData)
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     <div className='flex-3/4 flex flex-col border-2  m-2 px-2'>

@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import PostCard from '../Compnents/PostCard';
 import { Button } from 'flowbite-react';
 import { HiUserAdd } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
 
 const PostPage = () => {
   const postData = JSON.parse(localStorage.getItem("postToDisplay"));
   const navigate = useNavigate();
-  console.log(postData)
-  // const [post, setPost] = useState(postData);
+  const [post, setPost] = useState();
+  const { postId } = useParams();
+  const [author, setAuthor] = useState();
 
   const calculateReadingTime = (wordsPerMinute = 250) => {
     const text = postData.content.replace(/<[^>]*>/g, '');
@@ -37,19 +39,37 @@ const PostPage = () => {
     localStorage.setItem("authorToDisplay", JSON.stringify(postData?.author))
     navigate(`/authors/author/${postData?.author?._id}`)
   }
+
+  useEffect(()=>{
+    (async ()=>{
+      try {
+        const response = await fetch(apiEndPoints.getPostAddress(postId));
+        const post = await response.json();
+        if(post.success){
+          setPost(post?.data);
+          setAuthor(post?.data?.author)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })()
+  }, [])
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  console.log("post fetched", post)
+  // const { author } = post;
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { postData.title } </h1>
 
       <div>
         <div className='flex gap-2 items-center pb-2' onClick={handleAuthorClick}>
-          <img className='h-10 rounded-full' src={postData?.author?.profilePic} alt="" />
+          <img className='h-10 rounded-full' src={author?.profilePic} alt="" />
           <div className='flex w-full flex-col text-xs cursor-pointer'>
-            <span className=''>{postData?.author?.username} </span>
-            <span className=''>{postData?.author?.fullName} </span>
+            <span className=''>{author?.username} </span>
+            <span className=''>{author?.fullName} </span>
           </div>
           <Button className='bg-gray-800'> <span className='flex justify-center items-center'> <HiUserAdd className='mr-1' /> </span> Follow </Button>
         </div>

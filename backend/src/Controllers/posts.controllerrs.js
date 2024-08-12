@@ -61,7 +61,7 @@ export const createPost = asyncHandler(async (req, res, next)=>{
 export const getPosts = asyncHandler(async (req, res, next)=>{
     try {        
         await Post
-            .find()
+            .find({})
             .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
             // .skip(19)
             // .limit(10)
@@ -87,6 +87,7 @@ export const getPost = asyncHandler(async (req, res, next)=>{
         await Post
             .findById(req.params?.postId)
             .populate("comments")
+            .populate("author")
             .then((post)=>{
                 if(!post){
                     throw new apiError(404, "post doesn't exists!")

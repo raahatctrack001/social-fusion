@@ -12,7 +12,7 @@ export default function Header() {
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state=>state.user);
-  console.log(currentUser)
+  // console.log(currentUser)
   const dispatch = useDispatch();
   const handleSignOut = async()=>{
     try {
