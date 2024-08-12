@@ -1,4 +1,4 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Alert, Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiArrowRight, HiCheck, HiEye, HiEyeOff, HiUser } from "react-icons/hi";
 import { Link, useNavigate } from 'react-router-dom'
@@ -31,6 +31,7 @@ export default function SignIn() {
   const [formData, setFormData] = useState({userEmail: '', password: ''});
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ export default function SignIn() {
     e.preventDefault(); // Prevent default form submission
 
     try {
+      setError(null)
       dispatch(signInStart());
       const response = await fetch(apiEndPoints.loginAddress(), {
            method: 'POST',
@@ -51,6 +53,7 @@ export default function SignIn() {
          });
 
        if (!response.ok) {
+          setError(response.message)
          throw new Error(`failed to logIn! status: ${response.status}`);
        }
 
@@ -61,9 +64,14 @@ export default function SignIn() {
         dispatch(signInSuccess(data.data));
         navigate("/")
        }
+       else{
+        setError(data.message);
+        return;
+       }
     }  catch (error) {
+      setError(error.message)
       console.error('Error submitting form:', error);
-        dispatch(signInFailure(error));
+      dispatch(signInFailure(error));
     }
   };
 
@@ -161,6 +169,7 @@ export default function SignIn() {
               </Link>
             </Label>
           </div> */}
+          {error && <Alert color={"failure"} > {error} </Alert>}
           <Button onClick={handleSignIn} type="submit" outline className="hover:bg-gray-800"> Proceed </Button>
           <p> Doesn't have an accound? <Link to={"/register"} className="text-blue-400 text-lg tracking-widest"> Register Here </Link></p>
       </form>

@@ -5,6 +5,7 @@ import apiResponse from "../Utils/apiResponse.js";
 import { testPosts } from "../DataSeeders/post50.js";
 import bcryptjs from 'bcryptjs';
 import Post from "../Models/post.model.js";
+import apiError from "../Utils/apiError.js";
 
 export const userSeeder = asyncHandler(async (req, res, next)=>{
     // await User.deleteMany({})
@@ -36,35 +37,59 @@ export const postSeeder = asyncHandler(async (req, res, next)=>{
     // await Post.find({})
     //     .then((posts)=>{
     //         res.status(200).json(new apiResponse(200, "posts fetched", posts))
-    //     })
-    // await Post.deleteMany({})
-    //             .then((post)=>
-    //                 res.status(200).json(new apiResponse(200, "post deleted", post))
-    //             )
-    //             .catch(err=>next(err))
-
-    // return;
+    // //     })
+    
 
 
     const posts = [...new Set(testPosts)];
     
     const fetchedUser = await User.find({});
-    posts.map((post)=>{
+    const seededPost = posts.map((post)=>{
         const random = Math.floor((Math.random()*fetchedUser.length));
-        post.author = fetchedUser[random];
+        const {password, refreshToken, resetPasswordToken, ...author} = fetchedUser[random]?._doc;
+      
+        post.author = author;
+        Post.create(post)
+            .then((post)=>{
+                User.findById(post?.author?._id)
+                .then((user)=>{
+                    if(!user){
+                        throw new apiError(404, "creator of post doesn't exist")
+                    }
+
+                    user.posts.push(post)   ;
+                    user.save();
+                    console.log(user)
+                })
+                .catch(err=>next(err))
+            })
+            .catch(err=>next(err))
+        return post
     })
+    res.status(200).json(new apiResponse(200, "post seeded", seededPost));
+    // return;
 
     // console.log(posts)
-    await Post.insertMany(posts)
-    .then((posts)=>{
-        // console.log(users);
-        res.status(200)
-            .json(
-                new apiResponse(200, "posts seeded", {"posts list: " : posts, "length: ": posts.length})
-            )
-    })
-    .catch(err=>next(err))
+    // // return;
+    // Post.insertMany(posts)
+    // .then((posts)=>{
+    //     // console.log(users);
+    //     res.status(200)
+    //         .json(
+    //             new apiResponse(200, "posts seeded", {"posts list: " : posts, "length: ": posts.length})
+    //         )
+    // })
+    // .catch(err=>next(err))
     
 
+
+})
+
+export const seededPostDeleter = asyncHandler(async(req, res, next)=>{
+    await Post.deleteMany({})
+                .then((post)=>
+                    res.status(200).json(new apiResponse(200, "post deleted", post))
+                )
+                .catch(err=>next(err))
 
 })

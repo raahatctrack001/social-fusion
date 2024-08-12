@@ -47,6 +47,7 @@ const Author = () => {
     }
   };
 
+  console.log(authorData)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
