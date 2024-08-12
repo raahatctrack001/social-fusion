@@ -10,7 +10,7 @@ const PostPage = () => {
   console.log(postData)
   // const [post, setPost] = useState(postData);
 
-  const calculateReadingTime = (wordsPerMinute = 200) => {
+  const calculateReadingTime = (wordsPerMinute = 250) => {
     const text = postData.content.replace(/<[^>]*>/g, '');
     const wordCount = text.split(/\s+/).length;
     const readingTime = wordCount / wordsPerMinute;
@@ -42,14 +42,14 @@ const PostPage = () => {
   }, []);
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
-      <h1 className='font-bold text-xl md:text-3xl font-serif mb-5 border-b-2'> { postData.title } </h1>
+      <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { postData.title } </h1>
 
       <div>
-        <div className='flex gap-2 items-center pb-3' onClick={handleAuthorClick}>
-          <img className='h-12 rounded-full' src={postData?.author?.profilePic} alt="" />
-          <div className='flex w-full flex-col font-semibold cursor-pointer'>
-            <span>{postData?.author?.username} </span>
-            <span>{postData?.author?.fullName} </span>
+        <div className='flex gap-2 items-center pb-2' onClick={handleAuthorClick}>
+          <img className='h-10 rounded-full' src={postData?.author?.profilePic} alt="" />
+          <div className='flex w-full flex-col text-xs cursor-pointer'>
+            <span className=''>{postData?.author?.username} </span>
+            <span className=''>{postData?.author?.fullName} </span>
           </div>
           <Button className='bg-gray-800'> <span className='flex justify-center items-center'> <HiUserAdd className='mr-1' /> </span> Follow </Button>
         </div>

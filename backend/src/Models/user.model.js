@@ -50,6 +50,14 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }],
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Post'
+    }],
+    // reels:[{
+    //     types: mongoose.Schema.Types.ObjectId,
+    //     ref:'Reel'
+    // }],
     refreshToken: {
         type: String,
         default: "",

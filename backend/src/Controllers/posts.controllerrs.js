@@ -1,4 +1,5 @@
 import Post from "../Models/post.model.js"
+import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
@@ -30,6 +31,20 @@ export const createPost = asyncHandler(async (req, res, next)=>{
             author: req.user?._id
         })
         .then((post)=>{
+            if(!post){
+                throw new apiError(417, "Failed to upload the post!, plz try again")
+            }
+
+            User.findById(req.user?._id)
+                .then((user)=>{
+                    if(!user){
+                        throw new apiError(404, "creator of post doesn't exist")
+                    }
+
+                    user.posts = post;
+                    user.save();
+                })
+                .catch(err=>next(err))
             res
                 .status(200)
                 .json(
