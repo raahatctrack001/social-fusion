@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PostCard from '../Compnents/PostCard';
 import { Button } from 'flowbite-react';
 import { HiUserAdd } from 'react-icons/hi';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PostPage = () => {
   const postData = JSON.parse(localStorage.getItem("postToDisplay"));

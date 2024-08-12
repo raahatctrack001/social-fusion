@@ -66,7 +66,7 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
             // .skip(19)
             // .limit(10)
             .then((posts)=>{
-                console.log(posts)
+                // console.log(posts)
                 if(posts.length == 0){
                     throw new apiError(404, "posts doesn't exist!")
                 }

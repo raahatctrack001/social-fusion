@@ -102,6 +102,7 @@ export const getUser = asyncHandler(async (req, res, next)=>{
     try {        
         await User
         .findById(req.params?.userId)
+        .populate("posts")
         .then((user)=>{
             if(!user){
                 throw new apiError(404, "user doesn't exist")

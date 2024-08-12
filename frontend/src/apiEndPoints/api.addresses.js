@@ -3,7 +3,7 @@ export  const apiEndPoints = {
     loginAddress : ()=> `/api/v1/auth/login`,
     logoutAddress : ()=> `/api/v1/auth/logout`,
     
-    getUserAddress : (userId)=> `/api/v1/users/get-users/${userId}`,
+    getUserAddress : (userId)=> `/api/v1/users/get-user/${userId}`,
     getUsersAddress : ()=> `/api/v1/users/get-users/`,
     deleteUserAddress : (userId)=> `/api/v1/users/delete-user/${userId}`,
     updateUserAddress : (userId)=> `/api/v1/users/update-user/${userId}`,
