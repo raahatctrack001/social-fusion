@@ -36,7 +36,7 @@ export default function Header() {
     <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-50">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold border-x-2 border-x-gray-900 p-2 rounded-2xl text-gray-900">Soul Echo</span>
+        <span className="self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold md:border-x-2 md:border-x-gray-900 p-2 rounded-2xl text-gray-900">Soul Echo</span>
       </Navbar.Brand>
 
       <TextInput 
@@ -51,18 +51,21 @@ export default function Header() {
 
       <div className="flex gap-1 md:gap-2 md:order-2">
       {currentUser ?
-      <div className="" > 
-         <Dropdown label={currentUser.fullName.length > 10 ? currentUser.fullName.substr(0,10) : currentUser.fullName} outline arrowIcon={false}>
-            <Dropdown.Header>
-              <span className="block text-sm">{currentUser.username}</span>
-              <span className="block truncate text-sm font-medium">{currentUser.email}</span>
-            </Dropdown.Header>
-            <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
-            <Dropdown.Item icon={HiCog}>Edit Profile</Dropdown.Item>
-            <Dropdown.Item icon={HiDatabase}>Statistics</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>
-          </Dropdown>  
+      <div className=" flex gap-2" > 
+          <img onClick={dropdownRef.current && dropdownRef.current.click()} className="h-10 rounded-full cursor-pointer hidden" src={currentUser.profilePic} alt={currentUser.username} />
+          <div ref={dropdownRef} className=""> 
+            <Dropdown label={currentUser.fullName.length > 10 ? currentUser.fullName.substr(0,10) : currentUser.fullName} outline arrowIcon={false}>
+               <Dropdown.Header>
+                 <span className="block text-sm">{currentUser.username}</span>
+                 <span className="block truncate text-sm font-medium">{currentUser.email}</span>
+               </Dropdown.Header>
+               <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
+               <Dropdown.Item icon={HiCog}>Edit Profile</Dropdown.Item>
+               <Dropdown.Item icon={HiDatabase}>Statistics</Dropdown.Item>
+               <Dropdown.Divider />
+               <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>
+            </Dropdown>  
+          </div>
       </div>
           : 
        
@@ -75,7 +78,7 @@ export default function Header() {
           <span className="hidden md:inline"> Sign In </span> 
         
         </Button>)}
-        <Button outline className="bg-gray-800 hidden md:inline ml-12"> <span className="flex justify-center items-center"><HiSun /></span> </Button>
+        <Button outline className="bg-gray-800 hidden md:inline"> <span className="flex justify-center items-center"><HiSun /></span> </Button>
         <Navbar.Toggle />
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}

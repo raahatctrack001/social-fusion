@@ -13,11 +13,16 @@ import PostRegistration from "./Pages/PostRegistration"
 import AuthorPage from "./Pages/AuthorPage"
 import PostPage from "./Pages/PostPage"
 import HomePage from "./Pages/HomePage"
-
+import PrivateRoute from "./Compnents/PrivateRoute"
+// import Home from "./Pages/Home.jsx"
 function App() {
   return   <BrowserRouter>
               <Header />
                 <Routes>
+
+                <Route element={<PrivateRoute />}>
+                  <Route path='/' element={<Home />} />
+                </Route>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/authors/author/:authorId" element={<AuthorPage />} />
                   <Route path="/posts/post/:postId" element={<PostPage />} />
