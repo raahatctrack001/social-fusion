@@ -1,5 +1,5 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiArrowRight, HiCheck, HiEye, HiEyeOff, HiUser } from "react-icons/hi";
 import { Link, useNavigate } from 'react-router-dom'
 import { passwordSchema } from "../../../backend/src/Validators/user.validator";
@@ -67,6 +67,9 @@ export default function SignIn() {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10 xl:m-52 xl:mt-28 ">
       

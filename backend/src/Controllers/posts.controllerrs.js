@@ -46,9 +46,12 @@ export const createPost = asyncHandler(async (req, res, next)=>{
 export const getPosts = asyncHandler(async (req, res, next)=>{
     try {        
         await Post
-            .find({})
-            .populate("author") //fix this ... password and refresh token is getting exposed!
+            .find()
+            .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
+            .skip(19)
+            .limit(10)
             .then((posts)=>{
+                console.log(posts)
                 if(posts.length == 0){
                     throw new apiError(404, "posts doesn't exist!")
                 }
