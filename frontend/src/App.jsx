@@ -22,10 +22,10 @@ function App() {
 
                 <Route element={<PrivateRoute />}>
                   <Route path='/' element={<Home />} />
-                </Route>
-                  <Route path="/" element={<HomePage />} />
                   <Route path="/authors/author/:authorId" element={<AuthorPage />} />
                   <Route path="/posts/post/:postId" element={<PostPage />} />
+                </Route>
+                  <Route path="/" element={<HomePage />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/register/terms-and-conditions" element={<TermsAndConditions />}  />
                   <Route path="/register/post-registration" element={<PostRegistration /> } />

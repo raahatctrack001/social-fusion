@@ -91,7 +91,7 @@ const Home = () => {
         {postData && postData.map((post, index) => (
               <div className='p-1 border-2 border-gray-800 rounded-xl w-full md:max-w-96 h-96  bg-gray-300' key={index} >
                 {/* <AuthorCard author={post?.author} /> */}
-                <div className='flex justify-between'>
+                <div className='flex justify-between '>
                   <div 
                   onClick={
                     ()=>{
@@ -106,7 +106,7 @@ const Home = () => {
                       onClick={()=>console.log("follow button from post got a click")}
                       outline pill> <HiUserAdd /> </Button>
                 </div>
-                <div onClick={() => handlePostSelect(post)}>  
+                <div onClick={() => handlePostSelect(post)} className='cursor-pointer'>  
                   <PostCard post={post}  />
                 </div>
               </div>
