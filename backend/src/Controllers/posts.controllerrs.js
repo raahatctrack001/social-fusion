@@ -41,7 +41,7 @@ export const createPost = asyncHandler(async (req, res, next)=>{
                         throw new apiError(404, "creator of post doesn't exist")
                     }
 
-                    user.posts = post;
+                    user.posts.push(post);
                     user.save();
                 })
                 .catch(err=>next(err))
