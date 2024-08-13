@@ -25,7 +25,7 @@ const postSchema = new mongoose.Schema({
     }],
     category: {
         type: String,
-        default: "Uncategorised"
+        required:true,
     },
     imagesURLs: [{
         url: { 

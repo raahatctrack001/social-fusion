@@ -1,20 +1,48 @@
 import React, { useState, useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
-import { Button, Dropdown, TextInput } from 'flowbite-react';
+import { Alert, Button, Dropdown, TextInput } from 'flowbite-react';
 import { HiPhotograph, HiUpload, HiX } from 'react-icons/hi';
 import CopyInput from '../Compnents/CopyInput';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import { useNavigate } from 'react-router-dom';
+import EditorWithDisplay from '../Compnents/EditorWithDisplay';
+import CustomDropdown from '../Compnents/CustomDropdown';
+// import Editor from '../Compnents/EditorWithDisplay';
 
 const CreatePost = ({ placeholder }) => {
+  const categories = [
+    'Technology',
+    'Health & Wellness',
+    'Business & Finance',
+    'Education',
+    'Entertainment',
+    'Lifestyle',
+    'Travel',
+    'Food & Drink',
+    'Fashion',
+    'Sports',
+    'Art & Design',
+    'Science',
+    'DIY & Crafts',
+    'Personal Development',
+    'Uncategorised'
+  ];
+
+  const navigate = useNavigate();
   const editor = useRef(null);
   const filePickerRef = useRef();
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
+  const [error, setError] = useState(null);
   const [showInstructions, setShowInstructions] = useState(true);  
   const [imageUrl, setImageUrl] = useState();
   const [showURL, setShowURL] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("select a category")
+  const [selectedCategory, setSelectedCategory] = useState('')
 
+
+  const handleCategorySelect = (value) => {
+    setSelectedCategory(value);
+  };
   // Correct usage of useMemo
   const config = useMemo(() => ({
     readonly: false, // all options from https://xdsoft.net/jodit/docs/
@@ -24,6 +52,8 @@ const CreatePost = ({ placeholder }) => {
   console.log(content)
 
   const handleFileUpload = async (e)=>{
+      setShowURL(false);
+      setError(null);
       try {
         console.log(e.target.files[0]);
         const formData = new FormData();
@@ -36,6 +66,7 @@ const CreatePost = ({ placeholder }) => {
 
         console.log("response: ", response);
         if(!response.ok){
+          setError(response.message)
           throw new Error("error uploading file");
         }
 
@@ -45,19 +76,29 @@ const CreatePost = ({ placeholder }) => {
           setImageUrl(data.data?.url)
           console.log("data: ", data.data);
         }
+        else{
+          setError(data.message)
+        }
       } catch (error) {
+        setError(error.message)
         console.log(error);
       }
   }
 
 
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-  };
+  // const handleCategorySelect = (category) => {
+  //   setSelectedCategory(category);
+  // };
   
   const handlePostUpload = async (e)=>{
     e.preventDefault();
     try {
+        setError(null)
+
+        if(!selectedCategory){
+          setError("please select category!")
+          return;
+        }
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
@@ -65,24 +106,34 @@ const CreatePost = ({ placeholder }) => {
         
         const response = await fetch(apiEndPoints.createPostAddress(), {
           method: "POST",
-          body: formData,
+          body:formData,
         })
-
-        console.log("response", response);
+        
+        if(!response.ok){
+          setError(response.message)
+          return;
+          // throw new Error("failed to upload post!")
+        }
         const data = await response.json();
-
-        console.log("data extracted", data);
+        if(data.success){
+          navigate(`/posts/post/${data?.data?._id}`);
+        }else{
+          setError(data.message)
+        }
+        // console.log("data extracted", data.data);
     } catch (error) {
+      setError(error.message)
       console.log(error);
     }
   }
+  console.log(selectedCategory)
   return (
 
     <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>
       <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
-            <TextInput placeholder='Unique Title' className='mb-1 w-3/4' onBlur={(e)=>setTitle(e.target.value)}/>
+            <TextInput placeholder='Unique Title' className='mb-1 w-3/4' onChange={(e)=>setTitle(e.target.value)}/>
             <TextInput 
               onChange={handleFileUpload}
               type='file' ref={filePickerRef}  className='hidden' id='postImage' name='postImage'/>
@@ -122,6 +173,8 @@ const CreatePost = ({ placeholder }) => {
             {/* <h1> copy image url </h1>     */}
             <CopyInput url={imageUrl}/>
           </div>}
+
+          {/* <EditorWithDisplay /> */}
           <JoditEditor
             ref={editor}
             value={content}
@@ -131,57 +184,13 @@ const CreatePost = ({ placeholder }) => {
             onChange={newContent => {}}
             className=''
           />
-          <div className="w-full flex justify-center mt-2">
-            <Dropdown
-              label={selectedCategory}
-              placement="bottom-start"
-              dismissOnClick={true}
-              arrowIcon={false}
-              >
-              <Dropdown.Item onClick={() => handleCategorySelect('Technology')}>
-                Technology
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Health & Wellness')}>
-                Health & Wellness
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Business & Finance')}>
-                Business & Finance
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Education')}>
-                Education
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Entertainment')}>
-                Entertainment
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Lifestyle')}>
-                Lifestyle
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Travel')}>
-                Travel
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Food & Drink')}>
-                Food & Drink
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Fashion')}>
-                Fashion
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Sports')}>
-                Sports
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Art & Design')}>
-                Art & Design
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Science')}>
-                Science
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('DIY & Crafts')}>
-                DIY & Crafts
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleCategorySelect('Personal Development')}>
-                Personal Development
-              </Dropdown.Item>
-            </Dropdown>
+          
+          {/* <EditorWithDisplay /> */}
+          <div className="w-full flex justify-center mt-2 ">
+            <CustomDropdown options={categories} onSelect={handleCategorySelect} />
+
           </div>
+          {error && <Alert color={"failure"} className='flex justify-center items-center'><span>{error}</span></Alert>}
           <Button onClick={handlePostUpload} color={"warning"} className='w-full my-2'> Upload now </Button>
       </div>
     </div>
@@ -189,3 +198,4 @@ const CreatePost = ({ placeholder }) => {
 };
 
 export default CreatePost;
+

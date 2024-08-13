@@ -6,11 +6,12 @@ import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 
 export const createPost = asyncHandler(async (req, res, next)=>{
+    console.log(req.body)
     if(!req.user){
         throw new apiError(401, "Unauthorized! please login")
     }
-    const { title, content } = req.body;
-    if([title, content].some(field=>field?.trim()?0:1)){
+    const { title, content, category } = req.body;
+    if([title, content, category].some(field=>field?.trim()?0:1)){
         throw new apiError(404, "Title of Content for post is missing!")
     }
 
@@ -24,9 +25,11 @@ export const createPost = asyncHandler(async (req, res, next)=>{
         }   
 
         fileURLs.forEach(file=>console.log("files", file))
+        
         await Post.create({
             title,
             content,
+            category,
             imagesURLs: fileURLs,
             author: req.user?._id
         })

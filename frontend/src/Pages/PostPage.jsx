@@ -85,13 +85,15 @@ const PostPage = () => {
           <p className=''> <span className='hidden md:inline'> Last Update: </span> {lastUpdatedAt()}  </p>
         </div>
       </div>
-      <div className='border-2'>
-        <img src={post?.imagesURLs[0]?.url} alt="" />
-        <p className='w-full flex justify-center md:text-xl font-semibold my-3'> {post?.imagesURLs[0]?.original_filename} </p>
+      <div className='border-2 flex justify-center items-center text-xl py-3 font-semibold'>
+        {post.category}
+        {/* <img src={post?.imagesURLs[0]?.url} alt="" /> */}
+        {/* <p className='w-full flex justify-center md:text-xl font-semibold my-3'> {post?.imagesURLs[0]?.original_filename} </p> */}
       </div>
         <DisplayContent content={post?.content} />
     </div>
   )
 }
+
 
 export default PostPage
