@@ -36,8 +36,8 @@ function App() {
                   <Route path="/sign-in" element={<SignIn />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<Projects />} />
-                  <Route path="services" element={<Services />} />
-                  <Route path="*" element={<NotFoundPage />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/*" element={<NotFoundPage />} />
                 </Routes>
                 <FooterComp />
             </BrowserRouter>
