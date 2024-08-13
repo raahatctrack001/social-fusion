@@ -36,11 +36,11 @@ export default function Header() {
     <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-50">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold md:border-x-2 md:border-x-gray-900 p-2 rounded-2xl text-gray-900">Soul Echo</span>
+        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 px-2 rounded-2xl text-gray-900">Soul Echo</span>
       </Navbar.Brand>
 
       <TextInput 
-        className="hidden lg:inline w-44 lg:w-64 xl:w-96 border-y-4 border-gray-900 rounded-2xl font-bold "
+        className="hidden lg:inline w-44 lg:w-64 xl:w-96 border-gray-900 rounded-2xl font-bold "
         placeholder="search post..."
         rightIcon={HiDocumentSearch}
         icon={HiSearch}
@@ -88,10 +88,10 @@ export default function Header() {
           </Navbar.Link>
           <Button outline className="md:hidden"> <span className="flex justify-center items-center gap-2"> switch to dark theme <HiSun /></span> </Button>
 
-          <Navbar.Link className="" href="/about" active = {path === '/about'} >About</Navbar.Link>
-          <Navbar.Link className="" href="/services" active = {path === '/services'} >Services</Navbar.Link>
-          <Navbar.Link className="" href="/prices" active = {path === '/prices'} >Pricing</Navbar.Link>
-          <Navbar.Link className="" href="/contacts" active = {path === '/contacts'} >Contact</Navbar.Link>
+          <Navbar.Link className="text-sm" href="/about" active = {path === '/about'} >About</Navbar.Link>
+          <Navbar.Link className="text-sm" href="/services" active = {path === '/services'} >Services</Navbar.Link>
+          <Navbar.Link className="text-sm" href="/prices" active = {path === '/prices'} >Pricing</Navbar.Link>
+          <Navbar.Link className="text-sm" href="/contacts" active = {path === '/contacts'} >Contact</Navbar.Link>
       </Navbar.Collapse>
         {/* </div> */}
     </Navbar>
