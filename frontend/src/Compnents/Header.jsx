@@ -1,6 +1,6 @@
 
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentSearch, HiLogin, HiLogout, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
+import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLogin, HiLogout, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
@@ -59,9 +59,9 @@ export default function Header() {
                  <span className="block text-sm">{currentUser.username}</span>
                  <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                </Dropdown.Header>
-               <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
-               <Dropdown.Item icon={HiCog}>Edit Profile</Dropdown.Item>
-               <Dropdown.Item icon={HiDatabase}>Statistics</Dropdown.Item>
+               <Dropdown.Item href="/dashboard" icon={HiViewGrid}>Dashboard</Dropdown.Item>
+               <Dropdown.Item href="" icon={HiCog}>Edit Profile</Dropdown.Item>
+               <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>
                <Dropdown.Divider />
                <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>
             </Dropdown>  

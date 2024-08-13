@@ -1,3 +1,4 @@
+import { upload } from "../Middlewares/multer.middleware.js";
 import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
@@ -186,4 +187,21 @@ export const followUnfollow = asyncHandler(async (req, res, next)=>{
 
 export const unfollow = asyncHandler(async (req, res, next)=>{
 
+})
+
+export const imageUpload = asyncHandler(async (req, res, next)=>{
+    try {
+        const response = await uploadOnCloudinary(req.file?.path)
+        if(!response){
+            throw new apiError(500, "failed to upload image")
+        }
+        res
+            .status(200)
+            .json(
+                new apiResponse(200, "image updloaded!", response)
+            )
+
+    } catch (error) {
+        next(error)
+    }
 })

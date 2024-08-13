@@ -5,6 +5,7 @@ import { HiUserAdd } from 'react-icons/hi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import NotFoundPage from './NotFoundPage';
+import DisplayContent from '../Compnents/DisplayContent';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -88,7 +89,7 @@ const PostPage = () => {
         <img src={post?.imagesURLs[0]?.url} alt="" />
         <p className='w-full flex justify-center md:text-xl font-semibold my-3'> {post?.imagesURLs[0]?.original_filename} </p>
       </div>
-      <p className='mt-5'> { post.content } </p>
+        <DisplayContent content={post?.content} />
     </div>
   )
 }

@@ -1,21 +1,24 @@
 import React, { useState, useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
-import { Button, TextInput } from 'flowbite-react';
-import { HiPhotograph, HiX } from 'react-icons/hi';
+import { Button, Dropdown, TextInput } from 'flowbite-react';
+import { HiPhotograph, HiUpload, HiX } from 'react-icons/hi';
 import CopyInput from '../Compnents/CopyInput';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
 
 const CreatePost = ({ placeholder }) => {
   const editor = useRef(null);
   const filePickerRef = useRef();
   const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
   const [showInstructions, setShowInstructions] = useState(true);  
   const [imageUrl, setImageUrl] = useState();
   const [showURL, setShowURL] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("select a category")
 
   // Correct usage of useMemo
   const config = useMemo(() => ({
     readonly: false, // all options from https://xdsoft.net/jodit/docs/
-    placeholder: placeholder || 'Start writing you story...'
+    placeholder: placeholder || 'Start formatting you story...'
   }), [placeholder]);
 
   console.log(content)
@@ -46,18 +49,44 @@ const CreatePost = ({ placeholder }) => {
         console.log(error);
       }
   }
-  console.log(imageUrl)
+
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
+  
+  const handlePostUpload = async (e)=>{
+    e.preventDefault();
+    try {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("category", selectedCategory);
+        
+        const response = await fetch(apiEndPoints.createPostAddress(), {
+          method: "POST",
+          body: formData,
+        })
+
+        console.log("response", response);
+        const data = await response.json();
+
+        console.log("data extracted", data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
 
-    <div className='w-full'>
+    <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>
       <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
-            <TextInput placeholder='Unique Title' className='mb-1 w-3/4' />
+            <TextInput placeholder='Unique Title' className='mb-1 w-3/4' onBlur={(e)=>setTitle(e.target.value)}/>
             <TextInput 
               onChange={handleFileUpload}
               type='file' ref={filePickerRef}  className='hidden' id='postImage' name='postImage'/>
-            <Button outline onClick={()=>filePickerRef.current.click()} className='w-1/4 h-10 mb-1 flex items-center'> Upload Images </Button>
+            <Button outline onClick={()=>filePickerRef.current.click()} className='w-1/4  h-8 md:h-10 mb-1 flex items-center'> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Upload</span> Images </Button>
           </div>
           <div className=''>
             
@@ -81,16 +110,15 @@ const CreatePost = ({ placeholder }) => {
 
           </div>
           
+          
+
+          {imageUrl && showURL && <div className='flex flex-col'>
           <div className='flex'>
-            <div className='w-11/12'>
-              
+            <div className='w-11/12'>              
             </div>
             <span onClick={()=>{setShowURL(false)}} className='w-1/12 flex justify-end cursor-pointer pr-2 relative top-6 right-1'> <HiX /> </span>
 
           </div>
-          
-
-          {imageUrl && showURL && <div className='flex flex-col'>
             {/* <h1> copy image url </h1>     */}
             <CopyInput url={imageUrl}/>
           </div>}
@@ -101,8 +129,60 @@ const CreatePost = ({ placeholder }) => {
             tabIndex={1} // tabIndex of textarea
             onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
             onChange={newContent => {}}
-            className='min-h-96'
+            className=''
           />
+          <div className="w-full flex justify-center mt-2">
+            <Dropdown
+              label={selectedCategory}
+              placement="bottom-start"
+              dismissOnClick={true}
+              arrowIcon={false}
+              >
+              <Dropdown.Item onClick={() => handleCategorySelect('Technology')}>
+                Technology
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Health & Wellness')}>
+                Health & Wellness
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Business & Finance')}>
+                Business & Finance
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Education')}>
+                Education
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Entertainment')}>
+                Entertainment
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Lifestyle')}>
+                Lifestyle
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Travel')}>
+                Travel
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Food & Drink')}>
+                Food & Drink
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Fashion')}>
+                Fashion
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Sports')}>
+                Sports
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Art & Design')}>
+                Art & Design
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Science')}>
+                Science
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('DIY & Crafts')}>
+                DIY & Crafts
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleCategorySelect('Personal Development')}>
+                Personal Development
+              </Dropdown.Item>
+            </Dropdown>
+          </div>
+          <Button onClick={handlePostUpload} color={"warning"} className='w-full my-2'> Upload now </Button>
       </div>
     </div>
   );

@@ -21,6 +21,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.2",
     "multer": "^1.4.5-lts.1",
+    "rich-markdown-editor": "^11.21.3",
     "zod": "^3.23.8"
-  }
+  },
+  "overrides": {
+        "prosemirror-tables": "^1.1.1"
+    }
 }
