@@ -1,6 +1,6 @@
 import React, { useReducer, useRef, useState } from 'react';
 import { Button } from 'flowbite-react';
-import { HiOutlineUsers, HiPencil, HiPlus, HiSelector, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
+import { HiBadgeCheck, HiOutlineUsers, HiPencil, HiPlus, HiSelector, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -65,76 +65,86 @@ const AuthorHeader = ({ author }) => {
     }
   }
   return (
-    <div className="flex flex-col items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
-        <div className='flex md:flex-row justify-center items-center border-b md:border-0 p-2 w-full'>
-          <div className='relative'>
-            <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
-            { author?._id === currentUser?._id && <div onClick={()=>profileRef.current.click()} 
-              className='w-6 h-6 md:w-8 md:h-8 absolute border rounded-full bg-white top-12 left-12 md:top-16 md:left-16 flex justify-center items-center cursor-pointer'>
-              <HiPencil className='md:text-2xl' />
-            </div>}
-            <img 
-              src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
-              alt="Author" 
-              className="w-20 h-20 md:w-24 md:h-24 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"
-            />
-          </div>
-            <div className="flex flex-col justify-between w-full">
-              <div className='flex justify-between'>
-                <div>
-                    <h2 className="text-xl font-bold flex  ml-5 md:ml-10 justify-start">{author.fullName}</h2>
-                    <p className="text-gray-600 flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
-                </div>
-                <div onClick={handleToggleFollowButtonClick} className='flex md:hidden justify-center w-10 text-2xl'> 
-                    {author?.followers?.includes(currentUser?._id) ? 
-                    (<HiUserRemove />) : 
-                    (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> </span></div>)}
-                </div>
-                <div className='hidden md:flex gap-4'>
-                    <div className="text-center">
-                      <p className="text-lg font-semibold">{author.followers.length}</p>
-                      <p className="text-gray-600">Followers</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-semibold">{author.followings.length}</p>
-                      <p className="text-gray-600">Following</p>
-                    </div>
-                    <div className="text-center ">
-                      <p className="text-lg font-semibold">{author.posts.length}</p>
-                      <p className="text-gray-600">Posts</p>
-                    </div>
-                </div>
-              </div>
-              <div className='flex justify-between mt-2'>
-                {<p className="mt-2 text-gray-700 flex  ml-5 md:ml-10 justify-start">{author.bio||""}</p>}
-                {author?._id !== currentUser?._id ? 
-                (<Button 
-                  onClick={handleToggleFollowButtonClick}
-                  className='hidden md:inline'> 
-                                              {author?.followers?.includes(currentUser?._id) ? 
-                                              ( <div className='flex gap-1 items-center'> <HiUserRemove /> Following</div> ) : 
-                                              (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> follow </span></div>)}  
-                </Button>) : 
-                
-                (<Button disabled> Owner </Button>)}
-              </div>        
-            </div>
+    <div className="flex flex-col items-center p-2 w-full">
+    <div className="flex flex-col md:flex-row items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
+        <div className='relative'>
+          <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
+          { author?._id === currentUser?._id && <div onClick={()=>profileRef.current.click()} 
+            className='w-10 h-10 absolute border rounded-full bg-white top-20 left-24 flex justify-center items-center cursor-pointer'>
+            <HiPencil className='text-2xl' />
+          </div>}
+          <img 
+            src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
+            alt="Author" 
+            className="w-32 h-32 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"
+          />
         </div>
+        
+        <div>
+          <div className='flex md:flex-row justify-center items-center gap-4 border-b md:border-0 w-full'>
 
-        <div className="flex justify-between gap-2 md:hidden mt-4 md:mt-2 p-1 w-full px-5">
-          <div className="text-center">
-            <p className="text-lg font-semibold">{author.followers.length}</p>
-            <p className="text-gray-600">Followers</p>
+              <div className="flex flex-col justify-between w-full ">
+                <div className='flex justify-between'>
+                  <div>
+                      <h2 className="text-xl font-bold flex  ml-5 md:ml-10 justify-start">{author.fullName}</h2>
+                      <p className="text-gray-600 flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
+                  </div>
+                  <div onClick={handleToggleFollowButtonClick} className='flex md:hidden justify-between w-10 text-2xl'> 
+                      {author?._id !== currentUser?._id ? (author?.followers?.includes(currentUser?._id) ? 
+                      (<HiUserRemove />)  : 
+                      (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> </span></div>)): <div> <HiBadgeCheck /> </div>}
+                  </div>
+                  <div className='hidden md:flex gap-4'>
+                      <div className="text-center">
+                        <p className="text-lg font-semibold">{author.followers.length}</p>
+                        <p className="text-gray-600">Followers</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-semibold">{author.followings.length}</p>
+                        <p className="text-gray-600">Following</p>
+                      </div>
+                      <div className="text-center ">
+                        <p className="text-lg font-semibold">{author.posts.length}</p>
+                        <p className="text-gray-600">Posts</p>
+                      </div>
+                  </div>
+                </div>
+                <div className='flex items-center justify-between my-2 mt-5 md:ml-10' >
+                  <Button> Edit Profile </Button>
+                  {author?._id !== currentUser?._id ? 
+                  (<Button 
+                    onClick={handleToggleFollowButtonClick}
+                    className='hidden md:inline max-h-10'> 
+                                                {author?.followers?.includes(currentUser?._id) ? 
+                                                ( <div className='flex gap-1 items-center'> <HiUserRemove /> Following</div> ) : 
+                                                (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> follow </span></div>)}  
+                  </Button>) : 
+                                                
+                  (<span className='border w-24 grid place-items-center h-8 rounded bg-gray-900'> <HiBadgeCheck className='text-white' /> </span> )}
+                </div>        
+              </div>
           </div>
-          <div className="text-center">
-            <p className="text-lg font-semibold">{author.followings.length}</p>
-            <p className="text-gray-600">Following</p>
+
+          <div className="flex justify-between gap-2 md:hidden mt-4 md:mt-2 p-1 w-full px-5">
+            <div className="text-center">
+              <p className="text-lg font-semibold">{author.followers.length}</p>
+              <p className="text-gray-600">Followers</p>
+            </div>
+            <div className="text-center">
+              <p className="text-lg font-semibold">{author.followings.length}</p>
+              <p className="text-gray-600">Following</p>
+            </div>
+            <div className="text-center ">
+              <p className="text-lg font-semibold">{author.posts.length}</p>
+              <p className="text-gray-600">Posts</p>
+            </div>          
           </div>
-          <div className="text-center ">
-            <p className="text-lg font-semibold">{author.posts.length}</p>
-            <p className="text-gray-600">Posts</p>
-          </div>          
-        </div>
+
+        </div>       
+    </div>
+      <div className='flex justify-center items-center'>
+          {<p className="m-2 border p-2 rounded-lg text-gray-700 flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
+      </div>
     </div>
   );
 };
