@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+
 const postSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -23,6 +24,12 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    shares: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ],
     category: {
         type: String,
         required:true,

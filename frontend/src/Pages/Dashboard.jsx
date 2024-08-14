@@ -1,8 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sidebar, Navbar, Dropdown, Button, Table } from 'flowbite-react';
 import { HiChartBar, HiCog, HiHome, HiPencil, HiUser } from 'react-icons/hi';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import { useSelector } from 'react-redux';
+import DisplayContent from '../Compnents/DisplayContent';
+import RecentPostsTable from '../Compnents/RecentPostTable';
+// import { join } from 'path';
 
 const Dashboard = () => {
+    const { currentUser } = useSelector(state=>state.user)
+    const [postData, setPostData] = useState(null);
+    const [postsLastWeek, setPostsLastWeek] = useState(null);
+    const [postsLastTwoWeeks, setPostsLastTwoWeeks] = useState(null);
+    const [postsLastMonth, setPostsLastMonth] = useState(null);
+    const [postsLastThreeMonths, setPostsLastThreeMonths] = useState(null);
+    const [recentPosts, setRecentPosts] = useState(null);
+    const [popularPosts, setPopularPosts] = useState(null);
+    // const [olderPosts, setOlderPosts] = useState(null)
+    // useEffect(()=>{
+    //   fetch(apiEndPoints.getPostsAddress())
+    //     .then((posts)=>{
+    //       if(!posts){
+    //         throw new Error("network response wasn't ok for dashboard!");
+    //       }
+    //       return posts.json()
+    //     })
+    //     .then((data)=>{
+    //       const fetchedData = data.data;
+    //       console.log("fetched post for dashboard!"); 
+    //       setPostData(fetchedData)
+    //     })
+    //     .catch((err)=>{
+    //       throw new Error("Error fetching posts", err);
+    //     })
+    // }, [])
+    // console.log(apiEndPoints.allPostAnalytics())
+    useEffect(()=>{
+        fetch(apiEndPoints.allPostAnalytics())
+          .then((posts)=>{
+            if(!posts){
+              throw new Error("network response wasn't ok for dashboard!");
+            }
+            // console.log(posts)
+            return posts.json()
+          })
+          .then((data)=>{
+            console.log("data", data)
+            setPostData(data.data.allPosts)
+            setPostsLastWeek(data.data.postsLastWeek)
+            setPostsLastTwoWeeks(data.data.postsLastTwoWeeks)
+            setPostsLastMonth(data.data.postsLastMonth)
+            setPostsLastThreeMonths(data.data.postsLastThreeMonths)
+            setRecentPosts(data.data.allPosts?.slice(0, 5))
+            setPopularPosts(data.data.allPosts?.slice(10, 17))
+          })
+          .catch((err)=>{
+            console.log(err)
+          })
+        }, [])
+    console.log("sliced data", postData?.slice(0, 10));
+    console.log("recents posts", recentPosts);
+    console.log("popular posts", popularPosts);
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
@@ -56,32 +114,30 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
 
           {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold mb-2">Recent Posts</h3>
-              <ul>
-                <li>Post 1</li>
-                <li>Post 2</li>
-                <li>Post 3</li>
-              </ul>
+          <div className="flex flex-col gap-4 mb-8">
+            <div className="bg-white rounded-lg shadow-md">
+            {/* <h3 className="text-lg font-semibold mb-2">Recent Posts</h3> */}
+              <RecentPostsTable heading={"Recent Posts"} displayPosts={recentPosts} />
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold mb-2">Traffic Stats</h3>
-              <p>Daily Visitors: 1200</p>
+            <div className='flex justify-between'>
+              <div className="bg-white p-6 rounded-lg shadow-md order-2 w-1/4">
+                <h1 className="text-lg font-semibold mb-2">Traffic Stats:</h1>
+                <h2> Posts added in </h2>
+                <p>1. last week : {postsLastWeek?.length}</p>
+                <p>2. last 15 days : {postsLastTwoWeeks?.length||0}</p>
+                <p>3. last one month : {postsLastMonth?.length||0}</p>
+                <p>4. last three Posts: {postsLastThreeMonths?.length||0}</p>
+                <h2> Daily Visitors: 1200</h2>              
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md w-3/4">
+                <RecentPostsTable heading={"Popular Posts"} displayPosts={popularPosts} />
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold mb-2">Popular Posts</h3>
-              <ul>
-                <li>Post A</li>
-                <li>Post B</li>
-                <li>Post C</li>
-              </ul>
-            </div>
+            </div>  
           </div>
 
           {/* Post Management Table */}
           <h2 className="text-2xl font-semibold mb-4">Manage Posts</h2>
-          <Table>
+        <Table>
             <Table.Head>
               <Table.HeadCell>Title</Table.HeadCell>
               <Table.HeadCell>Author</Table.HeadCell>
@@ -90,18 +146,23 @@ const Dashboard = () => {
               <Table.HeadCell>Actions</Table.HeadCell>
             </Table.Head>
             <Table.Body>
-              <Table.Row>
-                <Table.Cell>Post 1</Table.Cell>
-                <Table.Cell>Author A</Table.Cell>
-                <Table.Cell>Category X</Table.Cell>
-                <Table.Cell>Published</Table.Cell>
-                <Table.Cell>
-                  <Button size="xs">Edit</Button>
-                </Table.Cell>
-              </Table.Row>
-              {/* Repeat for other posts */}
+              {postData?.length > 0 && postData.map((post, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell>{post?.title}</Table.Cell>
+                  <Table.Cell>{ currentUser._id === post?.author?._id ? "Author" :  post?.author?.fullName}</Table.Cell>
+                  <Table.Cell>{post.category}</Table.Cell>
+                  <Table.Cell>Published</Table.Cell>
+                  <Table.Cell>
+                    {currentUser?._id === post?.author?._id ? <div className='flex gap-1'>
+                      <Button color={'warning'} size="xs">Edit</Button>
+                      <Button color={'failure'} size="xs">Delete</Button>
+                    </div> : <Button disabled color={'failure'}> N/A </Button>}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
             </Table.Body>
-          </Table>
+        </Table>
+
         </main>
       </div>
     </div>

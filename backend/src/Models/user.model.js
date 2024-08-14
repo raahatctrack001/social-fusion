@@ -42,6 +42,17 @@ const userSchema = mongoose.Schema({
             type: String 
         }
       }],
+    shares:[[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Post'
+
+        },
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ]],
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

@@ -1,3 +1,5 @@
+// import { resourceLimits } from "worker_threads";
+import { response } from "express";
 import Post from "../Models/post.model.js"
 import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
@@ -185,7 +187,6 @@ export const deletePost = asyncHandler(async (req, res, next)=>{
 
 export const likePost = asyncHandler(async(req, res, next)=>{
     const { userId, postId } = req.params;
-
     try {
         const currentPost = await Post.findById(postId);
         if(!currentPost){
@@ -215,3 +216,66 @@ export const editPost = asyncHandler(async(req, res, next)=>{
     
 })
 
+
+
+export const allPostAnalytics = asyncHandler(async (req, res, next) => {
+    const now = new Date();
+
+    const oneWeekAgo = new Date(now);
+    oneWeekAgo.setDate(now.getDate() - 7);
+
+    const twoWeeksAgo = new Date(now);
+    twoWeeksAgo.setDate(now.getDate() - 14);
+
+    const oneMonthAgo = new Date(now);
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+
+    const threeMonthsAgo = new Date(now);
+    threeMonthsAgo.setMonth(now.getMonth() - 3);
+
+    try {
+        const allPosts = await Post.find()
+            .populate("author")
+            .sort({ createdAt: -1 });
+
+        const postsLastWeek = [];
+        const postsLastTwoWeeks = [];
+        const postsLastMonth = [];
+        const postsLastThreeMonths = [];
+        // const olderPosts = [];
+
+        allPosts.forEach(post => {
+            if (post.createdAt >= oneWeekAgo) {
+                postsLastWeek.push(post);
+                postsLastTwoWeeks.push(post); // Also add to last two weeks
+                postsLastMonth.push(post); // Also add to last month
+                postsLastThreeMonths.push(post); // Also add to last three months
+            } else if (post.createdAt >= twoWeeksAgo) {
+                postsLastTwoWeeks.push(post);
+                postsLastMonth.push(post); // Also add to last month
+                postsLastThreeMonths.push(post); // Also add to last three months
+            } else if (post.createdAt >= oneMonthAgo) {
+                postsLastMonth.push(post);
+                postsLastThreeMonths.push(post); // Also add to last three months
+            } else if (post.createdAt >= threeMonthsAgo) {
+                postsLastThreeMonths.push(post);
+            }
+        });
+
+        // Return the categorized posts
+        return res
+            .status(200)
+            .json(
+                new apiResponse(200, "post analytics has been retrieved", {
+                    allPosts,
+                    postsLastWeek,
+                    postsLastTwoWeeks,
+                    postsLastMonth,
+                    postsLastThreeMonths,
+                    // olderPosts,
+                })
+            );
+    } catch (error) {
+        next(error);
+    }
+});
