@@ -8,6 +8,7 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from 'flowbite-react'
 import { HiUserAdd } from 'react-icons/hi'
+import NotFoundPage from './NotFoundPage'
 
 const Home = () => {
   const [postData, setPostData] = useState([]);
@@ -78,7 +79,7 @@ const Home = () => {
                   <PostCard post={post}  />
                 </div>
               </div>
-          )) : <h1> no posts yet </h1>}
+          )) : <div className='w-full justify-center items-center'> <NotFoundPage /> </div>}
       </div>
     </div>
 

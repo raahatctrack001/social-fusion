@@ -57,6 +57,7 @@ export default function CreateProfile() {
       if(data.success){
         localStorage.removeItem("registerationData");
         localStorage.removeItem("profileData");
+        navigate("/sign-in")
       }
 
       console.log(data)

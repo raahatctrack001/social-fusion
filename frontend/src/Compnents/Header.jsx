@@ -4,14 +4,18 @@ import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, H
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { signoutSuccess } from "../redux/slices/user.slice";
+
+
 export default function Header() {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state=>state.user);
+
+
   // console.log(currentUser)
   const dispatch = useDispatch();
   const handleSignOut = async()=>{
@@ -31,8 +35,13 @@ export default function Header() {
       console.log("error logging out!", error)
     }
   }
-  
+  const handleSearchTerm = async (e)=>{
+    navigate(`/search-posts?query=${encodeURIComponent(e.target.value)}`);
+  }
+  // console.log(searchTerm)
   return (
+    <div className="">
+
     <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-50">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
@@ -44,6 +53,8 @@ export default function Header() {
         placeholder="search post..."
         rightIcon={HiDocumentSearch}
         icon={HiSearch}
+        id="searchTerm"
+        onChange={handleSearchTerm}
       />
 
       <Button outline className="bg-gray-800 lg:hidden"> <span className="flex justify-center items-center"><HiSearch /></span> </Button>
@@ -52,8 +63,8 @@ export default function Header() {
       <div className="flex gap-1 md:gap-2 md:order-2">
       {currentUser ?
       <div className=" flex gap-2" > 
-          <img onClick={dropdownRef.current && dropdownRef.current.click()} className="h-10 rounded-full cursor-pointer hidden" src={currentUser.profilePic} alt={currentUser.username} />
-          <div ref={dropdownRef} className=""> 
+          <img onClick={()=> dropdownRef.current && dropdownRef.current.click()} className="h-10 rounded-full cursor-pointer" src={currentUser.profilePic} alt={currentUser.username} />
+          <div ref={dropdownRef} className="hidden md:inline"> 
             <Dropdown label={currentUser.fullName.length > 10 ? currentUser.fullName.substr(0,10) : currentUser.fullName} outline arrowIcon={false}>
                <Dropdown.Header>
                  <span className="block text-sm">{currentUser.username}</span>
@@ -95,6 +106,7 @@ export default function Header() {
       </Navbar.Collapse>
         {/* </div> */}
     </Navbar>
+    </div>
   );
 }
 

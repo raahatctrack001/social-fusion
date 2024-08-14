@@ -8,6 +8,8 @@ import NotFoundPage from './NotFoundPage';
 import DisplayContent from '../Compnents/DisplayContent';
 
 const PostPage = () => {
+
+
   const { postId } = useParams();
 
   const navigate = useNavigate();
@@ -15,6 +17,10 @@ const PostPage = () => {
   const [author, setAuthor] = useState();
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []); 
 
   useEffect(()=>{
     try {

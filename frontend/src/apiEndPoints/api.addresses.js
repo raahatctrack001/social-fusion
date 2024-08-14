@@ -12,7 +12,7 @@ export  const apiEndPoints = {
     
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
-    
+    searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,
     getPostsAddress : ()=> `/api/v1/posts/get-posts/`,
     deletePostAddress : (postId)=> `/api/v1/posts/delete-post/${postId}`,
     editPostAddress : (postId)=> `/api/v1/posts/edit-post/${postId}`,

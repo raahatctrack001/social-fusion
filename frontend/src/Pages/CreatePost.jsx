@@ -49,13 +49,13 @@ const CreatePost = ({ placeholder }) => {
     placeholder: placeholder || 'Start formatting you story...'
   }), [placeholder]);
 
-  console.log(content)
+  // console.log(content)
 
   const handleFileUpload = async (e)=>{
       setShowURL(false);
       setError(null);
       try {
-        console.log(e.target.files[0]);
+        // console.log(e.target.files[0]);
         const formData = new FormData();
         formData.append("postImage", e.target.files[0]);
 
@@ -64,7 +64,7 @@ const CreatePost = ({ placeholder }) => {
           body: formData,
         })
 
-        console.log("response: ", response);
+        // console.log("response: ", response);
         if(!response.ok){
           setError(response.message)
           throw new Error("error uploading file");
@@ -74,14 +74,14 @@ const CreatePost = ({ placeholder }) => {
         if(data.success){
           setShowURL(true);
           setImageUrl(data.data?.url)
-          console.log("data: ", data.data);
+          // console.log("data: ", data.data);
         }
         else{
           setError(data.message)
         }
       } catch (error) {
         setError(error.message)
-        console.log(error);
+        // console.log(error);
       }
   }
 
@@ -126,7 +126,7 @@ const CreatePost = ({ placeholder }) => {
       console.log(error);
     }
   }
-  console.log(selectedCategory)
+  // console.log(selectedCategory)
   return (
 
     <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>

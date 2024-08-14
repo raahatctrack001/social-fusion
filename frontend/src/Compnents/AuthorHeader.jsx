@@ -34,7 +34,7 @@ const AuthorHeader = ({ author }) => {
                 </div>
               </div>
               <div className='flex justify-between mt-2'>
-                {<p className="mt-2 text-gray-700 flex  ml-5 md:ml-10 justify-start">{author.bio||"this is bio section but not present yet!"}</p>}
+                {<p className="mt-2 text-gray-700 flex  ml-5 md:ml-10 justify-start">{author.bio||""}</p>}
                 <Button className='hidden md:inline'> <span className='flex items-center justify-center mr-1'> <HiUserAdd /> </span>  Follow </Button>
               </div>        
             </div>

@@ -16,6 +16,7 @@ import HomePage from "./Pages/HomePage"
 import PrivateRoute from "./Compnents/PrivateRoute"
 import CreatePost from "./Pages/CreatePost"
 import NotFoundPage from "./Pages/NotFoundPage"
+import SearchPostResult from "./Pages/SearchPostResult"
 // import Home from "./Pages/Home.jsx"
 function App() {
   return   <BrowserRouter>
@@ -28,12 +29,14 @@ function App() {
                   <Route path="/posts/post/:postId" element={<PostPage />} />
                   <Route path="/create-post" element={<CreatePost />} />            
                 </Route>
+                  
                   <Route path="/" element={<HomePage />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/register/terms-and-conditions" element={<TermsAndConditions />}  />
                   <Route path="/register/post-registration" element={<PostRegistration /> } />
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
+                  <Route path="/search-posts" element={<SearchPostResult />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/services" element={<Services />} />
