@@ -7,7 +7,7 @@ import { testPosts } from '../dataSeeders/post50'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from 'flowbite-react'
-import { HiUserAdd, HiUserRemove } from 'react-icons/hi'
+import { HiBadgeCheck, HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd, HiUserRemove } from 'react-icons/hi'
 import NotFoundPage from './NotFoundPage'
 import { useSelector } from 'react-redux'
 
@@ -100,9 +100,16 @@ const Home = () => {
                     <img className='h-8 rounded-full' src={post?.author?.profilePic } alt="" />
                     <p className='text-xs font-semibold'> {post?.author?.username } </p>
                   </div>
-                  <Button 
-                      onClick={()=>console.log("follow button from post got a click")}
-                      outline pill> <HiUserAdd /> </Button>
+                  {post?.author?._id !== currentUser?._id ? 
+                  (<Button 
+                    onClick={()=>handleToggleFollowButtonClick(post?.author)}
+                    outline className='bg-gray-800 '> 
+                                                {post?.author?.followers?.includes(currentUser?._id) ? 
+                                                ( <div className='flex gap-1 items-center relative'>  <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' /> </div> ) : 
+                                                (<div className=''><span className='flex items-center justify-center gap-1 relative'> <HiUser className='text-lg' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> </span></div>)}  
+                </Button>) : 
+                
+                (<Button outline disabled> <HiBadgeCheck className='text-lg text-black' /> </Button>)}
                 </div>
                 <div className='cursor-pointer' onClick={()=>navigate(`posts/post/${post?._id}`)}>  
                   <PostCard post={post}  />
@@ -117,7 +124,7 @@ const Home = () => {
 
     <div className='flex-1/4 border-2 m-2 px-2 mx-2'>
       <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors </h1>
-      <div className="flex flex-col bg-gray-100 gap-3">
+      <div className="flex flex-col bg-gray-100 gap-3 ">
       {users && users.map((author, index) => (
             <div 
               className='flex justify-between items-center gap-2 border-2 border-gray-500 p-1 rounded-xl min-w-64 max-w-96 cursor-pointer'
@@ -131,8 +138,8 @@ const Home = () => {
                   onClick={()=>handleToggleFollowButtonClick(author)}
                   outline className='bg-gray-800 '> 
                                               {author?.followers?.includes(currentUser?._id) ? 
-                                              ( <div className='flex gap-1 items-center'> <HiUserRemove /> Following</div> ) : 
-                                              (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> follow </span></div>)}  
+                                              ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
+                                              (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                 </Button>) : 
                 
                 (<Button disabled> Owner </Button>)}

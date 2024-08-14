@@ -1,6 +1,6 @@
 
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLogin, HiLogout, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
+import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
@@ -40,9 +40,9 @@ export default function Header() {
   }
   // console.log(searchTerm)
   return (
-    <div className="">
+    <div className="sticky top-0 z-50">
 
-    <Navbar fluid rounded className="lg:px-10 border-b-2 sticky top-0 z-50">
+    <Navbar fluid rounded className="lg:px-10 border-b-2">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
         <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 px-2 rounded-2xl text-gray-900">Soul Echo</span>
@@ -71,7 +71,8 @@ export default function Header() {
                  <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                </Dropdown.Header>
                <Dropdown.Item href="/dashboard" icon={HiViewGrid}>Dashboard</Dropdown.Item>
-               <Dropdown.Item href="/edit-profile" icon={HiCog}>Edit Profile</Dropdown.Item>
+               <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
+               <Dropdown.Item href="/update-password" icon={HiLockOpen}>Update Password</Dropdown.Item>
                <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>
                <Dropdown.Divider />
                <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>
