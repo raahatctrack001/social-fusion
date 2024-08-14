@@ -7,10 +7,12 @@ import { testPosts } from '../dataSeeders/post50'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from 'flowbite-react'
-import { HiUserAdd } from 'react-icons/hi'
+import { HiUserAdd, HiUserRemove } from 'react-icons/hi'
 import NotFoundPage from './NotFoundPage'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
+  const { currentUser } = useSelector(state=>state.user)
   const [postData, setPostData] = useState([]);
   const [users, setUsers] = useState([]); 
 
@@ -53,6 +55,33 @@ const Home = () => {
         throw new Error("error getting author's detail! ", error)
       })
   }, [])
+
+  const handleToggleFollowButtonClick = async (author)=>{
+    try {
+      fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
+        method: "POST",
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+      .then((response)=>{
+        console.log("resonse: ", response);
+        return response.json();
+      })
+      .then((data)=>{
+          alert(data.message)
+          // if(data.success){
+          //   currentUser?.followers = data.followers;
+          //   currentUser?.followings = data.followings;
+          // }
+          console.log(data)
+      })
+    } catch (error) {
+        alert(error.message);
+        console.log(error);
+    }
+  }
+  
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     <div className='flex-3/4 flex flex-col border-2  m-2 px-2'>
@@ -96,12 +125,24 @@ const Home = () => {
               <div onClick={() => navigate(`/authors/author/${author?._id}`)}>
               <AuthorCard author={author}  />
               </div>
-              <Button
-                onClick={()=>console.log("follow button got a click")} 
+
+              {author?._id !== currentUser?._id ? 
+                (<Button 
+                  onClick={()=>handleToggleFollowButtonClick(author)}
+                  outline className='bg-gray-800 '> 
+                                              {author?.followers?.includes(currentUser?._id) ? 
+                                              ( <div className='flex gap-1 items-center'> <HiUserRemove /> Following</div> ) : 
+                                              (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> follow </span></div>)}  
+                </Button>) : 
+                
+                (<Button disabled> Owner </Button>)}
+                
+              {/* <Button
+                onClick={()=>handleToggleFollowButtonClick(author)} 
                 outline className='bg-gray-800 '> 
                 <span className='flex justify-center items-center'> <HiUserAdd /> </span>
                 <span className='hidden md:inline'> Follow </span>
-              </Button>
+              </Button> */}
              
             </div>
         ))}
