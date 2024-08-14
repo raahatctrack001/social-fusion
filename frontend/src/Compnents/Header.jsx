@@ -63,15 +63,15 @@ export default function Header() {
       <div className="flex gap-1 md:gap-2 md:order-2">
       {currentUser ?
       <div className=" flex gap-2" > 
-          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer" src={currentUser.profilePic} alt={currentUser.username} />
-          <div ref={dropdownRef} className="hidden md:inline"> 
+          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden md:inline" src={currentUser.profilePic} alt={currentUser.username} />
+          <div ref={dropdownRef} className=""> 
             <Dropdown label={currentUser.fullName.length > 10 ? currentUser.fullName.substr(0,10) : currentUser.fullName} outline arrowIcon={false}>
                <Dropdown.Header>
                  <span className="block text-sm">{currentUser.username}</span>
                  <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                </Dropdown.Header>
                <Dropdown.Item href="/dashboard" icon={HiViewGrid}>Dashboard</Dropdown.Item>
-               <Dropdown.Item href="" icon={HiCog}>Edit Profile</Dropdown.Item>
+               <Dropdown.Item href="/edit-profile" icon={HiCog}>Edit Profile</Dropdown.Item>
                <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>
                <Dropdown.Divider />
                <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>

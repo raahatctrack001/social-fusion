@@ -5,14 +5,13 @@ import { updateSuccess } from '../redux/slices/user.slice';
 
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.currentUser);
+  const { currentUser } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
-    username: user?.username || '',
-    email: user?.email || '',
-    fullName: user?.fullName || '',
-    password: '',
-    bio: user?.bio || '',
+    username: currentUser?.username || '',
+    email: currentUser?.email || '',
+    fullName: currentUser?.fullName || '',
+    bio: currentUser?.bio || '',
   });
 
   const [error, setError] = useState(null);
@@ -39,13 +38,14 @@ const ProfileEditPage = () => {
   };
   console.log(formData);
   return (
-    <div className="container mx-auto p-6 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Edit Profile</h1>
+    <div className=" flex flex-col justify-center items-center border">
+      <h1 className="text-2xl font-bold my-3 px-10 w-full flex justify-center"> Update Profile </h1>
       {error && <Alert color="failure" className="mb-4">{error}</Alert>}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:px-10">
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 m-1">Username</label>
           <TextInput
+            className='w-full'
             id="username"
             name="username"
             value={formData.username}
@@ -56,7 +56,7 @@ const ProfileEditPage = () => {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 m-1">Email</label>
           <TextInput
             type="email"
             id="email"
@@ -69,7 +69,7 @@ const ProfileEditPage = () => {
         </div>
 
         <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
+          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 m-1">Full Name</label>
           <TextInput
             id="fullName"
             name="fullName"
@@ -79,7 +79,7 @@ const ProfileEditPage = () => {
             required
           />
         </div>
-
+{/* 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
           <TextInput
@@ -90,10 +90,10 @@ const ProfileEditPage = () => {
             onChange={handleChange}
             placeholder="Enter your password"
           />
-        </div>
+        </div> */}
 
         <div>
-          <label htmlFor="bio" className="block text-sm font-medium text-gray-700">Bio</label>
+          <label htmlFor="bio" className="block text-sm font-medium text-gray-700 m-1">Showcase your latest self.</label>
           <Textarea
             id="bio"
             name="bio"
