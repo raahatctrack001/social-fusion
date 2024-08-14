@@ -27,11 +27,14 @@ function validatePassword(password) {
 
 
 
+
+
 export default function SignIn() {
   const [formData, setFormData] = useState({userEmail: '', password: ''});
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
   const [error, setError] = useState(null);
+  const [isCapsLockOn, setIsCapsLockOn] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -74,7 +77,7 @@ export default function SignIn() {
       dispatch(signInFailure(error));
     }
   };
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -108,6 +111,10 @@ export default function SignIn() {
 
           <div>
             <div className="mb-2 block">
+              {isCapsLockOn && (
+                                 <Alert color={"warning"} className="text-red-500 font-semibold mt-2 text-lg w-full flex items-center justify-center">Caps Lock is on!</Alert>
+                               )}
+              
               <div className="flex justify-between items-center">                
                   <Label className="" htmlFor="password" value="Your password" />
                   {formData.password && ((formData.password.length >= 8) &&(validationResults.hasUpperCase && validationResults.hasLowerCase && validationResults.hasNumber && validationResults.hasSpecialChar) && formData.password?
@@ -124,6 +131,7 @@ export default function SignIn() {
                 placeholder="************" 
                 required 
                 shadow 
+                onKeyDown={(event)=>setIsCapsLockOn(event.getModifierState('CapsLock'))}
                 onFocus={()=>setPasswordFocus(true)}
                 onBlur={()=>setPasswordFocus(false)}
                 onChange={(e)=>{setFormData({...formData, [e.target.id]: e.target.value})}}

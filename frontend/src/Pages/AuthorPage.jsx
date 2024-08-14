@@ -66,7 +66,7 @@ const Author = () => {
             <div className="flex flex-col items-center justify-center border m-2  p-6  shadow-lg md:py-52">
               <div className="text-center">
               <h2 className="text-2xl font-semibold text-gray-800 ">No Posts Yet  </h2>
-              <span className='flex justify-center items-center gap-2 text-3xl mt-2 md:text-5xl'> <HiDocumentAdd /> </span>
+              <span onClick={()=>navigate("/create-post")} className='flex justify-center items-center gap-2 text-3xl mt-2 md:text-5xl cursor-pointer'> <HiDocumentAdd /> </span>
                 <p className="mt-4 text-white italic">
                   "Every great story starts with a blank page. Begin your journey today."
                 </p>
