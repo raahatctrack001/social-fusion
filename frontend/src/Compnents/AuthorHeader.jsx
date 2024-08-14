@@ -4,6 +4,7 @@ import { HiBadgeCheck, HiOutlineUsers, HiPencil, HiPlus, HiSelector, HiUserAdd, 
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
+import { current } from '@reduxjs/toolkit';
 // import { signInSuccess } from '../redux/slices/user.slice';
 // import { current } from '@reduxjs/toolkit';
 
@@ -94,7 +95,7 @@ const AuthorHeader = ({ author }) => {
                       (<HiUserRemove />)  : 
                       (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> </span></div>)): <div> <HiBadgeCheck /> </div>}
                   </div>
-                  <div className='hidden md:flex gap-4'>
+                  <div className='hidden md:flex gap-4 md:ml-8'>
                       <div className="text-center">
                         <p className="text-lg font-semibold">{author.followers.length}</p>
                         <p className="text-gray-600">Followers</p>
@@ -110,7 +111,7 @@ const AuthorHeader = ({ author }) => {
                   </div>
                 </div>
                 <div className='flex items-center justify-between my-2 mt-5 md:ml-10' >
-                  <Button> Edit Profile </Button>
+                  {author?._id === currentUser?._id && <Button> Edit Profile </Button>}
                   {author?._id !== currentUser?._id ? 
                   (<Button 
                     onClick={handleToggleFollowButtonClick}
@@ -143,7 +144,7 @@ const AuthorHeader = ({ author }) => {
         </div>       
     </div>
       <div className='flex justify-center items-center'>
-          {<p className="m-2 border p-2 rounded-lg text-gray-700 flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
+          {author.bio && <p className="m-2 border p-2 rounded-lg text-gray-700 flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
       </div>
     </div>
   );
