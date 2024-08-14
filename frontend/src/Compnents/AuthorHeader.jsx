@@ -69,13 +69,14 @@ const AuthorHeader = ({ author }) => {
         <div className='flex md:flex-row justify-center items-center border-b md:border-0 p-2 w-full'>
           <div className='relative'>
             <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
-            { author?._id === currentUser?._id && <div onClick={()=>profileRef.current.click()} className='w-8 h-8 absolute border rounded-full bg-white top-3/4 left-16 flex justify-center items-center cursor-pointer'>
-              <HiPencil className='text-2xl' />
+            { author?._id === currentUser?._id && <div onClick={()=>profileRef.current.click()} 
+              className='w-6 h-6 md:w-8 md:h-8 absolute border rounded-full bg-white top-12 left-12 md:top-16 md:left-16 flex justify-center items-center cursor-pointer'>
+              <HiPencil className='md:text-2xl' />
             </div>}
             <img 
               src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
               alt="Author" 
-              className="w-24 h-24 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"
+              className="w-20 h-20 md:w-24 md:h-24 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"
             />
           </div>
             <div className="flex flex-col justify-between w-full">
