@@ -63,7 +63,7 @@ export default function Header() {
       <div className="flex gap-1 md:gap-2 md:order-2">
       {currentUser ?
       <div className=" flex gap-2" > 
-          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 rounded-full cursor-pointer" src={currentUser.profilePic} alt={currentUser.username} />
+          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer" src={currentUser.profilePic} alt={currentUser.username} />
           <div ref={dropdownRef} className="hidden md:inline"> 
             <Dropdown label={currentUser.fullName.length > 10 ? currentUser.fullName.substr(0,10) : currentUser.fullName} outline arrowIcon={false}>
                <Dropdown.Header>

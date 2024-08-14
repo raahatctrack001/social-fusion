@@ -1,12 +1,16 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer, useRef, useState } from 'react';
 import { Button } from 'flowbite-react';
-import { HiOutlineUsers, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
+import { HiOutlineUsers, HiPencil, HiPlus, HiSelector, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateSuccess } from '../redux/slices/user.slice';
 // import { signInSuccess } from '../redux/slices/user.slice';
 // import { current } from '@reduxjs/toolkit';
 
 const AuthorHeader = ({ author }) => {
+  const dispatch = useDispatch();
+  const [error, setError] = useState()
+  const profileRef = useRef();
   // const followRef = useRef(null)
   const { currentUser } = useSelector(state=>state.user)
   // const dispatch = useDispatch();
@@ -35,17 +39,45 @@ const AuthorHeader = ({ author }) => {
         console.log(error);
     }
   }
-  // console.log(author?._id)
-  // console.log(currentUser?._id);
-  // console.log(?)
+  
+  const handleDPChange = async (e)=>{
+    try {
+        const formData = new FormData();
+        formData.append("profilePicture", e.target.files[0]);
+        const response = await fetch(apiEndPoints.updateDPAddress(currentUser?._id), {
+          method: "PATCH",
+          body: formData
+        })
+
+        if(!response.ok){
+          setError(response.message);
+        }
+
+        const data = await response.json();
+        alert(data.message);
+        console.log(data);
+        dispatch(updateSuccess(data.data))
+
+        
+      
+    } catch (error) {
+        setError(error.message)
+    }
+  }
   return (
     <div className="flex flex-col items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
         <div className='flex md:flex-row justify-center items-center border-b md:border-0 p-2 w-full'>
+          <div className='relative'>
+            <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
+            <div onClick={()=>profileRef.current.click()} className='w-8 h-8 absolute border rounded-full bg-white top-3/4 left-16 flex justify-center items-center cursor-pointer'>
+              <HiPencil className='text-2xl' />
+            </div>
             <img 
               src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
               alt="Author" 
               className="w-24 h-24 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"
             />
+          </div>
             <div className="flex flex-col justify-between w-full">
               <div className='flex justify-between'>
                 <div>

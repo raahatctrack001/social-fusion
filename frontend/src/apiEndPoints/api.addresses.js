@@ -9,6 +9,7 @@ export  const apiEndPoints = {
     updateUserAddress : (userId)=> `/api/v1/users/update-user/${userId}`,
     updateProfilePic : (userId)=> `/api/v1/users/upload-profile-picture/${userId}`,
     toggleFollowUserAddress : (followId)=> `/api/v1/users/follow-user/${followId}`,
+    updateDPAddress: (userId)=>`/api/v1/users/upload-profile-picture/${userId}`,
     
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,

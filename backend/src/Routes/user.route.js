@@ -13,7 +13,7 @@ import { upload } from '../Middlewares/multer.middleware.js';
 
 const router = express.Router();
 
-router.route('/upload-profile-picture/:userId').post(isUserLoggedIn, upload.single('profilePic'), uploadProfilePicture)
+router.route('/upload-profile-picture/:userId').patch(isUserLoggedIn, upload.single('profilePicture'), uploadProfilePicture)
 router.route('/update-user/:userId').patch(isUserLoggedIn, upload.none(), updateUser)
 router.route('/get-users').get(/* isUserLoggedIn, */ getUsers);
 router.route('/get-user/:userId').get(isUserLoggedIn, getUser)

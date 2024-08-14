@@ -8,7 +8,6 @@ import { emailSchema, userSchema } from "../Validators/user.validator.js";
 import bcryptjs from 'bcryptjs'
 
 export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
-    
     try {
         const response = await uploadOnCloudinary(req.file?.path)
         if(!response){
