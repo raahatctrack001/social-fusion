@@ -145,50 +145,6 @@ export const deleteUser = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const followUnfollow = asyncHandler(async (req, res, next)=>{
-
-    // followerId: one who is following someone
-    // followingId: one who is followed by follower
-
-    const { followerId, followingId } = req.params;
-    try {
-        const follower = await User.findById(followerId);
-        const following = await User.findById(followingId);
-        const indexOfFollower = follower.followings.indexOf(following?._id)
-        const indexOfFollowing = following.followers.indexOf(follower?._id);
-
-
-        if(indexOfFollowing != -1){
-            follower.followings.splice(indexOfFollower, 1);
-            following.followers.splice(indexOfFollowing, 1);
-        }
-        else{
-            follower.followings.push(following?._id);
-            following.followers.push(follower?._id);
-        }
-        // console.log(indexOfFollower);
-        // console.log(indexOfFollowing);
-        
-        // return;
-        // follower.followings.push(following);
-        // following.followers.push(follower);
-        follower.save();
-        following.save();
-        return res.status(200).json(
-            new apiResponse(200, `${follower.fullName} followed ${following.fullName}`, {
-                "follower: ": follower,
-                "follwing: ": following
-            })
-        )
-    } catch (error) {
-        next(error)
-    }
-})
-
-export const unfollow = asyncHandler(async (req, res, next)=>{
-
-})
-
 export const imageUpload = asyncHandler(async (req, res, next)=>{
     try {
         const response = await uploadOnCloudinary(req.file?.path)
@@ -204,4 +160,42 @@ export const imageUpload = asyncHandler(async (req, res, next)=>{
     } catch (error) {
         next(error)
     }
+})
+
+export const followUser = asyncHandler(async (req, res, next)=>{
+    if(!req?.user){
+        throw new apiError(401, "first sign in to follow")
+    }
+
+    const { followId } = req.params;
+    if(followId == req?.user?._id){
+        throw new apiError(409, "You can't follow yourself!");
+    }
+    try {
+        const currentUser = await User.findById(req?.user?._id);
+        const followUser = await User.findById(followId);
+
+        if(currentUser?.followings?.includes(followUser?._id)){
+            // console.log("already a follower")
+            throw new apiError(409, "Already a follower");
+            // return;
+        }
+        
+        // return;
+        currentUser.followings.push(followUser);
+        followUser.followers.push(currentUser);
+    
+        currentUser.save();
+        followUser.save();
+
+        res
+            .status(200)
+            .json(
+                new apiResponse(200, `you stared following ${followUser?.fullName}`, {follower: currentUser, following: followUser})
+            )
+    
+    } catch (error) {
+        next(error);
+    }
+
 })

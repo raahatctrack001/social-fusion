@@ -1,8 +1,37 @@
 import React from 'react';
 import { Button } from 'flowbite-react';
 import { HiUserAdd } from 'react-icons/hi';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import { useSelector } from 'react-redux';
+import { current } from '@reduxjs/toolkit';
 
 const AuthorHeader = ({ author }) => {
+  const { currentUser } = useSelector(state=>state.user)
+  const handleFollowButtonClick = async ()=>{
+    try {
+      fetch(apiEndPoints.followUserAddress(author._id), {
+        method: "POST",
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+      .then((response)=>{
+        console.log("resonse: ", response);
+        return response.json();
+      })
+      .then((data)=>{
+        if(!data.success){
+          alert(data.message)
+        }
+        console.log(data)
+      })
+    } catch (error) {
+        alert(error.message);
+        console.log(error);
+    }
+  }
+  console.log(author?._id)
+  console.log(currentUser?._id);
   return (
     <div className="flex flex-col items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
         <div className='flex md:flex-row justify-center items-center border-b md:border-0 p-2 w-full'>
@@ -35,7 +64,10 @@ const AuthorHeader = ({ author }) => {
               </div>
               <div className='flex justify-between mt-2'>
                 {<p className="mt-2 text-gray-700 flex  ml-5 md:ml-10 justify-start">{author.bio||""}</p>}
-                <Button className='hidden md:inline'> <span className='flex items-center justify-center mr-1'> <HiUserAdd /> </span>  Follow </Button>
+                {author?._id !== currentUser?._id ? <Button 
+                  onClick={handleFollowButtonClick}
+                  className='hidden md:inline'> <span className='flex items-center justify-center mr-1'> <HiUserAdd /> </span>  Follow 
+                </Button> : <Button disabled> Owner </Button>}
               </div>        
             </div>
         </div>
