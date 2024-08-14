@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useReducer, useRef } from 'react';
 import { Button } from 'flowbite-react';
-import { HiUserAdd } from 'react-icons/hi';
+import { HiOutlineUsers, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
-import { signInSuccess } from '../redux/slices/user.slice';
-import { current } from '@reduxjs/toolkit';
+// import { signInSuccess } from '../redux/slices/user.slice';
+// import { current } from '@reduxjs/toolkit';
 
 const AuthorHeader = ({ author }) => {
+  // const followRef = useRef(null)
   const { currentUser } = useSelector(state=>state.user)
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const handleToggleFollowButtonClick = async ()=>{
     try {
       fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
@@ -51,7 +52,11 @@ const AuthorHeader = ({ author }) => {
                     <h2 className="text-xl font-bold flex  ml-5 md:ml-10 justify-start">{author.fullName}</h2>
                     <p className="text-gray-600 flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
                 </div>
-                <span className='flex md:hidden justify-center w-10'> <HiUserAdd /> </span>
+                <div onClick={handleToggleFollowButtonClick} className='flex md:hidden justify-center w-10 text-2xl'> 
+                    {author?.followers?.includes(currentUser?._id) ? 
+                    (<HiUserRemove />) : 
+                    (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> </span></div>)}
+                </div>
                 <div className='hidden md:flex gap-4'>
                     <div className="text-center">
                       <p className="text-lg font-semibold">{author.followers.length}</p>
@@ -74,8 +79,8 @@ const AuthorHeader = ({ author }) => {
                   onClick={handleToggleFollowButtonClick}
                   className='hidden md:inline'> 
                                               {author?.followers?.includes(currentUser?._id) ? 
-                                              ("following" ) : 
-                                              (<div><span className='flex items-center justify-center mr-1'> <HiUserAdd /> follow </span></div>)}  
+                                              ( <div className='flex gap-1 items-center'> <HiUserRemove /> Following</div> ) : 
+                                              (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> follow </span></div>)}  
                 </Button>) : 
                 
                 (<Button disabled> Owner </Button>)}

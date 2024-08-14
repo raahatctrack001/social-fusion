@@ -34,7 +34,7 @@ const Author = () => {
         setError(error)
         console.log("error fetching author!", error)
       }
-  }, [])
+  }, [ authorId ])
   // console.log(authorData)
 
   if(!authorData)
