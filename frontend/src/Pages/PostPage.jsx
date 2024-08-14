@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../Compnents/PostCard';
 import { Button } from 'flowbite-react';
-import { HiUserAdd } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd } from 'react-icons/hi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import NotFoundPage from './NotFoundPage';
 import DisplayContent from '../Compnents/DisplayContent';
+import { useSelector } from 'react-redux';
 
 const PostPage = () => {
-
+  const { currentUser } = useSelector(state=>state.user);
 
   const { postId } = useParams();
 
@@ -72,18 +73,58 @@ const PostPage = () => {
 
   // console.log("post fetched", post)
   // // const { author } = post;
+
+  const handleToggleFollowButtonClick = async (author)=>{
+    try {
+      fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
+        method: "POST",
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+      .then((response)=>{
+        console.log("resonse: ", response);
+        return response.json();
+      })
+      .then((data)=>{
+          alert(data.message)
+          // if(data.success){
+          //   currentUser?.followers = data.followers;
+          //   currentUser?.followings = data.followings;
+          // }
+          console.log(data)
+      })
+    } catch (error) {
+        alert(error.message);
+        console.log(error);
+    }
+  }
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>
 
       <div>
-        <div className='flex gap-2 items-center pb-2' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>
-          <img className='h-10 rounded-full' src={author?.profilePic} alt="" />
-          <div className='flex w-full flex-col text-xs cursor-pointer'>
-            <span className=''>{author?.username} </span>
-            <span className=''>{author?.fullName} </span>
+        <div className=' flex  justify-between'>
+          <div className='flex gap-2 items-center pb-2' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>
+            <img className='h-10 rounded-full' src={author?.profilePic} alt="" />
+            <div className='flex w-full flex-col text-xs cursor-pointer'>
+              <span className=''>{author?.username} </span>
+              <span className=''>{author?.fullName} </span>
+            </div>
           </div>
-          <Button className='bg-gray-800'> <span className='flex justify-center items-center'> <HiUserAdd className='mr-1' /> </span> Follow </Button>
+          <div>
+
+            {author?._id !== currentUser?._id ? 
+                  (<Button 
+                    onClick={()=>handleToggleFollowButtonClick(author)}
+                    outline className='bg-gray-800 '> 
+                                                {author?.followers?.includes(currentUser?._id) ? 
+                                                ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
+                                                (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
+                  </Button>) : 
+                                                
+                  (<Button disabled> <HiBadgeCheck /> </Button>)}        
+          </div>
         </div>
         <div className='flex flex-col md:flex-row md:justify-between border-b-2'>
           <p className=''> <span className='hidden md:inline'> Approx<span className='hidden lg:inline'>imate </span> time: </span> {calculateReadingTime(post?.content)} min read </p>

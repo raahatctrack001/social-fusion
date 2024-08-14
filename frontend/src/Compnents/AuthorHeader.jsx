@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useState } from 'react';
 
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiOutlineUsers, HiPencil, HiPlus, HiSelector, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -117,16 +117,15 @@ const AuthorHeader = ({ author }) => {
                   <div className='flex items-center justify-between my-2 mt-5 md:ml-10' >
                     {author?._id === currentUser?._id && <Button onClick={(()=>navigate("/edit-profile"))}> Edit Profile </Button>}
                     {author?._id !== currentUser?._id ? 
-                    (<Button 
-                      onClick={handleToggleFollowButtonClick}
-                      className='hidden md:inline max-h-10'> 
-                                                  {author?.followers?.includes(currentUser?._id) ? 
-                                                  ( <div className='flex gap-1 items-center'> <HiUserRemove /> Following</div> ) : 
-                                                  (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> follow </span></div>)}  
-                    </Button>) : 
-                                                  
-                    (<span className='border w-24 grid place-items-center h-8 rounded bg-gray-900'> <HiBadgeCheck className='text-white' /> </span> )}
-                  </div>        
+                  (<Button 
+                    onClick={()=>handleToggleFollowButtonClick(author)}
+                    outline className='bg-gray-800 '> 
+                                                {author?.followers?.includes(currentUser?._id) ? 
+                                                ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
+                                                (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
+                  </Button>) : 
+                                                
+                  (<Button disabled className='bg-gray-900'> <HiBadgeCheck className='text-xl text-white w-20 h-5' /> </Button>)}   </div>        
                 </div>
             </div>
                                                   
