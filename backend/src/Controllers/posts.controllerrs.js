@@ -8,7 +8,8 @@ import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 
 export const createPost = asyncHandler(async (req, res, next)=>{
-    console.log(req.body)
+    // console.log(req.body)
+    // return;
     if(!req.user){
         throw new apiError(401, "Unauthorized! please login")
     }
@@ -18,28 +19,29 @@ export const createPost = asyncHandler(async (req, res, next)=>{
     }
 
     try {
-        const files = req.files;
-        let fileURLs = [];
+        // const files = req.files;
+        // let fileURLs = [];
 
-        for(let i = 0; i < files.length; i++){
-            const response = await uploadOnCloudinary(files[i].path);
-            fileURLs.push(response)
-        }   
+        // for(let i = 0; i < files.length; i++){
+        //     const response = await uploadOnCloudinary(files[i].path);
+        //     fileURLs.push(response)
+        // }   
 
-        fileURLs.forEach(file=>console.log("files", file))
+        // fileURLs.forEach(file=>console.log("files", file))
         
         await Post.create({
             title,
             content,
             category,
-            imagesURLs: fileURLs,
+            // imagesURLs: fileURLs,
             author: req.user?._id
         })
         .then((post)=>{
             if(!post){
                 throw new apiError(417, "Failed to upload the post!, plz try again")
             }
-
+            post.thumbnail.push(req.body.thumbnail);
+            post.save();
             User.findById(req.user?._id)
                 .then((user)=>{
                     if(!user){

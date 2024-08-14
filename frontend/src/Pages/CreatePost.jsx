@@ -30,12 +30,15 @@ const CreatePost = ({ placeholder }) => {
 
   const navigate = useNavigate();
   const editor = useRef(null);
+  const thumbnailRef = useRef(null);
   const filePickerRef = useRef();
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const [error, setError] = useState(null);
   const [showInstructions, setShowInstructions] = useState(true);  
-  const [imageUrl, setImageUrl] = useState();
+  const [imageUrl, setImageUrl] = useState(null);
+  const [thumbnailURL, setThumbnailURL] = useState(null);
+  // const [thumbnailFile, setThumbnailFile] = useState(null);
   const [showURL, setShowURL] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('')
 
@@ -85,6 +88,41 @@ const CreatePost = ({ placeholder }) => {
       }
   }
 
+  const handleThumbnailUPload = async(e)=>{
+      setShowURL(false);
+      setError(null);
+      // setThumbnailFile(e.target.files[0]);
+      try {
+        // console.log(e.target.files[0]);
+        const formData = new FormData();
+        formData.append("postImage", e.target.files[0]);
+
+        const response = await fetch('/api/v1/users/image-upload', {
+          method:"POST",
+          body: formData,
+        })
+
+        // console.log("response: ", response);
+        if(!response.ok){
+          setError(response.message)
+          throw new Error("error uploading file");
+        }
+
+        const data = await response.json();
+        if(data.success){
+          setShowURL(true);
+          setThumbnailURL(data.data?.url)
+          // console.log("data: ", data.data);
+        }
+        else{
+          setError(data.message)
+        }
+      } catch (error) {
+        setError(error.message)
+        // console.log(error);
+      }
+  }
+
 
   // const handleCategorySelect = (category) => {
   //   setSelectedCategory(category);
@@ -103,6 +141,7 @@ const CreatePost = ({ placeholder }) => {
         formData.append("title", title);
         formData.append("content", content);
         formData.append("category", selectedCategory);
+        formData.append("thumbnail", thumbnailURL);
         
         const response = await fetch(apiEndPoints.createPostAddress(), {
           method: "POST",
@@ -137,7 +176,12 @@ const CreatePost = ({ placeholder }) => {
             <TextInput 
               onChange={handleFileUpload}
               type='file' ref={filePickerRef}  className='hidden' id='postImage' name='postImage'/>
-            <Button outline onClick={()=>filePickerRef.current.click()} className='w-1/4  h-8 md:h-10 mb-1 flex items-center'> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Upload</span> Images </Button>
+            <Button outline onClick={()=>filePickerRef.current.click()} color={''} className='w-1/4  h-8 md:h-10 mb-1 flex items-center hover:bg-gray-500 '> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Upload</span> Images </Button>
+          </div>
+
+          <div>
+            <TextInput onChange={handleThumbnailUPload} ref={thumbnailRef} className='hidden' type='file'/>
+            <Button onClick={()=>thumbnailRef.current.click()} className='w-full hover:bg-gray-500' color={''}  outline> Upload Thumbnail Image </Button>
           </div>
           <div className=''>
             
@@ -175,6 +219,7 @@ const CreatePost = ({ placeholder }) => {
           </div>}
 
           {/* <EditorWithDisplay /> */}
+          {thumbnailURL && <img src={thumbnailURL} alt="thumbnail" />}
           <JoditEditor
             ref={editor}
             value={content}

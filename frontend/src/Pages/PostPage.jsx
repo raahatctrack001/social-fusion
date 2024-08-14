@@ -133,7 +133,13 @@ const PostPage = () => {
         </div>
       </div>
       <div className='border-2 flex justify-center items-center text-xl py-3 font-semibold'>
-        {post.category}
+        <div className='flex flex-col justify-center items-center gap-2'>
+          {post.category}
+          <div>
+            {post?.thumbnail && <img src={post?.thumbnail} alt="" />}
+            {/* <p> original_filename </p> */}
+          </div>
+        </div>
         {/* <img src={post?.imagesURLs[0]?.url} alt="" /> */}
         {/* <p className='w-full flex justify-center md:text-xl font-semibold my-3'> {post?.imagesURLs[0]?.original_filename} </p> */}
       </div>
