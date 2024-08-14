@@ -105,32 +105,30 @@ export const loginUser = asyncHandler(async (req, res, next)=>{
 
 })
 
-export const logoutUser = asyncHandler(async (req, res, next)=>{
+export const logoutUser = asyncHandler(async (req, res, next) => {
     try {
-        const currentUser = await User
-            .findByIdAndUpdate(req.user?._id, {
-                $set: {
-                    refreshToken: 1,
-                },
-                
-            },
+        // Clear the user's refresh token in the database
+        const currentUser = await User.findByIdAndUpdate(
+            req.user?._id,
             {
-                new: true
-            }
-        )
+                $set: { refreshToken: null } // Clear refreshToken instead of setting it to 1
+            },
+            { new: true }
+        );
+
         console.log(currentUser);
+
+        // Clear cookies and respond
         return res
-                .status(200)
-                .clearCookie('accessToken', options)
-                .clearCookie('refreshToken', options)
-                .json(
-                    new apiResponse(200, "user logged out", {})
-                )
-        
+            .status(200)
+            .clearCookie('accessToken', { httpOnly: true, secure: true, sameSite: 'None' })
+            .clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'None' })
+            .json(new apiResponse(200, "User logged out", {}));
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
+
 
 export   const resetPassword = asyncHandler(async (req, res, next)=>{
 })

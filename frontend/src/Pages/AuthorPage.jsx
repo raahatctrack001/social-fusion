@@ -41,7 +41,7 @@ const Author = () => {
     return <NotFoundPage />
 
   const postData = authorData?.posts;
-
+  console.log(authorData)
   return (     
       <div className='bg-gray-500 m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
         <AuthorHeader author = {authorData} />

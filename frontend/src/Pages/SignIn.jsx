@@ -54,13 +54,13 @@ export default function SignIn() {
 
        if (!response.ok) {
           setError(response.message)
-         throw new Error(`failed to logIn! status: ${response.status}`);
        }
 
        const data = await response.json();
-       console.log('Form submitted successfully:', data);
+      //  console.log('Form submitted successfully:', data);
+
        if(data.success){
-        console.log(data.data)
+        // console.log(data.data)
         dispatch(signInSuccess(data.data));
         navigate("/")
        }

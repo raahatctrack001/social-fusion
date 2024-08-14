@@ -20,17 +20,17 @@ export default function Header() {
   const dispatch = useDispatch();
   const handleSignOut = async()=>{
     try {
-        const response = await fetch(apiEndPoints.logoutAddress(), {
-          method: "POST",
-        });
+      const response = await fetch(apiEndPoints.logoutAddress(), {
+        method: "POST",
+      });
+      const data = await response.json(); 
 
-        // console.log(response);
-
-        const data = await response.json();
-        // console.log(data);
-        if(data.success){
-          dispatch(signoutSuccess())
-        }
+      // console.log("response", response);
+      console.log("data", data);
+      alert(data.message)  
+      navigate("/sign-in")
+      dispatch(signoutSuccess())
+        
     } catch (error) {
       console.log("error logging out!", error)
     }
