@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextInput, Textarea, Button, Alert } from 'flowbite-react';
 import { updateSuccess } from '../redux/slices/user.slice';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
+
 
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const [error, setError] = useState(null)
 
   const [formData, setFormData] = useState({
     username: currentUser?.username || '',
@@ -14,7 +17,6 @@ const ProfileEditPage = () => {
     bio: currentUser?.bio || '',
   });
 
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,24 +30,46 @@ const ProfileEditPage = () => {
     e.preventDefault();
     setError(null);
 
+    // console.log(formData)
+
     try {
-      // Dispatch the action to update the profile
-      await dispatch(updateProfile(formData)).unwrap();
-      alert('Profile updated successfully!');
+      const response = await fetch(apiEndPoints.updateUserAddress(currentUser?._id), {
+        method: "PATCH",
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      if(!response.ok){
+        setError(response.message);
+        // alert("failed to update profile");
+      }
+
+
+      const data = await response.json();
+      console.log("response", response); 
+      console.log("data", data);
+      if(data.success){
+        dispatch(updateSuccess(data.data));
+        alert('Profile updated successfully!');
+        window.location.reload();
+        return;
+      }
+      setError(data.message)
     } catch (err) {
       setError(err.message || 'Failed to update profile');
     }
   };
-  console.log(formData);
+  // console.log(formData);
   return (
-    <div className=" flex flex-col justify-center items-center border">
+    <div className=" flex flex-col justify-center items-center border bg-gray-200">
       <h1 className="text-2xl font-bold my-3 px-10 w-full flex justify-center"> Update Profile </h1>
-      {error && <Alert color="failure" className="mb-4">{error}</Alert>}
-      <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:px-10">
+      {error && <Alert color="failure" className="text-lg rounded-lg">{error}</Alert>}
+      <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:px-10 lg:px-32 xl:px-40">
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700 m-1">Username</label>
           <TextInput
-            className='w-full'
+            className=''
             id="username"
             name="username"
             value={formData.username}
@@ -91,7 +115,6 @@ const ProfileEditPage = () => {
             placeholder="Enter your password"
           />
         </div> */}
-
         <div>
           <label htmlFor="bio" className="block text-sm font-medium text-gray-700 m-1">Showcase your latest self.</label>
           <Textarea

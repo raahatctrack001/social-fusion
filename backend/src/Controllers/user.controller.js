@@ -4,7 +4,7 @@ import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
-import { emailSchema, userSchema } from "../Validators/user.validator.js";
+import { emailSchema, updateUserSchema, userSchema } from "../Validators/user.validator.js";
 import bcryptjs from 'bcryptjs'
 
 export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
@@ -36,8 +36,8 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
     if(req.user?._id != req.params?.userId){
         throw new apiError(401, "Unothorized Attempt!")
     }
-    const {username, email, fullName, password} = req.body;
-    const userData = [username, email, fullName, password];
+    const {username, email, fullName, bio} = req.body;
+    const userData = [username, email, fullName];
     
     try {
         if(userData.some(field=>field?.trim()?0:1)){
@@ -48,12 +48,12 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
             throw new apiError(403, "username and email shouldn't be similar")
         }
         
-        const result = userSchema.safeParse({username, email, fullName, password})
+        const result = updateUserSchema.safeParse({username, email, fullName, bio})
         if(!result.success){
             throw new apiError(406, result?.error?.errors[0]?.message)
         }
 
-        req.body.password = bcryptjs.hashSync(req.body.password)
+        // req.body.password = bcryptjs.hashSync(req.body.password)
         User
             .findByIdAndUpdate(req.params?.userId, req.body, {new: true})
             .then((updatedUser)=>{
@@ -63,7 +63,7 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
                 res
                     .status(201)
                     .json(
-                        new apiResponse(201, `welcome hoooooomannnnnn!!! ${updatedUser.fullName} what a change u've made... we appreciate it `, updatedUser)
+                        new apiResponse(201, `Hoooooomannnnnn!!! ${updatedUser.fullName} what a change u've made... we appreciate it `, updatedUser)
                     )
                 })
             .catch(error=>next(error))

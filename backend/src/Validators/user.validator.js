@@ -11,17 +11,28 @@ export const passwordSchema = z.string()
   .regex(/[0-9]/, { message: "Password must contain at least one number" })
   .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character" });
 
-export const emailSchema = z.string().email({ message: "Invalid email address" });
-
-export const fullNameSchema = z.string();
+  export const emailSchema = z.string().email({ message: "Invalid email address" });
+  
+  export const fullNameSchema = z.string();
+  
+  const bioSchema = z.string()
+    .max(250, 'Bio cannot exceed 250 characters.')
+    .optional();
 
 export const userSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
   email: emailSchema,
-  fullName: fullNameSchema
+  fullName: fullNameSchema, 
+  bio: bioSchema,
 });
 
+export const updateUserSchema = z.object({
+  username: usernameSchema,
+  email: emailSchema,
+  fullName: fullNameSchema, 
+  bio: bioSchema,
+});
 
 export const uniqueIdValidator = (userEmail)=>{
     const uniqueId = emailSchema.safeParse(userEmail);
