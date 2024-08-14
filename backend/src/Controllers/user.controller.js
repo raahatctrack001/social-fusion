@@ -162,7 +162,7 @@ export const imageUpload = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const followUser = asyncHandler(async (req, res, next)=>{
+export const toggleFollowUser = asyncHandler(async (req, res, next)=>{
     if(!req?.user){
         throw new apiError(401, "first sign in to follow")
     }
@@ -175,13 +175,22 @@ export const followUser = asyncHandler(async (req, res, next)=>{
         const currentUser = await User.findById(req?.user?._id);
         const followUser = await User.findById(followId);
 
-        if(currentUser?.followings?.includes(followUser?._id)){
-            // console.log("already a follower")
-            throw new apiError(409, "Already a follower");
-            // return;
+        const indexOfFollowUser = currentUser?.followings.indexOf(followUser?._id);
+        const indexOfCurrentUser = followUser?.followers?.indexOf(currentUser?._id);
+        if(indexOfFollowUser != -1){
+            currentUser?.followings?.splice(indexOfFollowUser);
+            followUser?.followers?.splice(indexOfCurrentUser);
+
+            currentUser.save();
+            followUser.save();
+
+            return res
+            .status(200)
+            .json(
+                new apiResponse(200, `you unfollowed ${followUser?.fullName}`, {follower: currentUser, following: followUser})
+            )
         }
         
-        // return;
         currentUser.followings.push(followUser);
         followUser.followers.push(currentUser);
     
