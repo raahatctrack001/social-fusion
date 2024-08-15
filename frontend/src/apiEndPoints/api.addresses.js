@@ -1,8 +1,10 @@
+
 export  const apiEndPoints = {
     registerAddress : () => `/api/v1/auth/register`,
     loginAddress : ()=> `/api/v1/auth/login`,
     logoutAddress : ()=> `/api/v1/auth/logout`,
-    
+    updatePasswordAddress: (authorId)=>`/api/v1/auth/update-password//${authorId}`,
+
     getUserAddress : (userId)=> `/api/v1/users/get-user/${userId}`,
     getUsersAddress : ()=> `/api/v1/users/get-users/`,
     deleteUserAddress : (userId)=> `/api/v1/users/delete-user/${userId}`,

@@ -130,14 +130,20 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 });
 
 
-export   const resetPassword = asyncHandler(async (req, res, next)=>{
-})
+// export const resetPassword = asyncHandler(async (req, res, next)=>{
+//     console.log("reset password controller...")
+// })
 
 export const updatePassword = asyncHandler(async (req, res, next)=>{
-    const { oldPassword, newPassword, confirmPassword } = req.body;
+    
     try {        
-        if(newPassword !== confirmPassword){
-            throw new apiError(404, "password didn't match");
+        if(req.user?._id !== req.params?.userId){
+            throw new apiError(401, "Unauthorized attempt!")
+        }
+
+        const { oldPassword, newPassword, repeatPassword } = req.body;
+        if(newPassword !== repeatPassword){
+            throw new apiError(404, "repeat password didn't match");
         }
         
         const result = passwordSchema.safeParse(newPassword);
@@ -145,7 +151,7 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
             throw new apiError(406, result?.error?.errors[0]?.message)
         }
         
-        const currentUser = await User.findById(req.user?._id);
+        const currentUser = await User.findById(req.params?.userId);
         if(!currentUser.isPasswordCorrect(oldPassword)){
             throw new apiError(404, "old password is wrong")
         }

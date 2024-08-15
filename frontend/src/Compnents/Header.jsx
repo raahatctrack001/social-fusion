@@ -72,7 +72,7 @@ export default function Header() {
                </Dropdown.Header>
                <Dropdown.Item href="/dashboard" icon={HiViewGrid}>Dashboard</Dropdown.Item>
                <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
-               <Dropdown.Item href="/update-password" icon={HiLockOpen}>Update Password</Dropdown.Item>
+               {/* <Dropdown.Item href=  icon={HiLockOpen}>Update Password</Dropdown.Item> */}
                <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>
                <Dropdown.Divider />
                <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>

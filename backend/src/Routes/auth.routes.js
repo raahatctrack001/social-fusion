@@ -4,9 +4,8 @@ import {
     googleLogin, 
     loginUser, 
     logoutUser, 
-    registerUser, 
-    resetPassword, 
-    updatePassword 
+    registerUser,
+    updatePassword, 
 } from '../Controllers/auth.controllers.js'; 
 import { upload } from '../Middlewares/multer.middleware.js';   
 import { isUserLoggedIn } from '../Middlewares/auth.middleware.js';
@@ -30,7 +29,7 @@ upload.fields([{name: "first", maxCount: 1}, {name: "second", maxCount: 1}])
 router.route("/register").post(upload.none(), registerUser);
 router.route("/login").post(upload.none(), loginUser);
 router.route("/logout").post(isUserLoggedIn, logoutUser);
-router.route("/update-password").patch( upload.none(), isUserLoggedIn, updatePassword);
+router.route("/update-password/:userId").patch(upload.none(), isUserLoggedIn,  updatePassword);
 router.route("/delete-user").delete(isUserLoggedIn, deleteUser);
 
 export default router;
