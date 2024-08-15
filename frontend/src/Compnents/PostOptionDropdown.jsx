@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { HiBookmark, HiChartBar, HiClock, HiDotsVertical, HiFlag, HiLink, HiPencil, HiShare, HiStar, HiThumbUp, HiTrash } from 'react-icons/hi';
+import { HiBookmark, HiChartBar, HiClock, HiDotsVertical, HiExternalLink, HiFlag, HiLink, HiOutlineLink, HiPencil, HiShare, HiStar, HiThumbUp, HiTrash } from 'react-icons/hi';
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 function PostOptionsDropdown({post}) {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector(state=>state.user)
+  const [copyLink, setCopyLink] = useState(null);
+
   const navigate = useNavigate();
  console.log(currentUser)
   const handleToggle = () => {
@@ -15,6 +17,14 @@ function PostOptionsDropdown({post}) {
   const handleUpdatePostClick = ()=>{
     localStorage.setItem("postToUpdate", JSON.stringify(post))
     navigate(`/edit-post/${post?._id}`)
+  }
+  const handleCopyPostLinkClick = ()=>{
+    navigator.clipboard.writeText(window.location.href)
+    setCopyLink(true);
+
+    setTimeout(() => {
+      setCopyLink(false)
+    }, 3000);
   }
   return (
     <div className="relative inline-block text-left z-10">
@@ -68,9 +78,9 @@ function PostOptionsDropdown({post}) {
                   <HiClock className="w-5 h-5 mr-3 text-gray-600" />
                   <span>View Post History</span>
                 </div>
-                <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <HiLink className="w-5 h-5 mr-3 text-gray-600" />
-                  <span>Copy Post Link</span>
+                <div onClick={handleCopyPostLinkClick} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  {!copyLink ? <div className='flex items-center justify-center'><HiOutlineLink className="w-5 h-5 mr-3 text-gray-600" /> <span>Copy Link</span></div> :
+                  <div className='flex items-center justify-center'> <HiExternalLink className="w-5 h-5 mr-3 text-gray-600" /> <span>Link Copied</span> </div>}
                 </div>
             </div>
         </div>

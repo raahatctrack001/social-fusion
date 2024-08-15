@@ -42,17 +42,25 @@ const userSchema = mongoose.Schema({
             type: String 
         }
       }],
-    shares:[[
-        {
+    bookmarks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'        
+    }],
+    shares:[{
+        postShared: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'Post'
 
         },
-        {
+        sharedTo: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'User'
         }
-    ]],
+    }],
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+    }],
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

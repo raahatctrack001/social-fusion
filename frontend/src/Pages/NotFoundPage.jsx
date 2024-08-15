@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage = () => {
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   const navigate = useNavigate();
 
   const handleGoHome = () => {

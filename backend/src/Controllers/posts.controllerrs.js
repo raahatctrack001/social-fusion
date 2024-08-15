@@ -214,10 +214,48 @@ export const likePost = asyncHandler(async(req, res, next)=>{
     }
 })
 
-export const editPost = asyncHandler(async(req, res, next)=>{
+export const updatePost = asyncHandler(async (req, res, next)=>{
+    try {
+        if(!req.user){
+            throw new apiError(401, "Unauthorized! please login")
+        }
+        
+        const { postId } = req.params;
     
+        const postToUpdate = await Post.findById(postId);
+        if(!postToUpdate){
+            throw new apiError(404, "post doesn't exist");
+        }
+    
+        if(req.user?._id != postToUpdate?.author){
+            throw new apiError(401, "You can't edit this post")
+        }
+        
+        const { title, content, category } = req.body;
+        if([title, content, category].some(field=>field?.trim()?0:1)){
+            throw new apiError(404, "Title or Content or Category is missing!")
+        }
+       
+        const { thumbnail, ...rest } = req.body;
+        
+        const updatedPost = await Post.findByIdAndUpdate(postId, rest)
+        if(!updatedPost){
+            throw new apiError(500, "Failed to update post, try again later!")
+        }    
+        updatedPost.thumbnail.push(thumbnail);
+        updatedPost.save();
+    
+        return res
+            .status(200)
+            .json(
+                new apiResponse(200, "post updated!", updatedPost)
+            )
+    } catch (error) {
+        next(error)
+    }
+        
+        
 })
-
 
 
 export const allPostAnalytics = asyncHandler(async (req, res, next) => {

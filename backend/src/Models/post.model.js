@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema({
     }, 
     thumbnail:[{
         type: String,
-        required: true,
+        // required: true,
     }],
     author: {
         type: mongoose.Schema.Types.ObjectId,

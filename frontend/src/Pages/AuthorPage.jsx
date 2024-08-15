@@ -14,6 +14,11 @@ const Author = () => {
   const [error, setError] = useState();
   const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   
   useEffect(()=>{
       try {

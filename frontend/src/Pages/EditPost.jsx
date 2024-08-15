@@ -216,6 +216,7 @@ const EditPost = ({ placeholder }) => {
           </div>
           
           
+          {thumbnailURL && <img src={thumbnailURL} alt="thumbnail" />}
 
           {imageUrl && showURL && <div className='flex flex-col'>
           <div className='flex'>
@@ -229,7 +230,6 @@ const EditPost = ({ placeholder }) => {
           </div>}
 
           {/* <EditorWithDisplay /> */}
-          {thumbnailURL && <img src={thumbnailURL} alt="thumbnail" />}
           <JoditEditor
             ref={editor}
             value={content}

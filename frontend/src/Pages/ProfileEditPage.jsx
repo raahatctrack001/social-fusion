@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TextInput, Textarea, Button, Alert } from 'flowbite-react';
 import { updateSuccess } from '../redux/slices/user.slice';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import { HiExclamation, HiExternalLink, HiLockClosed, HiPencil, HiPencilAlt, HiRefresh, HiTrash, HiUserRemove } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 
 
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [error, setError] = useState(null)
 
@@ -65,7 +68,7 @@ const ProfileEditPage = () => {
     <div className=" flex flex-col justify-center items-center border bg-gray-200">
       <h1 className="text-2xl font-bold my-3 px-10 w-full flex justify-center"> Update Profile </h1>
       {error && <Alert color="failure" className="text-lg rounded-lg">{error}</Alert>}
-      <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:px-10 lg:px-32 xl:px-40">
+      <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:w-3/4 xl:w-1/2">
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700 m-1">Username</label>
           <TextInput
@@ -116,7 +119,7 @@ const ProfileEditPage = () => {
           />
         </div> */}
         <div>
-          <label htmlFor="bio" className="block text-sm font-medium text-gray-700 m-1">Showcase your latest self.</label>
+          <label htmlFor="bio" className="block text-sm font-medium text-gray-700 m-1">Bio</label>
           <Textarea
             id="bio"
             name="bio"
@@ -125,14 +128,30 @@ const ProfileEditPage = () => {
             placeholder="Tell us about yourself"
           />
         </div>
-
         <Button
           type="submit"
           className="w-full"
         >
-          Update Profile
+           <span className='flex justify-center items-center gap-1'> <HiPencilAlt />Update Profile</span>
         </Button>
+        
       </form>
+      <div className='flex gap-2 w-full p-3 md:w-3/4 xl:w-1/2'>
+          <Button
+            color={'failure'}
+            
+            className="w-full"
+          >
+           <span className='flex justify-center items-center gap-1'> <HiTrash />Delete Account</span>
+          </Button>
+          <Button
+            color={'warning'}
+            onClick={()=>navigate(`/reset-password/${currentUser?._id}`)}
+            className="w-full"
+          >
+           <span className='flex justify-center items-center gap-1'> <HiLockClosed />Reset Password</span>
+           </Button>
+        </div>
     </div>
   );
 };

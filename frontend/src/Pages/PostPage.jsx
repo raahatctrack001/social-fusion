@@ -147,9 +147,13 @@ const PostPage = () => {
         <DisplayContent content={post?.content} />
 
         <div className='flex  justify-between border-2 p-2 rounded-lg'>          
-          <div className='flex gap-3'><HiOutlineHeart className='text-white-500 hover:text-gray-800 hover:text-lg'/> <HiOutlineChatAlt2 className='text-white-500 hover:text-gray-800 hover:text-lg'/> <HiOutlineShare className='text-white-500 hover:text-gray-800 hover:text-lg'/></div> 
+          <div className='flex gap-3'>
+              <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
+              <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
+              <HiOutlineShare className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
+          </div> 
           
-          <HiOutlineBookmark className='text-black-500 hover:text-gray-800 hover:text-lg'/>
+          <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
         </div>
     </div>
   )

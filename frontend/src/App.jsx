@@ -20,6 +20,7 @@ import SearchPostResult from "./Pages/SearchPostResult"
 import ProfileEditPage from "./Pages/ProfileEditPage"
 import Dashboard from "./Pages/Dashboard"
 import EditPost from "./Pages/EditPost"
+import ResetPassword from "./Pages/ResetPassword"
 // import Home from "./Pages/Home.jsx"
 function App() {
   return   <BrowserRouter>
@@ -28,12 +29,13 @@ function App() {
 
                 <Route element={<PrivateRoute />}>
                   <Route path='/' element={<Home />} />
-                  <Route path="/authors/author/:authorId" element={<AuthorPage />} />
                   <Route path="/posts/post/:postId" element={<PostPage />} />
+                  <Route path="/authors/author/:authorId" element={<AuthorPage />} />
                   <Route path="/edit-post/:postId" element={<EditPost />} />
                   <Route path="/create-post" element={<CreatePost />} /> 
                   <Route path="/edit-profile" element={<ProfileEditPage />} />  
-                  <Route path="/dashboard" element={<Dashboard />} />         
+                  <Route path="/dashboard" element={<Dashboard />} />   
+                  <Route path="/reset-password/:authorId" element={<ResetPassword />} />      
                 </Route>
                   
                   <Route path="/" element={<HomePage />} />
