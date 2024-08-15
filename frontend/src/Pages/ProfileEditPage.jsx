@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextInput, Textarea, Button, Alert, Modal } from 'flowbite-react';
-import { updateSuccess } from '../redux/slices/user.slice';
+import { deleteUserSuccess, updateSuccess } from '../redux/slices/user.slice';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { HiExclamation, HiExternalLink, HiLockClosed, HiPencil, HiPencilAlt, HiRefresh, HiTrash, HiUserRemove } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+// import { current } from '@reduxjs/toolkit';
 
 
 const ProfileEditPage = () => {
@@ -67,7 +68,29 @@ const ProfileEditPage = () => {
   // console.log(formData);
 
   const handleDeleteAccount = async(e)=>{
-    alert("delete buttom clicked")
+    try {
+      const response = await fetch(apiEndPoints.deleteUserAddress(currentUser?._id), {
+        method: "DELETE",
+      });
+
+      if(!response.ok){
+        throw new Error("failed to delete account!")
+      }
+
+      const data = await response.json();
+      console.log(response);
+      console.log(data);
+      if(data.success){
+        dispatch(deleteUserSuccess());
+        return;
+      }
+
+      setError("failed to delete user! please try again later.")
+    } catch (error) {
+      setError(error.message)
+      alert(error.message)
+      console.log(error);
+    }
   }
   return (
     <div className=" flex flex-col justify-center items-center border bg-gray-200">

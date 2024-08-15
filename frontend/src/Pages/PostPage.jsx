@@ -107,7 +107,7 @@ const PostPage = () => {
       <div>
         <div className=' flex  justify-between'>
           <div className='flex gap-2 items-center pb-2' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>
-            <img className='h-10 rounded-full' src={author?.profilePic} alt="" />
+            <img className='w-10 h-10 rounded-full' src={author?.profilePic} alt="" />
             <div className='flex w-full flex-col text-xs cursor-pointer'>
               <span className=''>{author?.username} </span>
               <span className=''>{author?.fullName} </span>

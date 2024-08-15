@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useState } from 'react';
 
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiCheckCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -14,6 +14,7 @@ const AuthorHeader = ({ author }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState()
+  const [showDP, setShowDP] = useState(false);
   const profileRef = useRef();
   // const followRef = useRef(null)
   const { currentUser } = useSelector(state=>state.user)
@@ -71,6 +72,23 @@ const AuthorHeader = ({ author }) => {
   }
   return (
     <div className="flex flex-col items-center p-2 w-full">
+
+{/* show dp popup starts here */}
+      {showDP && (
+        <div className="fixed w-full inset-0 flex justify-center items-center top-20 bg-black bg-opacity-50 z-20">
+          <div className="bg-white p-2 rounded-lg shadow-lg flex flex-col">
+            <div className="flex justify-between relative">
+              <div> </div>
+              <div onClick={()=>setShowDP(!showDP)} className="relative bottom-1 right-1 cursor-pointer"> <HiXCircle className="text-red-700 text-lg"/> </div>
+            </div>
+            <div className='max-w-lg'>
+              <img className='rounded-lg' src={author?.profilePic} alt="" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* show dp popup ends here */}
       <div className="flex flex-col md:flex-row items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
           <div className='relative'>
             <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
@@ -79,6 +97,7 @@ const AuthorHeader = ({ author }) => {
               <HiPencil className='text-2xl' />
             </div>}
             <img 
+              onClick={()=>setShowDP(!showDP)}
               src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
               alt="Author" 
               className="w-32 h-32 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"

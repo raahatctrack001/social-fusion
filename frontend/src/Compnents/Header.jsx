@@ -1,6 +1,6 @@
 
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid } from "react-icons/hi";
+import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid, HiX } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
@@ -15,7 +15,7 @@ export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state=>state.user);
 
-
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
   // console.log(currentUser)
   const dispatch = useDispatch();
   const handleSignOut = async()=>{
@@ -41,7 +41,23 @@ export default function Header() {
   // console.log(searchTerm)
   return (
     <div className="sticky top-0 z-50">
+    {/* ///search popup starts here */}
+    {showSearchPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-20">
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+            <div className="flex justify-between relative">
+            <div> </div>
+            <div onClick={()=>setShowSearchPopup(!showSearchPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700"/> </div>
+            </div>
+           <TextInput 
+                onChange={(e)=>navigate(`/search-posts/?query=${e.target.value}`)}
+                type="text" placeholder="search title content or category of post..." /> 
+            
+          </div>
+        </div>
+      )}
 
+      {/* ///search popup ends here */}
     <Navbar fluid rounded className="lg:px-10 border-b-2">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
@@ -57,7 +73,7 @@ export default function Header() {
         onChange={handleSearchTerm}
       />
 
-      <Button outline className="bg-gray-800 lg:hidden"> <span className="flex justify-center items-center"><HiSearch /></span> </Button>
+      <Button onClick={()=>setShowSearchPopup(!showSearchPopup)} outline className="bg-gray-800 lg:hidden"> <span className="flex justify-center items-center"><HiSearch /></span> </Button>
 
 
       <div className="flex gap-1 md:gap-2 md:order-2">
