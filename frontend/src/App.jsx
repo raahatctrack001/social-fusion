@@ -21,6 +21,7 @@ import ProfileEditPage from "./Pages/ProfileEditPage"
 import Dashboard from "./Pages/Dashboard"
 import EditPost from "./Pages/EditPost"
 import ResetPassword from "./Pages/ResetPassword"
+import DeleteAccount from "./Pages/DeleteAccount"
 // import Home from "./Pages/Home.jsx"
 function App() {
   return   <BrowserRouter>
@@ -35,7 +36,8 @@ function App() {
                   <Route path="/create-post" element={<CreatePost />} /> 
                   <Route path="/edit-profile" element={<ProfileEditPage />} />  
                   <Route path="/dashboard" element={<Dashboard />} />   
-                  <Route path="/reset-password/:authorId" element={<ResetPassword />} />      
+                  <Route path="/reset-password/:authorId" element={<ResetPassword />} />
+                  <Route path="delete-account" element={<DeleteAccount />} />       
                 </Route>
                   
                   <Route path="/" element={<HomePage />} />

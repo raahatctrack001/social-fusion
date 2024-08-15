@@ -207,19 +207,16 @@ const CreatePost = ({ placeholder }) => {
           
           
 
+          {thumbnailURL && <img src={thumbnailURL} alt="thumbnail" />}
+         
           {imageUrl && showURL && <div className='flex flex-col'>
           <div className='flex'>
             <div className='w-11/12'>              
             </div>
             <span onClick={()=>{setShowURL(false)}} className='w-1/12 flex justify-end cursor-pointer pr-2 relative top-6 right-1'> <HiX /> </span>
-
           </div>
-            {/* <h1> copy image url </h1>     */}
             <CopyInput url={imageUrl}/>
           </div>}
-
-          {/* <EditorWithDisplay /> */}
-          {thumbnailURL && <img src={thumbnailURL} alt="thumbnail" />}
           <JoditEditor
             ref={editor}
             value={content}

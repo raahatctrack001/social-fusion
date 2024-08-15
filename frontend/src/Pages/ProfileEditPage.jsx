@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextInput, Textarea, Button, Alert } from 'flowbite-react';
+import { TextInput, Textarea, Button, Alert, Modal } from 'flowbite-react';
 import { updateSuccess } from '../redux/slices/user.slice';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { HiExclamation, HiExternalLink, HiLockClosed, HiPencil, HiPencilAlt, HiRefresh, HiTrash, HiUserRemove } from 'react-icons/hi';
@@ -12,6 +12,7 @@ const ProfileEditPage = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [error, setError] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   const [formData, setFormData] = useState({
     username: currentUser?.username || '',
@@ -64,6 +65,10 @@ const ProfileEditPage = () => {
     }
   };
   // console.log(formData);
+
+  const handleDeleteAccount = async(e)=>{
+    alert("delete buttom clicked")
+  }
   return (
     <div className=" flex flex-col justify-center items-center border bg-gray-200">
       <h1 className="text-2xl font-bold my-3 px-10 w-full flex justify-center"> Update Profile </h1>
@@ -139,7 +144,7 @@ const ProfileEditPage = () => {
       <div className='flex gap-2 w-full p-3 md:w-3/4 xl:w-1/2'>
           <Button
             color={'failure'}
-            
+            onClick={()=>setShowModal(true )}
             className="w-full"
           >
            <span className='flex justify-center items-center gap-1'> <HiTrash />Delete Account</span>
@@ -152,6 +157,28 @@ const ProfileEditPage = () => {
            <span className='flex justify-center items-center gap-1'> <HiLockClosed />Reset Password</span>
            </Button>
         </div>
+
+
+        <Modal show={showModal} onClose={() => setShowModal(false)}>
+          <Modal.Header>
+            <Alert color={"warning"}> Warning </Alert>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete your account? This action cannot be undone.
+              </p>
+            </div>
+          </Modal.Body>
+          <Modal.Footer className='flex justify-between'>
+            <Button color="failure" onClick={handleDeleteAccount}>
+              Yes, Delete My Account
+            </Button>
+            <Button color="gray" onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </div>
   );
 };
