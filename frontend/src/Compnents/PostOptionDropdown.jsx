@@ -12,6 +12,10 @@ function PostOptionsDropdown({post}) {
     setIsOpen(!isOpen);
   };
 
+  const handleUpdatePostClick = ()=>{
+    localStorage.setItem("postToUpdate", JSON.stringify(post))
+    navigate(`/edit-post/${post?._id}`)
+  }
   return (
     <div className="relative inline-block text-left z-10">
       <button
@@ -27,9 +31,9 @@ function PostOptionsDropdown({post}) {
             <div className="py-1">
                 {currentUser?._id === post?.author?._id && 
                 <div>
-                    <div onClick={()=>navigate(`/edit-post/${post?._id}`)} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <div onClick={handleUpdatePostClick} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       <HiPencil className="w-5 h-5 mr-3 text-gray-600" />
-                      <span>Edit Post</span>
+                      <span>Update Post</span>
                     </div>
                     <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       <HiTrash className="w-5 h-5 mr-3 text-gray-600" />

@@ -137,7 +137,7 @@ const PostPage = () => {
         <div className='flex flex-col justify-center items-center gap-2'>
           {post.category}
           <div>
-            {post?.thumbnail && <img src={post?.thumbnail} alt="" />}
+            {post?.thumbnail && <img src={post?.thumbnail?.at(-1)} alt="" />}
             {/* <p> original_filename </p> */}
           </div>
         </div>

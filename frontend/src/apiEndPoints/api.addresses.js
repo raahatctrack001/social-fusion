@@ -16,9 +16,10 @@ export  const apiEndPoints = {
     searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,
     getPostsAddress : ()=> `/api/v1/posts/get-posts/`,
     deletePostAddress : (postId)=> `/api/v1/posts/delete-post/${postId}`,
-    editPostAddress : (postId)=> `/api/v1/posts/edit-post/${postId}`,
+    updatePostAddress : (postId)=> `/api/v1/posts/edit-post/${postId}`,
     likePostAddress : (postId, userId)=> `/api/v1/posts/like-post/${postId}/${userId}`,
     allPostAnalytics: ()=>`/api/v1/posts/all-post-analytics`,
+
     createCommentAddress : ()=> `/api/v1/comments/create-comment/`,
     getCommentsAddress : ()=> `/api/v1/comments/comments-on-post/`,
     likeCommentAddress : (commentId, userId)=> `/api/v1/comments/like-comment/${commentId}/${userId}`,
