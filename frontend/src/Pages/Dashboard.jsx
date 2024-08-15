@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar, Navbar, Dropdown, Button, Table } from 'flowbite-react';
-import { HiChartBar, HiCog, HiHome, HiPencil, HiUser } from 'react-icons/hi';
+import { HiBookmark, HiChartBar, HiCog, HiHome, HiPencil, HiSave, HiSaveAs, HiUser } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useSelector } from 'react-redux';
 import DisplayContent from '../Compnents/DisplayContent';
@@ -72,6 +72,9 @@ const Dashboard = () => {
             </Sidebar.Item>
             <Sidebar.Item href="/posts" icon={HiPencil}>
               Posts
+            </Sidebar.Item>
+            <Sidebar.Item href="/saved-posts" icon={HiSave}>
+              Saved Posts
             </Sidebar.Item>
             <Sidebar.Item href="/categories" icon={HiUser}>
               Categories
