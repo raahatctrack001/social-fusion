@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../Compnents/PostCard';
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd } from 'react-icons/hi';
+import { HiBadgeCheck, HiBookmark, HiBookmarkAlt, HiChat, HiCheckCircle, HiHeart, HiOutlineBookmark, HiOutlineChat, HiOutlineChatAlt, HiOutlineChatAlt2, HiOutlineHeart, HiOutlineShare, HiPlusCircle, HiShare, HiUser, HiUserAdd } from 'react-icons/hi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import NotFoundPage from './NotFoundPage';
@@ -144,6 +144,12 @@ const PostPage = () => {
         {/* <p className='w-full flex justify-center md:text-xl font-semibold my-3'> {post?.imagesURLs[0]?.original_filename} </p> */}
       </div>
         <DisplayContent content={post?.content} />
+
+        <div className='flex  justify-between border-2 p-2 rounded-lg'>          
+          <div className='flex gap-3'><HiOutlineHeart className='text-white-500 hover:text-gray-800 hover:text-lg'/> <HiOutlineChatAlt2 className='text-white-500 hover:text-gray-800 hover:text-lg'/> <HiOutlineShare className='text-white-500 hover:text-gray-800 hover:text-lg'/></div> 
+          
+          <HiOutlineBookmark className='text-black-500 hover:text-gray-800 hover:text-lg'/>
+        </div>
     </div>
   )
 }
