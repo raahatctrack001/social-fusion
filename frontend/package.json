@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.2",
+    "@heroicons/react": "^2.1.5",
     "@reduxjs/toolkit": "^2.2.7",
     "date-fns": "^3.6.0",
     "dompurify": "^3.1.6",

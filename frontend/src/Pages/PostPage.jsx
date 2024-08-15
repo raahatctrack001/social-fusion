@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../Compnents/PostCard';
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiBookmark, HiBookmarkAlt, HiChat, HiCheckCircle, HiHeart, HiOutlineBookmark, HiOutlineChat, HiOutlineChatAlt, HiOutlineChatAlt2, HiOutlineHeart, HiOutlineShare, HiPlusCircle, HiShare, HiUser, HiUserAdd } from 'react-icons/hi';
+import { HiBadgeCheck, HiBookmark, HiBookmarkAlt, HiChat, HiCheckCircle, HiDotsVertical, HiHeart, HiOutlineBookmark, HiOutlineChat, HiOutlineChatAlt, HiOutlineChatAlt2, HiOutlineHeart, HiOutlineShare, HiPlusCircle, HiShare, HiUser, HiUserAdd } from 'react-icons/hi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import NotFoundPage from './NotFoundPage';
 import DisplayContent from '../Compnents/DisplayContent';
 import { useSelector } from 'react-redux';
+import PostOptionsDropdown from '../Compnents/PostOptionDropdown';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -112,8 +113,7 @@ const PostPage = () => {
               <span className=''>{author?.fullName} </span>
             </div>
           </div>
-          <div>
-
+          <div className='flex gap-3 justify-center items-center'>
             {author?._id !== currentUser?._id ? 
                   (<Button 
                     onClick={()=>handleToggleFollowButtonClick(author)}
@@ -123,7 +123,8 @@ const PostPage = () => {
                                                 (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                   </Button>) : 
                                                 
-                  (<Button disabled> <HiBadgeCheck /> </Button>)}        
+                  (<Button disabled className='h-5 flex justify-center items-center' color={"dark"}> <HiBadgeCheck /> </Button>)}
+              <div className='p-2 cursor-pointer' > <PostOptionsDropdown post={post} /> </div>
           </div>
         </div>
         <div className='flex flex-col md:flex-row md:justify-between border-b-2'>
