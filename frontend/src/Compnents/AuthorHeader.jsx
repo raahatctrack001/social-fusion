@@ -62,7 +62,7 @@ const AuthorHeader = ({ author }) => {
         alert(data.message);
         console.log(data);
         dispatch(updateSuccess(data.data))
-        window.location.reload();
+        // window.location.reload();
 
         
       

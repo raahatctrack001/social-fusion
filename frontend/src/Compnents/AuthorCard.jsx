@@ -7,7 +7,7 @@ const AuthorCard = ({ author }) => {
     <div >
       
       <div className='flex justify-center items-center gap-5'>
-        <img className='rounded-full h-10' src={author.profilePic} alt="author's photo"/>
+        <img className='rounded-full w-10 h-10' src={author?.profilePic} alt="author's photo"/>
         <div className='flex flex-col text-sm'>
           <p> {author.fullName} </p>
           <p> {author.username} </p>
