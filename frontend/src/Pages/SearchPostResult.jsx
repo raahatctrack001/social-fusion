@@ -16,6 +16,9 @@ const SearchPostResult = () => {
     // console.log(query)
     useEffect(()=>{
         try {
+            if(!query){
+              navigate('/')
+            }
             fetch(apiEndPoints.searchPostsAddress(query), {
                 method: "POST",
                 headers: {
@@ -40,8 +43,8 @@ const SearchPostResult = () => {
         }
     }, [query])
 
-    console.log("inside searchedPostResult page, ", postData)
-    console.log("query", query)
+    // console.log("inside searchedPostResult page, ", postData)
+    // console.log("query", query)
 
   return (
     <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
