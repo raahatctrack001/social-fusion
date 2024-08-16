@@ -15,6 +15,7 @@ const PostPage = () => {
   const { postId } = useParams();
 
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false)
   const [post, setPost] = useState();
   const [author, setAuthor] = useState();
   const [error, setError] = useState(null);
@@ -104,7 +105,7 @@ const PostPage = () => {
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>
-
+      
       <div>
         <div className=' flex  justify-between'>
           <div className='flex gap-2 items-center pb-2' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>

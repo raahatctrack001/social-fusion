@@ -181,7 +181,7 @@ const ProfileEditPage = () => {
            </Button>
         </div>
 
-
+{/* delete modal starts here */}
         <Modal show={showModal} onClose={() => setShowModal(false)}>
           <Modal.Header>
             <Alert color={"warning"}> Warning </Alert>
@@ -202,6 +202,8 @@ const ProfileEditPage = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        {/* delete modal ends here */}
     </div>
   );
 };
