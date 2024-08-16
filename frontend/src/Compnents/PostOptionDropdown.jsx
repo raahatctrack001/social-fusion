@@ -17,10 +17,34 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
     setIsOpen(!isOpen);
   };
 
-  const handleUpdatePostClick = ()=>{
-    localStorage.setItem("postToUpdate", JSON.stringify(post))
-    navigate(`/edit-post/${post?._id}`)
-  }
+    const handleUpdatePostClick = ()=>{
+      localStorage.setItem("postToUpdate", JSON.stringify(post))
+      navigate(`/edit-post/${post?._id}`)
+    }
+    const handleDeletePostClick = async(e)=>{
+      try {
+        // console.log(apiEndPoints.deletePostAddress(post?._id))
+        // return;
+        const response = await fetch(apiEndPoints.deletePostAddress(post?._id), {
+          method: "DELETE"
+        })
+        
+        if(!response.ok){
+          throw new Error(response.message||"Network response isn't ok!")
+        }
+
+        const data = await response.json();
+
+        console.log("response", response);
+        console.log("data", data);
+        if(data.success){
+          alert(data?.message);
+          navigate(`/authors/author/${currentUser?._id}`)
+        }
+      } catch (error) {
+        setError("failed to delete post, please try again later!")
+      }
+    }
   const handleCopyPostLinkClick = ()=>{
     navigator.clipboard.writeText(window.location.href)
     setCopyLink(true);
@@ -28,30 +52,6 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
     setTimeout(() => {
       setCopyLink(false)
     }, 3000);
-  }
-  const handleDeletePostClick = async(e)=>{
-    try {
-      // console.log(apiEndPoints.deletePostAddress(post?._id))
-      // return;
-      const response = await fetch(apiEndPoints.deletePostAddress(post?._id), {
-        method: "DELETE"
-      })
-      
-      if(!response.ok){
-        throw new Error(response.message||"Network response isn't ok!")
-      }
-
-      const data = await response.json();
-
-      console.log("response", response);
-      console.log("data", data);
-      if(data.success){
-        alert(data?.message);
-        navigate(`/authors/author/${currentUser?._id}`)
-      }
-    } catch (error) {
-      setError("failed to delete post, please try again later!")
-    }
   }
   return (
     <div className="relative inline-block text-left z-10">

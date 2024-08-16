@@ -10,42 +10,42 @@ const DashSidebar = () => {
         <Sidebar.Items>
           <Sidebar.ItemGroup>
             <Link to={'/dashboard?tab=home'}>
-                <Sidebar.Item  icon={HiHome}>
+                <Sidebar.Item as={"div"}  icon={HiHome}>
                   Home
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=posts'}>
-                <Sidebar.Item icon={HiPencil}>
+                <Sidebar.Item as={"div"} icon={HiPencil}>
                   Posts
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=saved-posts'}>
-                <Sidebar.Item href="" icon={HiSave}>
+                <Sidebar.Item as={"div"} icon={HiSave}>
                   Saved Posts
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=categories'}>
-                <Sidebar.Item icon={HiUser}>
+                <Sidebar.Item as={"div"} icon={HiUser}>
                   Categories
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=comments'}>
-                <Sidebar.Item icon={HiUser}>
+                <Sidebar.Item as={"div"} icon={HiUser}>
                   Comments
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=users'}>
-                <Sidebar.Item icon={HiUser}>
+                <Sidebar.Item as={"div"} icon={HiUser}>
                   Users
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=analytics'}>
-                <Sidebar.Item icon={HiChartBar}>
+                <Sidebar.Item as={"div"} icon={HiChartBar}>
                   Analytics
                 </Sidebar.Item>
             </Link>
             <Link to={'/dashboard?tab=settings'}>
-                <Sidebar.Item icon={HiCog}>
+                <Sidebar.Item as={"div"} icon={HiCog}>
                   Settings
                 </Sidebar.Item>
             </Link>

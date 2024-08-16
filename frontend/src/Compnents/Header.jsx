@@ -90,7 +90,7 @@ export default function Header() {
                    <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                   </Link>
                </Dropdown.Header>
-               <Dropdown.Item href="/dashboard" icon={HiViewGrid}>Dashboard</Dropdown.Item>
+               <Dropdown.Item href="/dashboard?tab=home" icon={HiViewGrid}>Dashboard</Dropdown.Item>
                <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
                {/* <Dropdown.Item href=  icon={HiLockOpen}>Update Password</Dropdown.Item> */}
                <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>

@@ -5,10 +5,41 @@ import NotFoundPage from '../Pages/NotFoundPage'
 import { HiCheckCircle, HiPlusCircle, HiUser } from 'react-icons/hi2'
 import { HiBadgeCheck } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
+import { apiEndPoints } from '../apiEndPoints/api.addresses'
+import { current } from '@reduxjs/toolkit'
+import { useSelector } from 'react-redux'
 
 const ShowPosts = ({heading, postData}) => {
-    const { currentUser } = useState(state=>state?.user)
+    const { currentUser } = useSelector(state=>state?.user)
+    console.log("currentUser", currentUser)
     const navigate = useNavigate();
+
+
+    const handleToggleFollowButtonClick = async (author)=>{
+        try {
+          fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
+            method: "POST",
+            headers: {
+              'content-type': 'application/json'
+            }
+          })
+          .then((response)=>{
+            console.log("resonse: ", response);
+            return response.json();
+          })
+          .then((data)=>{
+              alert(data.message)
+              // if(data.success){
+              //   currentUser?.followers = data.followers;
+              //   currentUser?.followings = data.followings;
+              // }
+              console.log(data)
+          })
+        } catch (error) {
+            alert(error.message);
+            console.log(error);
+        }
+      }
   return (
     <div>
         <div className='flex-3/4 flex flex-col border-2  m-2 px-2'>
