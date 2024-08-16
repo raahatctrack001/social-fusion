@@ -42,7 +42,7 @@ export default function Header() {
   }
   // console.log(searchTerm)
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50 dark:bg-gray-900 dark:text-white">
     {/* ///search popup starts here */}
     {showSearchPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-20">
@@ -63,7 +63,7 @@ export default function Header() {
     <Navbar fluid rounded className="lg:px-10 border-b-2">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 px-2 rounded-2xl text-gray-900">Soul Echo</span>
+        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 px-2 rounded-2xl ">Soul Echo</span>
       </Navbar.Brand>
 
       <TextInput 
@@ -85,8 +85,10 @@ export default function Header() {
           <div ref={dropdownRef} className=""> 
             <Dropdown label={currentUser?.fullName?.length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName} outline arrowIcon={false}>
                <Dropdown.Header>
-                 <span className="block text-sm">{currentUser.username}</span>
-                 <span className="block truncate text-sm font-medium">{currentUser.email}</span>
+                  <Link to={`/authors/author/${currentUser?._id}`}>        
+                   <span className="block text-sm">{currentUser.username}</span>
+                   <span className="block truncate text-sm font-medium">{currentUser.email}</span>
+                  </Link>
                </Dropdown.Header>
                <Dropdown.Item href="/dashboard" icon={HiViewGrid}>Dashboard</Dropdown.Item>
                <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
