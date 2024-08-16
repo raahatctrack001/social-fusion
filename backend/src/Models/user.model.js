@@ -77,6 +77,10 @@ const userSchema = mongoose.Schema({
     //     types: mongoose.Schema.Types.ObjectId,
     //     ref:'Reel'
     // }],
+    feedbacks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Feedback'
+    }],
     refreshToken: {
         type: String,
         default: "",

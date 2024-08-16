@@ -27,4 +27,6 @@ export  const apiEndPoints = {
     likeCommentAddress : (commentId, userId)=> `/api/v1/comments/like-comment/${commentId}/${userId}`,
     updateCommentsAddress : (commentId)=> `/api/v1/comments/update-comment/${commentId}`,
     deleteCommentAddress : (commentId)=> `/api/v1/comments/delete-comment/${commentId}`,
+
+    createFeedbackAddress: (authorId)=>`/api/v1/feedback/send-feedback/${authorId}`,
 }

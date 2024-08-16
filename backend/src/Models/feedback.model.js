@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const feedbackSchema = new mongoose.Schema({
     subject:{
-        type: Sting,
+        type: String,
         required: true,
     },
     problem:{
@@ -12,7 +12,7 @@ const feedbackSchema = new mongoose.Schema({
     solution:{
         type: String,
     },
-    user:{
+    author:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true

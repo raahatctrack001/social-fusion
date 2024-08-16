@@ -4,6 +4,7 @@ import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-
 import { HiDocument, HiMailOpen, HiOutlineMail, HiX } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { apiEndPoints } from "../apiEndPoints/api.addresses";
 
 export function FooterComp() {
   
@@ -11,8 +12,9 @@ export function FooterComp() {
   const [showFeedbackPopup, setShowFeedbackPopup] = useState();
   const { currentUser } = useSelector(state=>state.user);
   // console.log(currentUser)
-  const [error, setError] = useState(null)
-  const [formData, setFormData] = useState({})
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [formData, setFormData] = useState({});
   useEffect(()=>{
     setFormData(JSON.parse(localStorage.getItem("feedbackData")))
   }, [])
@@ -27,22 +29,38 @@ export function FooterComp() {
     try {
       console.log("feedback form submitted!")
       setError(null);
+      setMessage(null);
       if(!currentUser){
         localStorage.setItem("feedbackData", JSON.stringify(formData))
-        setError("Please sign in to send feedback")
-
-        setTimeout(() => {
-          setShowFeedbackPopup(!showFeedbackPopup)
-          navigate("/sign-in")
-        }, 2000);
+        alert("Please sign in to send feedback!")
+        setShowFeedbackPopup(!showFeedbackPopup)
+        navigate("/sign-in")
       }
+      const response = await fetch(apiEndPoints.createFeedbackAddress(currentUser?._id), {
+        method: "POST",
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      if(!response.ok){
+        throw new Error(response.message||"network response is not ok!")
+      }
+
+      const data = await response.json();
+      console.log("response", response);
+      console.log("data", data);
+
+      if(data.success){
+        setMessage(data.message);
+        localStorage.removeItem("feedbackData");
+        setFormData(null)
+      }      
     } catch (error) {
-      setError("failed to send feedback")
+      setError(error.message)
+      console.log(error)
     }
-    
-
-
-
 
   }
   console.log(formData)
@@ -115,6 +133,7 @@ export function FooterComp() {
                 value={formData?.solution}
               />
               {error && <Alert color={'failure'} > {error} </Alert>}
+              {message && <Alert color={'success'} > {message} </Alert>}
               <Button type="submit" className="mt-2"> Send Feedback </Button>
             </form> 
             
