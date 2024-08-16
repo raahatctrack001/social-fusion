@@ -3,6 +3,7 @@ import { HiBookmark, HiChartBar, HiClock, HiDotsVertical, HiExternalLink, HiFlag
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
 function PostOptionsDropdown({post}) {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector(state=>state.user)
@@ -26,6 +27,30 @@ function PostOptionsDropdown({post}) {
       setCopyLink(false)
     }, 3000);
   }
+  const handleDeletePostClick = async(e)=>{
+    try {
+      // console.log(apiEndPoints.deletePostAddress(post?._id))
+      // return;
+      const response = await fetch(apiEndPoints.deletePostAddress(post?._id), {
+        method: "DELETE"
+      })
+      
+      if(!response.ok){
+        throw new Error(response.message||"Network response isn't ok!")
+      }
+
+      const data = await response.json();
+
+      console.log("response", response);
+      console.log("data", data);
+      if(data.success){
+        alert(data?.message);
+        navigate(`/authors/author/${currentUser?._id}`)
+      }
+    } catch (error) {
+      setError("failed to delete post, please try again later!")
+    }
+  }
   return (
     <div className="relative inline-block text-left z-10">
       <button
@@ -45,7 +70,9 @@ function PostOptionsDropdown({post}) {
                       <HiPencil className="w-5 h-5 mr-3 text-gray-600" />
                       <span>Update Post</span>
                     </div>
-                    <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <div 
+                      onClick={handleDeletePostClick}
+                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       <HiTrash className="w-5 h-5 mr-3 text-gray-600" />
                       <span>Delete Post</span>
                     </div>
