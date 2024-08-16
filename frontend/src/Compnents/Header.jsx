@@ -1,12 +1,13 @@
 
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid, HiX } from "react-icons/hi";
+import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiMoon, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid, HiX } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
 import { useRef, useState } from "react";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { signoutSuccess } from "../redux/slices/user.slice";
+import { toggleTheme } from "../redux/slices/theme.slice";
 
 
 export default function Header() {
@@ -14,6 +15,7 @@ export default function Header() {
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state=>state.user);
+  const { theme } = useSelector(state=>state.theme);
 
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   // console.log(currentUser)
@@ -106,15 +108,23 @@ export default function Header() {
           <span className="hidden md:inline"> Sign In </span> 
         
         </Button>)}
-        <Button outline className="bg-gray-800 hidden md:inline"> <span className="flex justify-center items-center"><HiSun /></span> </Button>
-        <Navbar.Toggle />
+          <Button
+            className='w-12 h-10 hidden sm:inline'
+            color='gray'
+            pill
+            onClick={() => dispatch(toggleTheme())}
+          >
+            {theme === 'light' ?  <HiMoon /> : <HiSun />}
+          </Button>        
+      
+      <Navbar.Toggle />
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}
       <Navbar.Collapse className="">
           <Navbar.Link className="" href="/" active = {path === '/'} >
             Home
           </Navbar.Link>
-          <Button outline className="md:hidden"> <span className="flex justify-center items-center gap-2"> switch to dark theme <HiSun /></span> </Button>
+          {/* <Button outline className="md:hidden"> <span className="flex justify-center items-center gap-2"> switch to dark theme <HiSun /></span> </Button> */}
 
           <Navbar.Link className="text-sm" href="/about" active = {path === '/about'} >About</Navbar.Link>
           <Navbar.Link className="text-sm" href="/services" active = {path === '/services'} >Services</Navbar.Link>

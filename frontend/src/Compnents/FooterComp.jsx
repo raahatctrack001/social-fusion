@@ -105,7 +105,7 @@ export function FooterComp() {
           <div className="bg-gray-500 p-6 w-full  md:w-2/3 rounded-lg shadow-lg">
             <div className="flex justify-between relative">
               <div> </div>
-              <div onClick={()=>setShowFeedbackPopup(!showFeedbackPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700"/> </div>
+              <div onClick={()=>setShowFeedbackPopup(!showFeedbackPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700 cursor-pointer"/> </div>
             </div>
             <h1 className=" flex justify-center items-center p-2 border-2 border-b-8 border-b-gray-500  relative top-2 z-10 rounded-lg md:w-96">Feedbacks are always welcome</h1>
             

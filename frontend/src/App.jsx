@@ -23,6 +23,7 @@ import EditPost from "./Pages/EditPost"
 import ResetPassword from "./Pages/ResetPassword"
 import DeleteAccount from "./Pages/DeleteAccount"
 import PopupWindow from "./Pages/PopupWindow"
+import CameraComponent from "./TestComponent/CameraComponent"
 // import Home from "./Pages/Home.jsx"
 function App() {
   return   <BrowserRouter>
@@ -51,7 +52,7 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/services" element={<Services />} />
-                  <Route path="/test-route" element={<PopupWindow />} />
+                  <Route path="/test-route" element={<CameraComponent />} />
                   <Route path="/*" element={<NotFoundPage />} />
                 </Routes>
                 <FooterComp />

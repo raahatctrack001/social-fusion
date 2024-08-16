@@ -125,12 +125,14 @@ const Dashboard = () => {
             <div className='flex justify-between'>
               <div className="bg-white p-6 rounded-lg shadow-md order-2 w-1/4">
                 <h1 className="text-lg font-semibold mb-2">Traffic Stats:</h1>
-                <h2> Posts added in </h2>
-                <p>1. last week : {postsLastWeek?.length}</p>
-                <p>2. last 15 days : {postsLastTwoWeeks?.length||0}</p>
-                <p>3. last one month : {postsLastMonth?.length||0}</p>
-                <p>4. last three Posts: {postsLastThreeMonths?.length||0}</p>
-                <h2> Daily Visitors: 1200</h2>              
+                <ul> 
+                  <h1>Posts added in</h1> 
+                  <li>last week : {postsLastWeek?.length}</li>
+                  <li>last 15 days : {postsLastTwoWeeks?.length||0}</li>
+                  <li>last one month : {postsLastMonth?.length||0}</li>
+                  <li>last three months Posts: {postsLastThreeMonths?.length||0}</li>
+                  <h2> Daily Visitors: 1200</h2>              
+                </ul>
               </div>
               <div className="bg-white p-6 rounded-lg shadow-md w-3/4">
                 <RecentPostsTable heading={"Popular Posts"} displayPosts={popularPosts} />
