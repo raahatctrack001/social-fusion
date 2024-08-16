@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { HiBookmark, HiChartBar, HiClock, HiDotsVertical, HiExternalLink, HiFlag, HiLink, HiOutlineLink, HiPencil, HiShare, HiStar, HiThumbUp, HiTrash } from 'react-icons/hi';
+import { HiBan, HiBookmark, HiChartBar, HiChat, HiChatAlt, HiChatAlt2, HiClock, HiDotsVertical, HiExternalLink, HiFlag, HiLink, HiOutlineLink, HiPencil, HiShare, HiStar, HiThumbUp, HiTrash } from 'react-icons/hi';
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
-function PostOptionsDropdown({post}) {
+
+function PostOptionsDropdown({enableComment, toggleComment, post }) {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector(state=>state.user)
   const [copyLink, setCopyLink] = useState(null);
@@ -76,9 +77,18 @@ function PostOptionsDropdown({post}) {
                       <HiTrash className="w-5 h-5 mr-3 text-gray-600" />
                       <span>Delete Post</span>
                     </div>
-                    <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      <HiChartBar className="w-5 h-5 mr-3 text-gray-600" />
-                      <span>Disable/Enable Comments</span>
+                    <div  
+                      onClick={toggleComment}
+                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                      {enableComment ? 
+                        <div className='flex justify-center items-center'>
+                            <HiBan className="w-5 h-5 mr-3 text-gray-600" />
+                            <span>Disable Comments</span>
+                        </div> :
+                        <div className='flex justify-center items-center'> 
+                          <HiChatAlt2 className="w-5 h-5 mr-3 text-gray-600" />
+                          <span>Enable Comments</span>
+                        </div>}
                     </div>
                     <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       <MdPushPin  className="w-5 h-5 mr-3 text-gray-600" />

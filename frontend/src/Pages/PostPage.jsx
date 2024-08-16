@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../Compnents/PostCard';
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiBookmark, HiBookmarkAlt, HiChat, HiCheckCircle, HiDotsVertical, HiHeart, HiOutlineBookmark, HiOutlineChat, HiOutlineChatAlt, HiOutlineChatAlt2, HiOutlineHeart, HiOutlineShare, HiPlusCircle, HiShare, HiUser, HiUserAdd } from 'react-icons/hi';
+import { HiBadgeCheck, HiBookmark, HiBookmarkAlt, HiChat, HiCheckCircle, HiDotsVertical, HiHeart, HiOutlineBan, HiOutlineBookmark, HiOutlineChat, HiOutlineChatAlt, HiOutlineChatAlt2, HiOutlineHeart, HiOutlineShare, HiPlusCircle, HiShare, HiUser, HiUserAdd } from 'react-icons/hi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import NotFoundPage from './NotFoundPage';
@@ -18,6 +18,7 @@ const PostPage = () => {
   const [post, setPost] = useState();
   const [author, setAuthor] = useState();
   const [error, setError] = useState(null);
+  const [enableComment, setEnableComment] = useState(true);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -124,7 +125,13 @@ const PostPage = () => {
                   </Button>) : 
                                                 
                   (<Button disabled className='h-5 flex justify-center items-center' color={"dark"}> <HiBadgeCheck /> </Button>)}
-              <div className='p-2 cursor-pointer' > <PostOptionsDropdown post={post} /> </div>
+              <div className='p-2 cursor-pointer' > 
+                      <PostOptionsDropdown                         
+                        post={post}
+                        enableComment={enableComment} 
+                        toggleComment={() => setEnableComment(!enableComment)}
+                      /> 
+              </div>
           </div>
         </div>
         <div className='flex flex-col md:flex-row md:justify-between border-b-2'>
@@ -149,7 +156,7 @@ const PostPage = () => {
         <div className='flex  justify-between border-2 p-2 rounded-lg'>          
           <div className='flex gap-3'>
               <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
-              <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
+              {enableComment ? <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <button> <HiOutlineBan /> </button>} 
               <HiOutlineShare className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
           </div> 
           
