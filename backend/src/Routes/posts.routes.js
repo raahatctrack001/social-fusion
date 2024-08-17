@@ -9,7 +9,9 @@ import {
     likePost,
     allPostAnalytics,
     searchPosts,
-    updatePost
+    updatePost,
+    savePost,
+    getSavedPosts
 } from "../Controllers/posts.controllerrs.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 
@@ -24,4 +26,6 @@ router.route("/delete-post/:postId").delete(isUserLoggedIn, deletePost);
 router.route("/edit-post/:postId").put(upload.any(), isUserLoggedIn, updatePost);
 router.route("/like-post/:postId/:userId").post(isUserLoggedIn, likePost);
 router.route("/all-post-analytics").get(isUserLoggedIn, allPostAnalytics);
+router.route("/save-post/:postId/:userId").post(isUserLoggedIn, savePost);
+router.route("/saved-posts/:userId").get(isUserLoggedIn, getSavedPosts);
 export default router;

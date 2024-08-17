@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema({
             type: String 
         }
       }],
-    bookmarks: [{
+    savedPosts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'        
     }],

@@ -62,7 +62,7 @@ const ShowPosts = ({heading, postData}) => {
                     <p className='text-xs font-semibold'> {post?.author?.username } </p>
                   </div>
 
-                {post?.author?._id !== currentUser?._id ? 
+                {post?.author && post?.author?._id !== currentUser?._id ? 
                 (<Button 
                   onClick={()=>handleToggleFollowButtonClick(post?.author)}
                   outline className='bg-gray-800 '> 

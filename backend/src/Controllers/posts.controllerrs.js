@@ -278,7 +278,6 @@ export const updatePost = asyncHandler(async (req, res, next)=>{
         
 })
 
-
 export const allPostAnalytics = asyncHandler(async (req, res, next) => {
     const now = new Date();
 
@@ -340,3 +339,74 @@ export const allPostAnalytics = asyncHandler(async (req, res, next) => {
         next(error);
     }
 });
+
+export const savePost = asyncHandler (async (req, res, next)=>{
+    // console.log(req.params)
+    // return;
+    const { postId, userId } = req.params;
+    try {
+        if(req.user?._id !== userId){
+            throw new apiError(401, "Please sign in to save with post")
+        }
+
+        // const currentPost = await Post.findById(postId);
+        const currentUser = await User.findById(userId);
+
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist");
+        }
+
+        if(currentUser?.savedPosts?.includes(postId)){
+            currentUser?.savedPosts?.splice(currentUser?.savedPosts?.indexOf(postId), 1);
+            await currentUser.save();
+            return res
+                .status(200)
+                .json(
+                    new apiResponse(200, "post unsaved!", currentUser)
+                )
+        }
+        currentUser?.savedPosts?.push(postId);
+        await currentUser.save();
+
+        return res
+            .status(200)
+            .json(
+                new apiResponse(200, "post saved!", currentUser)
+            )
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const getSavedPosts = asyncHandler(async (req, res, next) => {
+    // console.log(req.params);
+    try {
+        const { userId } = req.params;
+
+        // Fetch user and populate savedPosts and the author field within each savedPost
+        const user = await User.findById(userId)
+            .populate({
+                path: 'savedPosts',
+                populate: {
+                    path: 'author',  // Populate the author field within each savedPost
+                    model: 'User'    // Ensure you specify the model name if it's not inferred
+                }
+            });
+
+        if (!user) {
+            throw new apiError(404, "User doesn't exist");
+        }
+
+        if (!user.savedPosts || user.savedPosts.length === 0) {
+            throw new apiError(404, "No saved posts.");
+        }
+
+        return res
+            .status(200)
+            .json(new apiResponse(200, "Saved posts fetched", user.savedPosts));
+    } catch (error) {
+        next(error);
+    }
+});
+

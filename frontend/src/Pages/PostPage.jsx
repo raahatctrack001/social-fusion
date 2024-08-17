@@ -9,6 +9,7 @@ import DisplayContent from '../Compnents/DisplayContent';
 import { useDispatch, useSelector } from 'react-redux';
 import PostOptionsDropdown from '../Compnents/PostOptionDropdown';
 import { updateSuccess } from '../redux/slices/user.slice';
+import { current } from '@reduxjs/toolkit';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -132,6 +133,31 @@ const PostPage = () => {
       }
   }
   // console.log("error: ", error)
+  const handleSavePostClick = async(e)=>{
+    e.preventDefault();  
+    try {
+      const response = await fetch(apiEndPoints.savePostAddress(post?._id, currentUser?._id), {
+        method: "POST",
+      }) 
+      if(!response.ok){
+        throw new Error(response.message || "Network response is not ok")
+      }
+
+      const data = await response.json();
+      if(data.success){
+        console.log("post saved", data)
+        dispatch(updateSuccess(data?.data));
+        // setLikes(data?.data?.currentPost?.likes?.length)
+        return;
+      }
+
+      setError(data.message)
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    }
+}
+  
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>
@@ -197,8 +223,9 @@ const PostPage = () => {
               {enableComment ? <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <button> <HiOutlineBan /> </button>} 
               <HiOutlineShare className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
           </div> 
-          
-          <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
+          <div onClick={handleSavePostClick}>
+            {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>}
+          </div>
         </div>
     </div>
   )

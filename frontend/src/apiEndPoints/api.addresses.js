@@ -21,6 +21,8 @@ export  const apiEndPoints = {
     updatePostAddress : (postId)=> `/api/v1/posts/edit-post/${postId}`,
     likePostAddress : (postId, userId)=> `/api/v1/posts/like-post/${postId}/${userId}`,
     allPostAnalytics: ()=>`/api/v1/posts/all-post-analytics`,
+    savePostAddress : (postId, userId)=> `/api/v1/posts/save-post/${postId}/${userId}`,
+    getSavedPostAddress: (userId)=>`/api/v1/posts/saved-posts/${userId}`,
 
     createCommentAddress : ()=> `/api/v1/comments/create-comment/`,
     getCommentsAddress : ()=> `/api/v1/comments/comments-on-post/`,
