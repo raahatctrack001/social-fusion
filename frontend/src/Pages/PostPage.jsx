@@ -12,47 +12,48 @@ import { updateSuccess } from '../redux/slices/user.slice';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
-
+  
   const { postId } = useParams();
-
+  
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false)
   const [post, setPost] = useState();
   const [author, setAuthor] = useState();
   const [error, setError] = useState(null);
   const [enableComment, setEnableComment] = useState(true);
-  const dispatch = useDispatch();
+  const [likes, setLikes] = useState();
 
+  const dispatch = useDispatch();
+  
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
   }, []); 
 
-  useEffect(()=>{
-    try {
-      (async ()=>{
-          // setError(null);
-          const response = await fetch(apiEndPoints.getPostAddress(postId));
-          // if(!response.ok){
-          //   setError(response.message)
-          // }
 
-          const post = await response.json();
-          console.log(post.data)
-          if(post.success){
-            setPost(post?.data);
-            setAuthor(post?.data?.author)
-          }
-      })()
-    } catch (error) {
-      // setError(error)
-      console.log("error fetching author!", error)
-    }
-}, [])
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await fetch(apiEndPoints.getPostAddress(postId));
+        const post = await response.json();
 
+        if (post.success) {
+          setPost(post.data);
+          setAuthor(post.data.author);
+          setLikes(post.data.likes.length); // Set likes count based on the fetched data
+        }
+      } catch (error) {
+        console.log("error fetching post!", error);
+        setError(error.message);
+      }
+    };
+
+    fetchPostData();
+  }, [postId]);
+  
   if(!post)
     return <NotFoundPage />
-
+  
   const calculateReadingTime = (content, wordsPerMinute = 250) => {
     const text = content.replace(/<[^>]*>/g, '');
     const wordCount = text.split(/\s+/).length;
@@ -105,6 +106,32 @@ const PostPage = () => {
         console.log(error);
     }
   }
+
+  const handleLikePostClick = async(e)=>{
+      e.preventDefault();  
+      try {
+        const response = await fetch(apiEndPoints.likePostAddress(post?._id, currentUser?._id), {
+          method: "POST",
+        }) 
+        if(!response.ok){
+          throw new Error(response.message || "Network response is not ok")
+        }
+
+        const data = await response.json();
+        if(data.success){
+          console.log("post liked")
+          dispatch(updateSuccess(data?.data?.currentUser));
+          setLikes(data?.data?.currentPost?.likes?.length)
+          return;
+        }
+
+        setError(data.message)
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      }
+  }
+  // console.log("error: ", error)
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>
@@ -159,7 +186,14 @@ const PostPage = () => {
 
         <div className='flex  justify-between border-2 p-2 rounded-lg'>          
           <div className='flex gap-3'>
-              <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
+
+              <div onClick={handleLikePostClick}> 
+                {currentUser?.likes?.includes(post?._id) ? 
+                <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-gray-800 hover:text-lg'/> {likes||0} </div>: 
+                <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg' /> {likes||0} </div>}
+              </div>
+              
+            
               {enableComment ? <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <button> <HiOutlineBan /> </button>} 
               <HiOutlineShare className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
           </div> 

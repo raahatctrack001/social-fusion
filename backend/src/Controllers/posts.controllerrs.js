@@ -190,24 +190,45 @@ export const deletePost = asyncHandler(async (req, res, next)=>{
 export const likePost = asyncHandler(async(req, res, next)=>{
     const { userId, postId } = req.params;
     try {
+        if(req.user?._id !== userId){
+            throw new apiError(401, "Please sign in to interact with posts")
+        }
+
         const currentPost = await Post.findById(postId);
+        const currentUser = await User.findById(userId);
+
         if(!currentPost){
             throw new apiError(404, "post doesn't exist");
         }
+
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist");
+        }
+
         const likes = currentPost.likes;
         const index = likes.findIndex(item => item._id == userId);
         if (index != -1) {
             likes.splice(index, 1);
+            currentUser.likes.splice(currentUser.likes.indexOf(postId), 1);
+            await currentUser.save();
+            await currentPost.save();
+            return res
+                .status(200)
+                .json(
+                    new apiResponse(200, "post unliked", {currentUser, currentPost})
+                )
         }
-        else{
-            likes.push(userId)
-        }
-        currentPost.save();
-        console.log('reached at the end')
-        res
+        
+        likes.push(userId)
+        currentUser.likes.push(currentPost?._id);
+        await currentUser.save();
+        await currentPost.save();
+
+        // console.log('reached at the end')
+        return res
             .status(200)
             .json(
-                new apiResponse(200, "post liked", currentPost)
+                new apiResponse(200, "post liked", {currentUser, currentPost})
             )
     } catch (error) {
         next(error)
