@@ -161,13 +161,13 @@ export const imageUpload = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const toggleFollowUser = asyncHandler(async (req, res, next)=>{
-    if(!req?.user){
-        throw new apiError(401, "first sign in to follow")
+export const toggleFollowUser = asyncHandler(async (req, res, next) => {
+    if (!req?.user) {
+        throw new apiError(401, "First sign in to follow");
     }
 
     const { followId } = req.params;
-    if(followId == req?.user?._id){
+    if (followId == req?.user?._id) {
         throw new apiError(409, "You can't follow yourself!");
     }
     try {
@@ -176,34 +176,35 @@ export const toggleFollowUser = asyncHandler(async (req, res, next)=>{
 
         const indexOfFollowUser = currentUser?.followings.indexOf(followUser?._id);
         const indexOfCurrentUser = followUser?.followers?.indexOf(currentUser?._id);
-        if(indexOfFollowUser != -1){
-            currentUser?.followings?.splice(indexOfFollowUser);
-            followUser?.followers?.splice(indexOfCurrentUser);
+        
+        if (indexOfFollowUser !== -1) {
+            // Remove just the one element
+            currentUser?.followings?.splice(indexOfFollowUser, 1);
+            followUser?.followers?.splice(indexOfCurrentUser, 1);
 
-            currentUser.save();
-            followUser.save();
+            await currentUser.save();
+            await followUser.save();
 
             return res
-            .status(200)
-            .json(
-                new apiResponse(200, `you unfollowed ${followUser?.fullName}`, {follower: currentUser, following: followUser})
-            )
+                .status(200)
+                .json(
+                    new apiResponse(200, `You unfollowed ${followUser?.fullName}`, {follower: currentUser, following: followUser})
+                );
         }
-        
-        currentUser.followings.push(followUser);
-        followUser.followers.push(currentUser);
+
+        currentUser.followings.push(followUser?._id);
+        followUser.followers.push(currentUser?._id);
     
-        currentUser.save();
-        followUser.save();
+        await currentUser.save();
+        await followUser.save();
 
         res
             .status(200)
             .json(
-                new apiResponse(200, `you stared following ${followUser?.fullName}`, {follower: currentUser, following: followUser})
-            )
+                new apiResponse(200, `You started following ${followUser?.fullName}`, {follower: currentUser, following: followUser})
+            );
     
     } catch (error) {
         next(error);
     }
-
-})
+});

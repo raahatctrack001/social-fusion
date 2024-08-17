@@ -21,8 +21,8 @@ const NotFoundPage = () => {
         <p className="mt-2 text-lg text-gray-500">
           The page you are looking for doesn’t exist or has been moved.
         </p>
-        <div className="mt-8">
-          <Button onClick={handleGoHome} color="primary">
+        <div className="mt-8 w-full flex justify-center">
+          <Button onClick={handleGoHome} outline>
             Go to Home
           </Button>
         </div>

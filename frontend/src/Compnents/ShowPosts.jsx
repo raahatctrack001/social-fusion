@@ -7,17 +7,22 @@ import { HiBadgeCheck } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { current } from '@reduxjs/toolkit'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateSuccess } from '../redux/slices/user.slice'
 
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
+    const dispatch = useDispatch();
     console.log("currentUser", currentUser)
     const navigate = useNavigate();
 
 
     const handleToggleFollowButtonClick = async (author)=>{
+      // console.log("post", post);
+      // console.log("currentUser", currentUser);
+        
         try {
-          fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
+          fetch(apiEndPoints.toggleFollowUserAddress(author?._id), {
             method: "POST",
             headers: {
               'content-type': 'application/json'
@@ -28,11 +33,9 @@ const ShowPosts = ({heading, postData}) => {
             return response.json();
           })
           .then((data)=>{
-              alert(data.message)
-              // if(data.success){
-              //   currentUser?.followers = data.followers;
-              //   currentUser?.followings = data.followings;
-              // }
+            console.log("data", data)
+              // alert(data.message)
+              dispatch(updateSuccess(data?.data?.follower))
               console.log(data)
           })
         } catch (error) {
@@ -58,16 +61,19 @@ const ShowPosts = ({heading, postData}) => {
                     <img className='h-8 rounded-full' src={post?.author?.profilePic } alt="" />
                     <p className='text-xs font-semibold'> {post?.author?.username } </p>
                   </div>
-                  {post?.author?._id !== currentUser?._id ? 
-                  (<Button 
-                    onClick={()=>handleToggleFollowButtonClick(post?.author)}
-                    outline className='bg-gray-800 '> 
-                                                {post?.author?.followers?.includes(currentUser?._id) ? 
-                                                ( <div className='flex gap-1 items-center relative'>  <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' /> </div> ) : 
-                                                (<div className=''><span className='flex items-center justify-center gap-1 relative'> <HiUser className='text-lg' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> </span></div>)}  
+
+                {post?.author?._id !== currentUser?._id ? 
+                (<Button 
+                  onClick={()=>handleToggleFollowButtonClick(post?.author)}
+                  outline className='bg-gray-800 '> 
+                                              {/* {author?.followers?.includes(currentUser?._id) ?  */}
+                                              {currentUser?.followings?.includes(post?.author?._id)?
+                                              ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  </div> ) : 
+                                              (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/>  </div>)}  
                 </Button>) : 
                 
-                (<Button outline disabled> <HiBadgeCheck className='text-lg text-black' /> </Button>)}
+                (<Button disabled> <HiBadgeCheck /> </Button>)}                  
+                
                 </div>
                 <div className='cursor-pointer' onClick={()=>navigate(`/posts/post/${post?._id}`)}>  
                   <PostCard post={post}  />

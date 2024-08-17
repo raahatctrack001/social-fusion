@@ -6,8 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import NotFoundPage from './NotFoundPage';
 import DisplayContent from '../Compnents/DisplayContent';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PostOptionsDropdown from '../Compnents/PostOptionDropdown';
+import { updateSuccess } from '../redux/slices/user.slice';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -20,6 +21,7 @@ const PostPage = () => {
   const [author, setAuthor] = useState();
   const [error, setError] = useState(null);
   const [enableComment, setEnableComment] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -90,11 +92,12 @@ const PostPage = () => {
         return response.json();
       })
       .then((data)=>{
-          alert(data.message)
+          // alert(data.message)
           // if(data.success){
           //   currentUser?.followers = data.followers;
           //   currentUser?.followings = data.followings;
           // }
+          dispatch(updateSuccess(data?.data?.follower))
           console.log(data)
       })
     } catch (error) {
@@ -120,7 +123,7 @@ const PostPage = () => {
                   (<Button 
                     onClick={()=>handleToggleFollowButtonClick(author)}
                     outline className='bg-gray-800 '> 
-                                                {author?.followers?.includes(currentUser?._id) ? 
+                                                {currentUser?.followings?.includes(author?._id) ? 
                                                 ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
                                                 (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                   </Button>) : 

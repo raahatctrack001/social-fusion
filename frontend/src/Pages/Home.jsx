@@ -9,13 +9,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Button } from 'flowbite-react'
 import { HiBadgeCheck, HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd, HiUserRemove } from 'react-icons/hi'
 import NotFoundPage from './NotFoundPage'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ShowPosts from '../Compnents/ShowPosts'
+import { updateSuccess } from '../redux/slices/user.slice'
 
 const Home = () => {
   const { currentUser } = useSelector(state=>state.user)
   const [postData, setPostData] = useState([]);
   const [users, setUsers] = useState([]); 
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -59,23 +61,25 @@ const Home = () => {
 
   const handleToggleFollowButtonClick = async (author)=>{
     try {
-      fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
+      await fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
         method: "POST",
         headers: {
           'content-type': 'application/json'
         }
       })
       .then((response)=>{
-        console.log("resonse: ", response);
+        if(!response.ok){
+          throw new Error(response.message || "Network response isn't ok!")
+        }
+        // console.log("resonse: ", response);
         return response.json();
       })
       .then((data)=>{
-          alert(data.message)
-          // if(data.success){
-          //   currentUser?.followers = data.followers;
-          //   currentUser?.followings = data.followings;
-          // }
-          console.log(data)
+          console.log("toggle follow data", data);
+          if(data.success){
+            dispatch(updateSuccess(data?.data?.follower))
+          }
+          
       })
     } catch (error) {
         alert(error.message);
@@ -86,9 +90,6 @@ const Home = () => {
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     {postData ? <ShowPosts heading={"Our recent posts!"} postData={postData} /> : <NotFoundPage /> }
-
-
-
 
     <div className='flex-1/4 border-2 m-2 px-2 mx-2'>
       <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors </h1>
@@ -105,7 +106,8 @@ const Home = () => {
                 (<Button 
                   onClick={()=>handleToggleFollowButtonClick(author)}
                   outline className='bg-gray-800 '> 
-                                              {author?.followers?.includes(currentUser?._id) ? 
+                                              {/* {author?.followers?.includes(currentUser?._id) ?  */}
+                                              {currentUser?.followings?.includes(author?._id)?
                                               ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
                                               (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                 </Button>) : 
