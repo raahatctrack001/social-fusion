@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { addPostComment } from "../actions/postActions"; // Import your action to handle adding comments
 import { formatDistanceToNow } from 'date-fns'; // Correct import
-import { HiArrowUp, HiOutlineHeart, HiOutlineThumbUp } from "react-icons/hi";
-import { HiHandThumbDown, HiHandThumbUp, HiMiniHandThumbUp, HiOutlineHandThumbUp } from "react-icons/hi2";
+import { HiOutlineHeart } from "react-icons/hi";
+import { apiEndPoints } from "../apiEndPoints/api.addresses";
+import { updateSuccess } from "../redux/slices/user.slice";
 
 const PostComment = ({ post, comments, handleReply, handleLike }) => {
     const { currentUser } = useSelector((state) => state.user);
@@ -12,6 +12,7 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
     const [postCommentContent, setPostCommentContent] = useState("");
     const [replyContent, setReplyContent] = useState("");
     const [showReplyBox, setShowReplyBox] = useState(false);
+    const [localComments, setLocalComments] = useState(comments); // Local state for comments
 
     const handlePostCommentSubmit = (e) => {
         e.preventDefault();
@@ -30,7 +31,37 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
         // setShowReplyBox(false);
     };
 
-    console.log("comments from postComponents!", post?.comments)
+    const handleLikeCommentClick = async (commentId, userId) => {
+        try {
+            const response = await fetch(apiEndPoints.likeCommentAddress(commentId, userId), {
+                method: "POST"
+            });
+            if (!response.ok) {
+                throw new Error(response.message || "Network response is not ok!");
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                // Update the local state with the new like count
+                setLocalComments(prevComments => 
+                    prevComments.map(comment =>
+                        comment._id === commentId
+                            ? data?.data?.comment // Add userId to likes
+                            : comment
+                    )
+                );
+
+                dispatch(updateSuccess(data?.data?.currentUser));
+                console.log(data.message);
+                console.log(data);
+                return;
+            }
+            console.log("Failed to like the comment");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className="p-3">
             {/* Form for posting a comment on the post */}
@@ -45,31 +76,35 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
                     Post Comment
                 </button>
             </form>
-            <div className=" rounded-lg">
-
-            {comments?.length > 0 && comments?.map((comment, index)=>{
-                return <div key={index} className=" border-2 border-black p-3 my-2 rounded-lg">
-                          {/* Username and Timestamp */}
-                          <div className="flex justify-between items-center mb-2 border-b border-black">
+            <div className="rounded-lg">
+                {localComments?.length > 0 && localComments.map((comment, index) => (
+                    <div key={index} className="border-2 border-black p-3 my-2 rounded-lg">
+                        {/* Username and Timestamp */}
+                        <div className="flex justify-between items-center mb-2 border-b border-black">
                             <div className="font-semibold">{comment?.author?.username}</div>
                             <div className="text-sm text-gray-500">{formatDistanceToNow(new Date(comment?.updatedAt), { addSuffix: true })}</div>
-                          </div>
-
-                          {/* Comment Content */}
-                          <div className="mb-2">
-                                {comment?.content}
-                          </div>
-
-                          {/* Likes, Reply, Upvote */}
-                          <div className="flex justify-between items-center">
-                            <div className="flex space-x-4">
-                              <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
-                              <button className="text-sm text-gray-500">Reply</button>
-                            </div>
-                            <button className="text-blue-500 font-semibold"><HiOutlineHeart className="text-lg text-black"/></button>
-                          </div>
                         </div>
-            })}
+
+                        {/* Comment Content */}
+                        <div className="mb-2">
+                            {comment?.content}
+                        </div>
+
+                        {/* Likes, Reply, Upvote */}
+                        <div className="flex justify-between items-center">
+                            <div className="flex space-x-4">
+                                <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
+                                <button className="text-sm text-gray-500">Reply</button>
+                            </div>
+                            <button
+                                onClick={() => handleLikeCommentClick(comment?._id, currentUser?._id)}
+                                className="text-blue-500 font-semibold"
+                            >
+                                <HiOutlineHeart className="text-lg text-black" />
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

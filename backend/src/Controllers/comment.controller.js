@@ -112,7 +112,7 @@ export const likeComment = asyncHandler(async (req, res, next)=>{
         
         if(comment.likes.indexOf(currentUser?._id) != -1){
             comment.likes.splice(comment.likes.indexOf(currentUser?._id), 1);
-            currentUser.comments?.splice(currentUser?.comments?.indexOf(comment?._id), 1);
+            currentUser.likedComments?.splice(currentUser?.likedComments?.indexOf(comment?._id), 1);
 
             await comment.save();
             await currentUser.save();
@@ -120,7 +120,7 @@ export const likeComment = asyncHandler(async (req, res, next)=>{
         }
 
         comment.likes.push(currentUser?._id);
-        currentUser.comments.push(comment?._id);
+        currentUser.likedComments.push(comment?._id);
         await comment.save();
         await currentUser.save();
 
