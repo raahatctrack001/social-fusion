@@ -4,57 +4,44 @@ import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 
-export const createComment = asyncHandler(async (req, res, next)=>{
-    const { author, content, parentCommentId} = req.body;
-    
-    if([author, content].some(field=>field?.trim()?0:1)){
-        throw new apiError(417, "All fields are necessary!");
+export const createComment = asyncHandler(async (req, res, next) => {
+    // console.log(req.params);
+    // return;
+    const { author, content, parent } = req.body;
+
+    // Validate input fields
+    if (!author || !content || author.trim() === '' || content.trim() === '') {
+        return next(new apiError(417, "All fields are necessary!"));
     }
+
     try {
-        const normalizedParentCommentId = parentCommentId.length && parentCommentId.trim() !== "" ? parentCommentId : null;
+        // Create a new comment
+        const newComment = await Comment.create(req.body);
 
-        const newComment = await Comment.create({
-            author, 
-            content,
-            parent: normalizedParentCommentId,
-        })
-        if(normalizedParentCommentId){
-            await Comment
-                .findById(normalizedParentCommentId)
-                .then((parentComment)=>{
-                    parentComment.replies.push(newComment);
-                    parentComment.save();
-                    res 
-                    .status(200)
-                    .json(
-                        new apiResponse(200, "reply added", parentComment)
-                    )
-                })
-                .catch(err=>next(err));
+        if (parent) {
+            // Add reply to parent comment
+            const parentComment = await Comment.findById(parent);
+            if (!parentComment) {
+                return next(new apiError(404, "Parent comment not found"));
+            }
+            parentComment.replies.push(newComment._id);
+            await parentComment.save();
+            return res.status(200).json(new apiResponse(200, "Reply added", parentComment));
+        } else {
+            // Add comment to post
+            const post = await Post.findById(req.params.postId);
+            if (!post) {
+                return next(new apiError(404, "Post not found"));
+            }
+            post.comments.push(newComment._id);
+            await post.save();
+            return res.status(200).json(new apiResponse(200, "Comment added", newComment));
         }
-        else{
-            await Post
-                .findById(req.params?.postId)
-                .then((post)=>{
-                    post.comments.push(newComment)
-                    post.save()
-                    res 
-                    .status(200)
-                    .json(
-                        new apiResponse(200, "comments added", newComment)
-                    )
-                })
-                .catch(err=>next(err));
-
-
-        }
-
-        
     } catch (error) {
         next(error);
     }
+});
 
-})
 
 export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
     await Comment

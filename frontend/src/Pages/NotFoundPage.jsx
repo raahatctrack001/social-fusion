@@ -22,7 +22,7 @@ const NotFoundPage = () => {
           The page you are looking for doesn’t exist or has been moved.
         </p>
         <div className="mt-8 w-full flex justify-center">
-          <Button onClick={handleGoHome} outline>
+        <Button onClick={handleGoHome} outline>
             Go to Home
           </Button>
         </div>

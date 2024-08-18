@@ -10,6 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostOptionsDropdown from '../Compnents/PostOptionDropdown';
 import { updateSuccess } from '../redux/slices/user.slice';
 import { current } from '@reduxjs/toolkit';
+import ShowPosts from '../Compnents/ShowPosts';
+import SharePopup from '../Compnents/ShareURL';
+// import Comment from '../Compnents/PostComment';
+import PostComment from '../Compnents/PostComment';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -23,6 +27,9 @@ const PostPage = () => {
   const [error, setError] = useState(null);
   const [enableComment, setEnableComment] = useState(true);
   const [likes, setLikes] = useState();
+  const [showPopup, setShowPopup] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const postUrl = `${window.location.origin}/posts/post/${post?._id}`;
 
   const dispatch = useDispatch();
   
@@ -120,7 +127,7 @@ const PostPage = () => {
 
         const data = await response.json();
         if(data.success){
-          console.log("post liked")
+          console.log(data?.message)
           dispatch(updateSuccess(data?.data?.currentUser));
           setLikes(data?.data?.currentPost?.likes?.length)
           return;
@@ -156,7 +163,17 @@ const PostPage = () => {
       console.log(error);
       setError(error.message);
     }
-}
+  }
+
+  const handleCommentLike = async(e)=>{
+
+  }
+
+  const handleCommentReply = async(e)=>{
+
+  }
+
+console.log(post)
   
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
@@ -220,12 +237,35 @@ const PostPage = () => {
               </div>
               
             
-              {enableComment ? <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <button> <HiOutlineBan /> </button>} 
-              <HiOutlineShare className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
+              {enableComment ?
+                <div >
+
+                  <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
+                                  
+                </div> :    
+              
+              <Button disabled> <HiOutlineBan /> </Button>} 
+                
+              <HiOutlineShare onClick={()=>setShowPopup(true)}  className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
+              {showPopup && (
+                <div className='w-full'>
+                  <SharePopup postUrl={postUrl} onClose={() => setShowPopup(false)} />
+                </div>
+
+              )}
           </div> 
+          { currentUser?._id !== post?.author?._id && 
           <div onClick={handleSavePostClick}>
             {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>}
-          </div>
+          </div>}
+        </div>
+        <div className='w-full rounded'>
+          {post?.comments?.length > 0 && <PostComment
+                  post={post}
+                  comments={post?.comments}
+                  handleLike={handleCommentLike}
+                  handleReply={handleCommentReply}
+                    />}
         </div>
     </div>
   )

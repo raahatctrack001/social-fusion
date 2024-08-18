@@ -7,18 +7,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
 import { current } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
+// import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
 // import { current } from '@reduxjs/toolkit';
 
 const AuthorHeader = ({ author }) => {
+  const [followersCount, setFollowersCount] = useState(author?.followers?.length)
+  // const [followingCount, setFollowingCount] = useState(author?.followings?.length)
+  console.log(author)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState()
   const [showDP, setShowDP] = useState(false);
   const profileRef = useRef();
-  // const followRef = useRef(null)
   const { currentUser } = useSelector(state=>state.user)
-  // const dispatch = useDispatch();
+
   const handleToggleFollowButtonClick = async ()=>{
     try {
       fetch(apiEndPoints.toggleFollowUserAddress(author._id), {
@@ -32,12 +35,15 @@ const AuthorHeader = ({ author }) => {
         return response.json();
       })
       .then((data)=>{
-          alert(data.message)
-          // if(data.success){
-          //   currentUser?.followers = data.followers;
-          //   currentUser?.followings = data.followings;
-          // }
-          console.log(data)
+          console.log(data.message)          
+          if(currentUser?.followings?.includes(author?._id)){
+            setFollowersCount(followersCount-1)
+          }
+          else{
+            setFollowersCount(followersCount+1)
+          }
+          dispatch(updateSuccess(data?.data?.follower))
+
       })
     } catch (error) {
         alert(error.message);
@@ -120,7 +126,7 @@ const AuthorHeader = ({ author }) => {
                     </div>
                     <div className='hidden md:flex gap-4 md:ml-8'>
                         <div className="text-center">
-                          <p className="text-lg font-semibold">{author.followers.length}</p>
+                          <p className="text-lg font-semibold">{followersCount}</p>
                           <p className="text-gray-600">Followers</p>
                         </div>
                         <div className="text-center">
@@ -136,15 +142,17 @@ const AuthorHeader = ({ author }) => {
                   <div className='flex items-center justify-between my-2 mt-5 md:ml-10' >
                     {author?._id === currentUser?._id && <Button onClick={(()=>navigate("/edit-profile"))}> Edit Profile </Button>}
                     {author?._id !== currentUser?._id ? 
-                  (<Button 
-                    onClick={()=>handleToggleFollowButtonClick(author)}
-                    outline className='bg-gray-800 '> 
-                                                {author?.followers?.includes(currentUser?._id) ? 
-                                                ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
-                                                (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
-                  </Button>) : 
-                                                
-                  (<Button disabled className='bg-gray-900'> <HiBadgeCheck className='text-xl text-white w-20 h-5' /> </Button>)}   </div>        
+                (<Button 
+                  onClick={()=>handleToggleFollowButtonClick(author)}
+                  outline className='bg-gray-800 '> 
+                                              {/* {author?.followers?.includes(currentUser?._id) ?  */}
+                                              {currentUser?.followings?.includes(author?._id)?
+                                              ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
+                                              (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
+                </Button>) : 
+                
+                  (<Button disabled className='bg-gray-900'> <HiBadgeCheck className='text-xl text-white w-20 h-5' /> </Button>)}   
+                  </div>        
                 </div>
             </div>
                                                   

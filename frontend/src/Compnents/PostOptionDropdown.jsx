@@ -12,7 +12,8 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
   const [copyLink, setCopyLink] = useState(null);
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate();
- console.log(currentUser)
+
+  
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -130,14 +131,16 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
                   <HiShare className="w-5 h-5 mr-3 text-gray-600" />
                   <span>Share Post</span>
                 </div> */}
-                <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <HiBookmark className="w-5 h-5 mr-3 text-gray-600" />
-                  <span>Save Post</span>
-                </div>
-                <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <HiFlag className="w-5 h-5 mr-3 text-gray-600" />
-                  <span>Report Post</span>
-                </div>
+                {currentUser?._id !== post?.author?._id && <div>
+                  <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <HiBookmark className="w-5 h-5 mr-3 text-gray-600" />
+                    <span>Save Post</span>
+                  </div>
+                  <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <HiFlag className="w-5 h-5 mr-3 text-gray-600" />
+                    <span>Report Post</span>
+                  </div>
+                </div> }
                 <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                   <HiClock className="w-5 h-5 mr-3 text-gray-600" />
                   <span>View Post History</span>
