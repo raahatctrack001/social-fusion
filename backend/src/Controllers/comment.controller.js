@@ -1,5 +1,6 @@
 import { Comment } from "../Models/comment.models.js";
 import Post from "../Models/post.model.js";
+import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
@@ -96,6 +97,36 @@ export const updateComment = asyncHandler(async (req, res, next)=>{
 })
 
 export const likeComment = asyncHandler(async (req, res, next)=>{
+    try {
+        const { commentId, authorId } = req.params;
     
+        const comment = await Comment.findById(commentId);
+        const currentUser = await User.findById(authorId);
+    
+        if(!comment){
+            throw new apiError(404, "Comment doesn't exist");
+        }    
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist");
+        }
+        
+        if(comment.likes.indexOf(currentUser?._id) != -1){
+            comment.likes.splice(comment.likes.indexOf(currentUser?._id), 1);
+            currentUser.comments?.splice(currentUser?.comments?.indexOf(comment?._id), 1);
+
+            await comment.save();
+            await currentUser.save();
+            return res.status(200).json(new apiResponse(200, "comment unliked", {comment, currentUser}))
+        }
+
+        comment.likes.push(currentUser?._id);
+        currentUser.comments.push(comment?._id);
+        await comment.save();
+        await currentUser.save();
+
+        return res.status(200).json(new apiResponse(200, "comment liked", {comment, currentUser}))
+    } catch (error) {
+        next(error)
+    }
 
 })

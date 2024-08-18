@@ -16,6 +16,6 @@ router.route("/create-comment/:postId").post(upload.none(), isUserLoggedIn, crea
 router.route("/comments-on-post").get(getCommentsOnPost);
 router.route("/delete-comment/:commentId").delete(isUserLoggedIn, deleteComment);
 router.route("/update-comment").patch(isUserLoggedIn, updateComment);
-router.route("/like-comment").post(isUserLoggedIn, likeComment);
+router.route("/like-comment/:commentId/:authorId").post(isUserLoggedIn, likeComment);
 
 export default router;
