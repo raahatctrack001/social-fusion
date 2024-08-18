@@ -231,7 +231,7 @@ console.log(post)
           <div className='flex gap-3'>
 
               <div onClick={handleLikePostClick}> 
-                {currentUser?.likes?.includes(post?._id) ? 
+                {currentUser?.likedPosts?.includes(post?._id) ? 
                 <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-gray-800 hover:text-lg'/> {likes||0} </div>: 
                 <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg' /> {likes||0} </div>}
               </div>

@@ -215,7 +215,7 @@ export const likePost = asyncHandler(async(req, res, next)=>{
         const index = likes.findIndex(item => item._id == userId);
         if (index != -1) {
             likes.splice(index, 1);
-            currentUser.likes.splice(currentUser.likes.indexOf(postId), 1);
+            currentUser.likedPosts.splice(currentUser.likedPosts.indexOf(postId), 1);
             await currentUser.save();
             await currentPost.save();
             return res
@@ -226,7 +226,7 @@ export const likePost = asyncHandler(async(req, res, next)=>{
         }
         
         likes.push(userId)
-        currentUser.likes.push(currentPost?._id);
+        currentUser.likedPosts.push(currentPost?._id);
         await currentUser.save();
         await currentPost.save();
 

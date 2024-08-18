@@ -57,10 +57,14 @@ const userSchema = mongoose.Schema({
             ref:'User'
         }
     }],
-    likes: [{
+    likedPosts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     }],
+    likedComments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }], 
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
