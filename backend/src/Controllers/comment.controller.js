@@ -6,19 +6,28 @@ import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 
 export const createComment = asyncHandler(async (req, res, next) => {
-    // console.log(req.params);
-    // return;
-    const { author, content, parent } = req.body;
-
+    
+    const {content, parent } = req.body;
+    const { postId, userId } = req.params;
+    
     // Validate input fields
-    if (!author || !content || author.trim() === '' || content.trim() === '') {
-        return next(new apiError(417, "All fields are necessary!"));
+    if (!content || content.trim() === '') {
+        return next(new apiError(417, "Write something to post as comment!"));
     }
-
+// return;
     try {
+        if(req.user?._id !== userId){
+            throw new apiError(404, "user doesn't exist to comment here!")
+        }
         // Create a new comment
-        const newComment = await Comment.create(req.body);
-
+        const newComment = await Comment.create({
+            content, 
+            author: userId
+        });
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "user to comment doesn't exist");
+        }
         if (parent) {
             // Add reply to parent comment
             const parentComment = await Comment.findById(parent);
@@ -27,16 +36,20 @@ export const createComment = asyncHandler(async (req, res, next) => {
             }
             parentComment.replies.push(newComment._id);
             await parentComment.save();
+            currentUser?.comments?.push(newComment)
+            await currentUser.save();
             return res.status(200).json(new apiResponse(200, "Reply added", parentComment));
         } else {
             // Add comment to post
-            const post = await Post.findById(req.params.postId);
+            const post = await Post.findById(postId);
             if (!post) {
                 return next(new apiError(404, "Post not found"));
             }
             post.comments.push(newComment._id);
             await post.save();
-            return res.status(200).json(new apiResponse(200, "Comment added", newComment));
+            currentUser?.comments?.push(newComment)
+            await currentUser.save();
+            return res.status(200).json(new apiResponse(200, "Comment added", {newComment, currentUser}));
         }
     } catch (error) {
         next(error);
