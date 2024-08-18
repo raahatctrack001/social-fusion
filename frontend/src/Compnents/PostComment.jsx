@@ -4,6 +4,7 @@ import { formatDistanceToNow } from 'date-fns'; // Correct import
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { updateSuccess } from "../redux/slices/user.slice";
+import CommentForm from "./CommentForm";
 
 const PostComment = ({ post, comments, handleReply, handleLike }) => {
     const { currentUser } = useSelector((state) => state.user);
@@ -16,8 +17,7 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
 
     const handlePostCommentSubmit = (e) => {
         e.preventDefault();
-        // dispatch(addPostComment(post._id, postCommentContent)); // Dispatch action to add post comment
-        // setPostCommentContent("");
+        
     };
 
     const handleReplyClick = () => {
@@ -63,21 +63,14 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
             console.log(error);
         }
     };
-
     return (
         <div className="p-3">
             {/* Form for posting a comment on the post */}
-            <form onSubmit={handlePostCommentSubmit} className="mb-4">
-                <textarea
-                    value={postCommentContent}
-                    onChange={(e) => setPostCommentContent(e.target.value)}
-                    placeholder="Write a comment about this post..."
-                    className="border w-full p-2"
-                />
-                <button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded-md">
-                    Post Comment
-                </button>
-            </form>
+            <CommentForm
+                handlePostCommentSubmit={handlePostCommentSubmit}
+                postCommentContent={postCommentContent}
+                setPostCommentContent={setPostCommentContent}
+              />
             <div className="rounded-lg">
                 {localComments?.length > 0 && localComments.map((comment, index) => (
                     
@@ -97,7 +90,14 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
                         <div className="flex justify-between items-center">
                             <div className="flex space-x-4">
                                 <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
-                                <button onClick={()=>console.log(comment?.author)} className="text-sm text-gray-500">Reply</button>
+                                <div className="flex flex-col">
+                                    <button onClick={()=>setShowReplyBox(!showReplyBox)} className="text-sm text-gray-500">Reply</button>
+                                    {showReplyBox && !comment?.parent && <CommentForm
+                                                          handlePostCommentSubmit={handlePostCommentSubmit}
+                                                          postCommentContent={postCommentContent}
+                                                          setPostCommentContent={setPostCommentContent}
+                                                        />}
+                                </div>
                             </div>
                             <button
                                 onClick={() => handleLikeCommentClick(comment?._id, currentUser?._id)}
