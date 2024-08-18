@@ -96,37 +96,45 @@ export const updateComment = asyncHandler(async (req, res, next)=>{
 
 })
 
-export const likeComment = asyncHandler(async (req, res, next)=>{
+export const likeComment = asyncHandler(async (req, res, next) => {
     try {
         const { commentId, authorId } = req.params;
     
-        const comment = await Comment.findById(commentId);
+        const comment = await Comment.findById(commentId).populate('author'); // Populate author field
         const currentUser = await User.findById(authorId);
     
-        if(!comment){
+        if (!comment) {
             throw new apiError(404, "Comment doesn't exist");
         }    
-        if(!currentUser){
-            throw new apiError(404, "user doesn't exist");
+        if (!currentUser) {
+            throw new apiError(404, "User doesn't exist");
         }
         
-        if(comment.likes.indexOf(currentUser?._id) != -1){
-            comment.likes.splice(comment.likes.indexOf(currentUser?._id), 1);
-            currentUser.likedComments?.splice(currentUser?.likedComments?.indexOf(comment?._id), 1);
+        const userId = currentUser._id;
+        const commentIdIndex = comment.likes.indexOf(userId);
+
+        if (commentIdIndex !== -1) {
+            // Unliking the comment
+            comment.likes.splice(commentIdIndex, 1);
+            const likedCommentsIndex = currentUser.likedComments.indexOf(commentId);
+            if (likedCommentsIndex !== -1) {
+                currentUser.likedComments.splice(likedCommentsIndex, 1);
+            }
 
             await comment.save();
             await currentUser.save();
-            return res.status(200).json(new apiResponse(200, "comment unliked", {comment, currentUser}))
+
+            return res.status(200).json(new apiResponse(200, "Comment unliked", { comment, currentUser }));
         }
 
-        comment.likes.push(currentUser?._id);
-        currentUser.likedComments.push(comment?._id);
+        // Liking the comment
+        comment.likes.push(userId);
+        currentUser.likedComments.push(commentId);
         await comment.save();
         await currentUser.save();
 
-        return res.status(200).json(new apiResponse(200, "comment liked", {comment, currentUser}))
+        return res.status(200).json(new apiResponse(200, "Comment liked", { comment, currentUser }));
     } catch (error) {
-        next(error)
+        next(error);
     }
-
-})
+});

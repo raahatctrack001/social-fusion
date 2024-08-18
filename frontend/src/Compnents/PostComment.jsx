@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { formatDistanceToNow } from 'date-fns'; // Correct import
-import { HiOutlineHeart } from "react-icons/hi";
+import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { updateSuccess } from "../redux/slices/user.slice";
 
@@ -32,6 +32,7 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
     };
 
     const handleLikeCommentClick = async (commentId, userId) => {
+        // console.log(currentUser?.likedComments?.includes(commentId));
         try {
             const response = await fetch(apiEndPoints.likeCommentAddress(commentId, userId), {
                 method: "POST"
@@ -42,6 +43,7 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
 
             const data = await response.json();
             if (data.success) {
+                console.log("data.data", data);
                 // Update the local state with the new like count
                 setLocalComments(prevComments => 
                     prevComments.map(comment =>
@@ -78,6 +80,7 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
             </form>
             <div className="rounded-lg">
                 {localComments?.length > 0 && localComments.map((comment, index) => (
+                    
                     <div key={index} className="border-2 border-black p-3 my-2 rounded-lg">
                         {/* Username and Timestamp */}
                         <div className="flex justify-between items-center mb-2 border-b border-black">
@@ -94,13 +97,16 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
                         <div className="flex justify-between items-center">
                             <div className="flex space-x-4">
                                 <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
-                                <button className="text-sm text-gray-500">Reply</button>
+                                <button onClick={()=>console.log(comment?.author)} className="text-sm text-gray-500">Reply</button>
                             </div>
                             <button
                                 onClick={() => handleLikeCommentClick(comment?._id, currentUser?._id)}
                                 className="text-blue-500 font-semibold"
                             >
-                                <HiOutlineHeart className="text-lg text-black" />
+                              {currentUser?.likedComments?.includes(comment?._id) ?  
+                                <HiHeart className="text-lg text-red-700" /> : 
+                                <HiOutlineHeart className="text-lg text-black"/>
+                              }
                             </button>
                         </div>
                     </div>
