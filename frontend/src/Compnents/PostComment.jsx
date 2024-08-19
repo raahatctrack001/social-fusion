@@ -1,69 +1,114 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { formatDistanceToNow } from 'date-fns'; // Correct import
-import { HiHeart, HiOutlineHeart } from "react-icons/hi";
+import { formatDistanceToNow } from 'date-fns';
+import { HiDotsHorizontal, HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { updateSuccess } from "../redux/slices/user.slice";
 import CommentForm from "./CommentForm";
-import { current } from "@reduxjs/toolkit";
+import { Link } from "react-router-dom";
+import { Dropdown } from "flowbite-react";
+import ShowComments from "./ShowComments";
+import PopupWindow from "../Pages/PopupWindow";
 
-const PostComment = ({ post, comments, handleReply, handleLike }) => {
+const PostComment = ({ post, comments, parent }) => {
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     const [postCommentContent, setPostCommentContent] = useState("");
     const [replyContent, setReplyContent] = useState("");
-    const [showReplyBox, setShowReplyBox] = useState(false);
-    const [localComments, setLocalComments] = useState(comments); // Local state for comments
-
-   
-
+    const [showReplyBox, setShowReplyBox] = useState({});
+    const [localComments, setLocalComments] = useState(comments || []);
+    const [commentReplies, setCommentReplies] = useState({});
+    const [showPopup, setShowPopup] = useState(false)
     const handlePostCommentSubmit = async (e) => {
         e.preventDefault();
-        // console.log(apiEndPoints.createCommentAddress(post?._id, currentUser?._id));
-        // return;
-        // console.log(currentUser?.likedComments?.includes(commentId));
+
         try {
             const formData = new FormData();
             formData.append("content", postCommentContent);
+            formData.append("parent", parent);
             const response = await fetch(apiEndPoints.createCommentAddress(post?._id, currentUser?._id), {
                 method: "POST",
                 body: formData,
             });
             const data = await response.json();
-            
+
             if (!response.ok) {
-                throw new Error(response.message || "Network response is not ok!");
+                throw new Error(data.message || "Network response is not ok!");
             }
             if (data.success) {
-                setLocalComments(prevComments => [...prevComments, data?.data?.newComment]);
+                setLocalComments(prevComments =>
+                    [data?.data?.newComment, ...(prevComments || [])].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                );
+
                 dispatch(updateSuccess(data?.data?.currentUser));
-                console.log(data.message);
-                console.log(data);
+                setPostCommentContent('');
                 return;
             }
-            console.log("Failed to comment");
         } catch (error) {
             console.log(error);
         }
     };
 
-    const handleReplyClick = () => {
-        setShowReplyBox(!showReplyBox);
+    const handleReplyClick = async (comment) => {
+        setShowPopup(!showPopup)
+        return;
+        console.log("inside reply click")
+        setShowReplyBox(comment?._id)
+        try {
+            const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Network response is not ok!");
+            }
+            console.log("data", data);
+            setCommentReplies((prevReplies) => ({
+                ...prevReplies,
+                [comment._id]: data?.data || [],
+            }));
+            console.log('commentReplies', commentReplies);
+            console.log('showreplybox', showReplyBox)
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    const handleReplySubmit = (e) => {
-        // e.preventDefault();
-        // handleReply(comment._id, replyContent);
-        // setReplyContent("");
-        // setShowReplyBox(false);
+    const handleReplySubmit = async (e, commentId) => {
+        e.preventDefault();
+
+        try {
+            const formData = new FormData();
+            formData.append("content", replyContent);
+            formData.append("parent", commentId);
+            const response = await fetch(apiEndPoints.createCommentAddress(post?._id, currentUser?._id), {
+                method: "POST",
+                body: formData,
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Network response is not ok!");
+            }
+            if (data.success) {
+                setCommentReplies(prevReplies => ({
+                    ...prevReplies,
+                    [commentId]: data?.data?.replies // assuming data.data contains the replies for the comment
+                }));
+                setReplyContent('');
+                dispatch(updateSuccess(data?.data?.currentUser));
+                console.log("comment reply", commentReplies)
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleLikeCommentClick = async (commentId, userId) => {
-        // console.log(currentUser?.likedComments?.includes(commentId));
         try {
             const response = await fetch(apiEndPoints.likeCommentAddress(commentId, userId), {
-                method: "POST"
+                method: "POST",
             });
             if (!response.ok) {
                 throw new Error(response.message || "Network response is not ok!");
@@ -71,78 +116,45 @@ const PostComment = ({ post, comments, handleReply, handleLike }) => {
 
             const data = await response.json();
             if (data.success) {
-                console.log("data.data", data);
-                // Update the local state with the new like count
-                setLocalComments(prevComments => 
+                setLocalComments(prevComments =>
                     prevComments.map(comment =>
                         comment._id === commentId
-                            ? data?.data?.comment // Add userId to likes
+                            ? data?.data?.comment
                             : comment
                     )
                 );
 
                 dispatch(updateSuccess(data?.data?.currentUser));
-                console.log(data.message);
-                console.log(data);
-                return;
             }
-            console.log("Failed to like the comment");
         } catch (error) {
             console.log(error);
         }
     };
-    // console.log(postCommentContent)
+
     return (
         <div className="p-3">
             {/* Form for posting a comment on the post */}
             <CommentForm
-                parent={null}
+                parent={parent}
                 handlePostCommentSubmit={handlePostCommentSubmit}
                 postCommentContent={postCommentContent}
                 setPostCommentContent={setPostCommentContent}
                 />
-            <div className="rounded-lg">
-                {localComments?.length > 0 && localComments.map((comment, index) => (
-                    
-                    <div key={index} className="border-2 border-black p-3 my-2 rounded-lg">
-                        {/* Username and Timestamp */}
-                        <div className="flex justify-between items-center mb-2 border-b border-black">
-                            <div className="font-semibold">{comment?.author?.username}</div>
-                            <div className="text-sm text-gray-500">{formatDistanceToNow(new Date(comment?.updatedAt), { addSuffix: true })}</div>
-                        </div>
+            <ShowComments 
+                localComments={localComments}
+                handleLikeCommentClick={handleLikeCommentClick}
+                handleReplyClick={handleReplyClick}
+                commentReplies={commentReplies}
+                showReplyBox={showReplyBox}
+                /> 
 
-                        {/* Comment Content */}
-                        <div className="mb-2">
-                            {comment?.content}
-                        </div>
-
-                        {/* Likes, Reply, Upvote */}
-                        <div className="flex justify-between items-center">
-                            <div className="flex space-x-4">
-                                <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
-                                <div className="flex flex-col">
-                                    <button onClick={()=>setShowReplyBox(!showReplyBox)} className="text-sm text-gray-500">Reply</button>
-                                    {showReplyBox && !comment?.parent && <CommentForm
-                                                          parent= {comment}
-                                                          handlePostCommentSubmit={handlePostCommentSubmit}
-                                                          postCommentContent={postCommentContent}
-                                                          setPostCommentContent={setPostCommentContent}
-                                                        />}
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => handleLikeCommentClick(comment?._id, currentUser?._id)}
-                                className="text-blue-500 font-semibold"
-                            >
-                              {currentUser?.likedComments?.includes(comment?._id) ?  
-                                <HiHeart className="text-lg text-red-700" /> : 
-                                <HiOutlineHeart className="text-lg text-black"/>
-                              }
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {showPopup && <PopupWindow 
+                                        heading={"Under Development"} 
+                                        information={"Thanks for checking in. This feature is under development, please be patient! you will be notified."}
+                                        showPopup={showPopup}
+                                        setShowPopup={setShowPopup}
+                                        />}          
+            
         </div>
     );
 };

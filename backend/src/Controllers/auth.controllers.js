@@ -64,46 +64,36 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const loginUser = asyncHandler(async (req, res, next)=>{
-    const {userEmail, password: pass} = req.body;
-    
+export const loginUser = asyncHandler(async (req, res, next) => {
+    const { userEmail, password: pass } = req.body;
+    console.log(req.body)
     try {
         const query = uniqueIdValidator(userEmail);
-        await User
-        .findOne(query)
-        // .select("-password -refreshToken")
-        .then((user)=>{
-                if(user){
-                    if(!user.isPasswordCorrect(pass)){
-                        throw new apiError(403, "password didn't matched!")
-                    }
-                    
-                    const {password, refreshToken, resetPasswordToken, ...userData} = user._doc
-                    generateAccessAndRefreshToken(user)
-                       .then((tokens)=>{
-                            const { accessToken, refreshToken } = tokens;
-                            res
-                            .status(202)
-                            .cookie('accessToken', accessToken, options)
-                            .cookie('refreshToken', refreshToken, options)
-                            .json(
-                                new apiResponse(202, "user logged in", userData)
-                            )                        
-                        })
-                       .catch(err=>next(err))
-                }
-                else{
-                    throw new apiError(404, "user not found!")
-                }
-                
-            })
-            .catch(error=>next(error))            
+        const user = await User.findOne(query);
+
+        if (user) {
+            if (!user.isPasswordCorrect(pass)) {
+                throw new apiError(403, "Password didn't match!");
+            }
+
+            const tokens = await generateAccessAndRefreshToken(user._id);
+            // console.log(tokens?.currentUser)
+            const { password, refreshToken, resetPasswordToken, ...userData } = tokens?.currentUser?._doc;
+            // console.log("rest************************************************", userData)
+            
+            res
+                .status(202)
+                .cookie('accessToken', tokens.accessToken, options)
+                .cookie('refreshToken', tokens.refreshToken, options)
+                .json(new apiResponse(202, "User logged in", userData));
+        } else {
+            throw new apiError(404, "User not found!");
+        }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         next(error);
     }
-
-})
+});
 
 export const logoutUser = asyncHandler(async (req, res, next) => {
     try {

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Comment } from "../Models/comment.models.js";
 import Post from "../Models/post.model.js";
 import User from "../Models/user.model.js";
@@ -6,29 +7,39 @@ import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 
 export const createComment = asyncHandler(async (req, res, next) => {
-    
-    const {content, parent } = req.body;
+    const { content, parent } = req.body;
     const { postId, userId } = req.params;
-    
+
+    console.log("params", req.params);
+    console.log("body", req.body);
+
     // Validate input fields
     if (!content || content.trim() === '') {
         return next(new apiError(417, "Write something to post as comment!"));
     }
-// return;
+
     try {
-        if(req.user?._id !== userId){
-            throw new apiError(404, "user doesn't exist to comment here!")
+        if (req.user?._id !== userId) {
+            throw new apiError(404, "User doesn't exist to comment here!");
         }
+
         // Create a new comment
-        const newComment = await Comment.create({
-            content, 
+        let newComment = await Comment.create({
+            content,
             author: userId
         });
+
         const currentUser = await User.findById(userId);
-        if(!currentUser){
-            throw new apiError(404, "user to comment doesn't exist");
+        if (!currentUser) {
+            throw new apiError(404, "User to comment doesn't exist");
         }
-        if (parent) {
+
+        if (!parent) {
+            // Check if parent is a valid ObjectId
+            if (!mongoose.Types.ObjectId.isValid(parent)) {
+                return next(new apiError(400, "Invalid parent comment ID"));
+            }
+
             // Add reply to parent comment
             const parentComment = await Comment.findById(parent);
             if (!parentComment) {
@@ -36,25 +47,52 @@ export const createComment = asyncHandler(async (req, res, next) => {
             }
             parentComment.replies.push(newComment._id);
             await parentComment.save();
-            currentUser?.comments?.push(newComment)
-            await currentUser.save();
-            return res.status(200).json(new apiResponse(200, "Reply added", parentComment));
         } else {
-            // Add comment to post
+            // Add comment to post when parent is null
             const post = await Post.findById(postId);
             if (!post) {
                 return next(new apiError(404, "Post not found"));
             }
             post.comments.push(newComment._id);
             await post.save();
-            currentUser?.comments?.push(newComment)
-            await currentUser.save();
-            return res.status(200).json(new apiResponse(200, "Comment added", {newComment, currentUser}));
         }
+
+        // Add comment to the user's comments list
+        currentUser.comments.push(newComment._id);
+        await currentUser.save();
+
+        // Populate the author field in the new comment
+        newComment = await newComment.populate('author');
+
+        return res.status(200).json(new apiResponse(200, "Comment added", { newComment, currentUser }));
     } catch (error) {
         next(error);
     }
 });
+
+
+
+export const getComment = asyncHandler(async (req, res, next)=>{
+    try {
+        const { commentId } = req.params;
+        if(!commentId){
+            throw new apiError(404, "commentId is required")
+        }
+        const comments = await Comment.findById(commentId).populate({
+            path:"replies",
+            populate: {
+                path:"author",
+                model:"User"
+            }
+        })
+        // if(!comments?.replies?.length){
+        //     throw new apiError(404, "no replies yet!")
+        // }
+        return res.status(200).json(new apiResponse(200, "comment replies fetched", comments?.replies))
+    } catch (error) {
+        next(error)
+    }
+})
 
 
 export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{

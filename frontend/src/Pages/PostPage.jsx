@@ -260,12 +260,12 @@ console.log(post)
           </div>}
         </div>
         <div className='w-full rounded'>
-          {post?.comments?.length > 0 && <PostComment
+          <PostComment
                   post={post}
                   comments={post?.comments}
                   handleLike={handleCommentLike}
                   handleReply={handleCommentReply}
-                    />}
+                    />
         </div>
     </div>
   )

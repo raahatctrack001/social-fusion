@@ -1,25 +1,24 @@
 import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
 
-export const generateAccessAndRefreshToken = async (userId)=>{
+export const generateAccessAndRefreshToken = async (userId) => {
     try {
-        const currentUser = await User.findById(userId);     
+        const currentUser = await User.findById(userId);
+
+        if (!currentUser) {
+            throw new apiError(404, "User not found");
+        }
 
         const accessToken = await currentUser.generateAccessToken();
-        const refreshToken =  await currentUser.generateRefreshToken();
-        
+        const refreshToken = await currentUser.generateRefreshToken();
+
         currentUser.refreshToken = refreshToken;
-        currentUser
-            .save()
-            .then(()=>{
-                console.log('tokens generated successfully!')
-            })
-            .catch((error)=>{
-                throw new apiError(500, error.message)
-            })
-        return {accessToken, refreshToken}
+        await currentUser.save();
+
+        console.log('Tokens generated successfully!');
+        return {currentUser, accessToken, refreshToken };
     } catch (error) {
-        throw new apiError(500, error.message)
+        throw new apiError(500, error.message);
     }
 }
 

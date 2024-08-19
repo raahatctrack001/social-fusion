@@ -1,13 +1,13 @@
 import React from 'react'
 
-const CommentForm = ({handlePostCommentSubmit, postCommentContent, setPostCommentContent}) => {
+const CommentForm = ({parent, handlePostCommentSubmit, postCommentContent, setPostCommentContent}) => {
   return (
     <div>
         <form onSubmit={handlePostCommentSubmit} className="mb-4 ">
                 <textarea
                     value={postCommentContent}
                     onChange={(e) => setPostCommentContent(e.target.value)}
-                    placeholder="Write a comment about this post..."
+                    placeholder={`${!parent? "Write a comment about this post..." : "Write a reply on this comment..."}`}
                     className="border w-full p-2 rounded-xl"
                     rows={3}
                 />
