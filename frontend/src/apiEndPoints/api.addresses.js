@@ -25,6 +25,8 @@ export  const apiEndPoints = {
     getSavedPostAddress: (userId)=>`/api/v1/posts/saved-posts/${userId}`,
 
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,
+    replyCommentAddress : (parentId, userId)=> `/api/v1/comments/reply-comment/${parentId}/${userId}`,
+    
     getCommentsAddress : ()=> `/api/v1/comments/comments-on-post/`,
     getCommentAddress: (commentId)=>`/api/v1/comments/get-comment/${commentId}`,
     likeCommentAddress : (commentId, userId)=> `/api/v1/comments/like-comment/${commentId}/${userId}`,

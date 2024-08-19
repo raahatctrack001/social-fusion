@@ -14,6 +14,7 @@ import ShowPosts from '../Compnents/ShowPosts';
 import SharePopup from '../Compnents/ShareURL';
 // import Comment from '../Compnents/PostComment';
 import PostComment from '../Compnents/PostComment';
+import { formatDistanceToNow } from 'date-fns';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -69,21 +70,21 @@ const PostPage = () => {
     return Math.ceil(readingTime);
   };
 
-  const lastUpdatedAt = ()=>{
-    const mongoDate = post?.updatedAt;
-    const date = new Date(mongoDate);
-    const formattedDate = date.toLocaleString('en-US', {
-      weekday: 'long', // "Monday"
-      year: 'numeric', // "2024"
-      month: 'long', // "August"
-      day: 'numeric', // "12"
-      hour: 'numeric', // "8 AM"
-      minute: 'numeric', // "00"
-      second: 'numeric', // "00"
-      timeZoneName: 'short' // "GMT"
-    });
-    return formattedDate
-  } 
+  // const lastUpdatedAt = ()=>{
+  //   const mongoDate = post?.updatedAt;
+  //   const date = new Date(mongoDate);
+  //   const formattedDate = date.toLocaleString('en-US', {
+  //     weekday: 'long', // "Monday"
+  //     year: 'numeric', // "2024"
+  //     month: 'long', // "August"
+  //     day: 'numeric', // "12"
+  //     hour: 'numeric', // "8 AM"
+  //     minute: 'numeric', // "00"
+  //     second: 'numeric', // "00"
+  //     timeZoneName: 'short' // "GMT"
+  //   });
+  //   return formattedDate
+  // } 
 
   // console.log("post fetched", post)
   // // const { author } = post;
@@ -165,16 +166,9 @@ const PostPage = () => {
     }
   }
 
-  const handleCommentLike = async(e)=>{
 
-  }
 
-  const handleCommentReply = async(e)=>{
 
-  }
-
-console.log(post)
-  
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>
@@ -211,7 +205,7 @@ console.log(post)
         <div className='flex flex-col md:flex-row md:justify-between border-b-2'>
           <p className=''> <span className='hidden md:inline'> Approx<span className='hidden lg:inline'>imate </span> time: </span> {calculateReadingTime(post?.content)} min read </p>
             <span className='hidden md:inline text-2xl lg:hidden'>|</span>
-          <p className=''> <span className='hidden md:inline'> Last Update: </span> {lastUpdatedAt()}  </p>
+          <p className=''> <span className='hidden md:inline'> Last Update: </span> {formatDistanceToNow(new Date(post?.updatedAt), { addSuffix: true })}  </p>
         </div>
       </div>
       <div className='border-2 flex justify-center items-center text-xl py-3 font-semibold'>
@@ -261,11 +255,8 @@ console.log(post)
         </div>
         <div className='w-full rounded'>
           <PostComment
-                  post={post}
-                  comments={post?.comments}
-                  handleLike={handleCommentLike}
-                  handleReply={handleCommentReply}
-                    />
+              post={post}
+          />
         </div>
     </div>
   )
