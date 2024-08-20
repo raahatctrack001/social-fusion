@@ -205,7 +205,7 @@ const PostPage = () => {
         <div className='flex flex-col md:flex-row md:justify-between border-b-2'>
           <p className=''> <span className='hidden md:inline'> Approx<span className='hidden lg:inline'>imate </span> time: </span> {calculateReadingTime(post?.content)} min read </p>
             <span className='hidden md:inline text-2xl lg:hidden'>|</span>
-          <p className=''> <span className='hidden md:inline'> Last Update: </span> {formatDistanceToNow(new Date(post?.updatedAt), { addSuffix: true })}  </p>
+          <p className=''> <span className='hidden md:inline'> Published: </span> {formatDistanceToNow(new Date(post?.createdAt), { addSuffix: true })}  </p>
         </div>
       </div>
       <div className='border-2 flex justify-center items-center text-xl py-3 font-semibold'>

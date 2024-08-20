@@ -14,7 +14,7 @@ export const createComment = asyncHandler(async (req, res, next)=>{
         }
 
         const { postId, userId } =  req.params;
-        const currentPost = await Post.findById(postId).populate("comments");
+        const currentPost = await Post.findById(postId).populate({path: "comments", populate: {path:"author", model:"User"}});
         if(!currentPost){
             throw new apiError(404, "Post doesn't exist")
         }
@@ -37,37 +37,42 @@ export const createComment = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const replyComment = asyncHandler(async (req, res, next)=>{
+export const replyComment = asyncHandler(async (req, res, next) => {
     try {
-        const { parentCommentId, userId }  = req.params;
+        const { parentCommentId, userId } = req.params;
         const { content } = req.body;
-    
-        if(!content || content.trim() === ''){
-            throw new apiError(404, "Write some content in comment box to post!")
+
+        if (!content || content.trim() === '') {
+            throw new apiError(404, "Write some content in the comment box to post!");
         }
 
-        const parentComment = await Comment.findById(parentCommentId).populate({path: "replies", populate: {path: 'author', model:'User'}});
-        if(!parentComment){
+        const parentComment = await Comment.findById(parentCommentId);
+        if (!parentComment) {
             throw new apiError(404, "Parent comment doesn't exist");
         }
 
         const currentUser = await User.findById(userId);
-        if(!currentUser){
+        if (!currentUser) {
             throw new apiError(404, "Current user doesn't exist");
         }
 
-        const newComment = await Comment.create({content:content, author:currentUser});
-        parentComment?.replies?.push(newComment);
-        currentUser?.comments?.push(newComment);
+        const newComment = await Comment.create({ content: content, author: currentUser._id, parent: parentComment._id });
+        parentComment.replies.push(newComment._id);
+        currentUser.comments.push(newComment._id);
 
         await parentComment.save();
         await currentUser.save();
 
-        return res.status(200).json(new apiResponse(200, "comment replied", {parentComment, currentUser})  )
+        // Populate the new comment with author information and send it without circular references
+        // const populatedNewComment = await Comment.findById(newComment._id).populate('author', 'username email');
+
+        return res.status(200).json(new apiResponse(200, "Comment replied", {parentComment, currentUser}))
+        
     } catch (error) {
-        console.log(error);
+        next(error);
     }
-})
+});
+
 
 
 
@@ -109,37 +114,40 @@ export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
 
 })
 
-export const deleteComment = asyncHandler(async (req, res, next)=>{
+export const deleteComment = asyncHandler(async (req, res, next) => {
     const { commentId } = req.params;
-    const { _id : userId } = req.user;
+    const { _id: userId } = req.user;
 
     try {
-        await Comment
-            .findById(commentId)
-            .then((comment)=>{
-                if(!comment){
-                    throw new apiError(404, "Comment doesn't exist");
-                }
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            throw new apiError(404, "Comment doesn't exist");
+        }
 
-                if(userId != comment.author){
-                    throw new apiResponse(401, "unauthorized attempt, you can delete only your own comment")
-                }
+        if (userId != comment.author.toString()) {
+            throw new apiError(401, "Unauthorized attempt, you can delete only your own comment");
+        }
 
-                Comment
-                    .findByIdAndDelete(commentId)
-                    .then((deletedComment)=>{
-                        res.status(200).json(
-                            new apiResponse(200, "comment deleted", deletedComment)
-                        )
-                    })
+        if (comment.parent) {
+            const parentComment = await Comment.findById(comment.parent);
+            if (parentComment) {
+                // Remove the commentId from the parentComment's replies
+                parentComment.replies = parentComment.replies.filter(replyId => replyId.toString() !== commentId);
+                await parentComment.save();
+            }
+        }
 
-            }) 
+        const deletedComment = await Comment.findByIdAndDelete(commentId);
+        if (!deletedComment) {
+            throw new apiError(404, "Failed to delete the comment");
+        }
+
+        res.status(200).json(new apiResponse(200, "Comment deleted", deletedComment));
     } catch (error) {
         next(error);
     }
+});
 
-
-})
 
 export const updateComment = asyncHandler(async (req, res, next)=>{
     const comment = await Comment.findById(req.params?.commentId);

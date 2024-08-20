@@ -216,6 +216,7 @@ export const likePost = asyncHandler(async(req, res, next)=>{
         if (index != -1) {
             likes.splice(index, 1);
             currentUser.likedPosts.splice(currentUser.likedPosts.indexOf(postId), 1);
+            currentPost.updatedAt = new Date(); // Update the timestamp
             await currentUser.save();
             await currentPost.save();
             return res
@@ -227,6 +228,8 @@ export const likePost = asyncHandler(async(req, res, next)=>{
         
         likes.push(userId)
         currentUser.likedPosts.push(currentPost?._id);
+        currentPost.updatedAt = new Date(); // Update the timestamp
+
         await currentUser.save();
         await currentPost.save();
 

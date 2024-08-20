@@ -7,31 +7,33 @@ import { Link } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import CommentForm from './CommentForm';
 import { updateSuccess } from '../redux/slices/user.slice';
+// import { current } from '@reduxjs/toolkit';
 
-const CommentBox = ({ comment, handleLikeCommentClick }) => {
+const CommentBox = ({ 
+    comment, 
+    handleLikeCommentClick,
+    handleDeleteClick,
+    handleEditClick,
+    handleReportClick,
+    
+}) => {
+    console.log("comment", comment);
     const { currentUser } = useSelector(state => state.user);
-    const [showCommentReply, setShowCommentReply] = useState(comment?.replies || []);
-    const [commentReplies, setCommentReplies] = useState(comment?.replies || []);
+    const [showCommentReply, setShowCommentReply] = useState(comment?.replies||{});
+    const [commentReplies, setCommentReplies] = useState(comment?.replies||{});
     const [replyContent, setReplyContent] = useState('');
     const [showReplyBox, setShowReplyBox] = useState(false);
     const dispatch = useDispatch();
+
     
-    const handleReportClick = ()=>{
-
-    }
-    const handleEditClick = ()=>{
-
-    }
-    const handleDeleteClick = ()=>{
-
-    }
-    
+  
     const handleShowReply = async()=>{
         setShowReplyBox(!showReplyBox);
         handleReplyClick();
     }
 
     const handleReplyClick = async () => {
+        console.log("reply of comment", comment);
         try {
             const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
             const data = await response.json();
@@ -78,7 +80,7 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
                 console.log("reply comment data", data);
                 
                 // Sort the new list of replies by createdAt
-                const newReply = data?.data?.newReply;
+                const newReply = data?.data?.newComment;
                 const updatedReplies = [newReply, ...(commentReplies[comment._id] || [])]
                     .filter(reply => !isNaN(new Date(reply?.createdAt).getTime()))
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -103,6 +105,25 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
         }
     };
 
+
+    const handleDeleteReplyClick = async (comment)=>{
+        try {
+            const response = await fetch(apiEndPoints.deleteCommentAddress(comment?._id), {
+                method: "DELETE"
+            });
+
+            const data = await response.json();
+            if(!response.ok){
+                console.log(data.message||"Network response is not ok!")
+            }
+            if(data.success){
+                
+                handleReplyClick();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className="border-2 border-black p-3 my-2 rounded-lg">
             {/* Username and Timestamp */}
@@ -123,19 +144,19 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
                     <div className="flex space-x-4">
                         <div className="flex gap-5 items-center">
                             <button onClick={handleShowReply} className="text-sm text-gray-500">
-                                {comment?.replies?.length > 0 ? "Replies" : "Reply"} ({comment?.replies?.length})
+                                {comment?.replies?.length > 1 ? "Replies" : "Reply"} ({comment?.replies?.length})
                             </button>
                             <Dropdown
                                 arrowIcon={false}
                                 inline={true}
                                 label={<HiDotsHorizontal className="text-lg text-gray-500" />}
                             >
-                                <Dropdown.Item onClick={() => handleEditClick(comment)}>
+                                {comment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleEditClick(comment)}>
                                     Edit
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handleDeleteClick(comment)}>
+                                </Dropdown.Item>}
+                                { comment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleDeleteClick(comment)}>
                                     Delete
-                                </Dropdown.Item>
+                                </Dropdown.Item>}
                                 <Dropdown.Item onClick={() => handleReportClick(comment)}>
                                     Report
                                 </Dropdown.Item>
@@ -154,6 +175,8 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
             </div>
             {showReplyBox && showCommentReply[comment?._id] &&
                 <CommentForm 
+                    buttonText={"Post Reply"}
+                    placeholder={'Write a reply about this comment...'}
                     parent={comment?._id} 
                     handlePostCommentSubmit={handleReplySubmit} 
                     postCommentContent={replyContent}
@@ -164,6 +187,9 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
                     key={index}
                     comment={reply} 
                     handleLikeCommentClick={handleLikeCommentClick}
+                    handleDeleteClick={handleDeleteReplyClick}
+                    handleEditClick={handleEditClick}
+                    handleReportClick={handleReportClick}
                 />
             ))}
         </div>
