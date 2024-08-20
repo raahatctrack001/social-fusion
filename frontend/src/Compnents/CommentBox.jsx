@@ -26,8 +26,12 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
 
     }
     
-    const handleReplyClick = async () => {
+    const handleShowReply = async()=>{
         setShowReplyBox(!showReplyBox);
+        handleReplyClick();
+    }
+
+    const handleReplyClick = async () => {
         try {
             const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
             const data = await response.json();
@@ -92,6 +96,7 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
 
                 setReplyContent('');
                 dispatch(updateSuccess(data?.data?.currentUser));
+                handleReplyClick();
             }
         } catch (error) {
             console.log(error);
@@ -117,7 +122,7 @@ const CommentBox = ({ comment, handleLikeCommentClick }) => {
                     <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
                     <div className="flex space-x-4">
                         <div className="flex gap-5 items-center">
-                            <button onClick={handleReplyClick} className="text-sm text-gray-500">
+                            <button onClick={handleShowReply} className="text-sm text-gray-500">
                                 {comment?.replies?.length > 0 ? "Replies" : "Reply"} ({comment?.replies?.length})
                             </button>
                             <Dropdown

@@ -6,9 +6,9 @@ import { testPosts } from "../DataSeeders/post50.js";
 import bcryptjs from 'bcryptjs';
 import Post from "../Models/post.model.js";
 import apiError from "../Utils/apiError.js";
-import fetch from "node-fetch";
-import OpenAI from "openai";
-const openai = new OpenAI();
+// import fetch from "node-fetch";
+// import OpenAI from "openai";
+// const openai = new OpenA();
 
 
 export const userSeeder = asyncHandler(async (req, res, next)=>{
