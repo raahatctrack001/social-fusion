@@ -99,33 +99,5 @@ export const userSeeder = asyncHandler(async (req, res, next)=>{
         })
 
     export const aiAPI = asyncHandler(async(req, res, next)=>{
-        // console.log(process.env.OPENAI_API_KEY)
-        const { prompt } = req.body;
-        // console.log(prompt)
-        try {
-        const response = await fetch('https://api.openai.com/v1/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'text-davinci-003', // You can use other models like "gpt-3.5-turbo"
-            prompt: prompt,
-            max_tokens: 100, // Adjust token limit as needed
-            temperature: 0.7, // Adjust creativity level (0.0 to 1.0)
-          }),
-        });
-
-        // console.log(response)
-
-        if (!response.ok) {
-          throw new apiError( 404, 'Network response was not ok');
-        }
-
-        const data = await response.json();
-        res.json({ text: data.choices[0].text });
-    }catch (error) {
-            next(error)
-        }
+     
 })  
