@@ -98,6 +98,4 @@ export const userSeeder = asyncHandler(async (req, res, next)=>{
             
         })
 
-    export const aiAPI = asyncHandler(async(req, res, next)=>{
-     
-})  
+  
