@@ -132,19 +132,19 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
                   <span>Share Post</span>
                 </div> */}
                 {currentUser?._id !== post?.author?._id && <div>
-                  <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  {/* <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     <HiBookmark className="w-5 h-5 mr-3 text-gray-600" />
                     <span>Save Post</span>
-                  </div>
+                  </div> */}
                   <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     <HiFlag className="w-5 h-5 mr-3 text-gray-600" />
                     <span>Report Post</span>
                   </div>
                 </div> }
-                <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                {/* <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                   <HiClock className="w-5 h-5 mr-3 text-gray-600" />
                   <span>View Post History</span>
-                </div>
+                </div> */}
                 <div onClick={handleCopyPostLinkClick} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                   {!copyLink ? <div className='flex items-center justify-center'><HiOutlineLink className="w-5 h-5 mr-3 text-gray-600" /> <span>Copy Link</span></div> :
                   <div className='flex items-center justify-center'> <HiExternalLink className="w-5 h-5 mr-3 text-gray-600" /> <span>Link Copied</span> </div>}

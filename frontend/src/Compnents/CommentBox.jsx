@@ -130,11 +130,13 @@ const CommentBox = ({
     }
 
     const handleEditClick = ()=>{
+        setError('')
         setShowEditCommentPopup(!showEditCommentPopup)
     }
 
     const handleEditCommentClick = async ()=>{
         try {
+            setError('')
             const formData = new FormData();
             formData.append("editedContent", editContent);
             const response = await fetch(apiEndPoints.updateCommentsAddress(comment?._id), {method: "PATCH", body: formData})

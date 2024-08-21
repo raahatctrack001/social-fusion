@@ -7,6 +7,9 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useNavigate } from 'react-router-dom';
 import EditorWithDisplay from '../Compnents/EditorWithDisplay';
 import CustomDropdown from '../Compnents/CustomDropdown';
+import { useSelector } from 'react-redux';
+import LoaderPopup from '../Compnents/Loader';
+import { info } from 'console';
 // import Editor from '../Compnents/EditorWithDisplay';
 
 const CreatePost = ({ placeholder }) => {
@@ -38,7 +41,7 @@ const CreatePost = ({ placeholder }) => {
   const [showInstructions, setShowInstructions] = useState(true);  
   const [imageUrl, setImageUrl] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState(null);
-  // const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [showURL, setShowURL] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('')
 
@@ -89,6 +92,7 @@ const CreatePost = ({ placeholder }) => {
   }
 
   const handleThumbnailUPload = async(e)=>{
+      setLoading(true)
       setShowURL(false);
       setError(null);
       // setThumbnailFile(e.target.files[0]);
@@ -121,6 +125,9 @@ const CreatePost = ({ placeholder }) => {
         setError(error.message)
         // console.log(error);
       }
+      finally{
+        setLoading(false)
+      }
   }
 
 
@@ -129,6 +136,7 @@ const CreatePost = ({ placeholder }) => {
   // };
   
   const handlePostUpload = async (e)=>{
+    setLoading(true)
     e.preventDefault();
     try {
         setError(null)
@@ -149,6 +157,7 @@ const CreatePost = ({ placeholder }) => {
         })
         
         if(!response.ok){
+          setLoading(false);
           setError(response.message)
           return;
           // throw new Error("failed to upload post!")
@@ -159,16 +168,21 @@ const CreatePost = ({ placeholder }) => {
         }else{
           setError(data.message)
         }
+        setLoading(false)
         // console.log("data extracted", data.data);
     } catch (error) {
       setError(error.message)
       console.log(error);
     }
+    finally{
+      setLoading(false)
+    }
   }
   // console.log(selectedCategory)
+  console.log("laoding", loading)
   return (
-
     <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>
+    { loading && <LoaderPopup loading={loading} />}
       <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
