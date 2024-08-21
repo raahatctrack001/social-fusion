@@ -5,9 +5,13 @@ import { updateSuccess } from "../redux/slices/user.slice";
 import CommentForm from "./CommentForm";
 import CommentBox from "./CommentBox";
 import { Alert } from "flowbite-react";
+import CommentsDisabled from "./CommentDisabled";
 
 const PostComment = ({ post }) => {
-    // console.log("post", post);
+    if(!post?.enableComments){
+        return <CommentsDisabled />
+    }
+    console.log("post", post);
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
@@ -114,9 +118,9 @@ const PostComment = ({ post }) => {
                 setPostCommentContent={setPostCommentContent}
 
                 />
-            <Alert color={'warning'}>
+            {post?.comments?.lenght > 0 && <Alert color={'warning'}>
               Some updates may take a moment to reflect. Please wait for the changes, or refresh the page to see the latest updates.
-            </Alert>
+            </Alert>}
 
             {localComments?.length > 0 && localComments.map((comment, index) => (
                 <CommentBox

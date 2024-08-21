@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { Alert, Button, Modal } from 'flowbite-react';
 
-function PostOptionsDropdown({enableComment, toggleComment, post }) {
+function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector(state=>state.user)
   const [copyLink, setCopyLink] = useState(null);
@@ -46,14 +46,32 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
         setError("failed to delete post, please try again later!")
       }
     }
-  const handleCopyPostLinkClick = ()=>{
-    navigator.clipboard.writeText(window.location.href)
-    setCopyLink(true);
+    const handleCopyPostLinkClick = ()=>{
+      navigator.clipboard.writeText(window.location.href)
+      setCopyLink(true);
 
-    setTimeout(() => {
-      setCopyLink(false)
-    }, 3000);
-  }
+      setTimeout(() => {
+        setCopyLink(false)
+      }, 3000);
+    }
+    const handleEnablePostComment = async()=>{
+      toggleComment();
+      try {
+        
+        // console.log(apiEndPoints.toggleCommentSectionAddress(post?._id))
+        const response = await fetch(`/api/v1/posts/toggle-comment-section/${post?._id}`, {method: "PATCH"})
+        const data = await response.json()
+        if(!response.ok){
+          console.log("netowrk response is not ok")
+        }
+        if(data.success){
+          setPost(data?.data)
+          console.log(data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   return (
     <div className="relative inline-block text-left z-10">
   {/* post delete modal starts here*/}
@@ -106,9 +124,9 @@ function PostOptionsDropdown({enableComment, toggleComment, post }) {
                       <span>Delete Post</span>
                     </div>
                     <div  
-                      onClick={toggleComment}
+                      onClick={handleEnablePostComment}
                       className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      {enableComment ? 
+                      {post.enableComments ? 
                         <div className='flex justify-center items-center'>
                             <HiBan className="w-5 h-5 mr-3 text-gray-600" />
                             <span>Disable Comments</span>

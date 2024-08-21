@@ -9,7 +9,7 @@ import EditorWithDisplay from '../Compnents/EditorWithDisplay';
 import CustomDropdown from '../Compnents/CustomDropdown';
 import { useSelector } from 'react-redux';
 import LoaderPopup from '../Compnents/Loader';
-import { info } from 'console';
+// import { info } from 'console';
 // import Editor from '../Compnents/EditorWithDisplay';
 
 const CreatePost = ({ placeholder }) => {
@@ -58,6 +58,7 @@ const CreatePost = ({ placeholder }) => {
   // console.log(content)
 
   const handleFileUpload = async (e)=>{
+      setLoading(true)
       setShowURL(false);
       setError(null);
       try {
@@ -88,6 +89,9 @@ const CreatePost = ({ placeholder }) => {
       } catch (error) {
         setError(error.message)
         // console.log(error);
+      }
+      finally{
+        setLoading(false)
       }
   }
 
@@ -136,6 +140,7 @@ const CreatePost = ({ placeholder }) => {
   // };
   
   const handlePostUpload = async (e)=>{
+    // setLoading(true)?
     setLoading(true)
     e.preventDefault();
     try {
@@ -182,8 +187,12 @@ const CreatePost = ({ placeholder }) => {
   console.log("laoding", loading)
   return (
     <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>
-    { loading && <LoaderPopup loading={loading} />}
-      <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
+
+      {loading && <LoaderPopup loading={loading} info="We are uploading your file" setLoading={setLoading} />}
+      
+         
+    <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
+    {thumbnailURL && <img className='px-10 mt-4' src={thumbnailURL} alt="thumbnail" />}
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
             <TextInput placeholder='Unique Title' className='mb-1 w-3/4' onChange={(e)=>setTitle(e.target.value)}/>
@@ -195,7 +204,7 @@ const CreatePost = ({ placeholder }) => {
 
           <div>
             <TextInput onChange={handleThumbnailUPload} ref={thumbnailRef} className='hidden' type='file'/>
-            <Button onClick={()=>thumbnailRef.current.click()} className='w-full hover:bg-gray-500' color={''}  outline> Upload Thumbnail Image </Button>
+            <Button onClick={()=>thumbnailRef.current.click()} className='w-full hover:bg-gray-500' color={''}  outline> {thumbnailURL ? "Update thumbnail image" : "Upload Thumbnail Image"} </Button>
           </div>
           <div className=''>
             
@@ -221,7 +230,6 @@ const CreatePost = ({ placeholder }) => {
           
           
 
-          {thumbnailURL && <img src={thumbnailURL} alt="thumbnail" />}
          
           {imageUrl && showURL && <div className='flex flex-col'>
           <div className='flex'>

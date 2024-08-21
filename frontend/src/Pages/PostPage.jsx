@@ -15,6 +15,7 @@ import SharePopup from '../Compnents/ShareURL';
 // import Comment from '../Compnents/PostComment';
 import PostComment from '../Compnents/PostComment';
 import { formatDistanceToNow } from 'date-fns';
+import CommentsDisabled from '../Compnents/CommentDisabled';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -26,7 +27,7 @@ const PostPage = () => {
   const [post, setPost] = useState();
   const [author, setAuthor] = useState();
   const [error, setError] = useState(null);
-  const [enableComment, setEnableComment] = useState(true);
+  const [enableComment, setEnableComment] = useState(false);
   const [likes, setLikes] = useState();
   const [showPopup, setShowPopup] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -196,6 +197,7 @@ const PostPage = () => {
               <div className='p-2 cursor-pointer' > 
                       <PostOptionsDropdown                         
                         post={post}
+                        setPost={setPost}
                         enableComment={enableComment} 
                         toggleComment={() => setEnableComment(!enableComment)}
                       /> 
@@ -253,11 +255,11 @@ const PostPage = () => {
             {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>}
           </div>}
         </div>
-        <div className='w-full rounded'>
+        {post?.enableComments ? <div className='w-full rounded'>
           <PostComment
               post={post}
-          />
-        </div>
+          /> :
+        </div> : <CommentsDisabled />}
     </div>
   )
 }

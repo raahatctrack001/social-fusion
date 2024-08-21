@@ -1,4 +1,3 @@
-
 export  const apiEndPoints = {
     isAuthorisedAddress: ()=>`/api/v1/auth/authorisation-status`,
     registerAddress : () => `/api/v1/auth/register`,
@@ -24,7 +23,8 @@ export  const apiEndPoints = {
     allPostAnalytics: ()=>`/api/v1/posts/all-post-analytics`,
     savePostAddress : (postId, userId)=> `/api/v1/posts/save-post/${postId}/${userId}`,
     getSavedPostAddress: (userId)=>`/api/v1/posts/saved-posts/${userId}`,
-
+    toggleCommentSectionAddress: (postId)=>`api/v1/posts/toggle-comment-section/${postId}`,
+    
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,
     replyCommentAddress : (parentId, userId)=> `/api/v1/comments/reply-comment/${parentId}/${userId}`,
     
