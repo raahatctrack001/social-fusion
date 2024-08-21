@@ -38,6 +38,7 @@ function App() {
                   <Route path="/dashboard" element={<Dashboard />} />   
                   <Route path="/reset-password/:authorId" element={<ResetPassword />} />
                   <Route path="delete-account" element={<DeleteAccount />} />       
+                  <Route path="/search-posts" element={<SearchPostResult />} />
                 </Route>
                   
                   <Route path="/" element={<HomePage />} />
@@ -46,7 +47,6 @@ function App() {
                   <Route path="/register/post-registration" element={<PostRegistration /> } />
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
-                  <Route path="/search-posts" element={<SearchPostResult />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/services" element={<Services />} />

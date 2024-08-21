@@ -7,22 +7,27 @@ import { Link } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import CommentForm from './CommentForm';
 import { updateSuccess } from '../redux/slices/user.slice';
+import EditCommentBox from './EditCommentBox';
 // import { current } from '@reduxjs/toolkit';
 
 const CommentBox = ({ 
     comment, 
     handleLikeCommentClick,
     handleDeleteClick,
-    handleEditClick,
+    // handleEditClick,
     handleReportClick,
     
 }) => {
     console.log("comment", comment);
     const { currentUser } = useSelector(state => state.user);
+    const [newComment, setNewComment] = useState(comment);
     const [showCommentReply, setShowCommentReply] = useState(comment?.replies||{});
     const [commentReplies, setCommentReplies] = useState(comment?.replies||{});
     const [replyContent, setReplyContent] = useState('');
     const [showReplyBox, setShowReplyBox] = useState(false);
+    const [showEditCommentPopup, setShowEditCommentPopup] = useState(false);
+    const [editContent, setEditContent] = useState('')
+    const [error, setError] = useState('');
     const dispatch = useDispatch();
 
     
@@ -105,7 +110,6 @@ const CommentBox = ({
         }
     };
 
-
     const handleDeleteReplyClick = async (comment)=>{
         try {
             const response = await fetch(apiEndPoints.deleteCommentAddress(comment?._id), {
@@ -124,17 +128,47 @@ const CommentBox = ({
             console.log(error)
         }
     }
+
+    const handleEditClick = ()=>{
+        setShowEditCommentPopup(!showEditCommentPopup)
+    }
+
+    const handleEditCommentClick = async ()=>{
+        try {
+            const formData = new FormData();
+            formData.append("editedContent", editContent);
+            const response = await fetch(apiEndPoints.updateCommentsAddress(comment?._id), {method: "PATCH", body: formData})
+            const data = await response.json()
+            if(!response.ok){
+                throw new Error(data?.message || "Network response isn't ok! in handleEdit comment click")
+            }
+
+            if(data?.success){
+                console.log(data);
+                setNewComment(data?.data)
+                console.log(data);
+                setShowEditCommentPopup(!showEditCommentPopup)
+            }
+        } catch (error) {
+            console.log(error)
+            setError(error.message);
+        }
+    }
+    console.log(editContent)
     return (
         <div className="border-2 border-black p-3 my-2 rounded-lg">
             {/* Username and Timestamp */}
             <div className="flex justify-between items-center mb-2 border-b border-black">
-                <Link to={`/authors/author/${comment?.author?._id}`} className="font-semibold">{comment?.author?.username}</Link>
-                <div className="text-sm text-gray-500">{formatDistanceToNow(new Date(comment?.updatedAt) || new Date(), { addSuffix: true })}</div>
+                <div className='flex gap-2'>
+                    <Link to={`/authors/author/${newComment?.author?._id}`} className="font-semibold">{newComment?.author?.username}</Link>
+                    {newComment?.edited && <p className="text-red-500 font-semibold">edited</p>}
+                </div>
+                <div className="text-sm text-gray-500">{formatDistanceToNow(new Date(newComment?.createdAt) || new Date(), { addSuffix: true })}</div>
             </div>
 
             {/* Comment Content */}
             <div className="mb-2">
-                {comment?.content}
+                {newComment?.content}
             </div>
 
             {/* Likes, Reply, Upvote */}
@@ -144,20 +178,20 @@ const CommentBox = ({
                     <div className="flex space-x-4">
                         <div className="flex gap-5 items-center">
                             <button onClick={handleShowReply} className="text-sm text-gray-500">
-                                {comment?.replies?.length > 1 ? "Replies" : "Reply"} ({comment?.replies?.length})
+                                {newComment?.replies?.length > 1 ? "Replies" : "Reply"} ({newComment?.replies?.length})
                             </button>
                             <Dropdown
                                 arrowIcon={false}
                                 inline={true}
                                 label={<HiDotsHorizontal className="text-lg text-gray-500" />}
                             >
-                                {comment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleEditClick(comment)}>
+                                {newComment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleEditClick(newComment)}>
                                     Edit
                                 </Dropdown.Item>}
-                                { comment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleDeleteClick(comment)}>
+                                { newComment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleDeleteClick(newComment)}>
                                     Delete
                                 </Dropdown.Item>}
-                                <Dropdown.Item onClick={() => handleReportClick(comment)}>
+                                <Dropdown.Item onClick={() => handleReportClick(newComment)}>
                                     Report
                                 </Dropdown.Item>
                             </Dropdown>
@@ -165,24 +199,24 @@ const CommentBox = ({
                     </div>
                 </div>
                 <button
-                    onClick={() => handleLikeCommentClick(comment?._id, currentUser?._id)}
+                    onClick={() => handleLikeCommentClick(newComment?._id, currentUser?._id)}
                     className="text-blue-500 font-semibold"
                 >
-                    {currentUser?.likedComments?.includes(comment?._id)
+                    {currentUser?.likedComments?.includes(newComment?._id)
                         ? <HiHeart className="text-lg text-red-700" />
                         : <HiOutlineHeart className="text-lg text-black" />}
                 </button>
             </div>
-            {showReplyBox && showCommentReply[comment?._id] &&
+            {showReplyBox && showCommentReply[newComment?._id] &&
                 <CommentForm 
                     buttonText={"Post Reply"}
                     placeholder={'Write a reply about this comment...'}
-                    parent={comment?._id} 
+                    parent={newComment?._id} 
                     handlePostCommentSubmit={handleReplySubmit} 
                     postCommentContent={replyContent}
                     setPostCommentContent={setReplyContent}
                 />}
-            {showReplyBox && showCommentReply[comment?._id] && commentReplies[comment?._id]?.map((reply, index) => (
+            {showReplyBox && showCommentReply[newComment?._id] && commentReplies[newComment?._id]?.map((reply, index) => (
                 <CommentBox 
                     key={index}
                     comment={reply} 
@@ -192,6 +226,15 @@ const CommentBox = ({
                     handleReportClick={handleReportClick}
                 />
             ))}
+
+            {showEditCommentPopup && <EditCommentBox
+                error={error}
+                comment={newComment}
+                handleEditCommentClick={handleEditCommentClick}
+                setEditContent={setEditContent}
+                showEditCommentPopup={showEditCommentPopup}
+                setShowEditCommentPopup={setShowEditCommentPopup}
+             />}
         </div>
     );
 };

@@ -1,5 +1,6 @@
 
 export  const apiEndPoints = {
+    isAuthorisedAddress: ()=>`/api/v1/auth/authorisation-status`,
     registerAddress : () => `/api/v1/auth/register`,
     loginAddress : ()=> `/api/v1/auth/login`,
     logoutAddress : ()=> `/api/v1/auth/logout`,

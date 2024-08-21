@@ -30,8 +30,9 @@ export default function Header() {
       // console.log("response", response);
       console.log("data", data);
       alert(data.message)  
-      navigate("/sign-in")
+      localStorage.removeItem("currentUser")
       dispatch(signoutSuccess())
+      // navigate("/sign-in")
         
     } catch (error) {
       console.log("error logging out!", error)

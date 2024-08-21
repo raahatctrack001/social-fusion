@@ -66,6 +66,7 @@ export default function SignIn() {
         // console.log(data.data)
         dispatch(signInSuccess(data.data));
         navigate("/")
+        localStorage.setItem("currentUser", JSON.stringify(data?.data))
        }
        else{
         setError(data.message);

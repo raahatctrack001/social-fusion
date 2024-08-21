@@ -4,6 +4,7 @@ import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { updateSuccess } from "../redux/slices/user.slice";
 import CommentForm from "./CommentForm";
 import CommentBox from "./CommentBox";
+import { Alert } from "flowbite-react";
 
 const PostComment = ({ post }) => {
     // console.log("post", post);
@@ -72,11 +73,12 @@ const PostComment = ({ post }) => {
             console.log(error);
         }
     };
+    
     const handleReportClick = ()=>{
-
+        alert("feature is under development yet!")
     }
     const handleEditClick = ()=>{
-
+        alert("feature is under development yet!")
     }
     const handleDeleteClick = async (comment)=>{
         try {
@@ -112,6 +114,10 @@ const PostComment = ({ post }) => {
                 setPostCommentContent={setPostCommentContent}
 
                 />
+            <Alert color={'warning'}>
+              Some updates may take a moment to reflect. Please wait for the changes, or refresh the page to see the latest updates.
+            </Alert>
+
             {localComments?.length > 0 && localComments.map((comment, index) => (
                 <CommentBox
                     key={index} 
@@ -120,7 +126,7 @@ const PostComment = ({ post }) => {
                     handleLikeCommentClick={handleLikeCommentClick}
                     handlePostCommentSubmit={handlePostCommentSubmit}
                     handleDeleteClick={handleDeleteClick}
-                    handleEditClick={handleEditClick}
+                    // handleEditClick={handleEditClick}
                     handleReportClick={handleReportClick}
                     postCommentContent={postCommentContent}
                     setPostCommentContent={setPostCommentContent}
