@@ -233,7 +233,7 @@ const PostPage = () => {
               </div>
               
             
-              {enableComment ?
+              {post?.enableComments ?
                 <div >
 
                   <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 

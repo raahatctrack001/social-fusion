@@ -5,12 +5,15 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { Alert, Button, Modal } from 'flowbite-react';
+import FeatureUnderDevelopmentPopup from './FeatureUnderDevelopmentPopup';
 
 function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector(state=>state.user)
   const [copyLink, setCopyLink] = useState(null);
   const [showModal, setShowModal] = useState(false)
+  const [showPopup, setShowPopup] = useState(false);
+
   const navigate = useNavigate();
 
   
@@ -75,7 +78,7 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
   return (
     <div className="relative inline-block text-left z-10">
   {/* post delete modal starts here*/}
-
+    <FeatureUnderDevelopmentPopup show={showPopup} onClose={()=>setShowPopup(!showPopup)}/>
     <Modal show={showModal} onClose={() => setShowModal(false)}>
           <Modal.Header>
             <Alert color={"warning"}> Warning </Alert>
@@ -124,7 +127,7 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
                       <span>Delete Post</span>
                     </div>
                     <div  
-                      onClick={handleEnablePostComment}
+                      onClick={()=>setShowPopup(!showPopup)}
                       className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       {post.enableComments ? 
                         <div className='flex justify-center items-center'>
@@ -136,11 +139,11 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
                           <span>Enable Comments</span>
                         </div>}
                     </div>
-                    <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <div onClick={()=>setShowPopup(!showPopup)} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       <MdPushPin  className="w-5 h-5 mr-3 text-gray-600" />
                       <span>Pin/Unpin Post</span>
                     </div> 
-                    <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <div onClick={()=>setShowPopup(!showPopup)} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                       <HiChartBar className="w-5 h-5 mr-3 text-gray-600" />
                       <span>View Post Analytics</span>
                     </div>
@@ -149,7 +152,7 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
                   <HiShare className="w-5 h-5 mr-3 text-gray-600" />
                   <span>Share Post</span>
                 </div> */}
-                {currentUser?._id !== post?.author?._id && <div>
+                {currentUser?._id != post?.author?._id && <div>
                   {/* <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     <HiBookmark className="w-5 h-5 mr-3 text-gray-600" />
                     <span>Save Post</span>

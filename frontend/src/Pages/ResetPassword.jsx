@@ -3,6 +3,8 @@ import { Alert, Button, Label, TextInput } from 'flowbite-react';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import LoaderPopup from '../Compnents/Loader';
+import PasswordResetSuccessPopup from '../Compnents/PasswordResetSuccessPopup';
 
 function resetPassword() {
     const [formData, setFormData] = useState({
@@ -16,6 +18,9 @@ function resetPassword() {
     const [seeOldPassword, setSeeOldPassword] = useState(false)
     const [seeNewPassword, setSeeNewPassword] = useState(false)
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+
 
     const handleInputChange = (e)=>{
         setFormData({...formData, [e.target.id]: e.target.value});
@@ -27,7 +32,7 @@ function resetPassword() {
         e.preventDefault();
         setError(null);
         setSuccess(null);
-
+        setLoading(true)
         try {
             const response = await fetch(apiEndPoints.updatePasswordAddress(authorId), {
                 method: "PATCH",
@@ -44,22 +49,31 @@ function resetPassword() {
             const data = await response.json();
             // console.log(data);
             if(data.success){
+                setShowPopup(true)
                 setSuccess(data.message);
-                setTimeout(() => {
-                    window.location.reload()
-                }, 3000);
-                // console.log(data);
-                return;
+                // window.location.reload();
+               return
             }
             setError(data.message);
         } catch (error) {
             setError(error.message);
             console.log(error);
         }
+        finally{
+          setTimeout(() => {
+            
+            setLoading(false)
+          }, 10000);
+        }
     }
-
+    const handleClosePopup = () => {
+      setShowPopup(false);
+      window.location.reload();
+    };
   return (
     <div className="max-w-md mx-auto mt-3">
+      <PasswordResetSuccessPopup show={showPopup} onClose={handleClosePopup} />
+
       <h2 className="text-2xl font-bold mb-3 text-center">Update Password</h2>
       <form onSubmit={handleUpdatePassword} className='p-5 space-y-3'>
         <div className="mb-4 relative">

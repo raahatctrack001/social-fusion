@@ -8,6 +8,7 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import CommentForm from './CommentForm';
 import { updateSuccess } from '../redux/slices/user.slice';
 import EditCommentBox from './EditCommentBox';
+import FeatureUnderDevelopmentPopup from './FeatureUnderDevelopmentPopup';
 // import { current } from '@reduxjs/toolkit';
 
 const CommentBox = ({ 
@@ -28,9 +29,13 @@ const CommentBox = ({
     const [showEditCommentPopup, setShowEditCommentPopup] = useState(false);
     const [editContent, setEditContent] = useState('')
     const [error, setError] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+
     const dispatch = useDispatch();
 
-    
+    const handleClosePopup = () => { //under development
+        setShowPopup(false);
+      };
   
     const handleShowReply = async()=>{
         setShowReplyBox(!showReplyBox);
@@ -160,6 +165,7 @@ const CommentBox = ({
     return (
         <div className="border-2 border-black p-3 my-2 rounded-lg">
             {/* Username and Timestamp */}
+            <FeatureUnderDevelopmentPopup show={showPopup} onClose={handleClosePopup} />
             <div className="flex justify-between items-center mb-2 border-b border-black">
                 <div className='flex gap-2'>
                     <Link to={`/authors/author/${newComment?.author?._id}`} className="font-semibold">{newComment?.author?.username}</Link>
@@ -193,7 +199,7 @@ const CommentBox = ({
                                 { newComment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleDeleteClick(newComment)}>
                                     Delete
                                 </Dropdown.Item>}
-                                <Dropdown.Item onClick={() => handleReportClick(newComment)}>
+                                <Dropdown.Item onClick={() => setShowPopup(!showPopup)}>
                                     Report
                                 </Dropdown.Item>
                             </Dropdown>

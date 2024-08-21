@@ -1,18 +1,20 @@
 import { Alert } from 'flowbite-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiX } from 'react-icons/hi';
 
 const LoaderPopup = ({ loading, setLoading, info }) => {
   if (!loading) return null;
-
+  const [showCancel, setShowCancel] = useState(false);
   console.log(info); // Should log "We are uploading your file"
-
+  setTimeout(() => {
+    setShowCancel(true);
+  }, 5000);
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 z-50">
         <div className='flex  w-full justify-between text-red-900 relative right-28'>
             <div></div>
             
-            {setTimeout(()=>true, [1000])&&<HiX onClick={()=>setLoading(false)} className='cursor-pointer text-xl font-bold hover:border-2' />}
+            {showCancel && <HiX onClick={()=>setLoading(false)} className='cursor-pointer text-xl font-bold hover:border-2' />}
         </div>
       <div className="flex flex-col items-center">
         <div className="loader border-t-4 border-blue-500 rounded-full w-16 h-16"></div>

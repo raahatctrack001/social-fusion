@@ -22,6 +22,7 @@ import Dashboard from "./Pages/Dashboard"
 import EditPost from "./Pages/EditPost"
 import ResetPassword from "./Pages/ResetPassword"
 import DeleteAccount from "./Pages/DeleteAccount"
+import LandingPage from "./Pages/LandingPage"
 
 function App() {
   return   <BrowserRouter>
@@ -50,7 +51,7 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/services" element={<Services />} />
-                  {/* <Route path="/test-route" element={/ /> */}
+                  <Route path="/test-route" element={<LandingPage />} />
                   <Route path="/*" element={<NotFoundPage />} />
                 </Routes>
                 <FooterComp />

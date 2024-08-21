@@ -7,20 +7,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
 import { current } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
+import LoaderPopup from './Loader';
+// import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
 // import { current } from '@reduxjs/toolkit';
 
-const AuthorHeader = ({ author }) => {
+const AuthorHeader = ({ author, setAuthor }) => {
   const [followersCount, setFollowersCount] = useState(author?.followers?.length)
   // const [followingCount, setFollowingCount] = useState(author?.followings?.length)
-  console.log(author)
+  // console.log(author)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState()
   const [showDP, setShowDP] = useState(false);
   const profileRef = useRef();
   const { currentUser } = useSelector(state=>state.user)
+  const [loading, setLoading] = useState(false);
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -52,6 +55,7 @@ const AuthorHeader = ({ author }) => {
   }
   
   const handleDPChange = async (e)=>{
+    setLoading(true)
     try {
         const formData = new FormData();
         formData.append("profilePicture", e.target.files[0]);
@@ -65,20 +69,23 @@ const AuthorHeader = ({ author }) => {
         }
 
         const data = await response.json();
-        alert(data.message);
-        console.log(data);
-        dispatch(updateSuccess(data.data))
-        // window.location.reload();
-
-        
-      
+        if(data.success){
+          setAuthor(data?.data)
+          // alert(data.message);
+          console.log("dp change data", data);
+          dispatch(updateSuccess(data.data))
+        }
+            
     } catch (error) {
         setError(error.message)
+    }
+    finally{
+      setLoading(false)
     }
   }
   return (
     <div className="flex flex-col items-center p-2 w-full">
-
+    {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Changing your dp!"} />}
 {/* show dp popup starts here */}
       {showDP && (
         <div className="fixed w-full inset-0 flex justify-center items-center top-20 bg-black bg-opacity-50 z-20">

@@ -1,22 +1,13 @@
-import { Button } from 'flowbite-react';
 import React from 'react';
-import { HiUserAdd } from 'react-icons/hi';
 
 const AuthorCard = ({ author }) => {
   return (
-    <div >
-      
-      <div className='flex justify-center items-center gap-5'>
-        <img className='rounded-full w-10 h-10' src={author?.profilePic} alt="author's photo"/>
-        <div className='flex flex-col text-sm'>
-          <p> {author.fullName} </p>
-          <p> {author.username} </p>
-        </div>
+    <div className='flex items-center gap-4'>
+      <img className='w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-700' src={author?.profilePic} alt="author's photo" />
+      <div className='text-sm'>
+        <p className='font-semibold text-gray-800 dark:text-white'>{author.fullName}</p>
+        <p className='text-gray-600 dark:text-gray-400'>{author.username}</p>
       </div>
-      {/* <Button outline className='bg-gray-800 '> 
-        <span className='flex justify-center items-center'> <HiUserAdd /> </span>
-        <span className='hidden md:inline'> Follow </span>
-      </Button> */}
     </div>
   );
 };

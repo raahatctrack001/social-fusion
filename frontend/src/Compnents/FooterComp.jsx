@@ -5,6 +5,7 @@ import { HiDocument, HiX } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
+import LoaderPopup from "./Loader";
 
 export function FooterComp() {
   
@@ -18,6 +19,8 @@ export function FooterComp() {
     problem: "",
     solution: ""
   });
+  const [loading, setLoading] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
 
   useEffect(()=>{
     const savedFormData = JSON.parse(localStorage.getItem("feedbackData"));
@@ -31,6 +34,7 @@ export function FooterComp() {
   }
 
   const handleFeedbackSubmit = async (e)=>{
+    setLoading(true)
     e.preventDefault();
     try {
       setError(null);
@@ -51,6 +55,9 @@ export function FooterComp() {
         body: JSON.stringify(formData)
       });
 
+      if(formData.subject?.trim() === '' || formData.problem?.trim() === ''){
+        throw new Error("subject or problem is empty!")
+      }
       if(!response.ok){
         throw new Error(response.message||"Network response is not ok!");
       }
@@ -65,10 +72,14 @@ export function FooterComp() {
     } catch (error) {
       setError(error.message);
     }
+    finally{
+      setLoading(false)
+    }
   }
 
   return (
     <Footer bgDark className="rounded-none">
+    {loading && <LoaderPopup loading={loading} setLoading={setLoading} />}
       <div className="w-full">
         <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
           <div>

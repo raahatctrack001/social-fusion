@@ -49,7 +49,7 @@ const Author = () => {
   // console.log(authorData)
   return (     
       <div className='bg-gray-500 m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
-        <AuthorHeader author = {authorData} />
+        <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>
         
 
         <div className='border-2 w-full min-h-screen flex flex-col rounded-3xl'>
