@@ -5,6 +5,7 @@ import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
+import { apiEndPoints } from "../../../frontend/src/apiEndPoints/api.addresses.js";
 
 export const createComment = asyncHandler(async (req, res, next)=>{
     try {
@@ -150,8 +151,37 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
 
 
 export const updateComment = asyncHandler(async (req, res, next)=>{
-    const comment = await Comment.findById(req.params?.commentId);
-    res.status(200).json( new apiResponse(200, "updatedComment", comment));
+    try {
+        const currentComment = await Comment.findById(req.params?.commentId).populate("author");
+        
+        if(!currentComment){
+            throw new apiError(404, "comment doesn't exist");
+        }
+
+        if(req.user?._id != currentComment?.author?._id){
+            throw new apiError(401, "Unauthorized attempt, you can edit only your comment!")
+        }
+
+        const { editedContent } = req.body;
+        console.log(editedContent);
+
+        if(editedContent === '' || editedContent.trim() === ''){
+            throw new apiError(401, "write something to comment")
+        }
+
+        if(editedContent?.trim() === currentComment?.content){
+            throw new apiError(401, "plz make some changes to post")
+        }
+
+        currentComment.content = editedContent.trim(),
+        currentComment.edited = true;
+        await currentComment.save();
+        console.log("comment edited!")
+        return res.status(200).json( new apiResponse(200, "comment edited", currentComment));
+        
+    } catch (error) {
+        next(error)
+    }
 
 })
 

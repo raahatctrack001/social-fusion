@@ -19,7 +19,7 @@ router.route("/reply-comment/:parentCommentId/:userId").post(upload.none(), isUs
 router.route("/comments-on-post").get(getCommentsOnPost);
 router.route("/get-comment/:commentId").get(getComment);
 router.route("/delete-comment/:commentId").delete(isUserLoggedIn, deleteComment);
-router.route("/update-comment/:commentId").patch(isUserLoggedIn, updateComment);
+router.route("/update-comment/:commentId").patch(upload.none(), isUserLoggedIn, updateComment);
 router.route("/like-comment/:commentId/:authorId").post(isUserLoggedIn, likeComment);
 
 export default router;

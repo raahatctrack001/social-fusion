@@ -2,6 +2,7 @@ import express from 'express';
 import { 
     deleteUser, 
     googleLogin, 
+    isAuthorised, 
     loginUser, 
     logoutUser, 
     registerUser,
@@ -26,6 +27,7 @@ const router = express.Router();
 /*
 upload.fields([{name: "first", maxCount: 1}, {name: "second", maxCount: 1}])
 */
+router.route("/authorisation-status").get(isUserLoggedIn, isAuthorised);
 router.route("/register").post(upload.none(), registerUser);
 router.route("/login").post(upload.none(), loginUser);
 router.route("/logout").post(isUserLoggedIn, logoutUser);

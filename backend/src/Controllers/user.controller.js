@@ -14,13 +14,14 @@ export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
             throw new apiError(500, "failed to update profile")
         }
 
-        const currentUser = await User.findById(req.params?.userId)
-        if(!currentUser){
+        const user = await User.findById(req.params?.userId)
+        if(!user){
             throw new apiError(404, "user doesn't exist");
         }
 
-        currentUser.profilePic = response.url;
-        currentUser.save();
+        user.profilePic = response.url;
+        await user.save();
+        const currentUser = await user.populate("posts")
         res
             .status(200)
             .json(

@@ -2,6 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import ApiResponse from './Utils/apiResponse.js';
+import path from 'path';
+
 
 const app = express();
 
@@ -27,6 +29,12 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/data', dataSeederRouter);
 app.use('/api/v1/feedback', feedbackRouter);
 
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '/frontend/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+  });
 
 app.use((err, req, res, next)=>{
     res

@@ -17,6 +17,14 @@ import {
 } from "../Validators/user.validator.js";
 import jwt from 'jsonwebtoken'
 
+export const isAuthorised = asyncHandler(async (req, res, next)=>{
+    console.log(req.user)
+    if(req.user){
+        return res.status(200).json( new apiResponse(401, "User is authorised to use this app!", {status:true}))
+    }
+    
+    return res.status(401).json( new apiResponse(401, "Unauthorised!", {status: false}))
+})
 
 export const registerUser = asyncHandler(async (req, res, next)=>{
     const {username, email, password, repeatPassword, fullName} = req.body;
@@ -144,6 +152,10 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
         const currentUser = await User.findById(req.params?.userId);
         if(!currentUser.isPasswordCorrect(oldPassword)){
             throw new apiError(404, "old password is wrong")
+        }
+
+        if(currentUser.isPasswordCorrect(newPassword)){
+            throw new apiError(406, "Old and new password can't be same!")
         }
 
         currentUser.password = newPassword;

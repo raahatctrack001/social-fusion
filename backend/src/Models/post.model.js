@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { type } from 'os';
 
 const postSchema = new mongoose.Schema({
     title: {
@@ -24,6 +25,10 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    enableComments:{
+        type: Boolean,
+        default: true,
+    },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -53,7 +58,11 @@ const postSchema = new mongoose.Schema({
       original_filename: {
           type: String,
       }
-    }]
+    }],
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
 
 },
 { timestamps: true })

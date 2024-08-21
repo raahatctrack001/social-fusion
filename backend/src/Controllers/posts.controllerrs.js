@@ -419,3 +419,25 @@ export const getSavedPosts = asyncHandler(async (req, res, next) => {
     }
 });
 
+export const toggleDisableComment = asyncHandler( async (req, res, next)=>{
+    try {
+        const currentPost = await Post.findById(req.params?.postId);
+        if(!currentPost){
+            throw  new apiError(404, "Post doesn't exist");
+        }
+
+        if(req.user?._id != currentPost?.author){
+            throw new apiError(401, "unatauthorised attempt!")
+        }
+        const status = currentPost?.enableComments;
+        currentPost.enableComments = !status;
+        await currentPost?.save();
+        const post = await currentPost.populate(["author", "comments"])
+        return res.status(200).json(new apiResponse(200, `${!status ? " Comments enabled" : "Comments disabled"}`, post))
+
+
+    } catch (error) {
+        next(error);
+    }
+})
+
