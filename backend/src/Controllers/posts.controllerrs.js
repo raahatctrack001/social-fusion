@@ -120,6 +120,7 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
             .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
             // .skip(19)
             // .limit(10)
+            .sort({createdAt: -1})
             .then((posts)=>{
                 // console.log(posts)
                 if(posts.length == 0){

@@ -240,7 +240,7 @@ const PostPage = () => {
                                   
                 </div> :    
               
-              <Button disabled> <HiOutlineBan /> </Button>} 
+              <Button disabled className='h-10'> <HiOutlineBan /> </Button>} 
                 
               <HiOutlineShare onClick={()=>setShowPopup(true)}  className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
               {showPopup && (

@@ -134,7 +134,10 @@ const AuthorHeader = ({ author, setAuthor }) => {
                         (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> </span></div>)): <div> <HiBadgeCheck /> </div>}
                     </div>
                     <div className='hidden md:flex gap-4 md:ml-8'>
-                        <div className="text-center">
+                        <div className="text-center"
+                          onMouseEnter={()=>console.log(author)}
+                          onMouseLeave={()=>console.log("mouse moved")}
+                        >
                           <p className="text-lg font-semibold">{followersCount}</p>
                           <p className="">Followers</p>
                         </div>

@@ -16,8 +16,8 @@ import PageLoader from '../Compnents/PageLoader'
 
 const Home = () => {
   const { currentUser } = useSelector(state=>state.user)
-  const [postData, setPostData] = useState([]);
-  const [users, setUsers] = useState([]); 
+  const [postData, setPostData] = useState();
+  const [users, setUsers] = useState(); 
   
   const dispatch = useDispatch();
 

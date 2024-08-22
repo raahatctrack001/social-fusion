@@ -83,11 +83,11 @@ export default function Register() {
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
             <h1 className=" flex lg:mb-10 justify-center items-center text-3xl tracking-widest md:tracking-normal md:text-6xl font-bold mb-2 flex-nowrap"> Register Here </h1>
-            <div className="mt-5 pt-3 flex justify-center items-center gap-5 mb-5 bg-gray-200 rounded-lg px-3">
+            <div className="border mt-5 pt-3 flex justify-center items-center gap-5 mb-5  rounded-lg px-3">
               {/* <p className="flex-1 w-full self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold  p-2 rounded-2xl text-gray-900 mb-5 flex justify-center">Soul Echo </p> */}
-              <span className="flex-3 font-semibold text-lg pb-4 text-gray-500">Unleash your soul's voice <span className="hidden md:inline">—share your deepest thoughts and stories with us.</span></span>
+              <span className="flex-3 font-semibold text-lg pb-4 ">Unleash your soul's voice <span className="hidden md:inline">—share your deepest thoughts and stories with us.</span></span>
             </div>
-            <p className="hidden md:inline font-semibold text-gray-400"> Your voice is unique, and your story is powerful. Join our community and share your journey with the world. Together, we inspire, connect, and grow. Register today and become a part of something extraordinary.</p>
+            <p className="hidden md:inline font-semibold"> Your voice is unique, and your story is powerful. Join our community and share your journey with the world. Together, we inspire, connect, and grow. Register today and become a part of something extraordinary.</p>
           </div>     
         </div>
         <form className=" m-10 mt-0 lg:mt-5 flex flex-col w-full gap-4 justify-center  rounded px-2" >

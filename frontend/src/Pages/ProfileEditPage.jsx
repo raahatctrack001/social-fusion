@@ -93,12 +93,12 @@ const ProfileEditPage = () => {
     }
   }
   return (
-    <div className=" flex flex-col justify-center items-center border bg-gray-200">
+    <div className=" flex flex-col justify-center items-center border ">
       <h1 className="text-2xl font-bold my-3 px-10 w-full flex justify-center"> Update Profile </h1>
       {error && <Alert color="failure" className="text-lg rounded-lg">{error}</Alert>}
       <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:w-3/4 xl:w-1/2">
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700 m-1">Username</label>
+          <label htmlFor="username" className="block text-sm font-medium  m-1">Username</label>
           <TextInput
             className=''
             id="username"
@@ -111,7 +111,7 @@ const ProfileEditPage = () => {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 m-1">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium  m-1">Email</label>
           <TextInput
             type="email"
             id="email"
@@ -124,7 +124,7 @@ const ProfileEditPage = () => {
         </div>
 
         <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 m-1">Full Name</label>
+          <label htmlFor="fullName" className="block text-sm font-medium  m-1">Full Name</label>
           <TextInput
             id="fullName"
             name="fullName"
@@ -147,7 +147,7 @@ const ProfileEditPage = () => {
           />
         </div> */}
         <div>
-          <label htmlFor="bio" className="block text-sm font-medium text-gray-700 m-1">Bio</label>
+          <label htmlFor="bio" className="block text-sm font-medium  m-1">Bio</label>
           <Textarea
             id="bio"
             name="bio"
