@@ -1,8 +1,9 @@
 import React from 'react'
+import NotFoundPage from '../Pages/NotFoundPage'
 
 const DashAnalytics = () => {
   return (
-    <div>DashAnalytics</div>
+    <NotFoundPage />
   )
 }
 

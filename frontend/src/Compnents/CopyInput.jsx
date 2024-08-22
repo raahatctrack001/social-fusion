@@ -15,18 +15,18 @@ const CopyInput = ({ url }) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-50 border border-gray-200 rounded-md shadow-md">
+    <div className="flex flex-col items-center p-4 border border-gray-200 rounded-md shadow-md">
       <p className="text-lg font-semibold mb-2">Copy this URL:</p> 
       <div className="flex items-center space-x-2 w-full max-w-md">
         <input
           type="text"
           value={url}
           readOnly
-          className="p-2 border border-gray-300 rounded-md bg-gray-100 w-full"
+          className="p-2 border border-gray-300 rounded-md w-full"
         />
         <button
           onClick={handleCopy}
-          className={`p-2 rounded-md text-white ${isCopied ? 'bg-green-500' : 'bg-blue-500'} hover:bg-opacity-80 transition duration-300`}
+          className={`p-2 rounded-md ${isCopied ? 'bg-green-500' : 'bg-blue-500'} hover:bg-opacity-80 transition duration-300`}
         >
           {isCopied ? 'Copied!' : 'Copy'}
         </button>

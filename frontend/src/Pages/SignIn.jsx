@@ -7,6 +7,7 @@ import { fromPairs } from "lodash";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { useDispatch } from "react-redux";
 import { signInFailure, signInStart, signInSuccess } from "../redux/slices/user.slice";
+import LoaderPopup from "../Compnents/Loader";
 
 const hasUpperCase = /[A-Z]/;
 const hasLowerCase = /[a-z]/;
@@ -35,6 +36,7 @@ export default function SignIn() {
   const [seePassword, setSeePassword] = useState(false);
   const [error, setError] = useState(null);
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -43,7 +45,7 @@ export default function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault(); // Prevent default form submission
-
+    setLoading(true)
     try {
       setError(null)
       dispatch(signInStart());
@@ -77,6 +79,9 @@ export default function SignIn() {
       console.error('Error submitting form:', error);
       dispatch(signInFailure(error));
     }
+    finally{
+      setLoading(false)
+    }
   };
   
   useEffect(() => {
@@ -84,7 +89,7 @@ export default function SignIn() {
   }, []);
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10 xl:m-52 xl:mt-28 ">
-      
+        {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"verifying credentials"} />}
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
             <h1 className=" flex lg:mb-10 justify-center items-center text-3xl tracking-widest md:tracking-normal md:text-6xl font-bold mb-2 text-nowrap"> Welcome Back! </h1>

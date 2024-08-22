@@ -32,7 +32,7 @@ const Dashboard = () => {
     console.log("tab", tab)
     
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-[rgb(16,23,42)]">
       {/* Sidebar */}
       <DashSidebar />
 

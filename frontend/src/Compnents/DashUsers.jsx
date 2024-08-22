@@ -1,9 +1,9 @@
 import React from 'react'
+import NotFoundPage from '../Pages/NotFoundPage'
 
 const DashUsers = () => {
   return (
-    <div>DashUsers</div>
-  )
+<NotFoundPage />  )
 }
 
 export default DashUsers

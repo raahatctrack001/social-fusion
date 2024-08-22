@@ -8,7 +8,7 @@ const CommentForm = ({buttonText, placeholder, parent, handlePostCommentSubmit, 
                     value={postCommentContent}
                     onChange={(e) => setPostCommentContent(e.target.value)}
                     placeholder={placeholder}
-                    className="border w-full p-2 rounded-xl"
+                    className="border w-full p-2 rounded-xl dark:bg-[rgb(16,23,42)]"
                     rows={3}
                 />
                 <div className="flex justify-between ">

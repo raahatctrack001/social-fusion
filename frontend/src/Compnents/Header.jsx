@@ -43,10 +43,10 @@ export default function Header() {
   }
   // console.log(searchTerm)
   return (
-    <div className="sticky top-0 z-50 dark:bg-gray-900 dark:text-white">
+    <div className="sticky top-0 z-50">
     {/* ///search popup starts here */}
     {showSearchPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-20">
+        <div className="fixed inset-0 bg-opacity-50 z-20">
           <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
             <div className="flex justify-between relative">
             <div> </div>
@@ -64,17 +64,17 @@ export default function Header() {
     <Navbar fluid rounded className="lg:px-10 border-b-2">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 px-2 rounded-2xl ">Soul Echo</span>
+        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">Soul Echo</span>
       </Navbar.Brand>
 
-      <TextInput 
+      {currentUser && <TextInput 
         className="hidden lg:inline w-44 lg:w-64 xl:w-96 border-gray-900 rounded-2xl font-bold "
         placeholder="search post..."
         rightIcon={HiDocumentSearch}
         icon={HiSearch}
         id="searchTerm"
         onChange={handleSearchTerm}
-      />
+      />}
 
       <Button onClick={()=>setShowSearchPopup(!showSearchPopup)} outline className="bg-gray-800 lg:hidden"> <span className="flex justify-center items-center"><HiSearch /></span> </Button>
 

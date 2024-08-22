@@ -3,7 +3,7 @@ import React from 'react'
 
 const DashHeader = () => {
   return (
-    <Navbar className="bg-white shadow-md">
+    <Navbar className="shadow-md">
           <Navbar.Brand href="/">
             <span className="self-center text-xl font-semibold whitespace-nowrap">
               Dashboard

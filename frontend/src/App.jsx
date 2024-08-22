@@ -23,6 +23,10 @@ import EditPost from "./Pages/EditPost"
 import ResetPassword from "./Pages/ResetPassword"
 import DeleteAccount from "./Pages/DeleteAccount"
 import LandingPage from "./Pages/LandingPage"
+import UnderDevelopment from "./TestComponent/UnderDevelopment"
+import ThemedComponent from "./Compnents/ThemedComponent"
+import PageLoader from "./Compnents/PageLoader"
+import AllRoute from "./Pages/AllRoute"
 
 function App() {
   return   <BrowserRouter>
@@ -31,7 +35,6 @@ function App() {
 
                 <Route element={<PrivateRoute />}>
                   <Route path='/' element={<Home />} />
-                  <Route path="/posts/post/:postId" element={<PostPage />} />
                   <Route path="/authors/author/:authorId" element={<AuthorPage />} />
                   <Route path="/edit-post/:postId" element={<EditPost />} />
                   <Route path="/create-post" element={<CreatePost />} /> 
@@ -42,17 +45,21 @@ function App() {
                   <Route path="/search-posts" element={<SearchPostResult />} />
                 </Route>
                   
+                  <Route path="/posts/post/:postId" element={<PostPage />} />
                   <Route path="/" element={<HomePage />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/register/terms-and-conditions" element={<TermsAndConditions />}  />
                   <Route path="/register/post-registration" element={<PostRegistration /> } />
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/test-route" element={<LandingPage />} />
-                  <Route path="/*" element={<NotFoundPage />} />
+                  <Route path="/about" element={<UnderDevelopment />} />
+                  <Route path="/projects" element={<UnderDevelopment />} />
+                  <Route path="/services" element={<UnderDevelopment />} />
+                  {/* <Route path="/test-route" element={<LandingPage />} /> */}
+                  <Route path="/contacts" element={<UnderDevelopment />} />
+                  <Route path="/prices" element={<UnderDevelopment />} />
+                  <Route path="/test-route" element={<PageLoader />} />
+                  <Route path="/*" element={<AllRoute />} />
                 </Routes>
                 <FooterComp />
             </BrowserRouter>

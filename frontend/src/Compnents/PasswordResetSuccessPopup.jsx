@@ -3,7 +3,7 @@ import { Modal, Button } from 'flowbite-react';
 
 const PasswordResetSuccessPopup = ({ show, onClose }) => {
   return (
-    <Modal show={show} onClose={onClose} size="md" popup={true}>
+    <Modal show={show} onClose={onClose} size="3xl" popup={true}>
       <Modal.Header />
       <Modal.Body>
         <div className="text-center">

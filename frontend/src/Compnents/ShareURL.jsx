@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { BsWhatsapp, BsInstagram, BsTwitter, BsFacebook, BsLinkedin } from "react-icons/bs";
+import { Button } from "flowbite-react";
 
 function SharePopup({ postUrl, onClose }) {
   const [copied, setCopied] = useState(false);
@@ -46,47 +47,47 @@ function SharePopup({ postUrl, onClose }) {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-1/2">
+      <div className="dark:bg-gray-800 bg-gray-200 p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-1/2">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Share Post</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button onClick={onClose} className="dark:text-gray-500 hover:text-red-700">
             ✕
           </button>
         </div>
 
         {/* Copy Link Section */}
-        <div className="mb-4 flex gap-2 outli">
+        <div className="mb-4 flex gap-2 items-center justify-center">
           <input
             type="text"
             value={postUrl}
             readOnly
-            className="w-3/4 p-2 border border-gray-300 rounded-md"
+            className="w-3/4 p-2 h-12 border dark:dark:border-gray-300 rounded-md dark:dark:bg-gray-700 dark:dark:text-white relative top-1"
           />
-          <button
+          <Button
             onClick={handleCopyLink}
-            className={`mt-2 w-1/4 p-2 ${copied ? "bg-green-500" : "bg-blue-500"} text-white rounded-md flex justify-center items-center gap-2`}
+            className={`mt-2 w-1/4 p-2 h-12 hover:opacity-60 ${copied ? "bg-green-500" : "bg-blue-500"} text-white rounded-md flex justify-center items-center gap-2`}
           >
             <HiOutlineClipboardCopy size={20} />
             {copied ? "Copied!" : "Copy Link"}
-          </button>
+          </Button>
         </div>
 
         {/* Share Icons */}
         <div className="flex justify-center gap-7 mt-4">
           <button onClick={() => handleShareClick("whatsapp")}>
-            <BsWhatsapp className="text-green-500 w-8 h-8" size={24} />
+            <BsWhatsapp className="text-green-500 w-8 h-8 hover:opacity-70" size={24} />
           </button>
           <button onClick={() => handleShareClick("instagram")}>
-            <BsInstagram className="text-pink-500 w-8 h-8" size={24} />
+            <BsInstagram className="text-pink-500 w-8 h-8 hover:opacity-70" size={24} />
           </button>
           <button onClick={() => handleShareClick("twitter")}>
-            <BsTwitter className="text-blue-500 w-8 h-8" size={24} />
+            <BsTwitter className="text-blue-500 w-8 h-8 hover:opacity-70" size={24} />
           </button>
           <button onClick={() => handleShareClick("facebook")}>
-            <BsFacebook className="text-blue-700 w-8 h-8" size={24} />
+            <BsFacebook className="text-blue-700 w-8 h-8 hover:opacity-70" size={24} />
           </button>
           <button onClick={() => handleShareClick("linkedin")}>
-            <BsLinkedin className="text-blue-600 w-8 h-8" size={24} />
+            <BsLinkedin className="text-blue-600 w-8 h-8 hover:opacity-70" size={24} />
           </button>
         </div>
       </div>

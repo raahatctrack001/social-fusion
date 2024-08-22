@@ -106,45 +106,45 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
       <button
         type="button"
         onClick={handleToggle}
-        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-[rgb(16,23,42)] dark:text-white dark:hover:bg-gray-700 focus:outline-none"
       >
         <HiDotsVertical className="w-5 h-5" />
       </button>
       
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="dark:bg-gray-700 dark:text-white origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
                 {currentUser?._id === post?.author?._id && 
                 <div>
-                    <div onClick={handleUpdatePostClick} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      <HiPencil className="w-5 h-5 mr-3 text-gray-600" />
+                    <div onClick={handleUpdatePostClick} className="flex items-center px-4 py-2  dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                      <HiPencil className="w-5 h-5 mr-3 " />
                       <span>Update Post</span>
                     </div>
                     <div 
                       onClick={()=>setShowModal(!showModal)}
-                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      <HiTrash className="w-5 h-5 mr-3 text-gray-600" />
+                      className="flex items-center px-4 py-2  dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                      <HiTrash className="w-5 h-5 mr-3 " />
                       <span>Delete Post</span>
                     </div>
                     <div  
                       onClick={()=>setShowPopup(!showPopup)}
-                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                      className="flex items-center px-4 py-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
                       {post.enableComments ? 
                         <div className='flex justify-center items-center'>
-                            <HiBan className="w-5 h-5 mr-3 text-gray-600" />
+                            <HiBan className="w-5 h-5 mr-3" />
                             <span>Disable Comments</span>
                         </div> :
                         <div className='flex justify-center items-center'> 
-                          <HiChatAlt2 className="w-5 h-5 mr-3 text-gray-600" />
+                          <HiChatAlt2 className="w-5 h-5 mr-3" />
                           <span>Enable Comments</span>
                         </div>}
                     </div>
-                    <div onClick={()=>setShowPopup(!showPopup)} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      <MdPushPin  className="w-5 h-5 mr-3 text-gray-600" />
+                    <div onClick={()=>setShowPopup(!showPopup)} className="flex items-center px-4 py-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                      <MdPushPin  className="w-5 h-5 mr-3" />
                       <span>Pin/Unpin Post</span>
                     </div> 
-                    <div onClick={()=>setShowPopup(!showPopup)} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      <HiChartBar className="w-5 h-5 mr-3 text-gray-600" />
+                    <div onClick={()=>setShowPopup(!showPopup)} className="flex items-center px-4 py-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                      <HiChartBar className="w-5 h-5 mr-3" />
                       <span>View Post Analytics</span>
                     </div>
                 </div>}
@@ -157,8 +157,8 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
                     <HiBookmark className="w-5 h-5 mr-3 text-gray-600" />
                     <span>Save Post</span>
                   </div> */}
-                  <div className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    <HiFlag className="w-5 h-5 mr-3 text-gray-600" />
+                  <div className="flex items-center px-4 py-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                    <HiFlag className="w-5 h-5 mr-3" />
                     <span>Report Post</span>
                   </div>
                 </div> }
@@ -166,9 +166,9 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
                   <HiClock className="w-5 h-5 mr-3 text-gray-600" />
                   <span>View Post History</span>
                 </div> */}
-                <div onClick={handleCopyPostLinkClick} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  {!copyLink ? <div className='flex items-center justify-center'><HiOutlineLink className="w-5 h-5 mr-3 text-gray-600" /> <span>Copy Link</span></div> :
-                  <div className='flex items-center justify-center'> <HiExternalLink className="w-5 h-5 mr-3 text-gray-600" /> <span>Link Copied</span> </div>}
+                <div onClick={handleCopyPostLinkClick} className="flex items-center px-4 py-2 hover:bg-gray-500 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                  {!copyLink ? <div className='flex items-center justify-center'><HiOutlineLink className="w-5 h-5 mr-3" /> <span>Copy Link</span></div> :
+                  <div className='flex items-center justify-center'> <HiExternalLink className="w-5 h-5 mr-3" /> <span>Link Copied</span> </div>}
                 </div>
             </div>
         </div>

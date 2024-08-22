@@ -19,6 +19,7 @@ const EditorWithDisplay = () => {
       <JoditEditor
         value={content}
         onChange={handleEditorChange}
+        className='dark:bg-[rgb(16,23,42)]'
       />
       <button onClick={toggleContentDisplay}>
         {showContent ? 'Hide Content' : 'Show Content'}

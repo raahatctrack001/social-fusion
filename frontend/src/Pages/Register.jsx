@@ -112,9 +112,9 @@ export default function Register() {
                     <Label className="" htmlFor="password" value="Your password" />
                     {registerData.password && ((registerData.password.length >= 8) &&(validationResults.hasUpperCase && validationResults.hasLowerCase && validationResults.hasNumber && validationResults.hasSpecialChar) && registerData.password?
                      (<p className="text-green-700 font-bold relative"> Strong Password 
-                    {(!seePassword ? <HiEye onClick={()=>setSeePassword(seePassword?false:true)} className="absolute top-11 right-5 z-10 text-gray-500 "/> : <HiEyeOff onClick={()=>setSeePassword(seePassword?false:true)} className="absolute  text-gray-500 top-11 right-5 z-10" />)} </p>) :
+                    {(!seePassword ? <HiEye onClick={()=>setSeePassword(seePassword?false:true)} className="absolute top-11 right-5 z-10 text-gray-500 cursor-pointer "/> : <HiEyeOff onClick={()=>setSeePassword(seePassword?false:true)} className="absolute  text-gray-500 top-11 right-5 z-10" />)} </p>) :
                      (<p className="text-red-900 font-bold relative"> Week Password 
-                    {(!seePassword ? <HiEye onClick={()=>setSeePassword(seePassword?false:true)} className="absolute top-11 right-5 z-10 text-gray-500 "/> : <HiEyeOff onClick={()=>setSeePassword(seePassword?false:true)} className="absolute  text-gray-500 top-11 right-5 z-10" />)}</p>))}
+                    {(!seePassword ? <HiEye onClick={()=>setSeePassword(seePassword?false:true)} className="absolute top-11 right-5 z-10 text-gray-500 cursor-pointer "/> : <HiEyeOff onClick={()=>setSeePassword(seePassword?false:true)} className="absolute  text-gray-500 top-11 right-5 z-10" />)}</p>))}
               </div>
             </div>
             <TextInput 

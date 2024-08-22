@@ -8,6 +8,7 @@ import { updateSuccess } from '../redux/slices/user.slice';
 import { current } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
 import LoaderPopup from './Loader';
+import PageLoader from './PageLoader';
 // import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
@@ -83,13 +84,14 @@ const AuthorHeader = ({ author, setAuthor }) => {
       setLoading(false)
     }
   }
+  
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Changing your dp!"} />}
 {/* show dp popup starts here */}
       {showDP && (
-        <div className="fixed w-full inset-0 flex justify-center items-center top-20 bg-black bg-opacity-50 z-20">
-          <div className="bg-white p-2 rounded-lg shadow-lg flex flex-col">
+        <div className="fixed w-full inset-0 flex justify-center items-center top-20  bg-opacity-50 z-20">
+          <div className="p-2 rounded-lg shadow-lg flex flex-col">
             <div className="flex justify-between relative">
               <div> </div>
               <div onClick={()=>setShowDP(!showDP)} className="relative bottom-1 right-1 cursor-pointer"> <HiXCircle className="text-red-700 text-lg"/> </div>
@@ -103,11 +105,11 @@ const AuthorHeader = ({ author, setAuthor }) => {
 
       {/* show dp popup ends here */}
       <div className="flex flex-col md:flex-row items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
-          <div className='relative'>
+          <div className='relative '>
             <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
             { author?._id === currentUser?._id && <div onClick={()=>profileRef.current.click()} 
-              className='w-10 h-10 absolute border rounded-full bg-white top-20 left-24 flex justify-center items-center cursor-pointer'>
-              <HiPencil className='text-2xl' />
+              className='w-10 h-10 bg-white absolute border rounded-full top-20 left-24 flex justify-center items-center cursor-pointer'>
+              <HiPencil className='text-2xl text-gray-950' />
             </div>}
             <img 
               onClick={()=>setShowDP(!showDP)}
@@ -124,7 +126,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                   <div className='flex justify-between'>
                     <div>
                         <h2 className="text-xl font-bold flex  ml-5 md:ml-10 justify-start">{author.fullName}</h2>
-                        <p className="text-gray-600 flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
+                        <p className="flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
                     </div>
                     <div onClick={handleToggleFollowButtonClick} className='flex md:hidden justify-between w-10 text-2xl'> 
                         {author?._id !== currentUser?._id ? (author?.followers?.includes(currentUser?._id) ? 
@@ -134,15 +136,15 @@ const AuthorHeader = ({ author, setAuthor }) => {
                     <div className='hidden md:flex gap-4 md:ml-8'>
                         <div className="text-center">
                           <p className="text-lg font-semibold">{followersCount}</p>
-                          <p className="text-gray-600">Followers</p>
+                          <p className="">Followers</p>
                         </div>
                         <div className="text-center">
                           <p className="text-lg font-semibold">{author.followings.length}</p>
-                          <p className="text-gray-600">Following</p>
+                          <p className="">Following</p>
                         </div>
                         <div className="text-center ">
                           <p className="text-lg font-semibold">{author.posts.length}</p>
-                          <p className="text-gray-600">Posts</p>
+                          <p className="">Posts</p>
                         </div>
                     </div>
                   </div>
@@ -151,14 +153,14 @@ const AuthorHeader = ({ author, setAuthor }) => {
                     {author?._id !== currentUser?._id ? 
                 (<Button 
                   onClick={()=>handleToggleFollowButtonClick(author)}
-                  outline className='bg-gray-800 '> 
+                  outline className=''> 
                                               {/* {author?.followers?.includes(currentUser?._id) ?  */}
                                               {currentUser?.followings?.includes(author?._id)?
                                               ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
                                               (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                 </Button>) : 
                 
-                  (<Button disabled className='bg-gray-900'> <HiBadgeCheck className='text-xl text-white w-20 h-5' /> </Button>)}   
+                  (<Button disabled className=''> <HiBadgeCheck className='text-xl w-20 h-5' /> </Button>)}   
                   </div>        
                 </div>
             </div>
@@ -166,22 +168,22 @@ const AuthorHeader = ({ author, setAuthor }) => {
             <div className="flex justify-between gap-2 md:hidden mt-4 md:mt-2 p-1 w-full px-5">
               <div className="text-center">
                 <p className="text-lg font-semibold">{author.followers.length}</p>
-                <p className="text-gray-600">Followers</p>
+                <p className="">Followers</p>
               </div>
               <div className="text-center">
                 <p className="text-lg font-semibold">{author.followings.length}</p>
-                <p className="text-gray-600">Following</p>
+                <p className="">Following</p>
               </div>
               <div className="text-center ">
                 <p className="text-lg font-semibold">{author.posts.length}</p>
-                <p className="text-gray-600">Posts</p>
+                <p className="">Posts</p>
               </div>          
             </div>
                                                   
           </div>       
       </div>
         <div className='flex justify-center items-center'>
-            {author.bio && <p className="m-2 border p-2 rounded-lg text-gray-700 flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
+            {author.bio && <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>
     </div>
   );

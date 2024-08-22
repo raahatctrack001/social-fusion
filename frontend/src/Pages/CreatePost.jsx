@@ -186,7 +186,7 @@ const CreatePost = ({ placeholder }) => {
   // console.log(selectedCategory)
   console.log("laoding", loading)
   return (
-    <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>
+    <div className='w-full border-2 border-rose-900 md:px-10 rounded-lg'>
 
       {loading && <LoaderPopup loading={loading} info="We are uploading your file" setLoading={setLoading} />}
       
@@ -195,16 +195,16 @@ const CreatePost = ({ placeholder }) => {
     {thumbnailURL && <img className='px-10 mt-4' src={thumbnailURL} alt="thumbnail" />}
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
-            <TextInput placeholder='Unique Title' className='mb-1 w-3/4' onChange={(e)=>setTitle(e.target.value)}/>
+            <TextInput placeholder='Unique Title' className='mb-1 w-3/4 border-2 rounded-lg' onChange={(e)=>setTitle(e.target.value)}/>
             <TextInput 
               onChange={handleFileUpload}
               type='file' ref={filePickerRef}  className='hidden' id='postImage' name='postImage'/>
-            <Button outline onClick={()=>filePickerRef.current.click()} color={''} className='w-1/4  h-8 md:h-10 mb-1 flex items-center hover:bg-gray-500 '> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Upload</span> Images </Button>
+            <Button outline onClick={()=>filePickerRef.current.click()} color={''} className='w-1/4  h-8 md:h-10 mb-1 flex items-center border-2 hover:bg-gray-500 '> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Upload</span> Images </Button>
           </div>
 
           <div>
-            <TextInput onChange={handleThumbnailUPload} ref={thumbnailRef} className='hidden' type='file'/>
-            <Button onClick={()=>thumbnailRef.current.click()} className='w-full hover:bg-gray-500' color={''}  outline> {thumbnailURL ? "Update thumbnail image" : "Upload Thumbnail Image"} </Button>
+            <TextInput onChange={handleThumbnailUPload} ref={thumbnailRef} className='hidden' type='file' />
+            <Button onClick={()=>thumbnailRef.current.click()} className=' border-2 mb-1 w-full hover:bg-gray-500' color={''}  outline> {thumbnailURL ? "Update thumbnail image" : "Upload Thumbnail Image"} </Button>
           </div>
           <div className=''>
             
@@ -255,7 +255,7 @@ const CreatePost = ({ placeholder }) => {
 
           </div>
           {error && <Alert color={"failure"} className='flex justify-center items-center'><span>{error}</span></Alert>}
-          <Button onClick={handlePostUpload} color={"warning"} className='w-full my-2'> Upload now </Button>
+          <Button onClick={handlePostUpload} color={"primary"} className='w-full my-2 border-2 hover:bg-gray-500'> Upload now </Button>
       </div>
     </div>
   );

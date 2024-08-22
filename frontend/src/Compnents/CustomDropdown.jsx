@@ -12,11 +12,13 @@ const CustomDropdown = ({ options, onSelect }) => {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%' }} className=''>
       <select
         value={selectedOption}
         onChange={handleChange}
         style={{ width: '100%', padding: '10px', fontSize: '16px' }}
+        className='dark:bg-[rgb(16,23,42)] rounded-lg hover:bg-gray-500'
+        
       >
         <option value="" disabled>
           Select a category

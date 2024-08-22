@@ -2,7 +2,7 @@ import React from 'react';
 
 const CommentsDisabled = () => {
   return (
-    <div className="flex items-center justify-center p-4 my-2 bg-gray-100 border border-gray-300 rounded-lg">
+    <div className="flex items-center justify-center p-4 my-2 border border-gray-300 rounded-lg">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6 text-gray-600 mr-2"

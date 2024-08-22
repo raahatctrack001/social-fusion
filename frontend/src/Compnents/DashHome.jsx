@@ -85,7 +85,7 @@ const DashHome = () => {
     // console.log("recents posts", recentPosts);
     // console.log("popular posts", popularPosts);
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen dark:bg-[rgb(16,23,42)]">
       
       {/* delete modal starts here */}
       <Modal show={showModal} onClose={() => setShowModal(false)}>
@@ -122,12 +122,12 @@ const DashHome = () => {
 
           {/* Key Metrics */}
           <div className="flex flex-col gap-4 mb-8">
-            <div className="bg-white rounded-lg shadow-md">
+            <div className=" rounded-lg shadow-md">
             {/* <h3 className="text-lg font-semibold mb-2">Recent Posts</h3> */}
               <RecentPostsTable heading={"Recent Posts"} displayPosts={recentPosts} />
             </div>
             <div className='flex justify-between'>
-              <div className="bg-white p-6 rounded-lg shadow-md order-2 w-1/4">
+              <div className=" p-6 rounded-lg shadow-md order-2 w-1/4">
                 <h1 className="text-lg font-semibold mb-2">Traffic Stats:</h1>
                 <ul> 
                   <h1>Posts added in</h1> 
@@ -138,39 +138,41 @@ const DashHome = () => {
                   <h2> Daily Visitors: 1200</h2>              
                 </ul>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-md w-3/4">
+              <div className="p-6 rounded-lg shadow-md w-3/4">
                 <RecentPostsTable heading={"Popular Posts"} displayPosts={popularPosts} />
             </div>
             </div>  
           </div>
 
           {/* Post Management Table */}
-          <h2 className="text-2xl font-semibold mb-4">Manage Posts</h2>
-        <Table>
-            <Table.Head>
-              <Table.HeadCell>Title</Table.HeadCell>
-              <Table.HeadCell>Author</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Status</Table.HeadCell>
-              <Table.HeadCell>Actions</Table.HeadCell>
-            </Table.Head>
-            <Table.Body>
-              {postData?.length > 0 && postData.map((post, index) => (
-                <Table.Row key={index}>
-                  <Table.Cell><div className='text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
-                  <Table.Cell > {post?.author ? <div className='text-blue-600' onClick={()=>navigate(`/authors/authors/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "Author" :  post?.author?.fullName} </div> : <div> Blog User </div>}</Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>Published</Table.Cell>
-                  <Table.Cell>
-                    {currentUser?._id === post?.author?._id ? <div className='flex gap-1'>
-                      <Button onClick={()=>handleUpdatePostClick(post)} color={'warning'} size="xs">Edit</Button>
-                      <Button onClick={()=>handleDeletePost(post)} color={'failure'} size="xs">Delete</Button>
-                    </div> : <Button disabled color={'failure'}> N/A </Button>}
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-        </Table>
+          <h2 className="text-2xl font-semibold mb-4 ">Manage Posts</h2>
+          <div className='border-2 rounded-lg p-2'>
+            <Table className=''>
+                <Table.Head>
+                  <Table.HeadCell>Title</Table.HeadCell>
+                  <Table.HeadCell>Author</Table.HeadCell>
+                  <Table.HeadCell>Category</Table.HeadCell>
+                  <Table.HeadCell>Status</Table.HeadCell>
+                  <Table.HeadCell>Actions</Table.HeadCell>
+                </Table.Head>
+                <Table.Body>
+                  {postData?.length > 0 && postData.map((post, index) => (
+                    <Table.Row key={index}>
+                      <Table.Cell><div className='text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
+                      <Table.Cell > {post?.author ? <div className='text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "Author" :  post?.author?.fullName} </div> : <div> Blog User </div>}</Table.Cell>
+                      <Table.Cell>{post.category}</Table.Cell>
+                      <Table.Cell>Published</Table.Cell>
+                      <Table.Cell>
+                        {currentUser?._id === post?.author?._id ? <div className='flex gap-1'>
+                          <Button onClick={()=>handleUpdatePostClick(post)} color={'warning'} size="xs">Edit</Button>
+                          <Button onClick={()=>handleDeletePost(post)} color={'failure'} size="xs">Delete</Button>
+                        </div> : <Button disabled color={'failure'}> N/A </Button>}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+            </Table>
+          </div>
 
         </main>
       </div>

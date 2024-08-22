@@ -45,13 +45,13 @@ const ShowPosts = ({heading, postData}) => {
       }
   return (
     <div>
-        <div className='flex-3/4 flex flex-col border-2  m-2 px-2'>
+        <div className='flex-3/4 flex flex-col m-2 px-2'>
         <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> {heading} </h1>
-        <div className="flex flex-col justify-center items-center md:grid md:grid-cols-2 lg:grid-cols-3 bg-gray-600 gap-5  p-2">
+        <div className="flex flex-col  justify-center items-center md:grid md:grid-cols-2 lg:grid-cols-3 gap-5  p-2">
         {postData?.length ? postData.map((post, index) => ( //handle the edge case if there's not post
-              <div className='p-1 border-2 border-gray-800 rounded-xl w-full md:max-w-96 h-96  bg-gray-300  dark:bg-gray-900' key={index} >
+              <div className='p-1 shadow-2xl hover:shadow-white border hover:shadow-2xl rounded-xl w-full md:max-w-96 h-96 ' key={index} >
                 {/* <AuthorCard author={post?.author} /> */}
-                <div className='flex justify-between '>
+                <div className='flex justify-between hover:dark:bg-gray-700 hover:bg-gray-100 p-2 rounded-lg '>
                   <div 
                   onClick={
                     ()=>{
@@ -63,14 +63,14 @@ const ShowPosts = ({heading, postData}) => {
                   </div>
 
                 {post?.author && post?.author?._id !== currentUser?._id ? 
-                (<Button 
+                (<button 
                   onClick={()=>handleToggleFollowButtonClick(post?.author)}
-                  outline className='bg-gray-800 '> 
+                  outline="true" className=' border rounded-lg px-4 hover:bg-gray-300 hover:dark:bg-gray-900'> 
                                               {/* {author?.followers?.includes(currentUser?._id) ?  */}
                                               {currentUser?.followings?.includes(post?.author?._id)?
                                               ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  </div> ) : 
                                               (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/>  </div>)}  
-                </Button>) : 
+                </button>) : 
                 
                 (<Button disabled> <HiBadgeCheck /> </Button>)}                  
                 

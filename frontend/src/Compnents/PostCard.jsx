@@ -9,7 +9,7 @@ const PostCard = ({ post }) => {
   const { author } = post;
   // console.log(author)
   return (   
-      <div className='flex flex-col' >
+      <div className=' w-full flex flex-col p-2 rounded-lg ' >
         {/* <div className='flex justify-between'>
           <Link className='flex items-center gap-2'>
             <img className='h-8 rounded-full' src={author?.profilePic } alt="" />

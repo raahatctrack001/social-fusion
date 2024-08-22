@@ -171,7 +171,7 @@ const CommentBox = ({
                     <Link to={`/authors/author/${newComment?.author?._id}`} className="font-semibold">{newComment?.author?.username}</Link>
                     {newComment?.edited && <p className="text-red-500 font-semibold">edited</p>}
                 </div>
-                <div className="text-sm text-gray-500">{formatDistanceToNow(new Date(newComment?.createdAt) || new Date(), { addSuffix: true })}</div>
+                <div className="text-sm">{formatDistanceToNow(new Date(newComment?.createdAt) || new Date(), { addSuffix: true })}</div>
             </div>
 
             {/* Comment Content */}
@@ -185,13 +185,13 @@ const CommentBox = ({
                     <div className="text-sm font-semibold">{comment?.likes?.length} likes</div>
                     <div className="flex space-x-4">
                         <div className="flex gap-5 items-center">
-                            <button onClick={handleShowReply} className="text-sm text-gray-500">
+                            <button onClick={handleShowReply} className="text-sm">
                                 {newComment?.replies?.length > 1 ? "Replies" : "Reply"} ({newComment?.replies?.length})
                             </button>
                             <Dropdown
                                 arrowIcon={false}
                                 inline={true}
-                                label={<HiDotsHorizontal className="text-lg text-gray-500" />}
+                                label={<HiDotsHorizontal className="text-lg" />}
                             >
                                 {newComment?.author?._id == currentUser?._id && <Dropdown.Item onClick={() => handleEditClick(newComment)}>
                                     Edit

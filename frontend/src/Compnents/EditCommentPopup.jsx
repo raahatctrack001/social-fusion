@@ -31,7 +31,7 @@ const EditCommentPopup = ({showEditPopup, setShowEditPopup, comment}) => {
   return (
     <div className="flex justify-center items-center h-screen">
        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <div className="p-6 rounded-lg shadow-lg w-96">
             <div className='flex justify-between items-center '> 
                 <div> </div> 
                 <button

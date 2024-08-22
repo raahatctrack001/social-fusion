@@ -12,11 +12,13 @@ import NotFoundPage from './NotFoundPage'
 import { useDispatch, useSelector } from 'react-redux'
 import ShowPosts from '../Compnents/ShowPosts'
 import { updateSuccess } from '../redux/slices/user.slice'
+import PageLoader from '../Compnents/PageLoader'
 
 const Home = () => {
   const { currentUser } = useSelector(state=>state.user)
   const [postData, setPostData] = useState([]);
   const [users, setUsers] = useState([]); 
+  
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -86,17 +88,19 @@ const Home = () => {
         console.log(error);
     }
   }
-  
+  if(!postData){
+    return <PageLoader />
+  }
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     {postData ? <ShowPosts heading={"Our recent posts!"} postData={postData} /> : <NotFoundPage /> }
 
-    <div className='flex-1/4 border-2 m-2 px-2 mx-2'>
+    <div className='flex-1/4 m-2 px-2 mx-2'>
       <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors </h1>
-      <div className="flex flex-col bg-gray-100 dark:bg-gray-900 gap-3 ">
+      <div className="flex flex-col bg-gray-100 dark:bg-gray-900 gap-3  ">
       {users && users.map((author, index) => (
             <div 
-              className='flex justify-between items-center gap-2 border-2 border-gray-500 p-1 rounded-xl min-w-64 max-w-96 cursor-pointer'
+              className='flex justify-between items-center gap-2 border-2 shadow-2xl hover:shadow-white hover:shadow-sm-light border-gray-500 p-1 rounded-xl min-w-64 max-w-96 cursor-pointer'
              key={index} >
               <div onClick={() => navigate(`/authors/author/${author?._id}`)}>
               <AuthorCard author={author}  />
