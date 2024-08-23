@@ -5,11 +5,12 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import apiError from '../../../backend/src/Utils/apiError';
 import { useSelector } from 'react-redux';
 import { Button } from 'flowbite-react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
   const [followers, setfollowers] = useState(null);
  const { currentUser } = useSelector(state=>state.user)
-
+  const navigate = useNavigate();
   useEffect(()=>{
     const getfollowers = async()=>{
         const response = await fetch(apiEndPoints.getFollowersAddress(follower?._id));
@@ -35,38 +36,43 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
   };
 
   const handleToggleFollowButtonClick = async (follower)=>{
-    try {
-      fetch(apiEndPoints.toggleFollowUserAddress(follower._id), {
-        method: "POST",
-        headers: {
-          'content-type': 'application/json'
-        }
-      })
-      .then((response)=>{
-        console.log("resonse: ", response);
-        return response.json();
-      })
-      .then((data)=>{
-          console.log(data.message)          
-          if(currentUser?.followings?.includes(follower?._id)){
-            setFollowersCount(followersCount-1)
-          }
-          else{
-            setFollowersCount(followersCount+1)
-          }
-          dispatch(updateSuccess(data?.data?.follower))
+    // try {
+    //   fetch(apiEndPoints.toggleFollowUserAddress(follower._id), {
+    //     method: "POST",
+    //     headers: {
+    //       'content-type': 'application/json'
+    //     }
+    //   })
+    //   .then((response)=>{
+    //     console.log("resonse: ", response);
+    //     return response.json();
+    //   })
+    //   .then((data)=>{
+    //       console.log(data.message)          
+    //       if(currentUser?.followings?.includes(follower?._id)){
+    //         setFollowersCount(followersCount-1)
+    //       }
+    //       else{
+    //         setFollowersCount(followersCount+1)
+    //       }
+    //       dispatch(updateSuccess(data?.data?.follower))
 
-      })
-    } catch (error) {
-        alert(error.message);
-        console.log(error);
-    }
+    //   })
+    // } catch (error) {
+    //     alert(error.message);
+    //     console.log(error);
+    // }
   }
 
   if(!followers){
     <PageLoader />
   }
 
+  const handleFollowerClick = (followerId)=>{
+    setIsHovered(false)
+    navigate(`/authors/author/${followerId}`)
+    
+  }
   return (
     <div
       className="relative inline-block"
@@ -86,7 +92,7 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
                 key={index}
                 className="flex items-center justify-between p-2 bg-gray-100 rounded-lg shadow-sm dark:bg-gray-700"
               >
-                <div className="flex items-center">
+                <div className="flex items-center cursor-pointer" onClick={()=>handleFollowerClick(follower?._id)}>
                   <img
                     src={follower.profilePic}
                     alt={follower.username}

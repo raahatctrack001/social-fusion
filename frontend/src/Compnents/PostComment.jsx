@@ -130,7 +130,7 @@ const PostComment = ({ post }) => {
                     handleLikeCommentClick={handleLikeCommentClick}
                     handlePostCommentSubmit={handlePostCommentSubmit}
                     handleDeleteClick={handleDeleteClick}
-                    // handleEditClick={handleEditClick}
+                    handleEditClick={handleEditClick}
                     handleReportClick={handleReportClick}
                     postCommentContent={postCommentContent}
                     setPostCommentContent={setPostCommentContent}

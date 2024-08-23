@@ -50,6 +50,7 @@ const Author = () => {
   if(!authorData){
     return <PageLoader />
   }
+  console.log(authorData)
   return (     
       <div className='m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
         <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>

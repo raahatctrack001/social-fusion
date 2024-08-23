@@ -87,27 +87,9 @@ const CommentBox = ({
                 throw new Error(data.message || "Network response is not ok!");
             }
             if (data.success) {
-                console.log("reply comment data", data);
-                
-                // Sort the new list of replies by createdAt
-                const newReply = data?.data?.newComment;
-                const updatedReplies = [newReply, ...(commentReplies[comment._id] || [])]
-                    .filter(reply => !isNaN(new Date(reply?.createdAt).getTime()))
-                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-                // Update both states with the new sorted replies
-                setCommentReplies(prevReplies => ({
-                    ...prevReplies,
-                    [comment._id]: updatedReplies
-                }));
-
-                setShowCommentReply(prev => ({
-                    ...prev,
-                    [comment._id]: updatedReplies
-                }));
-
-                setReplyContent('');
                 dispatch(updateSuccess(data?.data?.currentUser));
+                setNewComment(data?.data?.parentComment)
+                setReplyContent('')
                 handleReplyClick();
             }
         } catch (error) {
@@ -161,6 +143,25 @@ const CommentBox = ({
             setError(error.message);
         }
     }
+
+    const handleReplyLikeCommentClick = async (commentId, userId) => {
+        try {
+            const response = await fetch(apiEndPoints.likeCommentAddress(commentId, userId), {
+                method: "POST",
+            });
+            if (!response.ok) {
+                throw new Error(response.message || "Network response is not ok!");
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                handleReplyClick();
+                dispatch(updateSuccess(data?.data?.currentUser));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
     console.log(editContent)
     return (
         <div className="border-2 border-black p-3 my-2 rounded-lg">
@@ -228,7 +229,7 @@ const CommentBox = ({
                 <CommentBox 
                     key={index}
                     comment={reply} 
-                    handleLikeCommentClick={handleLikeCommentClick}
+                    handleLikeCommentClick={handleReplyLikeCommentClick}
                     handleDeleteClick={handleDeleteReplyClick}
                     handleEditClick={handleEditClick}
                     handleReportClick={handleReportClick}

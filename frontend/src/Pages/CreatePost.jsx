@@ -9,8 +9,7 @@ import EditorWithDisplay from '../Compnents/EditorWithDisplay';
 import CustomDropdown from '../Compnents/CustomDropdown';
 import { useSelector } from 'react-redux';
 import LoaderPopup from '../Compnents/Loader';
-// import { info } from 'console';
-// import Editor from '../Compnents/EditorWithDisplay';
+import "../Compnents/CustomJoditStyles.css"
 
 const CreatePost = ({ placeholder }) => {
   const categories = [
@@ -53,6 +52,7 @@ const CreatePost = ({ placeholder }) => {
   const config = useMemo(() => ({
     readonly: false, // all options from https://xdsoft.net/jodit/docs/
     placeholder: placeholder || 'Start formatting you story...'
+    
   }), [placeholder]);
 
   // console.log(content)
@@ -192,7 +192,9 @@ const CreatePost = ({ placeholder }) => {
       
          
     <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
-    {thumbnailURL && <img className='px-10 mt-4' src={thumbnailURL} alt="thumbnail" />}
+    <div className='flex justify-center items-center overflow-scroll mt-2 w-full'>
+      {thumbnailURL && <img className='p-5 w-1/2 max-h-96 rounded-3xl aspect-auto' src={thumbnailURL} alt="thumbnail" />}
+    </div>
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
             <TextInput placeholder='Unique Title' className='mb-1 w-3/4 border-2 rounded-lg' onChange={(e)=>setTitle(e.target.value)}/>
@@ -212,7 +214,7 @@ const CreatePost = ({ placeholder }) => {
               <div className='flex justify-between'>
                 <h2 className="text-lg font-semibold text-blue-800 mb-2">Add Images to Your Post</h2> 
                 <div className='flex cursor-pointer' onClick={()=>setShowInstructions(false)}>
-                  <HiX />
+                  <HiX className='dark:text-red-600'/>
                 </div>
               </div>
               <p className="text-blue-700 mb-2">

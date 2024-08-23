@@ -3,10 +3,11 @@ import { HiUserAdd } from 'react-icons/hi';
 import PageLoader from './PageLoader';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import apiError from '../../../backend/src/Utils/apiError';
+import { useNavigate } from 'react-router-dom';
 
 const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
   const [followings, setFollowings] = useState(null);
-
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const getFollowings = async()=>{
@@ -40,7 +41,10 @@ const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
   if(!followings){
     <PageLoader />
   }
-
+  const handleFollowingClick = (followingId)=>{
+    setIsHovered(false);
+    navigate(`/authors/author/${followingId}`)
+  }
   return (
     <div
       className="relative inline-block"
@@ -60,7 +64,7 @@ const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
                 key={index}
                 className="flex items-center justify-between p-2 bg-gray-100 rounded-lg shadow-sm dark:bg-gray-700"
               >
-                <div className="flex items-center">
+                <div className="flex items-center cursor-pointer" onClick={()=>handleFollowingClick(following?._id)}>
                   <img
                     src={following.profilePic}
                     alt={following.username}

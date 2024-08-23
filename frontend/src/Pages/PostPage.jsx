@@ -193,7 +193,7 @@ const PostPage = () => {
                                                 (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                   </Button>) : 
                                                 
-                  (<Button disabled className='h-5 flex justify-center items-center' color={"dark"}> <HiBadgeCheck /> </Button>)}
+                  (<Button disabled className='h-10 w-20 flex justify-center items-center' color={"dark"}> <HiBadgeCheck /> </Button>)}
               <div className='p-2 cursor-pointer' > 
                       <PostOptionsDropdown                         
                         post={post}
@@ -223,8 +223,8 @@ const PostPage = () => {
       </div>
         <DisplayContent content={post?.content} />
 
-        <div className='flex  justify-between border-2 p-2 rounded-lg'>          
-          <div className='flex gap-3'>
+        <div className='flex justify-between border-2 p-2 rounded-lg'>          
+          <div className='flex justify-center items-center gap-3'>
 
               <div onClick={handleLikePostClick}> 
                 {currentUser?.likedPosts?.includes(post?._id) ? 
@@ -258,7 +258,7 @@ const PostPage = () => {
         {post?.enableComments ? <div className='w-full rounded'>
           <PostComment
               post={post}
-          /> :
+          /> 
         </div> : <CommentsDisabled />}
     </div>
   )

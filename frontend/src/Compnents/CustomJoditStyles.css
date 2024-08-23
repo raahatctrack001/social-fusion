@@ -1,0 +1,15 @@
+/* src/CustomJoditStyles.css */
+
+/* Extend Tailwind styles */
+.jodit_wysiwyg {
+    @apply bg-gray-900 text-gray-100;
+  }
+  
+  .jodit_toolbar {
+    @apply bg-gray-800 text-white;
+  }
+  
+  .jodit_wysiwyg:empty:before {
+    @apply text-gray-500;
+  }
+  

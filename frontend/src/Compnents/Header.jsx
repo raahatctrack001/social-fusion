@@ -9,6 +9,7 @@ import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { signoutSuccess, updateSuccess } from "../redux/slices/user.slice";
 import { toggleTheme } from "../redux/slices/theme.slice";
 import { formatDistanceToNow } from "date-fns";
+import { HiChatBubbleBottomCenterText } from "react-icons/hi2";
 
 
 
@@ -137,6 +138,8 @@ export default function Header() {
                   </Link>
                </Dropdown.Header>
                <Dropdown.Item href="/dashboard?tab=home" icon={HiViewGrid}>Dashboard</Dropdown.Item>
+               <Dropdown.Item href="/chatroom" icon={HiChatBubbleBottomCenterText}>Chat Room</Dropdown.Item>
+
                <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
                {/* <Dropdown.Item href=  icon={HiLockOpen}>Update Password</Dropdown.Item> */}
                <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>
