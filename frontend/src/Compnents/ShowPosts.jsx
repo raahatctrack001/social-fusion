@@ -13,7 +13,7 @@ import { updateSuccess } from '../redux/slices/user.slice'
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
     const dispatch = useDispatch();
-    console.log("currentUser", currentUser)
+    // console.log("currentUser", currentUser)
     const navigate = useNavigate();
 
 

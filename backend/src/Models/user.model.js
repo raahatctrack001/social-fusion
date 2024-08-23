@@ -24,6 +24,7 @@ const userSchema = mongoose.Schema({
         type: String,
         trim: true,
         required: true,
+        select: false,
     },
     bio: {
         type: String,
@@ -89,9 +90,18 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'Feedback'
     }],
+    isActive:{ //if online or not
+        type: Boolean,
+        default: 'false'
+    },
+    lastActive: {
+        type: Date,
+        default: new Date,
+    },
     refreshToken: {
         type: String,
         default: "",
+        select: false,
     },
     isAdmin: {
         type: Boolean,
@@ -99,9 +109,10 @@ const userSchema = mongoose.Schema({
     }, 
     resetPasswordToken: {
         type: String,
-        default: ""
+        default: "",
+        select: false,
     }
-}, {timeStamps: true})
+}, {timestamps: true})
 
 
 userSchema.pre("save", function (next) {

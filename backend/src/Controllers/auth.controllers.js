@@ -16,6 +16,7 @@ import {
     userSchema 
 } from "../Validators/user.validator.js";
 import jwt from 'jsonwebtoken'
+import bcryptjs from 'bcryptjs';
 
 export const isAuthorised = asyncHandler(async (req, res, next)=>{
     console.log(req.user)
@@ -73,22 +74,24 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
 })
 
 export const loginUser = asyncHandler(async (req, res, next) => {
-    const { userEmail, password: pass } = req.body;
+    const { userEmail, password: pass} = req.body;
     console.log(req.body)
     try {
         const query = uniqueIdValidator(userEmail);
-        const user = await User.findOne(query);
-
+        const user = await User.findOne(query).select("+password");
+        if(!user){
+            throw new apiError(404, "user doesn't exist")
+        }
+        
         if (user) {
-            if (!user.isPasswordCorrect(pass)) {
+            if (!bcryptjs.compareSync(pass, user?.password)) {
                 throw new apiError(403, "Password didn't match!");
             }
-
+            user.isActive = true;
+            user.lastActive = new Date();
+            await user.save();
             const tokens = await generateAccessAndRefreshToken(user._id);
-            // console.log(tokens?.currentUser)
-            const { password, refreshToken, resetPasswordToken, ...userData } = tokens?.currentUser?._doc;
-            // console.log("rest************************************************", userData)
-            
+            const { password, ...userData} = user?._doc;
             res
                 .status(202)
                 .cookie('accessToken', tokens.accessToken, options)
@@ -114,8 +117,9 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
             { new: true }
         );
 
-        console.log(currentUser);
-
+        // console.log(currentUser);
+        currentUser.isActive = false;
+        await currentUser.save();
         // Clear cookies and respond
         return res
             .status(200)

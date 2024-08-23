@@ -6,9 +6,6 @@ import { testPosts } from "../DataSeeders/post50.js";
 import bcryptjs from 'bcryptjs';
 import Post from "../Models/post.model.js";
 import apiError from "../Utils/apiError.js";
-// import fetch from "node-fetch";
-// import OpenAI from "openai";
-// const openai = new OpenA();
 
 
 export const userSeeder = asyncHandler(async (req, res, next)=>{
@@ -99,3 +96,38 @@ export const userSeeder = asyncHandler(async (req, res, next)=>{
         })
 
   
+
+// mailer.js
+import nodemailer from 'nodemailer';
+
+// Create a transporter object using the default SMTP transport
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER, // Your Gmail address from environment variable
+    pass: process.env.GMAIL_PASS,  // Your Gmail password or App Password from environment variable
+  },
+});
+
+// Send an email
+const email = (to, subject, text) => {
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to,
+    subject,
+    text,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
+};
+
+export const sendEmail = asyncHandler(async (req, res, next)=>{
+    const { to, subject, text } = req.body;
+    email(to, subject, text);
+})

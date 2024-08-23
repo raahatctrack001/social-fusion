@@ -209,3 +209,44 @@ export const toggleFollowUser = asyncHandler(async (req, res, next) => {
         next(error);
     }
 });
+
+export const toggleOnlineStatus = asyncHandler( async (req, res, next)=>{
+    try {
+        const { userId } = req.params;
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "userr doesn't exist")
+        }
+        console.log(req.body)
+        
+        currentUser.isActive = req.body?.status;
+        currentUser.lastActive = new Date();                                    
+
+        await currentUser.save();
+        return res.status(200).json(new apiResponse(200, `${ req.body?.status ? "Offline" : "Online" }`, currentUser))
+    } catch (error) {
+        next(error)
+    }
+})
+
+const markUsersOffline = async () => {
+    const offlineThreshold = new Date(Date.now() - 2 * 60 * 1000); // 2 minutes ago
+  
+    try {
+      // Find users who haven't been active in the last 2 minutes
+      const inactiveUsers = await User.updateMany(
+        { lastActive: { $lt: offlineThreshold }, isActive: true },  // Query conditions
+        { $set: { isActive: false,} }       // Update operation
+      );
+      
+          
+      console.log(inactiveUsers);
+      console.log(`${inactiveUsers.nModified} users marked as offline.`);
+    } catch (error) {
+      console.error('Error marking users as offline:', error);
+    }
+  };
+  
+  // Run the offline check every minute
+setInterval(markUsersOffline, 60000);
+  

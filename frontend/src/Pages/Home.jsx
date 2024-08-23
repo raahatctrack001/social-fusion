@@ -43,22 +43,30 @@ const Home = () => {
 
 
   useEffect(()=>{
-    fetch(apiEndPoints.getUsersAddress())
-      .then((users)=>{
-        if(!users){
-          throw new Error("error getting author's detail")
-        }
+    const fetchUser = async ()=>{ 
+      await fetch(apiEndPoints.getUsersAddress())
+        .then((users)=>{
+          if(!users){
+            throw new Error("error getting author's detail")
+          }
 
-        return users.json();
-      })
-      .then((data)=>{
-        console.log("fetched user")
-        // console.log(data);
-        setUsers(data.data);
-      })
-      .catch((error)=>{
-        throw new Error("error getting author's detail! ", error)
-      })
+          return users.json();
+        })
+        .then((data)=>{
+          console.log("fetched user")
+          // console.log(data);
+          setUsers(data.data);
+          // dispatch(updateSuccess(  ))
+        })
+        .catch((error)=>{
+          throw new Error("error getting author's detail! ", error)
+        })
+    }
+    fetchUser();
+    const interval = setInterval(() => {    
+            fetchUser()
+          }, 100000);
+    return ()=>clearInterval(interval)
   }, [])
 
   const handleToggleFollowButtonClick = async (author)=>{

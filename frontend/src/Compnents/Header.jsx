@@ -4,13 +4,18 @@ import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, H
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
-import { signoutSuccess } from "../redux/slices/user.slice";
+import { signoutSuccess, updateSuccess } from "../redux/slices/user.slice";
 import { toggleTheme } from "../redux/slices/theme.slice";
+import { formatDistanceToNow } from "date-fns";
+
 
 
 export default function Header() {
+
+  const [isOnline, setIsOnline] = useState(window.navigator.onLine)
+  const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const path = useLocation().pathname;
@@ -20,6 +25,34 @@ export default function Header() {
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   // console.log(currentUser)
   const dispatch = useDispatch();
+  useEffect(()=>{
+     try {
+      const heartBeat = async ()=>{
+        const formData = new FormData();
+        formData.append("status", window.navigator.onLine);
+        const response = await fetch(apiEndPoints.toggleOnlineStatusAddress(currentUser?._id), {method: "PATCH", body: formData});
+        const data = await response.json();
+        console.log(data);
+        if(data.success){
+          // alert(data.success)
+          console.log(data)
+          console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
+          dispatch(updateSuccess(data?.data))
+          setIsOnline(data?.data?.isActive);
+        }
+      }
+        heartBeat();
+        const interval = setInterval(() => {
+          heartBeat();
+        }, 90000);
+
+        return ()=>clearInterval(interval)
+     } catch (error) {
+      console.log(error)
+     }
+  }, [])
+  
+  // console.log(isOnline)
   const handleSignOut = async()=>{
     try {
       const response = await fetch(apiEndPoints.logoutAddress(), {
@@ -38,9 +71,20 @@ export default function Header() {
       console.log("error logging out!", error)
     }
   }
-  const handleSearchTerm = async (e)=>{
-    navigate(`/search-posts?query=${encodeURIComponent(e.target.value)}`);
-  }
+
+
+  useEffect(()=>{
+    if(searchTerm?.trim() !== ''){
+      (()=>{
+        const timeout = setTimeout(() => {
+        
+        navigate(`/search-posts?query=${encodeURIComponent(searchTerm)}`);
+      }, 2000);
+      return ()=>clearTimeout(timeout)
+      })()
+    }
+  }, [searchTerm])
+  
   // console.log(searchTerm)
   return (
     <div className="sticky top-0 z-50">
@@ -73,7 +117,7 @@ export default function Header() {
         rightIcon={HiDocumentSearch}
         icon={HiSearch}
         id="searchTerm"
-        onChange={handleSearchTerm}
+        onChange={(e)=>setSearchTerm(e.target.value)}
       />}
 
       <Button onClick={()=>setShowSearchPopup(!showSearchPopup)} outline className="bg-gray-800 lg:hidden"> <span className="flex justify-center items-center"><HiSearch /></span> </Button>
@@ -81,7 +125,8 @@ export default function Header() {
 
       <div className="flex gap-1 md:gap-2 md:order-2">
       {currentUser ?
-      <div className=" flex gap-2" > 
+      <div className=" flex gap-2" >
+          <span className={`h-2 w-2 ${currentUser?.isActive ? "bg-green-600": "bg-red-600"} rounded-full relative top-1 left-12`}></span>
           <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden md:inline" src={currentUser.profilePic} alt={currentUser.username} />
           <div ref={dropdownRef} className=""> 
             <Dropdown label={currentUser?.fullName?.length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName} outline arrowIcon={false}>

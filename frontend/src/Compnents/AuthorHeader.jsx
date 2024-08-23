@@ -9,6 +9,9 @@ import { current } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
 import LoaderPopup from './Loader';
 import PageLoader from './PageLoader';
+import FollowingsPopup from './FollowingPopup';
+import FollowersPopup from './FollowersPopup';
+import { formatDistanceToNow } from 'date-fns';
 // import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
@@ -25,6 +28,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const profileRef = useRef();
   const { currentUser } = useSelector(state=>state.user)
   const [loading, setLoading] = useState(false);
+  const [isFollowingHovered, setisFollowingHovered] = useState(false);
+  const [isFollowerHovered, setisFollowerHovered] = useState(false);
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -132,16 +137,34 @@ const AuthorHeader = ({ author, setAuthor }) => {
                         {author?._id !== currentUser?._id ? (author?.followers?.includes(currentUser?._id) ? 
                         (<HiUserRemove />)  : 
                         (<div className=''><span className='flex items-center justify-center gap-1'> <HiUserAdd /> </span></div>)): <div> <HiBadgeCheck /> </div>}
+
                     </div>
+                          {/***********************************  popups ****************************************************/}
+                    {/* <div className='flex justify-center items-center relative right-72 top-20'> */}
+                    
+                    <div className=''>
+                      {isFollowingHovered && <FollowingsPopup author={author} isHovered={isFollowingHovered} setIsHovered={setisFollowingHovered} />}
+                      {isFollowerHovered && <FollowersPopup 
+                                          follower={author} 
+                                          isHovered={isFollowerHovered} 
+                                          setIsHovered={setisFollowerHovered} 
+                                          handleToggleFollowButtonClick={handleToggleFollowButtonClick}
+
+                                          />}
+                    </div>
+
+                    {/* </div> */}
                     <div className='hidden md:flex gap-4 md:ml-8'>
-                        <div className="text-center"
-                          onMouseEnter={()=>console.log(author)}
-                          onMouseLeave={()=>console.log("mouse moved")}
-                        >
+                        <div className="text-center cursor-pointer"
+                          onClick={()=>setisFollowerHovered(!isFollowerHovered)}
+                          >
                           <p className="text-lg font-semibold">{followersCount}</p>
                           <p className="">Followers</p>
                         </div>
-                        <div className="text-center">
+                        <div
+                          onClick={()=>setisFollowingHovered(!isFollowingHovered)}
+                          // onMouseLeave={()=>setisFollowingHovered(!isFollowingHovered)} 
+                          className="text-center cursor-pointer">
                           <p className="text-lg font-semibold">{author.followings.length}</p>
                           <p className="">Following</p>
                         </div>
@@ -169,11 +192,15 @@ const AuthorHeader = ({ author, setAuthor }) => {
             </div>
                                                   
             <div className="flex justify-between gap-2 md:hidden mt-4 md:mt-2 p-1 w-full px-5">
-              <div className="text-center">
+              <div
+                onClick={()=>setisFollowerHovered(!isFollowerHovered)} 
+                className="text-center cursor-pointer">
                 <p className="text-lg font-semibold">{author.followers.length}</p>
                 <p className="">Followers</p>
               </div>
-              <div className="text-center">
+              <div
+                onClick={()=>setisFollowingHovered(!isFollowingHovered)}  
+                className="text-center">
                 <p className="text-lg font-semibold">{author.followings.length}</p>
                 <p className="">Following</p>
               </div>
@@ -188,6 +215,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
         <div className='flex justify-center items-center'>
             {author.bio && <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>
+        <Button disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Button>
+
     </div>
   );
 };

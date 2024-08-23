@@ -12,7 +12,8 @@ export  const apiEndPoints = {
     updateProfilePic : (userId)=> `/api/v1/users/upload-profile-picture/${userId}`,
     toggleFollowUserAddress : (followId)=> `/api/v1/users/follow-user/${followId}`,
     updateDPAddress: (userId)=>`/api/v1/users/upload-profile-picture/${userId}`,
-    
+    toggleOnlineStatusAddress: (userId)=>`/api/v1/users/toggle-online-status/${userId}`,
+
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
     searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,
@@ -23,6 +24,8 @@ export  const apiEndPoints = {
     allPostAnalytics: ()=>`/api/v1/posts/all-post-analytics`,
     savePostAddress : (postId, userId)=> `/api/v1/posts/save-post/${postId}/${userId}`,
     getSavedPostAddress: (userId)=>`/api/v1/posts/saved-posts/${userId}`,
+    getFollowingsAddress: (userId)=>`/api/v1/posts/get-followings/${userId}`,
+    getFollowersAddress: (userId)=>`/api/v1/posts/get-followers/${userId}`,
     toggleCommentSectionAddress: (postId)=>`api/v1/posts/toggle-comment-section/${postId}`,
     
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,

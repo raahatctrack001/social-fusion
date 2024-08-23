@@ -7,7 +7,7 @@ import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 
-    export const createPost = asyncHandler(async (req, res, next)=>{
+export const createPost = asyncHandler(async (req, res, next)=>{
         // console.log(req.body)
         // return;
         if(!req.user){
@@ -63,7 +63,7 @@ import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
         } catch (error) {
         next(error) 
         }
-    })
+})
 
 export const searchPosts = asyncHandler(async (req, res, next) => {
     try {
@@ -111,7 +111,7 @@ export const searchPosts = asyncHandler(async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  });
+});
 
 export const getPosts = asyncHandler(async (req, res, next)=>{
     try {        
@@ -437,6 +437,40 @@ export const toggleDisableComment = asyncHandler( async (req, res, next)=>{
         return res.status(200).json(new apiResponse(200, `${!status ? " Comments enabled" : "Comments disabled"}`, post))
 
 
+    } catch (error) {
+        next(error);
+    }
+})
+
+export const getFollowers = asyncHandler( async (req, res, next)=>{
+    const { userId } = req.params;
+    
+    try {        
+        const currentUser = await User.findById(userId).populate("followers");
+
+        const followers = currentUser?.followers
+        console.log(followers)
+        if(!followers){
+            throw new apiError(404, "failed to fetch followings")
+        }
+        return res.status(200).json(new apiResponse(200, "followings fetcehd", followers));
+    } catch (error) {
+        next(error);
+    }
+})
+
+export const getFollowings = asyncHandler( async (req, res, next)=>{
+    const { userId } = req.params;
+    
+    try {        
+        const currentUser = await User.findById(userId).populate("followings");
+
+        const followings = currentUser?.followings
+        console.log(followings)
+        if(!followings){
+            throw new apiError(404, "failed to fetch followings")
+        }
+        return res.status(200).json(new apiResponse(200, "followings fetcehd", followings));
     } catch (error) {
         next(error);
     }

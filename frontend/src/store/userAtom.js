@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import FollowersPopup from '../Compnents/FollowersPopup';
 
 export const registrationState = atom({
     key: 'registrationState', // unique ID (with respect to other atoms/selectors)
@@ -17,3 +18,4 @@ export const profileState = atom({
     bio: '',
   }
 })
+
