@@ -75,15 +75,16 @@ export default function Header() {
 
 
   useEffect(()=>{
-    if(searchTerm?.trim() !== ''){
-      (()=>{
-        const timeout = setTimeout(() => {
-        
+    if(searchTerm?.trim() !== ''){      
+      const timeout = setTimeout(() => {
         navigate(`/search-posts?query=${encodeURIComponent(searchTerm)}`);
       }, 2000);
       return ()=>clearTimeout(timeout)
-      })()
     }
+    else{
+      navigate('/')
+    }
+    
   }, [searchTerm])
   
   // console.log(searchTerm)

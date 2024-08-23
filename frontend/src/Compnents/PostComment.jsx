@@ -89,6 +89,7 @@ const PostComment = ({ post }) => {
     }
 
   }
+
   const handlReportPostCommentClick = async()=>{
 
   }
@@ -118,7 +119,12 @@ const PostComment = ({ post }) => {
     }
 
   }
+
   const handleReplyCommentClick = async()=>{
+
+  }
+
+  const handleShowReplies = async ()=>{
 
   }
   
@@ -133,7 +139,7 @@ const PostComment = ({ post }) => {
             />
 
             <div>
-             {comments?.length > 0 && comments?.map((comment, index)=><div className='border-2 rounded-lg my-2' key={index}> 
+             {comments?.length > 0 && comments?.map((comment, index)=><div className='border-2 p-1 pr-3 rounded-lg my-1' key={index}> 
                     <CommentBox                     
                         comment={comment} 
                         handleLikeClick={handleLikeCommentClick}
@@ -141,6 +147,7 @@ const PostComment = ({ post }) => {
                         handleReplyClick={handleReplyCommentClick}
                         handleEditClick={handleEditPostCommentClick}
                         handleReportClick={handlReportPostCommentClick}
+
                     />
                 </div>)}
             </div>

@@ -4,6 +4,8 @@ import { HiChat, HiDotsHorizontal, HiOutlineThumbUp, HiThumbUp } from 'react-ico
 import { formatDistanceToNow } from 'date-fns';
 import { current } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
+import CommentForm from './CommentForm';
+import { apiEndPoints } from '../apiEndPoints/api.addresses';
 
 const CommentBox = ({ 
     comment, 
@@ -12,14 +14,34 @@ const CommentBox = ({
     handleDeleteClick,
     handleReportClick,
     handleLikeClick,
+    handleShowReplies
 
 }) => {
-    const [showReplies, setShowReplies] = useState(false)
-    const { currentUser } = useSelector(state=>state.user)
-    
+    const { currentUser } = useSelector(state=>state.user);
+    const [showReplies, setShowReplies] = useState(true);
+    const [commentReplies, setCommentReplies] = useState();
 
+    const handleToggleShowReplies = async (commentId)=>{
+        setShowReplies(!showReplies);
+        if(showReplies){
+            try {
+                const response = await fetch(apiEndPoints.getCommentAddress(commentId));
+                const data = await response.json();
+                if(!response.ok){
+                    throw new Error(data?.message || "Network reponse isn't ok while getting replies of a comment")
+                }
+
+                if(data?.success){
+                    setCommentReplies(data?.data || [])
+                    console.log("comment replies", data)
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
     return (
-        <div className="w-full p-4 dark:bg-[rgb(16,23,42)] rounded-lg shadow-md dark:text-white">
+        <div className="w-full p-4 dark:bg-[rgb(16,23,42)] rounded-lg shadow-md dark:text-white m-1">
             {/* Top Row: Username and Time */}
             <div className="flex justify-between items-center mb-2">
                 <span className="font-semibold">{comment?.author?.username}</span>
@@ -36,7 +58,7 @@ const CommentBox = ({
                 <div className='flex gap-5'>
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-1 cursor-pointer" onClick={()=>handleLikeClick(comment?._id)}>
-                            {currentUser?.likedComments?.includes(comment?._id) ? <HiOutlineThumbUp className="w-5 h-5 text-blue-500" /> : <HiThumbUp className="w-5 h-5 text-blue-500" />}
+                            {currentUser?.likedComments?.includes(comment?._id) ? <HiThumbUp className="w-5 h-5 text-blue-500" /> : <HiOutlineThumbUp className="w-5 h-5 text-blue-500" />}
                             <span>{comment?.likes?.length}</span>
                         </div>
                         <div className="flex items-center space-x-1 cursor-pointer">
@@ -45,8 +67,8 @@ const CommentBox = ({
                         </div>
                     </div>
                     <div className="relative flex gap-5">
-                        <div className='cursor-pointer' onClick={()=>setShowReplies(!showReplies)}>
-                            {showReplies ? <span>show replies</span> : <span> hide replies </span>}
+                        <div className='cursor-pointer' onClick={()=>handleToggleShowReplies(comment?._id)}>
+                            { comment?.replies?.length ? (showReplies ? <span>show replies</span> : <span> hide replies </span>) : <span> </span>}
                         </div>
                         <Dropdown
                             label={<HiDotsHorizontal className="w-5 h-5 cursor-pointer" />}
@@ -54,7 +76,7 @@ const CommentBox = ({
                             inline={true}
                             className="text-black dark:text-white"
                         >
-                            <Dropdown.Item onClick={handleReplyClick}>
+                            <Dropdown.Item onClick={()=>handleReplyClick(comment?._id)}>
                                 Reply
                             </Dropdown.Item>
                             <Dropdown.Item onClick={handleEditClick}>
@@ -74,16 +96,17 @@ const CommentBox = ({
                         onClick={()=>handleLikeClick(comment?._id)}
                         className="flex items-center space-x-1 text-blue-500 hover:underline focus:outline-none"
                     >
-                        {currentUser?.likedComments?.includes(comment?._id) ? <div><HiOutlineThumbUp className="w-5 h-5" />
-                        <span>Like</span></div> :
+                        {currentUser?.likedComments?.includes(comment?._id) ? <div><HiThumbUp className="w-5 h-5" />
+                        <span>Liked</span></div> :
 
-                        <div><HiThumbUp className="w-5 h-5" />
-                        <span>Liked</span></div>}
+                        <div><HiOutlineThumbUp className="w-5 h-5" />
+                        <span>Like</span></div>}
 
                          
                     </button>
                 </div>
             </div>
+                {!showReplies && commentReplies?.length > 0 && commentReplies.map((comment, index)=><CommentBox key={index} comment={comment}/>)}
         </div>
     );
 };
