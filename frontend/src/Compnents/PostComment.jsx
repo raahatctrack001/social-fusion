@@ -1,147 +1,126 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { apiEndPoints } from "../apiEndPoints/api.addresses";
-import { updateSuccess } from "../redux/slices/user.slice";
-import CommentForm from "./CommentForm";
-import CommentBox from "./CommentBox";
-import { Alert } from "flowbite-react";
-import CommentsDisabled from "./CommentDisabled";
+import React, { useEffect, useState } from 'react'
+import CommentForm from './CommentForm'
+import { apiEndPoints } from '../apiEndPoints/api.addresses'
+import LoaderPopup from './Loader';
+import CommentBox from './CommentBox';
+import { useSelector } from 'react-redux';
+import { updateSuccess } from '../redux/slices/user.slice';
 
 const PostComment = ({ post }) => {
-    if(!post?.enableComments){
-        return <CommentsDisabled />
-    }
-    console.log("post", post);
-    const { currentUser } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [comments, setComments] = useState(null);
+  const [commentContent, setCommentContent] = useState('');
+  const { currentUser } = useSelector(state=>state.user);
 
-    const [postCommentContent, setPostCommentContent] = useState('');
-    const [render, setRender] = useState(true);
-    // const [replyContent, setReplyContent] = useState("");
-    // const [showReplyBox, setShowReplyBox] = useState({});
-    const [localComments, setLocalComments] = useState(post?.comments?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || []);
-    // const [commentReplies, setCommentReplies] = useState({});
-    // const [showPopup, setShowPopup] = useState(false)
-
-    const handlePostCommentSubmit = async (e) => {
-        e.preventDefault();
-    
+  useEffect(()=>{
+    const getComments = async ()=>{
         try {
-            const formData = new FormData();
-            formData.append("content", postCommentContent);
-            const response = await fetch(apiEndPoints.createCommentAddress(post?._id, currentUser?._id), {
-                method: "POST",
-                body: formData,
-            });
+            const response = await fetch(apiEndPoints.getCommentsOnPostAddress(post?._id));
             const data = await response.json();
-    
-            if (!response.ok) {
-                throw new Error(data.message || "Network response is not ok!");
-            }
-            if (data.success) {
-                console.log("added comment response", data);
-                setLocalComments(data?.data?.currentPost?.comments?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || []);
-    
-                dispatch(updateSuccess(data?.data?.currentUser));
-                setPostCommentContent('');
-                return;
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    
-
-    const handleLikeCommentClick = async (commentId, userId) => {
-        try {
-            const response = await fetch(apiEndPoints.likeCommentAddress(commentId, userId), {
-                method: "POST",
-            });
-            if (!response.ok) {
-                throw new Error(response.message || "Network response is not ok!");
-            }
-
-            const data = await response.json();
-            if (data.success) {
-                setLocalComments(prevComments =>
-                    prevComments.map(comment =>
-                        comment._id === commentId
-                            ? data?.data?.comment
-                            : comment
-                    )
-                );
-
-                dispatch(updateSuccess(data?.data?.currentUser));
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    
-    const handleReportClick = ()=>{
-        alert("feature is under development yet!")
-    }
-    const handleEditClick = ()=>{
-        alert("feature is under development yet!")
-    }
-    const handleDeleteClick = async (comment)=>{
-        try {
-            const response = await fetch(apiEndPoints.deleteCommentAddress(comment?._id), {
-                method: "DELETE"
-            });
-
-            const data = await response.json();
+            console.log(data)
+            console.log(response)
             if(!response.ok){
-                console.log(data.message||"Network response is not ok!")
+                throw new Error(data?.message || "Network response isn't ok while fetchnig post comments!")
             }
+    
             if(data.success){
-                console.log(data);
-                // window.location.reload();
-                // alert(data.message + " if it still appears, don't worry we will update shortly or refresh the page!")
-                const updatedComment = localComments.filter(reply => reply._id != data?.data?._id);
-                setLocalComments(updatedComment);
+                setLoading(false);
+                setComments(data?.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || []);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
-    
-    return (
-        <div className="p-3">
-            {/* Form for posting a comment on the post */}
-            <CommentForm
-                buttonText={"Post Comment"}
-                placeholder={"Write a comment about this post..."}
-                parent={parent}
-                handlePostCommentSubmit={handlePostCommentSubmit}
-                postCommentContent={postCommentContent}
-                setPostCommentContent={setPostCommentContent}
+    getComments();
+  }, [])
+  const handlePostCommentSubmit = async(e)=>{
+     e.preventDefault();
+     try {
+        const formData = new FormData();
+        formData.append("content", commentContent);
+        const response = await fetch(apiEndPoints.createCommentAddress(post?._id, currentUser?._id), {
+           method: "POST",
+           body: formData
+        })
+   
+        const data = await response.json();
+        if(!response.ok){
+           throw new Error(data?.message || "Network response isn't ok while submitting post comment")
+        }
 
-                />
-            {post?.comments?.lenght > 0 && <Alert color={'warning'}>
-              Some updates may take a moment to reflect. Please wait for the changes, or refresh the page to see the latest updates.
-            </Alert>}
+        if(data.success){
+            setCommentContent('')
+            setComments(
+                data?.data?.currentPost?.comments
+                ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || []
+            );
+            dispatch(updateSuccess(data?.data?.currentUser));
+            console.log(data);
+        }
+     } catch (error) {
+        console.log(error);
+     }
+  }
+  
+  const handleEditPostCommentClick = async()=>{
 
-            {localComments?.length > 0 && localComments.map((comment, index) => (
-                <CommentBox
-                    key={index} 
-                    post={post}
-                    comment={comment} 
-                    handleLikeCommentClick={handleLikeCommentClick}
-                    handlePostCommentSubmit={handlePostCommentSubmit}
-                    handleDeleteClick={handleDeleteClick}
-                    handleEditClick={handleEditClick}
-                    handleReportClick={handleReportClick}
-                    postCommentContent={postCommentContent}
-                    setPostCommentContent={setPostCommentContent}
-                    setRender={setRender}
-                    // localComments={localComments}
-                    // setLocalComments={setLocalComments}
-                />
-            ))}        
-            
+  }
+  const handleDeletePostCommentClick = async(comment)=>{
+    // console.log("comment to delete", comment)
+    try {
+        const response = await fetch(apiEndPoints.deleteCommentAddress(comment?._id), {method: "DELETE"});
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error(data?.message || "Network response isn't ok in delete comment submit");
+        }
+
+        if(data?.success){
+            console.log("deletedComment", data)
+            setComments((comments)=>comments?.filter(comment=>comment?._id !== data?.data?._id))
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+  }
+  const handlReportPostCommentClick = async()=>{
+
+  }
+  const handleLikeCommentClick = async()=>{
+
+  }
+  const handleReplyCommentClick = async()=>{
+
+  }
+  if(loading){
+    return <LoaderPopup setLoading={setLoading} loading={loading} info={"fetching comments"} />
+  }
+  return (
+    <div>
+        <div className='w-full dark:border-white p-2 mt-2 rounded-lg'>
+            <CommentForm 
+                commentContent={commentContent} 
+                setCommentContent={setCommentContent} 
+                handleCommentSubmit={handlePostCommentSubmit}           
+            />
+
+            <div>
+             {comments?.length > 0 && comments?.map((comment, index)=><div className='border-2 rounded-lg my-2' key={index}> 
+                    <CommentBox                     
+                        comment={comment} 
+                        handleLikeClick={handleLikeCommentClick}
+                        handleDeleteClick={handleDeletePostCommentClick}
+                        handleReplyClick={handleReplyCommentClick}
+                        handleEditClick={handleEditPostCommentClick}
+                        handleReportClick={handlReportPostCommentClick}
+                    />
+                </div>)}
+            </div>
         </div>
-    );
-};
+    
+    
+    </div>
+  )
+}
 
-export default PostComment;
+export default PostComment

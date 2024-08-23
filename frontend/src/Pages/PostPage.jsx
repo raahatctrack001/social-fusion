@@ -9,13 +9,9 @@ import DisplayContent from '../Compnents/DisplayContent';
 import { useDispatch, useSelector } from 'react-redux';
 import PostOptionsDropdown from '../Compnents/PostOptionDropdown';
 import { updateSuccess } from '../redux/slices/user.slice';
-import { current } from '@reduxjs/toolkit';
-import ShowPosts from '../Compnents/ShowPosts';
 import SharePopup from '../Compnents/ShareURL';
-// import Comment from '../Compnents/PostComment';
-import PostComment from '../Compnents/PostComment';
 import { formatDistanceToNow } from 'date-fns';
-import CommentsDisabled from '../Compnents/CommentDisabled';
+import PostComment from '../Compnents/PostComment';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -255,11 +251,9 @@ const PostPage = () => {
             {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>}
           </div>}
         </div>
-        {post?.enableComments ? <div className='w-full rounded'>
-          <PostComment
-              post={post}
-          /> 
-        </div> : <CommentsDisabled />}
+
+        {post?.comments?.length > 0 && <PostComment post = { post }/>}
+        
     </div>
   )
 }

@@ -142,13 +142,6 @@ export const getPost = asyncHandler(async (req, res, next)=>{
     try {
         await Post
             .findById(req.params?.postId)
-            .populate({
-                path: "comments",
-                populate: {
-                    path: "author",
-                    model: "User",  // Assuming "User" is the model name for the author
-                }
-            })
             .populate("author")
             .then((post)=>{
                 if(!post){

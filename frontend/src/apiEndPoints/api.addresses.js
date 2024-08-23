@@ -31,7 +31,7 @@ export  const apiEndPoints = {
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,
     replyCommentAddress : (parentId, userId)=> `/api/v1/comments/reply-comment/${parentId}/${userId}`,
     
-    getCommentsAddress : ()=> `/api/v1/comments/comments-on-post/`,
+    getCommentsOnPostAddress : (postId)=> `/api/v1/comments/comments-on-post/${postId}`,
     getCommentAddress: (commentId)=>`/api/v1/comments/get-comment/${commentId}`,
     likeCommentAddress : (commentId, userId)=> `/api/v1/comments/like-comment/${commentId}/${userId}`,
     updateCommentsAddress : (commentId)=> `/api/v1/comments/update-comment/${commentId}`,

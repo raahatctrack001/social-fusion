@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.route("/create-comment/:postId/:userId").post(upload.none(), isUserLoggedIn, createComment);
 router.route("/reply-comment/:parentCommentId/:userId").post(upload.none(), isUserLoggedIn, replyComment);
-router.route("/comments-on-post").get(getCommentsOnPost);
+router.route("/comments-on-post/:postId").get(getCommentsOnPost);
 router.route("/get-comment/:commentId").get(getComment);
 router.route("/delete-comment/:commentId").delete(isUserLoggedIn, deleteComment);
 router.route("/update-comment/:commentId").patch(upload.none(), isUserLoggedIn, updateComment);

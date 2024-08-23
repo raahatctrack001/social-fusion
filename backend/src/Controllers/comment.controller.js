@@ -47,7 +47,8 @@ export const replyComment = asyncHandler(async (req, res, next) => {
             throw new apiError(404, "Write some content in the comment box to post!");
         }
 
-        const parentComment = await Comment.findById(parentCommentId);
+        const parentComment = await Comment.findById(parentCommentId).populate("parent");
+        console.log(parentComment);
         if (!parentComment) {
             throw new apiError(404, "Parent comment doesn't exist");
         }
@@ -101,16 +102,19 @@ export const getComment = asyncHandler(async (req, res, next)=>{
 
 
 export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
-    await Comment
-            .find({})
-            .populate(["author parent"])
-            .populate("replies")
-            .then((comments)=>{
-                if(!comments){
-                    throw new apiError(404, "comment doesn't exist! ")
+    console.log(req.params?.postId)
+    await Post
+            .findById(req.params?.postId)
+            .populate({path: "comments", populate: {
+                path: "author", 
+                model: "User"
+            }})
+            .then((post)=>{
+                if(!post){
+                    throw new apiError(404, "post doesn't exist! ")
                 }
-
-                res.status(200).json(new apiResponse(200, "comments fetched", comments))
+                console.log(post)
+                res.status(200).json(new apiResponse(200, "comments fetched", post?.comments))
             })
 
 })
