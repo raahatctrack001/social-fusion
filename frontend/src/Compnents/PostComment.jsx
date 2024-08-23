@@ -3,10 +3,12 @@ import CommentForm from './CommentForm'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import LoaderPopup from './Loader';
 import CommentBox from './CommentBox';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
+import PageLoader from './PageLoader';
 
 const PostComment = ({ post }) => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState(null);
   const [commentContent, setCommentContent] = useState('');
@@ -65,10 +67,11 @@ const PostComment = ({ post }) => {
   const handleEditPostCommentClick = async()=>{
 
   }
-  const handleDeletePostCommentClick = async(comment)=>{
+  const handleDeletePostCommentClick = async(commentId)=>{
     // console.log("comment to delete", comment)
+    setLoading(true)
     try {
-        const response = await fetch(apiEndPoints.deleteCommentAddress(comment?._id), {method: "DELETE"});
+        const response = await fetch(apiEndPoints.deleteCommentAddress(commentId), {method: "DELETE"});
         const data = await response.json();
         if(!response.ok){
             throw new Error(data?.message || "Network response isn't ok in delete comment submit");
@@ -81,22 +84,47 @@ const PostComment = ({ post }) => {
     } catch (error) {
         console.log(error)
     }
+    finally{
+        setLoading(false)
+    }
 
   }
   const handlReportPostCommentClick = async()=>{
 
   }
-  const handleLikeCommentClick = async()=>{
+  const handleLikeCommentClick = async(commentId)=>{
+    
+    try {
+        const response = await fetch(apiEndPoints.likeCommentAddress(commentId, currentUser?._id), {method: "POST"});
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error(data?.message || "Network response isn't ok while like the comment")
+        }
+
+        if(data.success){
+            const likedComment = data?.data?.comment;
+
+            const newComments = comments.map((comment)=>{
+                return comment?._id === likedComment?._id ? likedComment  : comment
+            })
+            setComments(newComments)
+
+            dispatch(updateSuccess(data?.data?.currentUser));
+            console.log("data", data);
+            console.log("current comments", comments);
+        }
+    } catch (error) {
+        console.log(error)
+    }
 
   }
   const handleReplyCommentClick = async()=>{
 
   }
-  if(loading){
-    return <LoaderPopup setLoading={setLoading} loading={loading} info={"fetching comments"} />
-  }
+  
   return (
     <div>
+        {loading && <PageLoader info={"updating data!"} />}
         <div className='w-full dark:border-white p-2 mt-2 rounded-lg'>
             <CommentForm 
                 commentContent={commentContent} 

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
 import { HiChat, HiDotsHorizontal, HiOutlineThumbUp, HiThumbUp } from 'react-icons/hi';
 import { formatDistanceToNow } from 'date-fns';
+import { current } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
 const CommentBox = ({ 
     comment, 
@@ -13,7 +15,7 @@ const CommentBox = ({
 
 }) => {
     const [showReplies, setShowReplies] = useState(false)
-
+    const { currentUser } = useSelector(state=>state.user)
     
 
     return (
@@ -33,8 +35,8 @@ const CommentBox = ({
             <div className="flex justify-between items-center">
                 <div className='flex gap-5'>
                     <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1 cursor-pointer" onClick={handleLikeClick}>
-                            <HiOutlineThumbUp className="w-5 h-5 text-blue-500" />
+                        <div className="flex items-center space-x-1 cursor-pointer" onClick={()=>handleLikeClick(comment?._id)}>
+                            {currentUser?.likedComments?.includes(comment?._id) ? <HiOutlineThumbUp className="w-5 h-5 text-blue-500" /> : <HiThumbUp className="w-5 h-5 text-blue-500" />}
                             <span>{comment?.likes?.length}</span>
                         </div>
                         <div className="flex items-center space-x-1 cursor-pointer">
@@ -58,7 +60,7 @@ const CommentBox = ({
                             <Dropdown.Item onClick={handleEditClick}>
                                 Edit
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={()=>handleDeleteClick(comment)}>
+                            <Dropdown.Item onClick={()=>handleDeleteClick(comment?._id)}>
                                 Delete
                             </Dropdown.Item>
                             <Dropdown.Item onClick={handleReplyClick}>
@@ -69,11 +71,16 @@ const CommentBox = ({
                 </div>
                 <div>
                     <button
-                        onClick={handleLikeClick}
+                        onClick={()=>handleLikeClick(comment?._id)}
                         className="flex items-center space-x-1 text-blue-500 hover:underline focus:outline-none"
                     >
-                        <HiOutlineThumbUp className="w-5 h-5" />
-                        <span>Like</span>
+                        {currentUser?.likedComments?.includes(comment?._id) ? <div><HiOutlineThumbUp className="w-5 h-5" />
+                        <span>Like</span></div> :
+
+                        <div><HiThumbUp className="w-5 h-5" />
+                        <span>Liked</span></div>}
+
+                         
                     </button>
                 </div>
             </div>
