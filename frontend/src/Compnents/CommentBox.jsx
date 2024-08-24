@@ -3,10 +3,11 @@ import { Dropdown } from 'flowbite-react';
 import { HiChat, HiDotsHorizontal, HiOutlineThumbUp, HiThumbUp } from 'react-icons/hi';
 import { formatDistanceToNow } from 'date-fns';
 import { current } from '@reduxjs/toolkit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CommentForm from './CommentForm';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import LoaderPopup from './Loader';
+import { updateSuccess } from '../redux/slices/user.slice';
 
 const CommentBox = ({ 
     comment, 
@@ -27,6 +28,7 @@ const CommentBox = ({
     const [commentReplies, setCommentReplies] = useState([]);
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [replyContent, setReplyContent] = useState('');
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
     const handleToggleShowReplyClick = ()=>{
@@ -35,7 +37,7 @@ const CommentBox = ({
     }
     const handleShowRepliesClick = async ()=>{
         // setShowReplies(!showReplies);
-        if(showReplies){
+        
             setLoading(true)
             try {
                 const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
@@ -56,7 +58,7 @@ const CommentBox = ({
             finally{
                 setLoading(false)
             }
-        }
+        
     }
 
     const handleReplySubmitButtonClick = async (e) => {
@@ -78,9 +80,9 @@ const CommentBox = ({
     
             if (data.success) {
                 console.log("reply data", data);
-                setShowReplies(false)
                 const parent = data?.data?.parent;
                 setCommentReplies(prev=>({...prev, [parent?._id]: parent.replies.sort((a, b)=> new Date(b.createdAt) - new Date(a.createdAt)) || []}))
+                setShowReplies(false)
                 console.log("rendered comment: ", commentReplies)
                 setReplyContent('')
             }
@@ -92,6 +94,32 @@ const CommentBox = ({
         }
     };
     
+    const handleReplyLikeCommentClick = async(commentId)=>{
+    
+        try {
+            const response = await fetch(apiEndPoints.likeCommentAddress(commentId, currentUser?._id), {method: "POST"});
+            const data = await response.json();
+            if(!response.ok){
+                throw new Error(data?.message || "Network response isn't ok while like the comment")
+            }
+    
+            if(data.success){
+                // const likedComment = data?.data?.comment;
+    
+                // const newCommentReplies = commentReplies.map((comment)=>{
+                //     return comment?._id === likedComment?._id ? likedComment  : comment
+                // })
+                // setCommentReplies(newCommentReplies)
+                dispatch(updateSuccess(data?.data?.currentUser));
+                handleShowRepliesClick();
+                console.log("data", data);
+                console.log("current comments", comments);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    
+      }
     console.log(replyContent)
     return (
         <div className="w-full p-4 dark:bg-[rgb(16,23,42)] rounded-lg shadow-md dark:text-white m-1">
@@ -133,7 +161,7 @@ const CommentBox = ({
                             <Dropdown.Item onClick={()=>setShowReplyForm(!showReplyForm)}>
                                 Reply
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={()=>console.log(comment)}>
+                            <Dropdown.Item onClick={()=>setShowEditForm(true)}>
                                 Edit
                             </Dropdown.Item>
                             <Dropdown.Item onClick={()=>handleDeleteClick(comment?._id)}>
@@ -170,7 +198,13 @@ const CommentBox = ({
                     handleCommentSubmit={handleReplySubmitButtonClick}
                 />}
 
-                {!showReplies && commentReplies[comment?._id] && commentReplies[comment?._id].map((comment, index)=><CommentBox key={index} comment={comment}/>)}
+                {!showReplies && 
+                    commentReplies[comment?._id] && 
+                    commentReplies[comment?._id].map((comment, index)=>
+                    <CommentBox key={index} 
+                        comment={comment}
+                        handleLikeClick={handleReplyLikeCommentClick}    
+                        />)}
         </div>
     );
 };

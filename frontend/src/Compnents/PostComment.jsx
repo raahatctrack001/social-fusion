@@ -35,6 +35,7 @@ const PostComment = ({ post }) => {
     }
     getComments();
   }, [])
+
   const handlePostCommentSubmit = async(e)=>{
      e.preventDefault();
      try {
@@ -67,9 +68,10 @@ const PostComment = ({ post }) => {
      }
   }
   
-  const handleEditPostCommentClick = async()=>{
-
+  const handleEditPostCommentClick = async(comment)=>{
+    console.log(comment);
   }
+
   const handleDeletePostCommentClick = async(commentId)=>{
     // console.log("comment to delete", comment)
     setLoading(true)
@@ -96,6 +98,7 @@ const PostComment = ({ post }) => {
   const handlReportPostCommentClick = async()=>{
 
   }
+  
   const handleLikeCommentClick = async(commentId)=>{
     
     try {
@@ -155,7 +158,6 @@ const PostComment = ({ post }) => {
                         handleReplyClick={handleReplyCommentClick}
                         handleEditClick={handleEditPostCommentClick}
                         handleReportClick={handlReportPostCommentClick}
-
                     />
                 </div>)}
             </div>
