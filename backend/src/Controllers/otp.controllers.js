@@ -1,4 +1,5 @@
 import Otp from "../Models/otp.model.js";
+import User from "../Models/user.model.js";
 import { sendEmail } from "../Services/sendEmail.js";
 import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
@@ -29,8 +30,13 @@ export const sendEmailToUser = asyncHandler(async (req, res, next)=>{
 
 export const createAndSendOTP = asyncHandler(async (req, res, next) => {
     try {
-        let otp = Math.floor(Math.random() * 1000000).toString().padStart(6, '0'); // Ensure OTP is 6 digits
         const { email } = req.body;
+        console.log(email)
+        const user = await User.findOne({email});
+        if(user){
+          throw new apiError(409, "User with this email already exists. Please try logging in or use forgot password feature inside sign in page to restore account!")
+        }
+        let otp = Math.floor(Math.random() * 1000000).toString().padStart(6, '0'); // Ensure OTP is 6 digits
         // const html = `<p>Your OTP is: <strong>${otp}</strong></p>`; // Simple HTML for the OTP email
         const html = `<!DOCTYPE html>
                         <html>
@@ -88,10 +94,10 @@ export const createAndSendOTP = asyncHandler(async (req, res, next) => {
                               <p>Hello user of ${email},</p>
                               <p>Thank you for registering with Social Fusion! To complete your registration, please use the following OTP:</p>
                               <div class="otp">${otp}</div>
-                              <p>The OTP is valid for the next 5 minutes. If you did not request this, please ignore this email.</p>
+                              <p>The OTP is valid for the next 15 minutes. If you did not request this, please ignore this email.</p>
                             </div>
                             <div class="footer">
-                              <p>For any assistance, visit our <a href="https://socialfusion.com/help">Help Center</a>.</p>
+                              <p>For any assistance, feel free to visit our <a href="socialfusion001.sf@gmail.com">Help Center</a>.</p>
                               <p>This is an automated message, but if you want, you can reply!!!.</p>
                             </div>
                           </div>

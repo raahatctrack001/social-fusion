@@ -12,6 +12,10 @@ import { passwordSchema } from "../../../backend/src/Validators/user.validator";
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { useRecoilState } from "recoil";
 import { profileState, registrationState } from "../store/userAtom";
+import { isBuffer } from "lodash";
+import LoaderPopup from "../Compnents/Loader";
+import OtpPopup from "../Compnents/OtpPopup";
+// import { register } from "module";
 // import { register } from "module";
 
 
@@ -34,18 +38,16 @@ function validatePassword(password) {
 export default function Register() {
   const prevData = JSON.parse(localStorage.getItem("registerationData"));
   const [registerData, setRegisterData] = useState(prevData||{email:'', password:'', repeatPassword:''});
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
   // const [profileData, setProfileData] = useRecoilState(profileState);
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
   const [repeatPasswordFocus, setRepeatPasswordFocus] = useState(false);
   const [agree, setAgree] = useState(false);
   const validationResults = validatePassword(registerData.password);
+  const [showOTPBox, setShowOTPBox] = useState(false);
   const navigate = useNavigate();
-  
-
-
-
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e)=>{
     e.preventDefault();
@@ -68,18 +70,45 @@ export default function Register() {
 
       const formDataString = JSON.stringify(registerData);
       localStorage.setItem('registerationData', formDataString);
-
-      navigate('profile')
+      verifyEmail();
 
     } catch (err) {
         console.log("error during registration page! email or password might be missing", err);
-        setError(err);
+        setError(err.message);
+    }
+  }
+
+  const verifyEmail = async ()=>{
+    setLoading(true)
+    // setShowOTPBox(true);
+    // return;
+    try {
+      const email = new FormData();
+      email.append("email", registerData.email);
+      const response = await fetch(apiEndPoints.createAndSendOTP(), {method: "POST", body: email});
+      const data = await response.json();
+      if(!response.ok){
+        throw new Error(data?.message|| "network response isn't ok while sending email");
+      }
+
+      if(data.success){
+        setShowOTPBox(true)
+        setLoading(false)
+        console.log(data);
+      }
+    } catch (error) {
+      setError(error.message)
+      console.log(error);
+    }
+    finally{
+      setLoading(false)
     }
   }
   console.log(registerData)
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10  ">
-      
+        {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Preparing to send OTP"} />}
+        {showOTPBox && <OtpPopup email={registerData.email} setShowOTPBox={setShowOTPBox} />}
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
             <h1 className=" flex lg:mb-10 justify-center items-center text-3xl tracking-widest md:tracking-normal md:text-6xl font-bold mb-2 flex-nowrap"> Register Here </h1>
@@ -171,7 +200,8 @@ export default function Register() {
           {error && <Alert color="failure" icon={HiInformationCircle}>
             <span className="font-medium">Alert HOOOOOOMAAANNNN!!! </span> {error}
           </Alert>}
-          <Button onClick={handleRegister} type="submit" outline className="hover:bg-gray-800 flex justify-center items-center" > <span className="pr-2">Register Account</span> <HiArrowCircleRight className="text-2xl" /> </Button>
+          {/* <Button onClick={()=>setLoading(true)}> show popup </Button> */}
+          <Button onClick={handleRegister} type="submit" outline className="hover:bg-gray-800 flex justify-center items-center" > <span className="pr-2"> Register Account </span> <HiArrowCircleRight className="text-2xl" /> </Button>
           <p> Already have an accound? <Link to={"/sign-in"} className="text-blue-400 text-lg tracking-widest"> sign in </Link></p>
       </form>
     </div>

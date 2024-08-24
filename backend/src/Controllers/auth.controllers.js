@@ -17,6 +17,8 @@ import {
 } from "../Validators/user.validator.js";
 import jwt from 'jsonwebtoken'
 import bcryptjs from 'bcryptjs';
+import Otp from "../Models/otp.model.js";
+import { kMaxLength } from "buffer";
 
 export const isAuthorised = asyncHandler(async (req, res, next)=>{
     console.log(req.user)
@@ -25,6 +27,28 @@ export const isAuthorised = asyncHandler(async (req, res, next)=>{
     }
     
     return res.status(401).json( new apiResponse(401, "Unauthorised!", {status: false}))
+})
+
+export const isEmailVerified = asyncHandler(async (req, res, next)=>{
+    try {
+        const { email } = req.body;
+        console.log(req.body)
+        if(!email){
+            throw new apiError(404, "email is necessary to verify")
+        }
+        const otp = await Otp.findOne({email});
+        if(!otp){
+            throw new apiError(404, "Otp doesn't exist, may be it has been expired");
+        }
+    
+        if(!otp.isVerified){
+            throw apiError(401, "email is not verified");
+        }
+    
+        return res.status(200).json(new apiResponse(200, "email has been verified"))
+    } catch (error) {
+        next(error)
+    }
 })
 
 export const registerUser = asyncHandler(async (req, res, next)=>{
@@ -36,7 +60,6 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
     const userData = [username, email, password, repeatPassword, fullName];
     
     try {
-
         if(userData.some(field=>field?.trim()?0:1)){
             throw new apiError(404, "All fields are necessary!");
         }

@@ -1,28 +1,66 @@
 import { Alert, Button, Checkbox, Label, Textarea, TextInput } from "flowbite-react";
-import { useState } from "react";
-import { HiArrowRight, HiGlobeAlt, HiInformationCircle } from "react-icons/hi";
+import { useEffect, useState } from "react";
+import { HiArrowRight, HiCheckCircle, HiGlobeAlt, HiInformationCircle, HiXCircle } from "react-icons/hi";
 import { Link, useNavigate } from 'react-router-dom'
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
+import LoaderPopup from "../Compnents/Loader";
+import AccountCreatedPopup from "../Compnents/AccountCreatedPopup";
 // import { profile } from "console";
 
 
 export default function CreateProfile() {
   const prevData = JSON.parse(localStorage.getItem("profileData"));
-  const [profileData, setProfileData] = useState(prevData || {fullName:'', username:'', bio:''});
+  const [profileData, setProfileData] = useState(prevData || {fullName:'', username:'', bio:'', isVerified: false});
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(null);
   const [agree, setAgree] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const registerationData = JSON.parse(localStorage.getItem("registerationData"));
+  
+  // const [error, setError] = useState(null)
   const  navigate = useNavigate();
 
+  useEffect(()=>{
+    const isVerified = async ()=>{
+      try {
+        setError('');
+        const formData = new FormData();
+        formData.append("email", registerationData.email);
+        const response = await fetch('/api/v1/auth/is-email-verified', {method:"POST", body: formData});
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data?.message || "Network response isn't ok while verifying email status in create profile")
+        }
+
+        if(data.success){
+          setProfileData(prev => ({
+            ...prev,
+            isVerified: true // Update the isVerified field to true
+          }));
+          setIsVerified(true);
+        }
+      } catch (error) {
+        setError(error.message)
+        console.log(error);
+      }
+      
+    }
+    isVerified();
+  }, [])
   
 
   const handleInputChange = (e)=>{
     setProfileData({...profileData, [e.target.id]: e.target.value});
   }
 
-  const registerationData = JSON.parse(localStorage.getItem("registerationData"));
+
+  
+
   const handleCreateAccount = async(e)=>{
     e.preventDefault();
+    setLoading(true);
     localStorage.setItem("profileData", JSON.stringify(profileData));
     try {
       setError(null)
@@ -65,13 +103,24 @@ export default function CreateProfile() {
     } catch (error) {
       setError(error);
     }
+    finally{
+      setLoading(false);
+    }
   }
   // console.log(agree);
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-10 lg:my-8 xl:my-10 ">
-      
+      {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"please be patient, we are creating your account!"} />}
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
+            {
+              isVerified ? 
+              <div className="flex justify-center items-center gap-2 mb-2"> <HiCheckCircle className="text-xl text-green-700"/> Email Verified </div>:
+              <div className="flex justify-center items-center gap-2 mb-2"> <HiXCircle className="text-xl text-red-700"/> Email isn't verified yet</div>
+            }
+
+            {showSuccessPopup && <AccountCreatedPopup setShowPopup={setShowSuccessPopup} />}
+
             <Alert color={"success"} className=" flex lg:mb-10 justify-center items-center text-3xl md:text-6xl font-bold mb-2 text-nowrap"> Introduce Yourself! </Alert>
             <div className="mt-5 flex justify-center items-center gap-5 mb-5  rounded-lg px-3">
               {/* <p className="flex-1 w-full self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold  p-2 rounded-2xl text-gray-900 mb-5 flex justify-center">Soul Echo </p> */}
@@ -116,7 +165,7 @@ export default function CreateProfile() {
             <span className="font-medium">Alert HOOOOOOMAAANNNN!!! </span> {message}
           </Alert>}
           <Button onClick={handleCreateAccount}  type="submit" outline className="hover:bg-gray-800">Create Account</Button>
-          <p> Already have an accound? <Link to={"/sign-in"} className="text-blue-400 text-lg tracking-widest"> sign in </Link></p>
+          {/* <p> Already have an accound? <Link to={"/sign-in"} className="text-blue-400 text-lg tracking-widest"> sign in </Link></p> */}
       </form>
     </div>
   );

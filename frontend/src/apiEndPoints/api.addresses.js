@@ -38,4 +38,7 @@ export  const apiEndPoints = {
     deleteCommentAddress : (commentId)=> `/api/v1/comments/delete-comment/${commentId}`,
 
     createFeedbackAddress: (authorId)=>`/api/v1/feedback/send-feedback/${authorId}`,
+
+    createAndSendOTP: ()=>`/api/v1/otp/send-email`,
+    verifyOTPAddress: ()=>`/api/v1/otp/verify-email`,   
 }

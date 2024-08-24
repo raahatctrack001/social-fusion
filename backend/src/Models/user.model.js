@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
         trim: true,
         required: true,
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
     fullName: {
         type: String,
         trim: true, 

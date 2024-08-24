@@ -27,6 +27,8 @@ import UnderDevelopment from "./TestComponent/UnderDevelopment"
 import ThemedComponent from "./Compnents/ThemedComponent"
 import PageLoader from "./Compnents/PageLoader"
 import AllRoute from "./Pages/AllRoute"
+import OtpPopup from "./Compnents/OtpPopup"
+import AccountCreatedPopup from "./Compnents/AccountCreatedPopup"
 
 function App() {
   return   <BrowserRouter>
@@ -58,7 +60,7 @@ function App() {
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
                   <Route path="/contacts" element={<UnderDevelopment />} />
                   <Route path="/prices" element={<UnderDevelopment />} />
-                  <Route path="/test-route" element={<PageLoader />} />
+                  <Route path="/test-route" element={<AccountCreatedPopup />} />
                   <Route path="/*" element={<AllRoute />} />
                 </Routes>
                 <FooterComp />

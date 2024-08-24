@@ -3,6 +3,7 @@ import {
     deleteUser, 
     googleLogin, 
     isAuthorised, 
+    isEmailVerified, 
     loginUser, 
     logoutUser, 
     registerUser,
@@ -33,6 +34,6 @@ router.route("/login").post(upload.none(), loginUser);
 router.route("/logout").post(isUserLoggedIn, logoutUser);
 router.route("/update-password/:userId").patch(upload.none(), isUserLoggedIn,  updatePassword);
 router.route("/delete-user").delete(isUserLoggedIn, deleteUser);
-
+router.route("/is-email-verified").post(upload.none(), isEmailVerified);
 export default router;
 
