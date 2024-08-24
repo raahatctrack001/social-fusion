@@ -209,7 +209,7 @@ const CommentBox = ({
                     </div>
                     <div className="relative flex gap-5">
                         <div className='cursor-pointer' onClick={handleToggleShowReplyClick}>
-                            { comment?.replies?.length ? (showReplies ? <span>show replies</span> : <span> hide replies </span>) : <span> </span>}
+                            { commentReplies[comment?._id]?.length || comment?.replies?.length ? (showReplies ? <span>show replies</span> : <span> hide replies </span>) : <span> </span>}
                         </div>
                         <Dropdown
                             label={<HiDotsHorizontal className="w-5 h-5 cursor-pointer" />}
@@ -220,12 +220,12 @@ const CommentBox = ({
                             <Dropdown.Item onClick={()=>setShowReplyForm(!showReplyForm)}>
                                 Reply
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={()=>setShowEditForm(!showEditForm)}>
+                            {currentUser?._id === comment?.author?._id && <Dropdown.Item onClick={()=>setShowEditForm(!showEditForm)}>
                                 Edit
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={()=>handleDeleteClick(comment?._id)}>
+                            </Dropdown.Item>}
+                            {currentUser?._id === comment?.author?._id && <Dropdown.Item onClick={()=>handleDeleteClick(comment?._id)}>
                                 Delete
-                            </Dropdown.Item>
+                            </Dropdown.Item>}
                             <Dropdown.Item onClick={handleReplyClick}>
                                 Report
                             </Dropdown.Item>
