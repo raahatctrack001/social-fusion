@@ -58,6 +58,7 @@ const CommentBox = ({
             }
         }
     }
+
     const handleReplySubmitButtonClick = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -77,6 +78,7 @@ const CommentBox = ({
     
             if (data.success) {
                 console.log("reply data", data);
+                setShowReplies(false)
                 const parent = data?.data?.parent;
                 setCommentReplies(prev=>({...prev, [parent?._id]: parent.replies.sort((a, b)=> new Date(b.createdAt) - new Date(a.createdAt)) || []}))
                 console.log("rendered comment: ", commentReplies)
@@ -115,7 +117,7 @@ const CommentBox = ({
                         </div>
                         <div className="flex items-center space-x-1 cursor-pointer">
                             <HiChat className="w-5 h-5 text-blue-500" />
-                            <span>{comment?.replies?.length}</span>
+                            <span>{commentReplies[comment?._id]?.length||comment?.replies?.length}</span>
                         </div>
                     </div>
                     <div className="relative flex gap-5">
@@ -131,7 +133,7 @@ const CommentBox = ({
                             <Dropdown.Item onClick={()=>setShowReplyForm(!showReplyForm)}>
                                 Reply
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={handleEditClick}>
+                            <Dropdown.Item onClick={()=>console.log(comment)}>
                                 Edit
                             </Dropdown.Item>
                             <Dropdown.Item onClick={()=>handleDeleteClick(comment?._id)}>
@@ -168,7 +170,7 @@ const CommentBox = ({
                     handleCommentSubmit={handleReplySubmitButtonClick}
                 />}
 
-                {!showReplies &&  commentReplies[comment?._id] && commentReplies[comment?._id].map((comment, index)=><CommentBox key={index} comment={comment}/>)}
+                {!showReplies && commentReplies[comment?._id] && commentReplies[comment?._id].map((comment, index)=><CommentBox key={index} comment={comment}/>)}
         </div>
     );
 };
