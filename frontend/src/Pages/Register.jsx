@@ -46,8 +46,9 @@ export default function Register() {
   const [agree, setAgree] = useState(false);
   const validationResults = validatePassword(registerData.password);
   const [showOTPBox, setShowOTPBox] = useState(false);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegister = async (e)=>{
     e.preventDefault();
@@ -94,6 +95,7 @@ export default function Register() {
       if(data.success){
         setShowOTPBox(true)
         setLoading(false)
+        setOtpSent(true);
         console.log(data);
       }
     } catch (error) {
@@ -104,7 +106,10 @@ export default function Register() {
       setLoading(false)
     }
   }
-  console.log(registerData)
+  const handleShowOTPBox = (e)=>{
+    e.preventDefault();
+    setShowOTPBox(true)
+  }
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10  ">
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Preparing to send OTP"} />}
@@ -201,7 +206,11 @@ export default function Register() {
             <span className="font-medium">Alert HOOOOOOMAAANNNN!!! </span> {error}
           </Alert>}
           {/* <Button onClick={()=>setLoading(true)}> show popup </Button> */}
+          {otpSent ?
+          <Button onClick={handleShowOTPBox} type="submit" outline className="hover:bg-gray-800 flex justify-center items-center" > <span className="pr-2"> Show OTP Box </span> </Button>:
+ 
           <Button onClick={handleRegister} type="submit" outline className="hover:bg-gray-800 flex justify-center items-center" > <span className="pr-2"> Register Account </span> <HiArrowCircleRight className="text-2xl" /> </Button>
+          }
           <p> Already have an accound? <Link to={"/sign-in"} className="text-blue-400 text-lg tracking-widest"> sign in </Link></p>
       </form>
     </div>

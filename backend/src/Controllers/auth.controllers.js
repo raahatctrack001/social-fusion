@@ -30,6 +30,8 @@ export const isAuthorised = asyncHandler(async (req, res, next)=>{
 })
 
 export const isEmailVerified = asyncHandler(async (req, res, next)=>{
+    // const deletedOTP = await Otp.deleteMany({});
+    // console.log(deletedOTP)
     try {
         const { email } = req.body;
         console.log(req.body)
@@ -42,10 +44,15 @@ export const isEmailVerified = asyncHandler(async (req, res, next)=>{
         }
     
         if(!otp.isVerified){
-            throw apiError(401, "email is not verified");
+            throw new apiError(401, "email is not verified");
         }
-    
-        return res.status(200).json(new apiResponse(200, "email has been verified"))
+        
+        await Otp
+            .findByIdAndDelete(otp?._id)
+            .then((deletedOTP)=>{
+                 return res.status(200).json(new apiResponse(200, "email has been verified and otp has been deleted!", deletedOTP))
+            })
+            .catch(err=>next(err))
     } catch (error) {
         next(error)
     }

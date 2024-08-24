@@ -35,6 +35,7 @@ export default function CreateProfile() {
         }
 
         if(data.success){
+          console.log("data", data);
           setProfileData(prev => ({
             ...prev,
             isVerified: true // Update the isVerified field to true
@@ -60,6 +61,11 @@ export default function CreateProfile() {
 
   const handleCreateAccount = async(e)=>{
     e.preventDefault();
+    if(!isVerified){
+      alert("your email isn't verified yet!, please verify first")
+      navigate('/register')
+      return;
+    }
     setLoading(true);
     localStorage.setItem("profileData", JSON.stringify(profileData));
     try {
