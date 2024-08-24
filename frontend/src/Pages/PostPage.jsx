@@ -251,7 +251,7 @@ const PostPage = () => {
             {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>}
           </div>}
         </div>
-
+        
         {post?.comments?.length > 0 && <PostComment post = { post }/>}
         
     </div>

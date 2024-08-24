@@ -52,11 +52,14 @@ const PostComment = ({ post }) => {
 
         if(data.success){
             setCommentContent('')
-            setComments(
-                data?.data?.currentPost?.comments
-                ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || []
-            );
+            // const updatedComment = 
+            setComments(prev => 
+                [...prev, data?.data?.newComment]
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              );
+                          
             dispatch(updateSuccess(data?.data?.currentUser));
+            // setCommentContent('')
             console.log(data);
         }
      } catch (error) {
@@ -120,8 +123,8 @@ const PostComment = ({ post }) => {
 
   }
 
-  const handleReplyCommentClick = async()=>{
-
+  const handleReplyCommentClick = async(comment)=>{
+    console.log("replying on commment", comment);
   }
 
   const handleShowReplies = async ()=>{
@@ -133,6 +136,9 @@ const PostComment = ({ post }) => {
         {loading && <PageLoader info={"updating data!"} />}
         <div className='w-full dark:border-white p-2 mt-2 rounded-lg'>
             <CommentForm 
+                keepX={false}
+                placeholder={"Write a comment about this post..."}
+                buttonText={"Post Comment"}
                 commentContent={commentContent} 
                 setCommentContent={setCommentContent} 
                 handleCommentSubmit={handlePostCommentSubmit}           
@@ -141,7 +147,9 @@ const PostComment = ({ post }) => {
             <div>
              {comments?.length > 0 && comments?.map((comment, index)=><div className='border-2 p-1 pr-3 rounded-lg my-1' key={index}> 
                     <CommentBox                     
-                        comment={comment} 
+                        comment={comment}   
+                        comments={comments}
+                        setComments={setComments}                      
                         handleLikeClick={handleLikeCommentClick}
                         handleDeleteClick={handleDeletePostCommentClick}
                         handleReplyClick={handleReplyCommentClick}

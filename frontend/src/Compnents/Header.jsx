@@ -81,9 +81,7 @@ export default function Header() {
       }, 2000);
       return ()=>clearTimeout(timeout)
     }
-    else{
-      navigate('/')
-    }
+    
     
   }, [searchTerm])
   
@@ -92,14 +90,19 @@ export default function Header() {
     <div className="sticky top-0 z-50">
     {/* ///search popup starts here */}
     {showSearchPopup && (
-        <div className="fixed inset-0 bg-opacity-50 z-20">
-          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+        <div 
+            // onMouseLeave={()=>console.log("mouse left")}
+            className="fixed inset-0 bg-opacity-50 z-20"
+             >
+          <div className="bg-blue-950 p-6 rounded-lg shadow-lg flex flex-col">
             <div className="flex justify-between relative">
+            <p> search substring of title, content, category... </p>
             <div> </div>
             <div onClick={()=>setShowSearchPopup(!showSearchPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700"/> </div>
             </div>
            <TextInput 
-                onChange={(e)=>navigate(`/search-posts/?query=${e.target.value}`)}
+                
+                onChange={(e)=>setSearchTerm(e.target.value)}
                 type="text" placeholder="search title content or category of post..." /> 
             
           </div>

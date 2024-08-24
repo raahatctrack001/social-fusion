@@ -6,9 +6,12 @@ import { current } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import CommentForm from './CommentForm';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import LoaderPopup from './Loader';
 
 const CommentBox = ({ 
     comment, 
+    comments,
+    setComments,
     handleReplyClick,
     handleEditClick,
     handleDeleteClick,
@@ -18,31 +21,80 @@ const CommentBox = ({
 
 }) => {
     const { currentUser } = useSelector(state=>state.user);
+    // const [currentComment, setCurrentComment] = useState(comment);
     const [showReplies, setShowReplies] = useState(true);
-    const [commentReplies, setCommentReplies] = useState();
+    const [currentReplies, setCurrentReplies] = useState();
+    const [commentReplies, setCommentReplies] = useState([]);
+    const [showReplyForm, setShowReplyForm] = useState(false);
+    const [replyContent, setReplyContent] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleToggleShowReplies = async (commentId)=>{
+    const handleToggleShowReplyClick = ()=>{
         setShowReplies(!showReplies);
+        handleShowRepliesClick()
+    }
+    const handleShowRepliesClick = async ()=>{
+        // setShowReplies(!showReplies);
         if(showReplies){
+            setLoading(true)
             try {
-                const response = await fetch(apiEndPoints.getCommentAddress(commentId));
+                const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
                 const data = await response.json();
                 if(!response.ok){
                     throw new Error(data?.message || "Network reponse isn't ok while getting replies of a comment")
                 }
 
                 if(data?.success){
-                    setCommentReplies(data?.data || [])
                     console.log("comment replies", data)
+                    
+                    setCommentReplies(prev=>({...prev, [comment?._id]: data?.data || []}))
+                    console.log(commentReplies)
                 }
             } catch (error) {
                 console.log(error);
             }
+            finally{
+                setLoading(false)
+            }
         }
     }
+    const handleReplySubmitButtonClick = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("content", replyContent);
+    
+            const response = await fetch(apiEndPoints.replyCommentAddress(comment?._id, currentUser?._id), {
+                method: "POST",
+                body: formData,
+            });
+    
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data?.message || "Network response isn't ok from reply comment component!");
+            }
+    
+            if (data.success) {
+                console.log("reply data", data);
+                const parent = data?.data?.parent;
+                setCommentReplies(prev=>({...prev, [parent?._id]: parent.replies.sort((a, b)=> new Date(b.createdAt) - new Date(a.createdAt)) || []}))
+                console.log("rendered comment: ", commentReplies)
+                setReplyContent('')
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        finally{
+            setLoading(false)
+        }
+    };
+    
+    console.log(replyContent)
     return (
         <div className="w-full p-4 dark:bg-[rgb(16,23,42)] rounded-lg shadow-md dark:text-white m-1">
             {/* Top Row: Username and Time */}
+            {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Updating Coments"} />}
             <div className="flex justify-between items-center mb-2">
                 <span className="font-semibold">{comment?.author?.username}</span>
                 <span className="text-sm text-gray-400">{formatDistanceToNow(comment?.createdAt, {addSuffix: true})}</span>
@@ -67,7 +119,7 @@ const CommentBox = ({
                         </div>
                     </div>
                     <div className="relative flex gap-5">
-                        <div className='cursor-pointer' onClick={()=>handleToggleShowReplies(comment?._id)}>
+                        <div className='cursor-pointer' onClick={handleToggleShowReplyClick}>
                             { comment?.replies?.length ? (showReplies ? <span>show replies</span> : <span> hide replies </span>) : <span> </span>}
                         </div>
                         <Dropdown
@@ -76,7 +128,7 @@ const CommentBox = ({
                             inline={true}
                             className="text-black dark:text-white"
                         >
-                            <Dropdown.Item onClick={()=>handleReplyClick(comment?._id)}>
+                            <Dropdown.Item onClick={()=>setShowReplyForm(!showReplyForm)}>
                                 Reply
                             </Dropdown.Item>
                             <Dropdown.Item onClick={handleEditClick}>
@@ -94,7 +146,7 @@ const CommentBox = ({
                 <div>
                     <button
                         onClick={()=>handleLikeClick(comment?._id)}
-                        className="flex items-center space-x-1 text-blue-500 hover:underline focus:outline-none"
+                        className="hidden md:flex items-center space-x-1 text-blue-500 hover:underline focus:outline-none"
                     >
                         {currentUser?.likedComments?.includes(comment?._id) ? <div><HiThumbUp className="w-5 h-5" />
                         <span>Liked</span></div> :
@@ -106,7 +158,17 @@ const CommentBox = ({
                     </button>
                 </div>
             </div>
-                {!showReplies && commentReplies?.length > 0 && commentReplies.map((comment, index)=><CommentBox key={index} comment={comment}/>)}
+                {showReplyForm && <CommentForm
+                    keepX={true}
+                    setShowCommentForm={setShowReplyForm}
+                    placeholder={"Write a reply about this comment..."}
+                    buttonText={"Post Reply"}
+                    commentContent={replyContent}
+                    setCommentContent={setReplyContent}
+                    handleCommentSubmit={handleReplySubmitButtonClick}
+                />}
+
+                {!showReplies &&  commentReplies[comment?._id] && commentReplies[comment?._id].map((comment, index)=><CommentBox key={index} comment={comment}/>)}
         </div>
     );
 };

@@ -5,10 +5,18 @@ import { databaseConnection } from './backend/src/Databases/mongodb.connection.j
 
 dotenv.config({path: './.env'})
 
-databaseConnection().then((connectionInstance)=>{
-    const port = process.env.PORT;
-    console.log(`mongodb connection has been established at`, connectionInstance.connection.host)
-    app.listen(port, ()=>{
-        console.log(`server is up and live on ${port}`)
+databaseConnection()
+    .then((connectionInstance)=>{
+        const port = process.env.PORT;
+        console.log(`mongodb connection has been established at`, connectionInstance.connection.host)
+        app.listen(port, ()=>{
+            console.log(`server is up and live on ${port}`)
+        })
     })
-})
+    .catch((error)=>{
+        console.log("trying to connect database", error);
+        setTimeout(() => {
+            databaseConnection();
+            
+        }, 5000);
+    })

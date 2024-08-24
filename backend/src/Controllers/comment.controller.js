@@ -32,7 +32,7 @@ export const createComment = asyncHandler(async (req, res, next)=>{
 
         await currentPost.save();
         await currentUser.save();
-        return res.status(200).json(new apiResponse(200, "commend added", {currentPost, currentUser}))
+        return res.status(200).json(new apiResponse(200, "commend added", {newComment, currentUser}))
     } catch (error) {
         next(error)
     }
@@ -43,11 +43,14 @@ export const replyComment = asyncHandler(async (req, res, next) => {
         const { parentCommentId, userId } = req.params;
         const { content } = req.body;
 
+        console.log(req.params);
+        console.log(req.body)
+
         if (!content || content.trim() === '') {
             throw new apiError(404, "Write some content in the comment box to post!");
         }
 
-        const parentComment = await Comment.findById(parentCommentId).populate("parent");
+        const parentComment = await Comment.findById(parentCommentId);
         console.log(parentComment);
         if (!parentComment) {
             throw new apiError(404, "Parent comment doesn't exist");
@@ -58,17 +61,23 @@ export const replyComment = asyncHandler(async (req, res, next) => {
             throw new apiError(404, "Current user doesn't exist");
         }
 
-        const newComment = await Comment.create({ content: content, author: currentUser._id, parent: parentComment._id });
-        parentComment.replies.push(newComment._id);
-        currentUser.comments.push(newComment._id);
+        const comment = await Comment.create({ content: content, author: currentUser._id, parent: parentComment._id });
+        parentComment.replies.push(comment._id);
+        currentUser.comments.push(comment._id);
 
         await parentComment.save();
         await currentUser.save();
-
+        const parent = await parentComment?.populate({
+            path:"replies",
+            populate: {
+                path: "author",
+                model: 'User'
+            }
+        })
         // Populate the new comment with author information and send it without circular references
         // const populatedNewComment = await Comment.findById(newComment._id).populate('author', 'username email');
-
-        return res.status(200).json(new apiResponse(200, "Comment replied", {parentComment, currentUser}))
+        // const newComment = await comment.populate("author");
+        return res.status(200).json(new apiResponse(200, "Comment replied", {parent, currentUser}))
         
     } catch (error) {
         next(error);
