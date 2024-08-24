@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import LoaderPopup from "../Compnents/Loader";
 import AccountCreatedPopup from "../Compnents/AccountCreatedPopup";
+import SuccessPopup from "../Compnents/AccountCreatedPopup";
 // import { profile } from "console";
 
 
@@ -42,6 +43,11 @@ export default function CreateProfile() {
           }));
           setIsVerified(true);
         }
+        else{
+          alert("your email isn't verified yet!, please verify first")
+          navigate('/register')
+          return;
+        }
       } catch (error) {
         setError(error.message)
         console.log(error);
@@ -61,11 +67,6 @@ export default function CreateProfile() {
 
   const handleCreateAccount = async(e)=>{
     e.preventDefault();
-    if(!isVerified){
-      alert("your email isn't verified yet!, please verify first")
-      navigate('/register')
-      return;
-    }
     setLoading(true);
     localStorage.setItem("profileData", JSON.stringify(profileData));
     try {
@@ -101,7 +102,7 @@ export default function CreateProfile() {
       if(data.success){
         localStorage.removeItem("registerationData");
         localStorage.removeItem("profileData");
-        navigate("/sign-in")
+        setShowSuccessPopup(true)
       }
 
       console.log(data)
@@ -117,6 +118,7 @@ export default function CreateProfile() {
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-10 lg:my-8 xl:my-10 ">
       {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"please be patient, we are creating your account!"} />}
+      {showSuccessPopup && <SuccessPopup heading={"Account Created!"} info={`We welcome you ${profileData?.fullName}! to our community! Kindly sign in to continue!`} setShowPopup={setShowSuccessPopup} />}
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
             {
@@ -125,7 +127,6 @@ export default function CreateProfile() {
               <div className="flex justify-center items-center gap-2 mb-2"> <HiXCircle className="text-xl text-red-700"/> Email isn't verified yet</div>
             }
 
-            {showSuccessPopup && <AccountCreatedPopup setShowPopup={setShowSuccessPopup} />}
 
             <Alert color={"success"} className=" flex lg:mb-10 justify-center items-center text-3xl md:text-6xl font-bold mb-2 text-nowrap"> Introduce Yourself! </Alert>
             <div className="mt-5 flex justify-center items-center gap-5 mb-5  rounded-lg px-3">

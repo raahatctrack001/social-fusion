@@ -71,17 +71,17 @@ function resetPassword() {
       window.location.reload();
     };
   return (
-    <div className="max-w-md mx-auto mt-3">
+    <div className="mt-3 flex flex-col items-center justify-center p-2 md:p-5">
       <PasswordResetSuccessPopup show={showPopup} onClose={handleClosePopup} />
 
-      <h2 className="text-2xl font-bold mb-3 text-center">Update Password</h2>
-      <form onSubmit={handleUpdatePassword} className='p-5 space-y-3'>
+      <h2 className="text-2xl font-bold mb-3 text-center text-red-600">Update Password</h2>
+      <form onSubmit={handleUpdatePassword} className='p-5 space-y-3 border-2 border-red-500 rounded-lg w-full md:w-3/4 xl:w-1/2'>
         <div className="mb-4 relative">
-          <div className='flex justify-between mr-4 '>
+          <div className='flex justify-between mr-4 mb-1'>
             <Label htmlFor="oldPassword" value="Old Password" />
             { seeOldPassword ? 
-                    <HiEyeOff onClick={()=>setSeeOldPassword(seeOldPassword?false:true)} className='relative top-8 z-10' />: 
-                    <HiEye onClick={()=>setSeeOldPassword(seeOldPassword?false:true)}  className='relative top-8 z-10' /> }
+                    <HiEyeOff onClick={()=>setSeeOldPassword(seeOldPassword?false:true)} className='relative top-9 z-10' />: 
+                    <HiEye onClick={()=>setSeeOldPassword(seeOldPassword?false:true)}  className='relative top-9 z-10' /> }
           </div>
           <TextInput
             id="oldPassword"
@@ -93,11 +93,11 @@ function resetPassword() {
           />
         </div>
         <div className="mb-4">
-            <div className='flex justify-between mr-4 '>
+            <div className='flex justify-between mr-4 mb-1'>
                 <Label htmlFor="newPassword" value="New Password" />
                 { seeNewPassword ? 
-                    <HiEyeOff onClick={()=>setSeeNewPassword(seeNewPassword?false:true)} className='relative top-8 z-10' />: 
-                    <HiEye onClick={()=>setSeeNewPassword(seeNewPassword?false:true)}  className='relative top-8 z-10' /> }
+                    <HiEyeOff onClick={()=>setSeeNewPassword(seeNewPassword?false:true)} className='relative top-9 z-10' />: 
+                    <HiEye onClick={()=>setSeeNewPassword(seeNewPassword?false:true)}  className='relative top-9 z-10' /> }
             </div>
           <TextInput
             id="newPassword"
@@ -109,11 +109,11 @@ function resetPassword() {
           />
         </div>
         <div className="mb-4">
-            <div className='flex justify-between mr-4 '>
+            <div className='flex justify-between mr-4 mb-1'>
                 <Label htmlFor="repeatPassword" value="Repeat New Password" />
                 { seeRepeatPassword ? 
-                    <HiEyeOff onClick={()=>setSeeRepeatPassword(seeRepeatPassword?false:true)} className='relative top-8 z-10' />: 
-                    <HiEye onClick={()=>setSeeRepeatPassword(seeRepeatPassword?false:true)}  className='relative top-8 z-10' /> }
+                    <HiEyeOff onClick={()=>setSeeRepeatPassword(seeRepeatPassword?false:true)} className='relative top-9 z-10' />: 
+                    <HiEye onClick={()=>setSeeRepeatPassword(seeRepeatPassword?false:true)}  className='relative top-9 z-10' /> }
             </div>
           <TextInput
             id="repeatPassword"
@@ -126,7 +126,7 @@ function resetPassword() {
         </div>
         {error && <Alert color={'failure'}> {error} </Alert>}
         {success && <Alert color={'success'}> {success} </Alert> }
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" color={'failure'}>
           Update Password
         </Button>
       </form>

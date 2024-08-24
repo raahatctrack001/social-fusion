@@ -14,6 +14,7 @@ const ProfileEditPage = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [error, setError] = useState(null)
   const [showModal, setShowModal] = useState(false)
+  const [editSuccessPopup, setEditSuccessPopup] = useState(false)
 
   const [formData, setFormData] = useState({
     username: currentUser?.username || '',
@@ -45,19 +46,17 @@ const ProfileEditPage = () => {
         },
         body: JSON.stringify(formData)
       })
+      const data = await response.json();
       if(!response.ok){
-        setError(response.message);
+        setError(data.message || "Network response isn't ok while profile edit submit pgae!");
         // alert("failed to update profile");
       }
 
 
-      const data = await response.json();
-      console.log("response", response); 
-      console.log("data", data);
+      
       if(data.success){
         dispatch(updateSuccess(data.data));
-        alert('Profile updated successfully!');
-        window.location.reload();
+        
         return;
       }
       setError(data.message)
@@ -81,6 +80,7 @@ const ProfileEditPage = () => {
       console.log(response);
       console.log(data);
       if(data.success){
+
         dispatch(deleteUserSuccess());
         return;
       }

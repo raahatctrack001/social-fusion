@@ -60,7 +60,7 @@ function App() {
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
                   <Route path="/contacts" element={<UnderDevelopment />} />
                   <Route path="/prices" element={<UnderDevelopment />} />
-                  <Route path="/test-route" element={<AccountCreatedPopup />} />
+                  <Route path="/test-route" element={<AccountCreatedPopup heading={"Account Created!"} info={"your account has been created!"}  />} />
                   <Route path="/*" element={<AllRoute />} />
                 </Routes>
                 <FooterComp />
