@@ -1,61 +1,46 @@
-import { formatISODuration } from 'date-fns';
-import { Button, Textarea } from 'flowbite-react';
-import React, { useState } from 'react'
-import { HiX } from 'react-icons/hi'
-import { apiEndPoints } from '../apiEndPoints/api.addresses';
+import React, { useState } from 'react';
+import { HiX } from 'react-icons/hi';
 
-const EditCommentPopup = ({showEditPopup, setShowEditPopup, comment}) => {
-    // const [editContent, setEditContent] = useState(comment);
-    const [formData, setFormData] = useState({content: comment?.content||''})
-    console.log(formData)
-
-    const handleEditCommentSubmit = async(e)=>{
+const EditCommentPopup = ({ placeholder, buttonText, keepX, commentContent, setCommentContent, setShowCommentForm, handleCommentSubmit }) => {
+    const [editContent, setEditContent] = useState(commentContent)
+    const handleFormSubmit = (e)=>{
         e.preventDefault();
-        try {
-            const response = await fetch(apiEndPoints.updateCommentsAddress(comment?._id), {
-                method: "PATCH",
-                body: formData,
-            })
-            const data = await response.json();
-            if(!response.ok){
-                console.log(data.message||"Network response is not ok!")
-            }
-
-            if(data.success){
-                
-            }
-        } catch (error) {
-            console.log(error)
-        }
+        handleCommentSubmit(editContent)
+        setShowCommentForm(false)
     }
-  return (
-    <div className="flex justify-center items-center h-screen">
-       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="p-6 rounded-lg shadow-lg w-96">
-            <div className='flex justify-between items-center '> 
-                <div> </div> 
-                <button
-                    className="px-4 flex justify-center items-center gap-2 py-2 bg-red-600 text-white font-semibold rounded-md"
-                    onClick={()=>setShowEditPopup(!showEditPopup)}
-                    >
-                    <HiX /> Close              
-                </button>
+    return (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="relative w-full md:w-3/4 p-4 dark:bg-[rgb(16,23,42)] bg-white border rounded-lg shadow-lg">
+                <div className='flex justify-between items-center mb-4'>
+                    <h2 className="text-lg font-semibold">{keepX ? "Edit Reply" : "Edit Comment"}</h2>
+                    {keepX && (
+                        <button onClick={() => setShowCommentForm(false)} className="text-xl">
+                            <HiX className='dark:text-white' />
+                        </button>
+                    )}
+                </div>
+                <form onSubmit={handleFormSubmit}>
+                    <div className="mb-4">
+                        <textarea
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 dark:bg-[rgb(16,23,42)] focus:ring-blue-500"
+                            placeholder={placeholder}
+                            rows="4"
+                            value={editContent}
+                            onChange={(e) => setEditContent(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex justify-end">
+                        <button
+                            type="submit"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            {buttonText}
+                        </button>
+                    </div>
+                </form>
             </div>
-            <h2 className="text-xl font-semibold mb-4">Edit Comment</h2>
-            <form onSubmit={handleEditCommentSubmit} className='space-y-3'>
-                <Textarea
-                    id='content'
-                    value={formData?.content || ""}
-                    onChange={(e)=>setFormData({...formData, [e.target.id]: e.target.value})}
-                />
-                <Button type='submit' className='w-full'> Edit </Button>
-            </form>
-            
-          </div>
         </div>
-      
-    </div>
-)}
+    );
+};
 
-export default EditCommentPopup
-
+export default EditCommentPopup;

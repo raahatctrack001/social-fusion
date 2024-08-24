@@ -13,7 +13,7 @@ const PostComment = ({ post }) => {
   const [comments, setComments] = useState(null);
   const [commentContent, setCommentContent] = useState('');
   const { currentUser } = useSelector(state=>state.user);
-
+  const [editedCommentContent, setEditedCommentContent] = useState('');
   useEffect(()=>{
     const getComments = async ()=>{
         try {
@@ -68,8 +68,32 @@ const PostComment = ({ post }) => {
      }
   }
   
-  const handleEditPostCommentClick = async(comment)=>{
-    console.log(comment);
+  const handleEditPostCommentClick = async(comment, editedContent)=>{
+    
+    try {
+        setLoading(true)
+        const formData = new FormData();
+        formData.append("editedContent", editedContent)
+        const response = await fetch(apiEndPoints.updateCommentAddress(comment?._id), {method: "PATCH", body: formData});
+        const data = await response.json();
+        
+        if(!response.json()){
+            throw new Error(data?.message || "Network response isn't ok while editing main comments");
+        }
+
+        if(data?.success){
+            const editedComment = data?.data;
+            const updatedComments = comments?.map((comment)=>comment?._id === editedComment?._id ? editedComment : comment)
+            setComments(updatedComments);
+
+            
+        }
+    } catch (error) {
+        console.log()
+    }
+    finally{
+        setLoading(false)
+    }
   }
 
   const handleDeletePostCommentClick = async(commentId)=>{
@@ -98,7 +122,7 @@ const PostComment = ({ post }) => {
   const handlReportPostCommentClick = async()=>{
 
   }
-  
+
   const handleLikeCommentClick = async(commentId)=>{
     
     try {
@@ -136,7 +160,7 @@ const PostComment = ({ post }) => {
   
   return (
     <div>
-        {loading && <PageLoader info={"updating data!"} />}
+        {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"updating Comments!"} />}
         <div className='w-full dark:border-white p-2 mt-2 rounded-lg'>
             <CommentForm 
                 keepX={false}

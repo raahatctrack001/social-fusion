@@ -8,6 +8,7 @@ import CommentForm from './CommentForm';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import LoaderPopup from './Loader';
 import { updateSuccess } from '../redux/slices/user.slice';
+import EditCommentPopup from './EditCommentPopup';
 
 const CommentBox = ({ 
     comment, 
@@ -28,6 +29,9 @@ const CommentBox = ({
     const [commentReplies, setCommentReplies] = useState([]);
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [replyContent, setReplyContent] = useState('');
+    const [editCommentContent, setEditCommentContent] = useState('');
+    const [showEditForm, setShowEditForm] = useState(false);
+
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
@@ -95,7 +99,7 @@ const CommentBox = ({
     };
     
     const handleReplyLikeCommentClick = async(commentId)=>{
-    
+        setLoading(true)
         try {
             const response = await fetch(apiEndPoints.likeCommentAddress(commentId, currentUser?._id), {method: "POST"});
             const data = await response.json();
@@ -118,15 +122,52 @@ const CommentBox = ({
         } catch (error) {
             console.log(error)
         }
+        finally{
+            setLoading(false)
+        }
     
       }
-    console.log(replyContent)
+    
+    const handleEditButtonClick = ()=>{
+    }
+    const handleEditFormSubmit = (editedContent)=>{
+        handleEditClick(comment, editedContent);
+    }
+
+    const handleReplyEdit = async (comment, editedContent)=>{
+        console.log("handlReplyEdit", comment);
+        console.log("handlereplyEdit", editedContent);
+
+        try {
+            setLoading(true)
+            const formData = new FormData();
+            formData.append("editedContent", editedContent)
+            const response = await fetch(apiEndPoints.updateCommentAddress(comment?._id), {method: "PATCH", body: formData});
+            const data = await response.json();
+            
+            if(!response.json()){
+                throw new Error(data?.message || "Network response isn't ok while editing main comments");
+            }
+    
+            if(data?.success){
+                console.log("reply edited", data)
+                handleShowRepliesClick();               
+            }
+        } catch (error) {
+            console.log()
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+    console.log("edit comment click", editCommentContent)
     return (
         <div className="w-full p-4 dark:bg-[rgb(16,23,42)] rounded-lg shadow-md dark:text-white m-1">
             {/* Top Row: Username and Time */}
-            {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Updating Coments"} />}
+            
+            {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Updating Comments"} />}
             <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold">{comment?.author?.username}</span>
+                <div className='flex gap-3'> <span className="font-semibold">{comment?.author?.username}</span> {comment?.edited && <span className='font-semibold text-red-600'> edited</span>} </div>
                 <span className="text-sm text-gray-400">{formatDistanceToNow(comment?.createdAt, {addSuffix: true})}</span>
             </div>
 
@@ -161,7 +202,7 @@ const CommentBox = ({
                             <Dropdown.Item onClick={()=>setShowReplyForm(!showReplyForm)}>
                                 Reply
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={()=>setShowEditForm(true)}>
+                            <Dropdown.Item onClick={()=>setShowEditForm(!showEditForm)}>
                                 Edit
                             </Dropdown.Item>
                             <Dropdown.Item onClick={()=>handleDeleteClick(comment?._id)}>
@@ -197,14 +238,25 @@ const CommentBox = ({
                     setCommentContent={setReplyContent}
                     handleCommentSubmit={handleReplySubmitButtonClick}
                 />}
+                {showEditForm && <EditCommentPopup
+                        placeholder={"edit Comment..."}
+                        buttonText={"Edit Comment"}
+                        keepX={true}
+                        commentContent={comment?.content}
+                        setShowCommentForm={setShowEditForm}
+                        setCommentContent={setEditCommentContent}
+                        handleCommentSubmit={handleEditFormSubmit}
+                     /> 
+                    }
 
                 {!showReplies && 
                     commentReplies[comment?._id] && 
                     commentReplies[comment?._id].map((comment, index)=>
                     <CommentBox key={index} 
                         comment={comment}
-                        handleLikeClick={handleReplyLikeCommentClick}    
-                        />)}
+                        handleLikeClick={handleReplyLikeCommentClick}  
+                        handleEditClick={handleReplyEdit}  
+                    />)}
         </div>
     );
 };
