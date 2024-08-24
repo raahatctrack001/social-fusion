@@ -13,7 +13,7 @@ import PageLoader from '../Compnents/PageLoader'
 const Author = () => {
   const { authorId } = useParams();
   const [postData, setPostData] = useState();
-  const [authorData, setAuthorData] = useState();
+  const [authorData, setAuthorData] = useState(null);
   const [error, setError] = useState();
   const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Author = () => {
   if(!authorData){
     return <PageLoader />
   }
-  console.log(authorData)
+  // console.log(authorData)
   return (     
       <div className='m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
         <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>

@@ -10,6 +10,7 @@ const EditCommentPopup = ({ placeholder, buttonText, keepX, error, commentConten
         handleCommentSubmit(editContent)
         setShowCommentForm(false)
     }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div className="relative w-full md:w-3/4 p-4 dark:bg-[rgb(16,23,42)] bg-white border rounded-lg shadow-lg">
@@ -22,7 +23,8 @@ const EditCommentPopup = ({ placeholder, buttonText, keepX, error, commentConten
                     )}
 
                 </div>
-                {error && <Alert color={'warning'}> {error} </Alert>}
+                {error && <Alert color={'warning'} className='mb-2 h-10 flex justify-center'> {error} </Alert>}
+                {commentContent === editContent.trim() && <Alert className='h-10 mb-2 flex justify-center'> Edit something to post! </Alert>}
                 <form onSubmit={handleFormSubmit}>
                     <div className="mb-4">
                         <textarea

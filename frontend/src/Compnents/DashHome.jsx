@@ -6,11 +6,12 @@ import DisplayContent from '../Compnents/DisplayContent';
 import RecentPostsTable from '../Compnents/RecentPostTable';
 import DashSidebar from '../Compnents/DashSidebar';
 import { useNavigate } from 'react-router-dom';
+import PageLoader from './PageLoader';
 // import { join } from 'path';
 
 const DashHome = () => {
     const { currentUser } = useSelector(state=>state.user)
-    const [postData, setPostData] = useState(null);
+    const [postData, setPostData] = useState([]);
     const [postsLastWeek, setPostsLastWeek] = useState(null);
     const [postsLastTwoWeeks, setPostsLastTwoWeeks] = useState(null);
     const [postsLastMonth, setPostsLastMonth] = useState(null);
@@ -81,9 +82,9 @@ const DashHome = () => {
           console.log(error)
         }
       }
-    // console.log("sliced data", postData?.slice(0, 10));
-    // console.log("recents posts", recentPosts);
-    // console.log("popular posts", popularPosts);
+    if(postData.length == 0){
+      return <PageLoader />
+    }
   return (
     <div className="flex min-h-screen dark:bg-[rgb(16,23,42)]">
       
@@ -126,10 +127,10 @@ const DashHome = () => {
             {/* <h3 className="text-lg font-semibold mb-2">Recent Posts</h3> */}
               <RecentPostsTable heading={"Recent Posts"} displayPosts={recentPosts} />
             </div>
-            <div className='flex justify-between'>
-              <div className=" p-6 rounded-lg shadow-md order-2 w-1/4">
+            <div className='flex justify-between '>
+              <div className=" p-6 rounded-lg shadow-md order-2 w-1/4 border-2">
                 <h1 className="text-lg font-semibold mb-2">Traffic Stats:</h1>
-                <ul> 
+                <ul className=''> 
                   <h1>Posts added in</h1> 
                   <li>last week : {postsLastWeek?.length}</li>
                   <li>last 15 days : {postsLastTwoWeeks?.length||0}</li>
@@ -158,8 +159,8 @@ const DashHome = () => {
                 <Table.Body>
                   {postData?.length > 0 && postData.map((post, index) => (
                     <Table.Row key={index}>
-                      <Table.Cell><div className='text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
-                      <Table.Cell > {post?.author ? <div className='text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "Author" :  post?.author?.fullName} </div> : <div> Blog User </div>}</Table.Cell>
+                      <Table.Cell><div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
+                      <Table.Cell> {post?.author ? <div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "Author" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
                       <Table.Cell>{post.category}</Table.Cell>
                       <Table.Cell>Published</Table.Cell>
                       <Table.Cell>

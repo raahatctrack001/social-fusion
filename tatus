@@ -1,0 +1,803 @@
+[33mcommit 0984932ecfb317706cbca88f72804dd82815d307[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 25 00:31:17 2024 +0530
+
+    add error meesages and alert
+
+[33mcommit 0fdb016bd92173114828595da75e440f5de21774[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 23:53:41 2024 +0530
+
+    add account creation success popup
+
+[33mcommit 15b60d36e4fb335791c49abd9d75a53bddb4abfc[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 21:51:06 2024 +0530
+
+    fix bug while authentication direct jump from one route to another
+
+[33mcommit f2ca644f3fdcceb7649da8888e753f1a23f7888a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 21:30:43 2024 +0530
+
+    design and develop ui for otp verification
+
+[33mcommit a6e77fadedda5737dbcf8409ea439e4decf1dcf6[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 17:36:15 2024 +0530
+
+    controller router and add router at app.js to send email creat and verify otp
+
+[33mcommit d92276acc4bfeb586d2830282d9e4615281c427d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 13:20:47 2024 +0530
+
+    add delete reply at multiple level
+
+[33mcommit f5b6cc599365e82f96380ecd8d59ff07064c4f1d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 13:08:21 2024 +0530
+
+    add edit functinality in multilevel
+
+[33mcommit a5334a69a19a56fb7b5b675f95cc3557c6576188[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 12:13:44 2024 +0530
+
+    add multiple level of likes comment
+
+[33mcommit 6ec2c5b3aaba8a5259d267b06c83b0b3db6c477c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 11:52:58 2024 +0530
+
+    add multiple level of reply comment
+
+[33mcommit b6ea5627dfc248d79cf5a57b0ec47ddc8a3b7ea8[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 24 11:41:28 2024 +0530
+
+    add reply to first level
+
+[33mcommit 3b94b208411f5104ff0236bbc52d4cc5621cce17[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 23 20:01:49 2024 +0530
+
+    add show and hide replies functionality in comment section
+
+[33mcommit f24fb13cda23766931523cff54151ed0597de71e[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 23 18:14:01 2024 +0530
+
+    add like comment functionality
+
+[33mcommit 0cc7af6f11a09d7f003e394f71cdf355489b5a1a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 23 17:52:46 2024 +0530
+
+    remove all the comment related file and start from scratch: add create and delete UI and interface with backend
+
+[33mcommit ee5113493a6fcbc313d7e87bbf7ab0670ff15dbf[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 23 13:15:06 2024 +0530
+
+    add fix bug in reply section of recursive comment to update its count once it is replied
+
+[33mcommit 223ad2adec57a62e62a3226950244536d2a020e5[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 23 11:58:07 2024 +0530
+
+    add active and last seen controllers routers and develop UI
+
+[33mcommit 388c6ff1b751bb27216852a762eadf628b7cf934[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 22 12:27:51 2024 +0530
+
+    fix bug i even don't know what i fixed
+
+[33mcommit 533189f13480ee0200fdd75ee849bd56577f4b3c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 22 12:09:30 2024 +0530
+
+    modify theme and color scheme of whole project
+
+[33mcommit c218d6fe7589ed100de47e7014d1e6b82319108d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 20:14:32 2024 +0530
+
+    add redux persist
+
+[33mcommit 9a9d0ac695e0f1903ea7e62a7e42a75060221c09[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 20:02:42 2024 +0530
+
+    modify script
+
+[33mcommit bfe5ab67e615ccf59b2262de60feb26386657bb4[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 20:00:57 2024 +0530
+
+    add favicon
+
+[33mcommit f07af5e18b36edd30fd57adac04bfa30108bf405[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 19:37:57 2024 +0530
+
+    ready to deploy beta version
+
+[33mcommit e60f1d284a375fa76a16473fe2d9620123d8bfd9[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 18:21:47 2024 +0530
+
+    ready to deploy
+
+[33mcommit 9f71efa3a90fab6f847349777eb05f0460ac73b3[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 18:20:39 2024 +0530
+
+    ready to deploy
+
+[33mcommit 18cf101f71af3bc64da71d98e2d39a3b812fd77f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 15:19:02 2024 +0530
+
+    add enable disable comments
+
+[33mcommit 1cda905ce4ef8b703cd05b3e67c15c828ddf002a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 14:01:29 2024 +0530
+
+    add loader to thumbnail upload
+
+[33mcommit 5ce122a9caf27d60f86650c726056706e9948bac[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 21 13:27:05 2024 +0530
+
+    add edit comment functionality
+
+[33mcommit 852d9a74962e9dedbd39566f2ad4b8d73a1c54ab[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 20 22:59:27 2024 +0530
+
+    failed to add reply(state) dynamically
+
+[33mcommit 359714aec42fd1a23c1cdf8b7158dc8e4f96fdb3[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 20 20:10:43 2024 +0530
+
+    add recursive reply comment section successfully
+
+[33mcommit 853cfa89aa4293d21f57ff5cdd5c798356a622d5[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 20 19:57:34 2024 +0530
+
+    fix bug for warning punycode module
+
+[33mcommit 43ae5c1f5749acdaa9d8483fb5f521bc479854f5[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 19 20:40:32 2024 +0530
+
+    add recursive comment functionality
+
+[33mcommit 367a824331e7126a21d0a30ee2c2effcc0c49411[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 19 12:29:31 2024 +0530
+
+    failed to fix state management bugs
+
+[33mcommit 5e32ac8d31dfb4bbc6ab5bb23c550c1602d19935[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 17:35:04 2024 +0530
+
+    add new Comment controller router and dev
+
+[33mcommit 753c8673fb14f7588aaa9e2b12cbc9c26f076417[m
+Merge: e03acc3 142ae21
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 14:55:37 2024 +0530
+
+    Merge pull request #2 from raahatctrack001/likeComment
+    
+    Like comment
+
+[33mcommit 142ae21aee677b246cc73cd06610daf6cc97ef64[m[33m ([m[1;31morigin/likeComment[m[33m, [m[1;31morigin/addNewComment[m[33m)[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 14:54:13 2024 +0530
+
+    add reply comment
+
+[33mcommit afd64e4106483ab1e507bc747015cec9086cc443[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 14:28:56 2024 +0530
+
+    populate author in comment section to display username of user
+
+[33mcommit fe96ec1e6e1dc4a20384c0c43f7cc48634dea1e7[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 14:13:56 2024 +0530
+
+    change name convention in user model from likes to likedPosts and comments to likedComments
+
+[33mcommit 9d867d9a1b6107e1def32f42c58c5561cc411aa9[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 13:41:01 2024 +0530
+
+    add like and unlike controller and routes
+
+[33mcommit e03acc3add4c91afd5bfa5738c410a0c2aeb3033[m
+Merge: 7b837c4 16ed063
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 13:16:50 2024 +0530
+
+    Merge pull request #1 from raahatctrack001/likeComment
+    
+    add like comment controller for testing branching in git
+
+[33mcommit 16ed0630da73c4b91426c1a3b4a113bd4e31e3da[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 13:14:28 2024 +0530
+
+    add like comment controller for testing branching in git
+
+[33mcommit 7b837c4339afbaad703d3581787a631df39f2b9b[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 18 12:59:24 2024 +0530
+
+    add recursive reply comment section at frontend
+
+[33mcommit 8a692b534411454bc7147996bf1154704e740a67[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 17 17:23:18 2024 +0530
+
+    add router, controller and functionality for saving posts, also show the saved posts in dashboard
+
+[33mcommit c41489c2af1ec593642f0c74d0a2f095d63e9278[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 17 16:12:35 2024 +0530
+
+    fix bug in like unlike post controller also add functionality at frontend and modify the look accordingly
+
+[33mcommit bb4d0cf22d5e6498c751f193cc2e580f1435a677[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 17 15:16:32 2024 +0530
+
+    add follow and unfollow toggle dynamically
+
+[33mcommit 720d388ce02456654035b88c8a8b08a69e2b074d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 21:43:29 2024 +0530
+
+    make separate component for search post and modify desings
+
+[33mcommit 05c25499e4b5369fc8c4ddc398bc1fd7a839c017[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 21:02:47 2024 +0530
+
+    add multiple files to support dashboard and create different file components to display posts
+
+[33mcommit 5c1b7687af58a9330391438af27ede787ef73dc2[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 20:01:44 2024 +0530
+
+    test under development page
+
+[33mcommit 4af105ec9fa61a662734f1328cb9d54117803078[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 16:06:20 2024 +0530
+
+    add modal before post deletiion
+
+[33mcommit 5bd2482b1b93c7cb533ef51d8226229f192e7f30[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 15:54:12 2024 +0530
+
+    enable disable comment
+
+[33mcommit f459b55d875c7fcae2a4390e7994271fe7fa8713[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 15:31:15 2024 +0530
+
+    add delete post functionality
+
+[33mcommit 48977d56f568fd95312dda335738882c7de2af37[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 15:20:31 2024 +0530
+
+    add toggle theme feature
+
+[33mcommit 44a5dbddf2aea67099cb68f05881b0b842020f6f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 11:56:25 2024 +0530
+
+    add feedback router and controllers also add functionality at fronend
+
+[33mcommit babb408ba525fe37725e0bc74fb93fa1c272cd01[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 11:16:23 2024 +0530
+
+    add feedback popup
+
+[33mcommit c202a975592aa7449bb0fe2ba5e1e95fec893dcf[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 16 00:17:48 2024 +0530
+
+    add feedback schema
+
+[33mcommit f7514cf752d3db71ae267816223ca78b0eb89fab[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 23:54:13 2024 +0530
+
+    add popup search window for small screen search and popup window for full dp
+
+[33mcommit e0c6590cf4a81628ed4daca88acd3fb6ea11af2d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 21:08:43 2024 +0530
+
+    add modal for delete user warning
+
+[33mcommit 478e8e0778c4063ed6f3c851f4a28ef4722db156[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 20:50:00 2024 +0530
+
+    add reset password functionality
+
+[33mcommit 0956d8e5a6a69d8d0f98449414d86936feb66167[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 18:51:42 2024 +0530
+
+    add reset password page
+
+[33mcommit 5132157bf297ff8bf6f7c6649643289aa321a9dd[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 14:57:30 2024 +0530
+
+    add bookmarks shares and likes field in user schema
+
+[33mcommit c28d83df76fc3bbdf6b1e90380da90dd50700071[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 14:46:10 2024 +0530
+
+    add edit post functionality
+
+[33mcommit a63516fdadfec58f1458af22ab3b3015bb42b6ba[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 12:55:31 2024 +0530
+
+    add post option dropdown and install some other icons library
+
+[33mcommit 908e37541bad561a5a9622371c50a5c57c8cabdd[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 12:02:55 2024 +0530
+
+    add like comment share bookmark buttons
+
+[33mcommit ea7089542c0c7b81e09505250ecfe4581b3b4497[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 01:13:30 2024 +0530
+
+    add post thumbnail
+
+[33mcommit 4e6f175252ec93245de5dbb12a18a741bab58413[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 15 00:28:33 2024 +0530
+
+    add dashboard analytics with recent post, popular post, post statistics and managepost feature to delete and edit posts
+
+[33mcommit 39187a054f9141f5d69976d22b7858789cbab86b[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 20:50:18 2024 +0530
+
+    add static dummy dashboard for design inspiration
+
+[33mcommit 2754982f49de03d1bd069d3b7215d4d585347578[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 20:18:03 2024 +0530
+
+    make header sticky, change icon configuration of  follow unfollow user
+
+[33mcommit 9dac6bd7bf580e9612d3becb46daf3be22624add[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 18:14:15 2024 +0530
+
+    complete edit profile functionality
+
+[33mcommit 4c389fdeae98cd86a054d1772c6a44488538a9ff[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 17:37:52 2024 +0530
+
+    add edit profile page
+
+[33mcommit 692ad937ed762a969cef38884357f1916915fd16[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 17:06:51 2024 +0530
+
+    add condition to allow only owner to edit their profile
+
+[33mcommit 32ed1b48d9975524a0ef627f47b1509c299b0ec6[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 16:59:48 2024 +0530
+
+    modify author'spage design
+
+[33mcommit 0cd4910d413eaeadfa379d579cf6cbd8e83f167f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 16:16:54 2024 +0530
+
+    adjust edit button for multiple screen size
+
+[33mcommit 6e862be2ec00b871013c2d49bd9a32aa8c8381a3[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 16:08:28 2024 +0530
+
+    add caps on detector and allow only owner to edit their dp
+
+[33mcommit f4e34b5470c3e362436c2154ae589026ef527059[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 15:52:16 2024 +0530
+
+    controller route and design to change profile pic
+
+[33mcommit 0dabbc3ae85e77d0e20ea986a25fd400c3c1d51a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 15:03:05 2024 +0530
+
+    fix bug in auth logout controller and middleware also modify frontend accordingly
+
+[33mcommit 04460b0d8cb7a48e802cfc9d76b324c142f4990f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 13:23:46 2024 +0530
+
+    add toggle follow button at homepage
+
+[33mcommit 5c0f545e1d48ab7cd117c7f221ca19ffbcf5ba9c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 13:03:27 2024 +0530
+
+    modify design for mobile size screen
+
+[33mcommit d2b37701323511707e203c8d9a5f4435a79c212e[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 12:48:31 2024 +0530
+
+    add controllers to toggle follow and follow authors modify apiendpoints at frontend and also modify frontend accordingly
+
+[33mcommit 9b4062228a1bbc4a9b2562086c77c205fd68dd04[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 12:12:09 2024 +0530
+
+    add followUser controller and route, design buttons on authorHeader section of authorPage, also design Header section accordingly and add apiaddress for following user in frontend object
+
+[33mcommit a5d18158c2c5606b22fd56edb924a51d789bcc3a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 14 11:30:04 2024 +0530
+
+    add search post page, routes and add search post controller, also fixed bug accordingly
+
+[33mcommit a70971c24da9f1446955f23b2e4747cd0a46a1b7[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 13 17:51:19 2024 +0530
+
+    add custom dropdown and fix bug in post controller for not acccepting category!
+
+[33mcommit 194873cb747383c96d4a26842e375e62ea147539[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 13 16:22:43 2024 +0530
+
+    setup create pospt page and render it
+
+[33mcommit 9b64e1bb322dcfb4ae4b073bd720349adf804512[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 13 14:14:31 2024 +0530
+
+    desig create post page
+
+[33mcommit bfbf78a4612394db30026ecfbb82beb8be10dbc4[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 13 10:34:26 2024 +0530
+
+    redefine authors page UI
+
+[33mcommit fb5d0df6d9189815b0c1c72782b61c6907e9a2ab[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 18:33:30 2024 +0530
+
+    fix bug at post controller to pupulate author and fix dedicated post page
+
+[33mcommit 02a8d17e4b251179540f90285606c87a4a0d9ed3[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 18:00:00 2024 +0530
+
+    fix bug in post controller to push posts in array instead of deleting all and assigning new
+
+[33mcommit 6c0abd4f74505ab596378a78b1b0220e0f07f898[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 17:28:01 2024 +0530
+
+    add author's post to their page and fix bug in post seeder
+
+[33mcommit e9863bd58212d2aaea9e09a030318988d25293f4[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 16:03:06 2024 +0530
+
+    add author page
+
+[33mcommit efa842909745165a594e0b146dba07b26f9ec75c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 12:02:43 2024 +0530
+
+    add post to use model
+
+[33mcommit 9ad79d171fb3c34c779ed8f87f0ecb9a2f906d86[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 11:40:59 2024 +0530
+
+    add dedicated page for post content
+
+[33mcommit cf47de601c1d5b8030322caaa16514d94778904f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 09:45:51 2024 +0530
+
+    add private router
+
+[33mcommit 89a265bb970f7d857ee2a65b47bed397ae09ce9a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 09:21:26 2024 +0530
+
+    add landing page
+
+[33mcommit 49d3f7660c3a1f69f6a3a49d705ed9378c541294[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 12 00:33:29 2024 +0530
+
+    improve UI of author and post page
+
+[33mcommit 0efa11d2f86db88f25bcca3af633106d942f2833[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 11 22:31:56 2024 +0530
+
+    remove sensitive information from authors data and get post and author data on click
+
+[33mcommit 83405410176b96ddda6411d25d3420297d660f8f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 11 18:31:49 2024 +0530
+
+    login and decorate header section with user information
+
+[33mcommit e08d33cd94354901bdf8254a86e845fc7c5e696d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 11 17:21:12 2024 +0530
+
+    add sign in frontend with backend
+
+[33mcommit c3c610246748b7dc8160a1ceb660e5ea7f130ba7[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 11 17:08:50 2024 +0530
+
+    connect register frontend with backend
+
+[33mcommit cc3cd2863d235b86a50cedf3dd8c6c5911859f40[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sun Aug 11 16:44:44 2024 +0530
+
+    fix bug in auth controllers and improve UI for inputs of auth fields
+
+[33mcommit 1bb9d00411a09aed04faca222e35472910b4cd7f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 10 12:01:01 2024 +0530
+
+    delegate terms and condition for pankaj to make it more hilarious
+
+[33mcommit 4d33003d0891262969c87dbd204939d0853f3153[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Sat Aug 10 11:59:40 2024 +0530
+
+    ui improvement and adding terms and condition
+
+[33mcommit 4b7d6e5df2f84301f3210ede909f1369f919a4e3[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 9 23:46:10 2024 +0530
+
+    add UI interface with backend
+
+[33mcommit 01b31b4a30e3e04d2115a9abcae2510cf0df7118[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 9 01:21:19 2024 +0530
+
+    improve UI of register signin
+
+[33mcommit b1c0be9cc7bbac977f305a693e51794abb3201e3[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 8 18:25:39 2024 +0530
+
+    add and style rgistration page
+
+[33mcommit 2e0e3db68e21ad71e786c66e9b47cf7b6794c7b5[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 8 16:53:40 2024 +0530
+
+    add message for handling later and modify user model
+
+[33mcommit 43131eea316a815e66d102ac2905f202b5b76dcf[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 8 16:37:35 2024 +0530
+
+    fix bug, fetch data from backend for posts and populate on homepage
+
+[33mcommit 0ac51331b0e5e2eec29e2f3d3057c45a6e2ff185[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 8 15:07:31 2024 +0530
+
+    export all api addressed
+
+[33mcommit bfaf26634fb80185d05df150473e75bd40a4e76b[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 8 13:26:39 2024 +0530
+
+    complete post and author card section and seed test data for post and user/author
+
+[33mcommit 38a6e51b532c499e2d1cbba6ef9a434a24e4a3e0[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 8 10:09:28 2024 +0530
+
+    complete header section UI
+
+[33mcommit 094e0d44fc021c68336af97079658b4d2dbdcc27[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 7 17:40:20 2024 +0530
+
+    add landing page
+
+[33mcommit 7fca1165cc9c8cbb8fa2178256f1ad2d11df30ba[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 7 15:24:50 2024 +0530
+
+    add header section navbar
+
+[33mcommit ebde33f362754b205b71953147cc0f4ae2857a8c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 7 12:29:19 2024 +0530
+
+    fix bugs and start frontend
+
+[33mcommit b2cd9cb41ac3b5c3cfb06a50b31097d11197cf70[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Wed Aug 7 10:00:01 2024 +0530
+
+    add follow unfollow controller and router
+
+[33mcommit 8b0cacd154d71f1983b73a9ed88d5e963a14a0d4[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 6 18:03:25 2024 +0530
+
+    add like post controller and routes
+
+[33mcommit 0af840fcf4a590f87370a953c73d47a7ac08d9e9[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 6 17:08:03 2024 +0530
+
+    add controllers and routes for updating profile pictures of user
+
+[33mcommit 4d85d23c5cd0c9c14cacb91849586d644ad43147[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 6 16:41:34 2024 +0530
+
+    add update user route and controller
+
+[33mcommit ea1258a0f9ffd0168802b1e95b525c16281f533d[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 6 14:53:00 2024 +0530
+
+    add delete comment controllers
+
+[33mcommit d2384b3e61345f229413828481f7ca1b75fed1db[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Tue Aug 6 12:50:52 2024 +0530
+
+    add recursive comment controller route and set up road for next controllers
+
+[33mcommit 4a85b47e4df5c9b513d04f8c0123ac79a1253963[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 17:09:40 2024 +0530
+
+    develop footer section
+
+[33mcommit f844071fed17f95b9b0c6d7091c30190c53bf47f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 16:52:35 2024 +0530
+
+    develop header section
+
+[33mcommit 1fccbad282066c6c3d47303e258f841cd0d54469[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 15:25:12 2024 +0530
+
+    add frontend field file structure
+
+[33mcommit 5e52b036030627f5fc8f2c2147d0b189a7560060[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 14:34:41 2024 +0530
+
+    delete frontend and start from scratch also convert zod to user validator
+
+[33mcommit 5b6f8a5d0d2d0e20f00e746d9fa9089b9196495f[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 14:17:49 2024 +0530
+
+    add comment schema
+
+[33mcommit 05c643904eaf1f33493f8c22215e9f661d29b689[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 12:35:08 2024 +0530
+
+    complete all post controllers
+
+[33mcommit a0269ca14fab8114a181b0e6cb10fb1b0862af47[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 12:21:33 2024 +0530
+
+    add delete post controller and router
+
+[33mcommit 86b4428519fbc2919c1272c544dcfb12dcc372c4[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 10:57:41 2024 +0530
+
+    add create post and get post controller with routes
+
+[33mcommit bbf27c638b787958e85014b43a41463d636ed287[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Mon Aug 5 09:47:23 2024 +0530
+
+    file management
+
+[33mcommit db6ee2f750b9b8e46ebf1440d71733c6e1d9839c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 16:14:28 2024 +0530
+
+    setup post model controller router and app.js for blog post data storage
+
+[33mcommit 9143d9aaf5b69da763ce4ad95ae7500a4764a0e8[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 15:54:56 2024 +0530
+
+    create post data model
+
+[33mcommit ac7a9a9616eab67f4c0131a2b91351a76243caa6[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 15:32:45 2024 +0530
+
+    fix bug
+
+[33mcommit 209ea08df03ed396f4ac96a709722841387dc67c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 15:26:51 2024 +0530
+
+    add delete user controller and routes
+
+[33mcommit 1189d472775ac6e7733257406875570d519546b6[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 15:02:23 2024 +0530
+
+    add update password controllers and routes
+
+[33mcommit dc16841a09bfcd2212286d8b0f3fe24efcd76e0a[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 12:58:29 2024 +0530
+
+    fix bug and add resetPasswordToken in user model
+
+[33mcommit ad7f41af73038bda1636759e44fbb47c79a0c0fc[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 12:54:59 2024 +0530
+
+    add login and logout controllers routes and related middlewares
+
+[33mcommit 1c81d9f18f55d9bae420ffe38e93d331559cbf77[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Fri Aug 2 09:49:33 2024 +0530
+
+    create register user controller route and model
+
+[33mcommit dc935ef81054c8f8a311e281d348dac9f854a59c[m
+Author: Raahat Khan <raahatctrack001.rc@gmail.com>
+Date:   Thu Aug 1 16:57:28 2024 +0530
+
+    set up starter file

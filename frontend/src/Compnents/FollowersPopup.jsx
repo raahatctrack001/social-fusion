@@ -108,17 +108,7 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
                   Follow
                 </button> */}
 
-                {follower?._id !== currentUser?._id ? 
-                (<Button 
-                  onClick={()=>handleToggleFollowButtonClick(follower)}
-                  outline className='bg-gray-800 '> 
-                                              {/* {follower?.followers?.includes(currentUser?._id) ?  */}
-                                              {currentUser?.followings?.includes(follower?._id)?
-                                              ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
-                                              (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
-                </Button>) : 
                 
-                (<Button disabled> Owner </Button>)}
               </li>
             ))}
           </ul>

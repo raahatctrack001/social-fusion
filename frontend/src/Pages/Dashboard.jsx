@@ -49,7 +49,7 @@ const Dashboard = () => {
       {tab === 'comments' && <DashComments />} 
       {tab === 'users' && <DashUsers />} 
       {tab === 'analytics' && <DashAnalytics />} 
-      {tab === 'setting s' && <DashSettings />} 
+      {tab === 'settings' && <DashSettings />} 
       </div>
     </div>
   );

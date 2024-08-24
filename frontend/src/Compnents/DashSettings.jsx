@@ -1,9 +1,10 @@
 import React from 'react'
 import NotFoundPage from '../Pages/NotFoundPage'
+import UnderDevelopment from '../TestComponent/UnderDevelopment'
 
 const DashSettings = () => {
   return (
-<NotFoundPage />  )
+<UnderDevelopment />  )
 }
 
 export default DashSettings

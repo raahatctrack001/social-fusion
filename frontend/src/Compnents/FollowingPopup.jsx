@@ -72,13 +72,13 @@ const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
                   />
                   <span className="text-gray-800 dark:text-gray-200">{following.username}</span>
                 </div>
-                <button
+                {/* <button
                   onClick={() => handleFollow(following.username)}
                   className="flex items-center justify-center px-2 py-1 text-xs text-white bg-blue-500 rounded-lg hover:bg-blue-600"
                 >
                   <HiUserAdd className="mr-1" />
                   Follow
-                </button>
+                </button> */}
               </li>
             ))}
           </ul>
