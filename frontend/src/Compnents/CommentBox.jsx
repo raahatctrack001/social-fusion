@@ -31,6 +31,7 @@ const CommentBox = ({
     const [replyContent, setReplyContent] = useState('');
     const [editCommentContent, setEditCommentContent] = useState('');
     const [showEditForm, setShowEditForm] = useState(false);
+    const [error, setError] = useState('');
 
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
@@ -43,6 +44,7 @@ const CommentBox = ({
         // setShowReplies(!showReplies);
         
             setLoading(true)
+            
             try {
                 const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
                 const data = await response.json();
@@ -57,6 +59,7 @@ const CommentBox = ({
                     console.log(commentReplies)
                 }
             } catch (error) {
+                alert(error.message)
                 console.log(error);
             }
             finally{
@@ -68,6 +71,7 @@ const CommentBox = ({
     const handleReplySubmitButtonClick = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError('')
         try {
             const formData = new FormData();
             formData.append("content", replyContent);
@@ -91,6 +95,7 @@ const CommentBox = ({
                 setReplyContent('')
             }
         } catch (error) {
+            setError(error.message);
             console.log(error);
         }
         finally{
@@ -120,6 +125,7 @@ const CommentBox = ({
                 console.log("current comments", comments);
             }
         } catch (error) {
+            alert(error.message)
             console.log(error)
         }
         finally{
@@ -142,6 +148,7 @@ const CommentBox = ({
                 handleShowRepliesClick();
             }
         } catch (error) {
+            alert(error.message)
             console.log(error)
         }
         finally{
@@ -153,11 +160,12 @@ const CommentBox = ({
     }
 
     const handleReplyEdit = async (comment, editedContent)=>{
-        console.log("handlReplyEdit", comment);
-        console.log("handlereplyEdit", editedContent);
+        // console.log("handlReplyEdit", comment);
+        // console.log("handlereplyEdit", editedContent);
 
         try {
             setLoading(true)
+            setError('')
             const formData = new FormData();
             formData.append("editedContent", editedContent)
             const response = await fetch(apiEndPoints.updateCommentAddress(comment?._id), {method: "PATCH", body: formData});
@@ -172,6 +180,7 @@ const CommentBox = ({
                 handleShowRepliesClick();               
             }
         } catch (error) {
+            setError(error.message)
             console.log()
         }
         finally{
@@ -249,6 +258,7 @@ const CommentBox = ({
             </div>
                 {showReplyForm && <CommentForm
                     keepX={true}
+                    error={error}
                     setShowCommentForm={setShowReplyForm}
                     placeholder={"Write a reply about this comment..."}
                     buttonText={"Post Reply"}
@@ -260,6 +270,7 @@ const CommentBox = ({
                         placeholder={"edit Comment..."}
                         buttonText={"Edit Comment"}
                         keepX={true}
+                        error={error}
                         commentContent={comment?.content}
                         setShowCommentForm={setShowEditForm}
                         setCommentContent={setEditCommentContent}

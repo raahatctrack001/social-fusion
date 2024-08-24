@@ -169,6 +169,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 export const updatePassword = asyncHandler(async (req, res, next)=>{
     
     try {        
+        console.log(req.body)
         if(req.user?._id !== req.params?.userId){
             throw new apiError(401, "Unauthorized attempt!")
         }
@@ -183,12 +184,15 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
             throw new apiError(406, result?.error?.errors[0]?.message)
         }
         
-        const currentUser = await User.findById(req.params?.userId);
-        if(!currentUser.isPasswordCorrect(oldPassword)){
+        const currentUser = await User.findById(req.params?.userId).select("+password");
+        if(!currentUser){
+            throw new apiError(404, "User doesn't exist")
+        }
+        if(!bcryptjs.compareSync(oldPassword, currentUser?.password)){
             throw new apiError(404, "old password is wrong")
         }
 
-        if(currentUser.isPasswordCorrect(newPassword)){
+        if(bcryptjs.compareSync(newPassword, currentUser?.password)){
             throw new apiError(406, "Old and new password can't be same!")
         }
 
@@ -204,6 +208,7 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
             })
             .catch(err=>next(err));
     } catch (error) {
+        console.log(error)
         next(error)
     }
 })

@@ -93,8 +93,8 @@ const ProfileEditPage = () => {
     }
   }
   return (
-    <div className=" flex flex-col justify-center items-center border ">
-      <h1 className="text-2xl font-bold my-3 px-10 w-full flex justify-center"> Update Profile </h1>
+    <div className=" flex flex-col justify-center items-center border px-2">
+      <h1 className="text-2xl font-bold my-3 w-full flex justify-center "> Update Profile </h1>
       {error && <Alert color="failure" className="text-lg rounded-lg">{error}</Alert>}
       <form onSubmit={handleSubmit} className="space-y-4 w-full p-3 md:w-3/4 xl:w-1/2">
         <div>

@@ -14,6 +14,7 @@ const PostComment = ({ post }) => {
   const [commentContent, setCommentContent] = useState('');
   const { currentUser } = useSelector(state=>state.user);
   const [editedCommentContent, setEditedCommentContent] = useState('');
+  const [error, setError] = useState('')
   useEffect(()=>{
     const getComments = async ()=>{
         try {
@@ -40,6 +41,7 @@ const PostComment = ({ post }) => {
      e.preventDefault();
      setLoading(true)
      try {
+        setError('')
         const formData = new FormData();
         formData.append("content", commentContent);
         const response = await fetch(apiEndPoints.createCommentAddress(post?._id, currentUser?._id), {
@@ -65,6 +67,7 @@ const PostComment = ({ post }) => {
             console.log(data);
         }
      } catch (error) {
+        setError(error.message)
         console.log(error);
      }
      finally{
@@ -76,6 +79,7 @@ const PostComment = ({ post }) => {
     
     try {
         setLoading(true)
+        setError('')
         const formData = new FormData();
         formData.append("editedContent", editedContent)
         const response = await fetch(apiEndPoints.updateCommentAddress(comment?._id), {method: "PATCH", body: formData});
@@ -88,11 +92,10 @@ const PostComment = ({ post }) => {
         if(data?.success){
             const editedComment = data?.data;
             const updatedComments = comments?.map((comment)=>comment?._id === editedComment?._id ? editedComment : comment)
-            setComments(updatedComments);
-
-            
+            setComments(updatedComments);            
         }
     } catch (error) {
+        setError(error.message)
         console.log()
     }
     finally{
@@ -167,6 +170,7 @@ const PostComment = ({ post }) => {
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"updating Comments!"} />}
         <div className='w-full dark:border-white p-2 mt-2 rounded-lg'>
             <CommentForm 
+                error={error}
                 keepX={false}
                 placeholder={"Write a comment about this post..."}
                 buttonText={"Post Comment"}

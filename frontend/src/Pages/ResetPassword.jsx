@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import LoaderPopup from '../Compnents/Loader';
 import PasswordResetSuccessPopup from '../Compnents/PasswordResetSuccessPopup';
+import SuccessPopup from '../Compnents/AccountCreatedPopup';
 
 function resetPassword() {
     const [formData, setFormData] = useState({
@@ -51,8 +52,10 @@ function resetPassword() {
             if(data.success){
                 setShowPopup(true)
                 setSuccess(data.message);
-                // window.location.reload();
-               return
+                setTimeout(() => {
+                  window.location.reload();
+                }, (5000));
+                return
             }
             setError(data.message);
         } catch (error) {
@@ -60,19 +63,18 @@ function resetPassword() {
             console.log(error);
         }
         finally{
-          setTimeout(() => {
-            
+          setTimeout(() => {            
             setLoading(false)
-          }, 10000);
+          }, 3000);
         }
     }
     const handleClosePopup = () => {
       setShowPopup(false);
-      window.location.reload();
     };
   return (
     <div className="mt-3 flex flex-col items-center justify-center p-2 md:p-5">
-      <PasswordResetSuccessPopup show={showPopup} onClose={handleClosePopup} />
+      {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Verifyiing and Resetting your password, please wait!"} />}
+      {showPopup && <SuccessPopup setShowPopup={setShowPopup} heading={"Reset Password Success!"} info={`Your password has been changed to "${formData.newPassword}", please keep in mind.` } />}
 
       <h2 className="text-2xl font-bold mb-3 text-center text-red-600">Update Password</h2>
       <form onSubmit={handleUpdatePassword} className='p-5 space-y-3 border-2 border-red-500 rounded-lg w-full md:w-3/4 xl:w-1/2'>

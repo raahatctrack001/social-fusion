@@ -1,8 +1,10 @@
+import { Alert } from 'flowbite-react';
 import React, { useState } from 'react';
 import { HiX } from 'react-icons/hi';
 
-const EditCommentPopup = ({ placeholder, buttonText, keepX, commentContent, setCommentContent, setShowCommentForm, handleCommentSubmit }) => {
+const EditCommentPopup = ({ placeholder, buttonText, keepX, error, commentContent, setCommentContent, setShowCommentForm, handleCommentSubmit }) => {
     const [editContent, setEditContent] = useState(commentContent)
+    // const [error, setError] = useState('')
     const handleFormSubmit = (e)=>{
         e.preventDefault();
         handleCommentSubmit(editContent)
@@ -18,7 +20,9 @@ const EditCommentPopup = ({ placeholder, buttonText, keepX, commentContent, setC
                             <HiX className='dark:text-white' />
                         </button>
                     )}
+
                 </div>
+                {error && <Alert color={'warning'}> {error} </Alert>}
                 <form onSubmit={handleFormSubmit}>
                     <div className="mb-4">
                         <textarea
