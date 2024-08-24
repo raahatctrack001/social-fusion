@@ -38,6 +38,7 @@ const PostComment = ({ post }) => {
 
   const handlePostCommentSubmit = async(e)=>{
      e.preventDefault();
+     setLoading(true)
      try {
         const formData = new FormData();
         formData.append("content", commentContent);
@@ -65,6 +66,9 @@ const PostComment = ({ post }) => {
         }
      } catch (error) {
         console.log(error);
+     }
+     finally{
+        setLoading(false);
      }
   }
   

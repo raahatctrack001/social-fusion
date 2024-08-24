@@ -128,7 +128,25 @@ const CommentBox = ({
     
       }
     
-    const handleEditButtonClick = ()=>{
+    const handleDeleteReply = async (commentId)=>{
+        setLoading(true)
+        try {
+            const response = await fetch(apiEndPoints.deleteCommentAddress(commentId), {method: "DELETE"});
+            const data = await response.json();
+            if(!response.ok){
+                throw new Error(data?.message || "Network response isn't ok in delete comment submit");
+            }
+    
+            if(data?.success){
+                console.log("deletedComment", data)
+                handleShowRepliesClick();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally{
+            setLoading(false)
+        }
     }
     const handleEditFormSubmit = (editedContent)=>{
         handleEditClick(comment, editedContent);
@@ -255,7 +273,8 @@ const CommentBox = ({
                     <CommentBox key={index} 
                         comment={comment}
                         handleLikeClick={handleReplyLikeCommentClick}  
-                        handleEditClick={handleReplyEdit}  
+                        handleEditClick={handleReplyEdit}
+                        handleDeleteClick={handleDeleteReply}  
                     />)}
         </div>
     );
