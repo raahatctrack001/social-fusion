@@ -10,6 +10,7 @@ import AuthorHeader from '../Compnents/AuthorHeader'
 import LoaderPopup from '../Compnents/Loader'
 import PageLoader from '../Compnents/PageLoader'
 import { useSelector } from 'react-redux'
+import LikersPopup from '../Compnents/PostLikersPopup'
 
 const Author = () => {
   const { authorId } = useParams();
@@ -19,6 +20,7 @@ const Author = () => {
   const [error, setError] = useState();
   const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
+  const [showLikers, setShowLikers] = useState({});
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -64,12 +66,12 @@ const Author = () => {
             {postData.length && postData.map((post, index) => (
                 <div className='p-1 border-2 border-gray-800 rounded-xl max-w-80 max-h-96 shadow-xl hover:shadow-white overflow-hidden' key={index} >
                   {/* <AuthorCard author={post?.author} /> */}
-                  
-                <div class="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
-                  <div class="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
-                      <button onClick={()=>alert("button clicked!")} class="text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
-                      <button onClick={()=>alert("button clicked!")} class="text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
-                      <button onClick={()=>alert("button clicked!")} class="text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
+                  {showLikers[post?._id] && <LikersPopup postId={post?._id} setIsHovered={setShowLikers}/>}
+                <div className="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
+                  <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                      <button onClick={()=>setShowLikers({[post?._id]: true})} className="text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
+                      <button disabled onClick={()=>alert("button clicked!")} className="cursor-not-allowed text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
+                      <button disabled onClick={()=>alert("button clicked!")} className="cursor-not-allowed text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
                     </div>
                     <PostCard post={post}  />
                   </div>

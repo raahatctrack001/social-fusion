@@ -100,11 +100,11 @@ const ShowPosts = ({heading, postData}) => {
                 (<Button disabled> <HiBadgeCheck /> </Button>)}                  
                 
                 </div>
-                <div class="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
-                    <div class="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
-                      <button onClick={()=>handleShowLikers(post)} class=" cursor-pointer text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
-                      <button disabled class="cursor-not-allowed text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
-                      <button disabled class="cursor-not-allowed text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
+                <div className="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
+                    <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                      <button onClick={()=>handleShowLikers(post)} className=" cursor-pointer text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
+                      <button disabled className="cursor-not-allowed text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
+                      <button disabled className="cursor-not-allowed text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
                     </div>
                   {showLikers[post?._id] && <LikersPopup postId={postId} isHovered={showLikers} setIsHovered={setShowLikers} />}
                   <PostCard post={post}  />

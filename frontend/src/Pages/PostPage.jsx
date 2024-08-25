@@ -12,6 +12,7 @@ import { updateSuccess } from '../redux/slices/user.slice';
 import SharePopup from '../Compnents/ShareURL';
 import { formatDistanceToNow } from 'date-fns';
 import PostComment from '../Compnents/PostComment';
+import LikersPopup from '../Compnents/PostLikersPopup';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -25,6 +26,7 @@ const PostPage = () => {
   const [error, setError] = useState(null);
   const [enableComment, setEnableComment] = useState(false);
   const [likes, setLikes] = useState();
+  const [showLikers, setShowLikers] = useState(false)
   const [showPopup, setShowPopup] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const postUrl = `${window.location.origin}/posts/post/${post?._id}`;
@@ -222,10 +224,11 @@ const PostPage = () => {
         <div className='flex justify-between border-2 p-2 rounded-lg'>          
           <div className='flex justify-center items-center gap-3'>
 
+                {showLikers[post?._id] && <LikersPopup postId={post?._id} isHovered={showLikers} setIsHovered={setShowLikers} />}
               <div onClick={handleLikePostClick}> 
                 {currentUser?.likedPosts?.includes(post?._id) ? 
-                <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-gray-800 hover:text-lg'/> {likes||0} </div>: 
-                <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg' /> {likes||0} </div>}
+                <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-gray-800 hover:text-lg'/><span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} >  {likes||0}</span> </div>: 
+                <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg' /> <span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} > {likes||0} </span></div>}
               </div>
               
             

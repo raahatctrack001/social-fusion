@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd } from 'react-icons/hi';
+import { HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd, HiX } from 'react-icons/hi';
 import PageLoader from './PageLoader';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import apiError from '../../../backend/src/Utils/apiError';
@@ -85,7 +85,10 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
 
       {isHovered && (
         <div className=" absolute top-full left-0 mt-2 w-80 h-96 p-4 bg-white border  rounded-lg shadow-lg z-10 dark:bg-gray-800 dark:border-gray-600">
-          <h3 className="text-lg font-bold mb-2 text-gray-800 dark:text-white">followed by: </h3>
+        <div className='flex justify-between'> 
+            <h3 className="text-lg font-bold mb-2 text-gray-800 dark:text-white">followed By: </h3>
+            <HiX className='cursor-pointer' onClick={()=>setIsHovered(false)} />
+          </div>          
           <ul className="max-h-80 overflow-y-auto space-y-2">
             {followers?.length && followers.map((follower, index) => (
               <li
