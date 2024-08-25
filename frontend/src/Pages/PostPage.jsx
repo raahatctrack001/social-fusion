@@ -252,7 +252,7 @@ const PostPage = () => {
           </div>}
         </div>
         
-        {post?.comments?.length > 0 && <PostComment post = { post }/>}
+         <PostComment post = { post }/>
         
     </div>
   )

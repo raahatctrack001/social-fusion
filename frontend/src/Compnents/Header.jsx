@@ -113,11 +113,11 @@ export default function Header() {
     <Navbar fluid rounded className="lg:px-10 border-b-2">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">Soul Echo</span>
+        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">Social Fusion</span>
       </Navbar.Brand>
 
       {currentUser && <TextInput 
-        className="hidden lg:inline w-44 lg:w-64 xl:w-96 border-gray-900 rounded-2xl font-bold "
+        className="hidden lg:inline w-44 lg:w-44 xl:w-96 border-gray-900 rounded-2xl font-bold "
         placeholder="search post..."
         rightIcon={HiDocumentSearch}
         icon={HiSearch}
@@ -132,7 +132,7 @@ export default function Header() {
       {currentUser ?
       <div className=" flex gap-2" >
           <span className={`h-2 w-2 ${currentUser?.isActive ? "bg-green-600": "bg-red-600"} rounded-full relative top-1 left-12`}></span>
-          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden md:inline" src={currentUser.profilePic} alt={currentUser.username} />
+          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden lg:inline" src={currentUser.profilePic} alt={currentUser.username} />
           <div ref={dropdownRef} className=""> 
             <Dropdown label={currentUser?.fullName?.length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName} outline arrowIcon={false}>
                <Dropdown.Header>
@@ -175,7 +175,7 @@ export default function Header() {
       <Navbar.Toggle />
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}
-      <Navbar.Collapse className="">
+      <Navbar.Collapse className="hidden">
           <Navbar.Link className="" href="/" active = {path === '/'} >
             Home
           </Navbar.Link>

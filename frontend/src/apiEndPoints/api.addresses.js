@@ -10,6 +10,7 @@ export  const apiEndPoints = {
     deleteUserAddress : (userId)=> `/api/v1/users/delete-user/${userId}`,
     updateUserAddress : (userId)=> `/api/v1/users/update-user/${userId}`,
     updateProfilePic : (userId)=> `/api/v1/users/upload-profile-picture/${userId}`,
+    uploadStoryAddress: ()=>`/api/v1/users/upload-story`,
     toggleFollowUserAddress : (followId)=> `/api/v1/users/follow-user/${followId}`,
     updateDPAddress: (userId)=>`/api/v1/users/upload-profile-picture/${userId}`,
     toggleOnlineStatusAddress: (userId)=>`/api/v1/users/toggle-online-status/${userId}`,

@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, useState } from 'react';
 
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiCheckCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -26,10 +26,15 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [error, setError] = useState()
   const [showDP, setShowDP] = useState(false);
   const profileRef = useRef();
+  const storyRef = useRef();
   const { currentUser } = useSelector(state=>state.user)
-  const [loading, setLoading] = useState(false);
+  const [dpLoading, setdpLoading] = useState(false);
+  const [storyLoading, setStoryLoading]  = useState(false);
   const [isFollowingHovered, setisFollowingHovered] = useState(false);
   const [isFollowerHovered, setisFollowerHovered] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [storyURLs, setStoryURLs] = useState([]);
+
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -61,7 +66,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   }
   
   const handleDPChange = async (e)=>{
-    setLoading(true)
+    setdpLoading(true)
     try {
         const formData = new FormData();
         formData.append("profilePicture", e.target.files[0]);
@@ -86,14 +91,51 @@ const AuthorHeader = ({ author, setAuthor }) => {
         setError(error.message)
     }
     finally{
-      setLoading(false)
+      setdpLoading(false)
     }
   }
-  
+
+  const handleAddStory = async (e)=>{
+    setShowDropdown(false);
+    const files = e.target.files; 
+    const formData = new FormData(); 
+    setStoryLoading(true)
+    for (let i = 0; i < files.length; i++) {
+      formData.append('storyFiles', files[i]); 
+    }
+
+    try {
+      const response = await fetch(`/api/v1/users/upload-story/${currentUser?._id}`, {
+          method: "POST",
+          body: formData,
+        });
+
+      const data = await response.json();
+      if(!response.ok){
+        throw new Error(data?.message || "Network response isn't ok while adding stories!")
+      }
+
+      if(data?.success){
+        setStoryURLs(data?.data?.stories);
+        console.log("story uploaded", data)
+        dispatch(updateSuccess(data?.data?.currentUser))
+      }
+
+    } catch (error) {
+      console.log("inside add story", error)
+      setError(error.message)
+    }
+    finally{
+      setStoryLoading(false)
+    }
+  }
+  console.log(storyURLs)
   return (
     <div className="flex flex-col items-center p-2 w-full">
-    {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Changing your dp!"} />}
+    {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
+    {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
 {/* show dp popup starts here */}
+
       {showDP && (
         <div className="fixed w-full inset-0 flex justify-center items-center top-20  bg-opacity-50 z-20">
           <div className="p-2 rounded-lg shadow-lg flex flex-col">
@@ -112,16 +154,27 @@ const AuthorHeader = ({ author, setAuthor }) => {
       <div className="flex flex-col md:flex-row items-center p-2 w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl border rounded-lg mb-5">
           <div className='relative '>
             <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
-            { author?._id === currentUser?._id && <div onClick={()=>profileRef.current.click()} 
+            { author?._id === currentUser?._id && !showDropdown &&
+            <div onClick={()=>setShowDropdown(!showDropdown)}
               className='w-10 h-10 bg-white absolute border rounded-full top-20 left-24 flex justify-center items-center cursor-pointer'>
-              <HiPencil className='text-2xl text-gray-950' />
-            </div>}
-            <img 
-              onClick={()=>setShowDP(!showDP)}
-              src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
-              alt="Author" 
-              className="w-32 h-32 rounded-full mb-4 md:mb-0 md:mr-6 object-cover"
+              <HiPencil className='text-2xl text-gray-950 relative' 
             />
+            </div>}
+            {showDropdown && <div className='bg-gray-300 text-black dark:bg-gray-700 dark:text-white rounded-lg font-semibold items-center relative top-32 left-20 z-10'>
+              <span onClick={()=>{profileRef.current.click(), setShowDropdown(false)}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'><HiOutlineUserCircle /> Change DP</span>
+              
+              <input ref={storyRef} type='file' className='hidden' onChange={handleAddStory} multiple="multiple"/>
+              <span onClick={()=>{storyRef.current.click()}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'> <HiPlus /> Add Story</span>
+            </div>}
+            <div className={`w-36 h-36 ${storyURLs?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
+              <img 
+                onClick={()=>setShowDP(!showDP)}
+                src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
+                alt="Author" 
+                className="w-32 h-32 rounded-full  object-cover"
+              />
+
+            </div>
           </div>
           
           <div>
@@ -174,6 +227,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                         </div>
                     </div>
                   </div>
+                  
                   <div className='flex items-center justify-between my-2 mt-5 md:ml-10' >
                     {author?._id === currentUser?._id && <Button onClick={(()=>navigate("/edit-profile"))}> Edit Profile </Button>}
                     {author?._id !== currentUser?._id ? 
@@ -212,6 +266,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                                                   
           </div>       
       </div>
+
         <div className='flex justify-center items-center'>
             {author.bio && <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>

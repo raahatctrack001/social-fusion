@@ -178,7 +178,7 @@ const EditPost = ({ placeholder }) => {
   // console.log(selectedCategory)
   return (
 
-    <div className='w-full bg-gray-300 border-2 border-rose-900 md:px-10 rounded-lg'>
+    <div className='w-full border-2 md:px-10 rounded-lg'>
       <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Update Post </h1>  
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>

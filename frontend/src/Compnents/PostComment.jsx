@@ -164,12 +164,14 @@ const PostComment = ({ post }) => {
   const handleShowReplies = async ()=>{
 
   }
+
+  
   
   return (
     <div>
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"updating Comments!"} />}
         <div className='w-full dark:border-white p-2 mt-2 rounded-lg'>
-            <CommentForm 
+           <CommentForm 
                 error={error}
                 keepX={false}
                 placeholder={"Write a comment about this post..."}

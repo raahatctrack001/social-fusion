@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
         required: true,
         select: false,
     },
+    stories: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Story'
+    }],
     bio: {
         type: String,
         trim: true,
