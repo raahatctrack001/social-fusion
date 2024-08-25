@@ -9,7 +9,6 @@ import {
     updateUser, 
     uploadProfilePicture, 
     toggleOnlineStatus,
-    uploadStory
 } from '../Controllers/user.controller.js';
 import { upload } from '../Middlewares/multer.middleware.js';
 
@@ -21,7 +20,6 @@ router.route('/get-users').get(/* isUserLoggedIn, */ getUsers);
 router.route('/get-user/:userId').get(isUserLoggedIn, getUser)
 router.route('/delete-user/:userId').delete(isUserLoggedIn, deleteUser);
 router.route('/image-upload').post(upload.single("postImage"), isUserLoggedIn, imageUpload);
-router.route('/upload-story/:userId').post(upload.array("storyFiles"), isUserLoggedIn, uploadStory)
 router.route('/follow-user/:followId').post(isUserLoggedIn, toggleFollowUser);
 router.route('/toggle-online-status/:userId').patch(upload.none(), isUserLoggedIn, toggleOnlineStatus);
 export default router;

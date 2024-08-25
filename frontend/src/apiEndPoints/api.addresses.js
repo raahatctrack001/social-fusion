@@ -42,4 +42,7 @@ export  const apiEndPoints = {
 
     createAndSendOTP: ()=>`/api/v1/otp/send-email`,
     verifyOTPAddress: ()=>`/api/v1/otp/verify-email`,   
+
+    addStoriesAddress: (userId)=>`/api/v1/story/upload-story/${userId}`,
+    getStoriesOfUser: (userId)=>`/api/v1/story/get-stories-of-user/${userId}`
 }

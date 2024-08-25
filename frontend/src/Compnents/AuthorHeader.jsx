@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Button } from 'flowbite-react';
 import { HiBadgeCheck, HiCheckCircle, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
@@ -105,7 +105,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
     }
 
     try {
-      const response = await fetch(`/api/v1/users/upload-story/${currentUser?._id}`, {
+      const response = await fetch(apiEndPoints.addStoriesAddress(currentUser?._id), {
           method: "POST",
           body: formData,
         });
@@ -129,7 +129,29 @@ const AuthorHeader = ({ author, setAuthor }) => {
       setStoryLoading(false)
     }
   }
-  console.log(storyURLs)
+
+  useEffect(()=>{
+    const getStories = async ()=>{
+      try {
+        console.log("inside useeffect", apiEndPoints.getStoriesOfUser(currentUser?._id))
+        const response = await fetch(apiEndPoints.getStoriesOfUser(currentUser?._id));
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data?.message || "Network response isn't ok while fetching stories") 
+        }
+
+        if(data.success){
+          setStoryURLs(data?.data);
+          console.log("stories data fetched", data);
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    getStories();
+  }, [])
+
+    
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
