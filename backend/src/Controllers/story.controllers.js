@@ -66,12 +66,9 @@ export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
         if(!stories){
             throw new apiError(404, "No recent stories")
         }
-        const storiesURL = [];
-        for(let i = 0; i < stories.length; i++){
-            storiesURL.push(stories[i].contentURL);
-        }
+        
 
-        return res.status(200).json(new apiResponse(200, "stories fetched", storiesURL))
+        return res.status(200).json(new apiResponse(200, "stories fetched", stories))
         
     } catch (error) {
         next(error)

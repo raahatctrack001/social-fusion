@@ -1,15 +1,14 @@
 import { Button } from 'flowbite-react';
 import React from 'react';
 import { HiBookmark, HiChat, HiHeart, HiSearch, HiShare, HiUserAdd } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { users } from '../dataSeeders/author50';
 import DisplayContent from './DisplayContent';
 
 const PostCard = ({ post }) => {
-  const { author } = post;
-  // console.log(author)
+  const navigate = useNavigate();
   return (   
-      <div className=' w-full flex flex-col p-2 rounded-lg ' >
+      <div className=' w-full flex flex-col p-2 rounded-lg object-contain cursor-pointer ' onClick={()=>navigate(`/posts/post/${post?._id}`)} >
         {/* <div className='flex justify-between'>
           <Link className='flex items-center gap-2'>
             <img className='h-8 rounded-full' src={author?.profilePic } alt="" />

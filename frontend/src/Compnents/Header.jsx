@@ -134,7 +134,7 @@ export default function Header() {
           <span className={`h-2 w-2 ${currentUser?.isActive ? "bg-green-600": "bg-red-600"} rounded-full relative top-1 left-12`}></span>
           <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden lg:inline" src={currentUser.profilePic} alt={currentUser.username} />
           <div ref={dropdownRef} className=""> 
-            <Dropdown label={currentUser?.fullName?.length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName} outline arrowIcon={false}>
+            <Dropdown label={currentUser?.fullName?.split(' ')[0].length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName.split(' ')[0]} outline arrowIcon={false}>
                <Dropdown.Header>
                   <Link to={`/authors/author/${currentUser?._id}`}>        
                    <span className="block text-sm">{currentUser.username}</span>

@@ -28,6 +28,7 @@ export  const apiEndPoints = {
     getFollowingsAddress: (userId)=>`/api/v1/posts/get-followings/${userId}`,
     getFollowersAddress: (userId)=>`/api/v1/posts/get-followers/${userId}`,
     toggleCommentSectionAddress: (postId)=>`api/v1/posts/toggle-comment-section/${postId}`,
+    getLikersOfPost: (postId)=>`/api/v1/posts/likers-of-post/${postId}`,
     
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,
     replyCommentAddress : (parentId, userId)=> `/api/v1/comments/reply-comment/${parentId}/${userId}`,

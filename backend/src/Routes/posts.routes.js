@@ -14,7 +14,8 @@ import {
     getSavedPosts,
     toggleDisableComment,
     getFollowers,
-    getFollowings
+    getFollowings,
+    getLikersOfPost
 } from "../Controllers/posts.controllerrs.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 
@@ -34,4 +35,5 @@ router.route("/saved-posts/:userId").get(isUserLoggedIn, getSavedPosts);
 router.route("/toggle-comment-section/:postId").patch(isUserLoggedIn, toggleDisableComment)
 router.route("/get-followers/:userId").get(isUserLoggedIn, getFollowers);
 router.route("/get-followings/:userId").get(isUserLoggedIn, getFollowings);
+router.route("/likers-of-post/:postId").get(isUserLoggedIn, getLikersOfPost);
 export default router;

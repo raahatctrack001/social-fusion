@@ -165,8 +165,7 @@ const PostComment = ({ post }) => {
 
   }
 
-  
-  
+    
   return (
     <div>
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"updating Comments!"} />}

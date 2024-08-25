@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Button } from 'flowbite-react';
-import { HiBadgeCheck, HiCheckCircle, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiEye, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -34,7 +34,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [isFollowingHovered, setisFollowingHovered] = useState(false);
   const [isFollowerHovered, setisFollowerHovered] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false)
-  const [storyURLs, setStoryURLs] = useState([]);
+  const [stories, setStories] = useState([]);
   const [showStory, setShowStory] = useState(false);
 
 
@@ -118,7 +118,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         throw new Error(data?.message || "Network response isn't ok while adding stories!")
       }
       if(data?.success){
-        setStoryURLs(data?.data?.stories);
+        setStories((prevstories) => [...prevstories, data?.data?.stories[0]]);
         console.log("story uploaded", data)
         dispatch(updateSuccess(data?.data?.currentUser))
       }
@@ -143,7 +143,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         }
 
         if(data.success){
-          setStoryURLs(data?.data);
+          setStories(data?.data);
           console.log("stories data fetched", data);
         }
       } catch (error) {
@@ -158,7 +158,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
-    {showStory && <StoryViewer stories={storyURLs.slice(29)} onClose={setShowStory} />}
+    {showStory && <StoryViewer stories={stories} onClose={setShowStory} />}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -193,14 +193,14 @@ const AuthorHeader = ({ author, setAuthor }) => {
               
               <input ref={storyRef} type='file' className='hidden' onChange={handleAddStory} multiple="multiple"/>
               <span onClick={()=>{storyRef.current.click()}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'> <HiPlus /> Add Story</span>
-              <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'> <HiPlus /> show DP</span>
+              <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-center items-center hover:text-lg cursor-pointer gap-2'> <HiEye className='' /> Show DP</span>
             </div>}
-            <div className={`w-36 h-36 ${storyURLs?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
+            <div className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
               <img 
                 onClick={()=>setShowStory(!showStory)}
                 src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
                 alt="Author" 
-                className="w-32 h-32 rounded-full  object-cover"
+                className="w-32 h-32 rounded-full  object-cover cursor-pointer"
               />
 
             </div>

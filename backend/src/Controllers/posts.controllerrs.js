@@ -469,3 +469,22 @@ export const getFollowings = asyncHandler( async (req, res, next)=>{
     }
 })
 
+export const getLikersOfPost = asyncHandler (async (req, res, next)=>{
+    try {
+        const { postId } = req.params;
+        if(!postId){
+            throw new apiError(404, "postId is missing dude! jyada hoshiyar mat bano");
+        }
+
+        const currentPost = await Post.findById(postId).populate("likes");
+        if(!currentPost){
+            throw new apiError(404, "current post doesn't exist");
+        }
+
+        return res.status(200).json(new apiResponse(200, "likers fetched", currentPost.likes));
+
+    } catch (error) {
+        next(error)
+    }
+})
+

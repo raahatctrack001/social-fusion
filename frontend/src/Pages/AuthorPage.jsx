@@ -15,7 +15,7 @@ const Author = () => {
   const { authorId } = useParams();
   const { currentUser } = useSelector(state=>state.user)
   const [postData, setPostData] = useState();
-  const [authorData, setAuthorData] = useState(null);
+  const [authorData, setAuthorData] = useState([]);
   const [error, setError] = useState();
   const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
@@ -49,10 +49,9 @@ const Author = () => {
   // console.log(authorData)
 
  
-  if(!authorData){
+  if(authorData?.length == 0){
     return <PageLoader />
   }
-  // console.log(authorData)
   return (     
       <div className='m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
         <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>
@@ -66,7 +65,12 @@ const Author = () => {
                 <div className='p-1 border-2 border-gray-800 rounded-xl max-w-80 max-h-96 shadow-xl hover:shadow-white overflow-hidden' key={index} >
                   {/* <AuthorCard author={post?.author} /> */}
                   
-                  <div onClick={() => navigate(`/posts/post/${post?._id}`)} className='cursor-pointer'>  
+                <div class="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
+                  <div class="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                      <button onClick={()=>alert("button clicked!")} class="text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
+                      <button onClick={()=>alert("button clicked!")} class="text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
+                      <button onClick={()=>alert("button clicked!")} class="text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
+                    </div>
                     <PostCard post={post}  />
                   </div>
                 </div>

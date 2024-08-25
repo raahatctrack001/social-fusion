@@ -1,10 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { HiX, HiPause, HiPlay } from 'react-icons/hi';
+import PageLoader from './PageLoader';
 
 const StoryViewer = ({ stories, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  console.log(stories)
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      setProgress(0);
+      return (prevIndex + 1) % stories.length;
+    });
+  }, [stories.length]);
+
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      setProgress(0);
+      return (prevIndex - 1 + stories.length) % stories.length;
+    });
+  }, [stories.length]);
+
+  const handlePause = useCallback(() => {
+    setIsPaused(true);
+  }, []);
+
+  const handlePlay = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
+  const handleMouseOver = useCallback(() => {
+    setIsPaused(true);
+  }, []);
+
+  const handleMouseOut = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
+  const handleTouchStart = useCallback(() => {
+    setIsPaused(true);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
+  const handleClick = useCallback((e) => {
+    const clickPosition = e.clientX;
+    const screenWidth = window.innerWidth;
+
+    if (clickPosition < screenWidth / 2) {
+      handlePrev(); // Trigger prev if clicked on the left half
+    } else {
+      handleNext(); // Trigger next if clicked on the right half
+    }
+  }, [handleNext, handlePrev]);
 
   useEffect(() => {
     let timer;
@@ -33,71 +83,34 @@ const StoryViewer = ({ stories, onClose }) => {
       clearInterval(timer);
       clearInterval(progressInterval);
     };
-  }, [stories.length, isPaused, currentIndex]);
+  }, [isPaused, stories.length]);
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => {
-      setProgress(0);
-      return (prevIndex + 1) % stories.length;
-    });
-  };
+  if(stories?.length === 0){
+    setTimeout(() => {
+      <PageLoader />
+    }, 5000);
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) => {
-      setProgress(0);
-      return (prevIndex - 1 + stories.length) % stories.length;
-    });
-  };
-
-  const handlePause = () => {
-    setIsPaused(true);
-  };
-
-  const handlePlay = () => {
-    setIsPaused(false);
-  };
-
-  const handleMouseOver = () => {
-    setIsPaused(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsPaused(false);
-  };
-
-  const handleTouchStart = () => {
-    setIsPaused(true);
-  };
-
-  const handleTouchEnd = () => {
-    setIsPaused(false);
-  };
-
-  const handleClick = (e) => {
-    const clickPosition = e.clientX;
-    const screenWidth = window.innerWidth;
-
-    if (clickPosition < screenWidth / 2) {
-      handlePrev(); // Trigger prev if clicked on the left half
-    } else {
-      handleNext(); // Trigger next if clicked on the right half
-    }
-  };
+    onClose(false)
+  }
   return (
-    <div className="fixed inset-0 bg-opacity-90 flex items-center justify-center bg-black z-50 m-5">
-      <div onClick={handleClick} className="relative w-full md:w-3/4 bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
+    <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
+      <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
         <button onClick={() => onClose(false)} className="absolute dark:bg-gray-600 dark:text-white bg-red-600 text-white rounded-lg right-2 text-xl p-2">
           <HiX />
         </button>
-        <div
-          className="w-full max-h-3/4 p-2 flex items-center justify-center rounded-lg"
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className="w-full max-w-lg mx-auto">
-            <img src={stories[currentIndex]} alt="Story" className="w-full h-auto max-h-screen object-contain" />
+        <div className='flex flex-col gap-2 md:px-2'>
+          <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> Recent Stories ({currentIndex+1}/{stories.length}) </h1>
+          <div
+            className="w-full p-2 flex items-center justify-center rounded-lg"
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+
+            <div className="w-full mx-auto">
+              <img src={stories[currentIndex].contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain" />
+            </div>
           </div>
         </div>
         <div className="absolute top-2 left-2 flex items-center gap-2">
@@ -111,13 +124,13 @@ const StoryViewer = ({ stories, onClose }) => {
             </button>
           )}
         </div>
-        <div className="absolute top-0 left-0 w-full h-1 bg-gray-400">
+        <div className="absolute top-0 h-2 left-0 w-full bg-gray-400">
           <div
             className="h-full bg-blue-500 dark:bg-blue-300 transition-all duration-50"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
-    </div>
+      </div>
     </div>
   );
 };

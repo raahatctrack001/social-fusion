@@ -9,13 +9,16 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { current } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSuccess } from '../redux/slices/user.slice'
+import LikersPopup from './PostLikersPopup'
 
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
     const dispatch = useDispatch();
     // console.log("currentUser", currentUser)
     const navigate = useNavigate();
-
+    // const [likers, setLikers] = useState([]);
+    const [showLikers, setShowLikers] = useState({})
+    const [postId, setPostId] = useState(null);
 
     const handleToggleFollowButtonClick = async (author)=>{
       // console.log("post", post);
@@ -43,13 +46,35 @@ const ShowPosts = ({heading, postData}) => {
             console.log(error);
         }
       }
+      
+    const handleShowLikers = async (post)=>{
+      setPostId(post?._id);
+      setShowLikers({[post?._id]: true})
+      // try {
+      //   const response = await fetch(apiEndPoints.getLikersOfPost(post?._id));
+      //   const data = await response.json();
+      //   if(!response.ok){
+      //     throw new Error(data?.message || "Network response isn't ok while fetcing likers in show posts")
+      //   }
+
+      //   if(data.success){
+      //     setLikers(data?.data);
+      //     setShowLikers(true);
+      //   }
+      // } catch (error) {
+      //   console.log(error)
+      // }
+    }
+
+    
   return (
     <div>
         <div className='flex-3/4 flex flex-col m-2 px-2'>
         <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> {heading} </h1>
         <div className="flex flex-col  justify-center items-center md:grid lg:grid-cols-2 xl:grid-cols-3 gap-5  p-2">
+
         {postData?.length ? postData.map((post, index) => ( //handle the edge case if there's not post
-              <div className='p-1 shadow-2xl hover:shadow-white border hover:shadow-2xl rounded-xl w-full md:max-w-96 h-96 ' key={index} >
+              <div className='p-1 shadow-2xl dark:hover:shadow-white border hover:shadow-black rounded-xl w-full md:max-w-96 h-96 ' key={index} >
                 {/* <AuthorCard author={post?.author} /> */}
                 <div className='flex justify-between hover:dark:bg-gray-700 hover:bg-gray-100 p-2 rounded-lg '>
                   <div 
@@ -75,7 +100,13 @@ const ShowPosts = ({heading, postData}) => {
                 (<Button disabled> <HiBadgeCheck /> </Button>)}                  
                 
                 </div>
-                <div className='cursor-pointer' onClick={()=>navigate(`/posts/post/${post?._id}`)}>  
+                <div class="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
+                    <div class="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                      <button onClick={()=>handleShowLikers(post)} class=" cursor-pointer text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
+                      <button disabled class="cursor-not-allowed text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
+                      <button disabled class="cursor-not-allowed text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
+                    </div>
+                  {showLikers[post?._id] && <LikersPopup postId={postId} isHovered={showLikers} setIsHovered={setShowLikers} />}
                   <PostCard post={post}  />
                 </div>
               </div>
