@@ -5,7 +5,9 @@ import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 
-export const uploadStory = asyncHandler(async (req, res, next)=>{      
+export const uploadStory = asyncHandler(async (req, res, next)=>{ 
+    // console.log("upload story hits");
+    // return;     
     try {
         const { userId } = req.params;
         if(!userId){

@@ -9,9 +9,11 @@ import NotFoundPage from './NotFoundPage'
 import AuthorHeader from '../Compnents/AuthorHeader'
 import LoaderPopup from '../Compnents/Loader'
 import PageLoader from '../Compnents/PageLoader'
+import { useSelector } from 'react-redux'
 
 const Author = () => {
   const { authorId } = useParams();
+  const { currentUser } = useSelector(state=>state.user)
   const [postData, setPostData] = useState();
   const [authorData, setAuthorData] = useState(null);
   const [error, setError] = useState();
@@ -75,13 +77,16 @@ const Author = () => {
             <div className="flex flex-col items-center justify-center border m-2  p-6  shadow-lg md:py-52">
               <div className="text-center">
               <h2 className="text-2xl font-semibold text-gray-800 ">No Posts Yet  </h2>
-              <span onClick={()=>navigate("/create-post")} className='flex justify-center items-center gap-2 text-3xl mt-2 md:text-5xl cursor-pointer'> <HiDocumentAdd /> </span>
+              {currentUser?._id === authorData?._id && 
+              <div>
+               <span onClick={()=>navigate("/create-post")} className='flex justify-center items-center gap-2 text-3xl mt-2 md:text-5xl cursor-pointer'> <HiDocumentAdd /> </span>
                 <p className="mt-4  italic">
                   "Every great story starts with a blank page. Begin your journey today."
                 </p>
                 <p className="mt-2 ">
                   Why not start writing your own story? Share your thoughts, ideas, and experiences with the world.
-                </p>
+                </p> 
+              </div>}
               </div>
             </div>}
         </div>        
