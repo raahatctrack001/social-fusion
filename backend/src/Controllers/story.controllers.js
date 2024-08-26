@@ -118,3 +118,26 @@ export const createNewHightlights = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
+export const getHeighlightStories = asyncHandler(async (req, res, next)=>{
+    try {
+        const { stories } = req.body;
+        if(!stories.length){
+            throw new apiError(404, "stories doesn't exist in this heighlights")
+        }
+
+        const fetchedStories = await Story.find({
+            _id: { $in: stories.split(',') }
+          });
+
+        if(fetchedStories.length === 0){
+            throw new apiError(404, "No stories exists in this highlights")
+        }
+
+        console.log(fetchedStories)
+        return res.status(200).json(new apiResponse(200, "highlight stories fetched", fetchedStories))
+        
+    } catch (error) {
+        next(error)
+    }
+})

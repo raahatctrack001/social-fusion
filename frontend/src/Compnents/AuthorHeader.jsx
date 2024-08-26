@@ -15,6 +15,7 @@ import { formatDistanceToNow } from 'date-fns';
 import StoryViewer from './StoryViewer';
 import HighlightSelector from './HighlightSelector';
 import HighlightNamePopup from './HighlightNamePopup';
+import apiError from '../../../backend/src/Utils/apiError';
 // import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
@@ -35,13 +36,16 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [storyLoading, setStoryLoading]  = useState(false);
   const [isFollowingHovered, setisFollowingHovered] = useState(false);
   const [isFollowerHovered, setisFollowerHovered] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false)
-  const [stories, setStories] = useState([]);
-  const [showStory, setShowStory] = useState(false);
-  const [showHighlightSelector, setShowHighlightSelector] = useState(false);
-  const [showHighlightName, setShowHighlightName] = useState(false);
-  const [highlightName, setHighlightName] = useState('')
-  const [highlights, setHighlights] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false) //dp drop down to let user decide see dp add story or change dp
+  const [stories, setStories] = useState([]); //fetched story data to display on click
+  const [showStory, setShowStory] = useState(false); //condition check to show story or not
+  const [showHighlightSelector, setShowHighlightSelector] = useState(false); //popup to display highlight story select
+  const [showHighlightName, setShowHighlightName] = useState(false); //whether to display popup to take highlght name or not
+  const [highlightName, setHighlightName] = useState('') //when user create new highlight ask them to enter name
+  const [highlights, setHighlights] = useState([]); //initial data to display in screen's highlight row
+  const [highlightClick, setHighlightClick] = useState(false)
+  const [highlightClickStories, setHighlightClickStories] = useState([])
+  const [loading, setLoading] = useState(false);
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -165,15 +169,42 @@ const AuthorHeader = ({ author, setAuthor }) => {
   }
 
   
-  console.log("new hightlights", highlights);
-  
+  const handleHighlightClick = async (highlight)=>{
+    try {
+      setLoading(true)
+      console.log(highlight)
+      const formData = new FormData();
+      formData.append("stories", highlight.stories);
+      const response = await fetch(apiEndPoints.getHighlightStories(), {method: "POST", body: formData});
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data?.message || "Network response isn't ok while fetching highligh stories")
+      }
+
+      if(data?.success){
+        console.log(data);
+        setHighlightClickStories(data?.data);
+        setHighlightClick(true)
+      }
+    } catch (error) {
+      alert(error.message)
+      console.log(error)
+    }
+    finally{
+      setLoading(false)
+    }
+
+  }
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
-    {showStory && <StoryViewer stories={stories} onClose={setShowStory} />}
+    {showStory && <StoryViewer stories={stories} onClose={setShowStory} heading={"Recent Stories..."}/>}
     {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={stories} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>}
     {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
+    {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
+    {highlightClick && <StoryViewer stories={highlightClickStories} onClose={setHighlightClick} heading={"Highlight Stories"}/>}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -321,7 +352,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         {/* Map through highlights */}
           {highlights.length > 0 &&
             highlights.map((highlight, index) => (
-              <div
+              <div onClick={()=>handleHighlightClick(highlight)}
                 key={index} // Add a unique key for each item
                 className='min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'
               >

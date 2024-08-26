@@ -5,7 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { current } from '@reduxjs/toolkit';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 
-const StoryViewer = ({ stories, onClose }) => {
+const StoryViewer = ({ stories, onClose,heading }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -106,7 +106,7 @@ const StoryViewer = ({ stories, onClose }) => {
         </button>
         <div className='flex flex-col gap-2 md:px-2'>
           <div className='flex justify-between items-center'>
-            <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> Recent Stories ({currentIndex+1}/{stories.length}) </h1>
+            <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> {heading} ({currentIndex+1}/{stories.length}) </h1>
             <div className='cursor-pointer relative top-2 right-5'>
               <HiDotsCircleHorizontal className='text-lg '/>
             </div>
