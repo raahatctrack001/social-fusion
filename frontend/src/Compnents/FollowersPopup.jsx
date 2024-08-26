@@ -8,7 +8,7 @@ import { Button } from 'flowbite-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
-  const [followers, setfollowers] = useState(null);
+  const [followers, setfollowers] = useState([]);
  const { currentUser } = useSelector(state=>state.user)
   const navigate = useNavigate();
   useEffect(()=>{
@@ -114,6 +114,8 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
                 
               </li>
             ))}
+            {followers?.length === 0 && <div className='w-full flex justify-center items-center h-32'> <p>loading...</p> <div className='animate-spin h-10 w-10 bg-gray-200 flex justify-center items-center '> O </div> </div> }
+
           </ul>
         </div>
       )}

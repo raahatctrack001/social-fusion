@@ -232,22 +232,30 @@ export const toggleOnlineStatus = asyncHandler( async (req, res, next)=>{
 
 const markUsersOffline = async () => {
     const offlineThreshold = new Date(Date.now() - 2 * 60 * 1000); // 2 minutes ago
+    console.log('Offline Threshold:', offlineThreshold);
   
     try {
       // Find users who haven't been active in the last 2 minutes
-      const inactiveUsers = await User.updateMany(
-        { lastActive: { $lt: offlineThreshold }, isActive: true },  // Query conditions
-        { $set: { isActive: false,} }       // Update operation
+      const inactiveUsers = await User.find({
+        lastActive: { $lt: offlineThreshold },
+        isActive: true,
+      }).exec();
+  
+      console.log('Users to mark offline:', inactiveUsers);
+  
+      // Mark those users as offline
+      const result = await User.updateMany(
+        { lastActive: { $lt: offlineThreshold }, isActive: true },
+        { $set: { isActive: false } }
       );
-      
-          
-      console.log(inactiveUsers);
-      console.log(`${inactiveUsers.nModified} users marked as offline.`);
+  
+      console.log('Update result:', result);
+      console.log(`${result.nModified || result.modifiedCount} users marked as offline.`);
     } catch (error) {
       console.error('Error marking users as offline:', error);
     }
   };
   
   // Run the offline check every minute
-setInterval(markUsersOffline, 60000);
+  setInterval(markUsersOffline, 60000);
   

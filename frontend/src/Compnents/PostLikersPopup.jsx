@@ -46,9 +46,8 @@ const LikersPopup = ({ postId, isHovered, setIsHovered }) => {
     setIsHovered({[postId]: false});
   };
 
-  if(!likers.length){
-    <LoaderPopup loading={loading} setLoading={setLoading} info={"retrieving who liked this post!"}/>
-  }
+ 
+  
 
   const handleFollowerClick = (followerId)=>{
     setIsHovered(false)
@@ -93,6 +92,7 @@ const LikersPopup = ({ postId, isHovered, setIsHovered }) => {
                 
               </li>
             ))}
+          {likers?.length === 0 && <div className='w-full flex justify-center items-center h-32'> <p>loading...</p> <div className='animate-spin h-10 w-10 bg-gray-200 flex justify-center items-center '> O </div> </div> }
           </ul>
         </div>
       

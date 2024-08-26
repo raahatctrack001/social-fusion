@@ -84,6 +84,8 @@ const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
                 </button> */}
               </li>
             ))}
+            {followings?.length === 0 && <div className='w-full flex justify-center items-center h-32'> <p>loading...</p> <div className='animate-spin h-10 w-10 bg-gray-200 flex justify-center items-center '> O </div> </div> }
+
           </ul>
         </div>
       )}
