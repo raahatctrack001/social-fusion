@@ -1,6 +1,6 @@
 
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiMoon, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiViewGrid, HiX } from "react-icons/hi";
+import { HiBell, HiChat, HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiMoon, HiOutlineBell, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiUserAdd, HiViewGrid, HiX } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
@@ -183,7 +183,12 @@ export default function Header() {
 
           <Navbar.Link className="text-sm" href="/about" active = {path === '/about'} >About</Navbar.Link>
           <Navbar.Link className="text-sm" href="/services" active = {path === '/services'} >Services</Navbar.Link>
-          <Navbar.Link className="text-sm" href="/prices" active = {path === '/prices'} >Pricing</Navbar.Link>
+          <Navbar.Link className="text-sm" href="/prices" active = {path === '/prices'} >
+            <div> 
+              <span className="flex  justify-center items-center"> Notif<span className="lg:hidden">n</span> <span className="hidden lg:inline">ications</span> <HiOutlineBell /> </span> 
+              <div className="flex justify-center items-center gap-2"> <HiChat /> <HiUserAdd /> <HiDocumentAdd /> </div>
+            </div>
+          </Navbar.Link>
           <Navbar.Link className="text-sm" href="/contacts" active = {path === '/contacts'} >Contact</Navbar.Link>
       </Navbar.Collapse>
         {/* </div> */}

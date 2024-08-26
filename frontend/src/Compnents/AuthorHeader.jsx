@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 
-import { Button } from 'flowbite-react';
+import { Alert, Button } from 'flowbite-react';
 import { HiBadgeCheck, HiCheckCircle, HiEye, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,8 @@ import FollowingsPopup from './FollowingPopup';
 import FollowersPopup from './FollowersPopup';
 import { formatDistanceToNow } from 'date-fns';
 import StoryViewer from './StoryViewer';
+import HighlightSelector from './HighlightSelector';
+import HighlightNamePopup from './HighlightNamePopup';
 // import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
@@ -36,7 +38,10 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [stories, setStories] = useState([]);
   const [showStory, setShowStory] = useState(false);
-
+  const [showHighlightSelector, setShowHighlightSelector] = useState(false);
+  const [showHighlightName, setShowHighlightName] = useState(false);
+  const [highlightName, setHighlightName] = useState('')
+  const [highlights, setHighlights] = useState([]);
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -143,7 +148,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
         }
 
         if(data.success){
-          setStories(data?.data);
+          setStories(data?.data?.stories);
+          setHighlights(data?.data?.currentUser?.highlights);
           console.log("stories data fetched", data);
         }
       } catch (error) {
@@ -153,12 +159,21 @@ const AuthorHeader = ({ author, setAuthor }) => {
     getStories();
   }, [])
 
-    
+
+  const getHighlightName = (name)=>{
+    setHighlightName(name);
+  }
+
+  
+  console.log("new hightlights", highlights);
+  
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
     {showStory && <StoryViewer stories={stories} onClose={setShowStory} />}
+    {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={stories} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>}
+    {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -299,7 +314,35 @@ const AuthorHeader = ({ author, setAuthor }) => {
         <div className='flex justify-center items-center'>
             {author.bio && <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>
-        <Button disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Button>
+        <Alert disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full justify-center items-center'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
+      <div className='w-full flex items-center overflow-x-scroll gap-3 pb-2 pl-2 h-40'>
+  {/* Highlight creation button */}
+
+        {/* Map through highlights */}
+          {highlights.length > 0 &&
+            highlights.map((highlight, index) => (
+              <div
+                key={index} // Add a unique key for each item
+                className='min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'
+              >
+                <div className='flex flex-col justify-center items-center text-nowrap dark:text-white'>
+                  <div className='w-full flex items-center justify-center p'>                   
+                    <img src={highlight?.thumbnail} className='h-16 w-16 md:h-24 md:w-24 rounded-full ' />
+                  </div>
+                </div>
+                {/* <div className='text-nowrap'>highlight.name</div> */}
+              </div>
+            ))}
+          {author?._id === currentUser?._id && <div
+            onClick={() => setShowHighlightName(true)}
+            className=' min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'
+          >
+            <div className='flex flex-col justify-center items-center text-nowrap dark:text-white'>
+              <HiPlus className='text-5xl' />
+              <span className='hidden md:inline'>Highlights</span>
+            </div>
+          </div>}
+        </div>
 
     </div>
   );

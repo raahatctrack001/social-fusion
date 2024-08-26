@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { HiX, HiPause, HiPlay } from 'react-icons/hi';
+import { HiX, HiPause, HiPlay, HiDotsHorizontal, HiDotsVertical, HiOutlineDotsVertical, HiSwitchVertical, HiDotsCircleHorizontal } from 'react-icons/hi';
 import PageLoader from './PageLoader';
+import { formatDistanceToNow } from 'date-fns';
+import { current } from '@reduxjs/toolkit';
+import { HiEllipsisVertical } from 'react-icons/hi2';
 
 const StoryViewer = ({ stories, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -92,6 +95,9 @@ const StoryViewer = ({ stories, onClose }) => {
 
     onClose(false)
   }
+  if(stories.length === 0){
+    return <PageLoader />
+  }
   return (
     <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
       <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
@@ -99,7 +105,12 @@ const StoryViewer = ({ stories, onClose }) => {
           <HiX />
         </button>
         <div className='flex flex-col gap-2 md:px-2'>
-          <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> Recent Stories ({currentIndex+1}/{stories.length}) </h1>
+          <div className='flex justify-between items-center'>
+            <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> Recent Stories ({currentIndex+1}/{stories.length}) </h1>
+            <div className='cursor-pointer relative top-2 right-5'>
+              <HiDotsCircleHorizontal className='text-lg '/>
+            </div>
+          </div>
           <div
             className="w-full p-2 flex items-center justify-center rounded-lg"
             onMouseOver={handleMouseOver}
@@ -109,6 +120,7 @@ const StoryViewer = ({ stories, onClose }) => {
           >
 
             <div className="w-full mx-auto">
+              <p className='w-full flex items-center justify-center'>uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, {addSuffix: true})} </p>
               <img src={stories[currentIndex].contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain" />
             </div>
           </div>

@@ -15,11 +15,10 @@ const storySchema = new mongoose.Schema({
     enum: ['image', 'video'], // Type of content
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    expires: '24h',
-  },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
   viewers: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,8 +29,8 @@ const storySchema = new mongoose.Schema({
       type: Date,
       default: Date.now,
     }
-  }],
-});
+  }]
+}, {timestamps: true});
 
 const Story = mongoose.model('Story', storySchema);
 

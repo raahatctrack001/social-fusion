@@ -62,14 +62,58 @@ export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
         if(!currentUser){
             throw new apiError(404, "User is missing")
         }
-        const stories = await Story.find({user: currentUser});
+        const stories = await Story.find({
+            user:currentUser,
+            createdAt: { $gt: new Date(Date.now() - 24*60*60*1000) } // all the documents whose date and timing are greater than 24 hours before now...
+            //createdAt time should be greater than this given time
+        
+        })
+        console.log(stories.length)
         if(!stories){
             throw new apiError(404, "No recent stories")
         }
         
 
-        return res.status(200).json(new apiResponse(200, "stories fetched", stories))
+        return res.status(200).json(new apiResponse(200, "stories fetched", {currentUser, stories}))
         
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const deleteStory = asyncHandler(async (req, res, next)=>{
+    
+})
+
+export const createNewHightlights = asyncHandler(async (req, res, next)=>{
+    try {
+        const { userId } = req.params;                      
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "either userId is wrong or user doesn't exists");
+        }
+        
+        const { name, stories} = req.body;
+
+        if(name.trim() === ''){
+            throw new apiError(404, "Highlights name is necessary!");
+        }
+
+        if(stories.trim() === ''){
+            throw new apiError(404, "no stories selected!");
+        }
+
+        const firstStory = await Story.findById(stories.split(',')[0]);
+        const newHighlight = {
+            name,
+            thumbnail: firstStory.contentURL,
+            stories: stories.split(','),
+        }
+
+        currentUser.highlights.push(newHighlight);
+        await currentUser.save();
+
+        return res.status(200).json( new apiResponse(200, "new highlights has been created!", {currentUser, newHighlight}));
     } catch (error) {
         next(error)
     }

@@ -34,6 +34,18 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Story'
     }],
+    highlights: [{
+      name: {
+        type: String,
+      },
+      thumbnail:{
+        type:String,
+      },
+      stories:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Story'
+      }] 
+    }],
     bio: {
         type: String,
         trim: true,
