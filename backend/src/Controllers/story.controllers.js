@@ -1,3 +1,4 @@
+import HighlightModel from "../Models/story.highlight.model.js";
 import Story from "../Models/story.model.js";
 import User from "../Models/user.model.js";
 import apiError from "../Utils/apiError.js";
@@ -38,6 +39,7 @@ export const uploadStory = asyncHandler(async (req, res, next)=>{
 
         currentUser.stories = [...currentUser?.stories, ...stories];
         await currentUser.save();
+        console.log(stories)
         res
             .status(200)
             .json(
@@ -58,12 +60,12 @@ export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
             throw new apiError(404, "UserId is missing")
         } 
 
-        const currentUser = await User.findById(userId);
+        const currentUser = await User.findById(userId).populate("highlights");
         if(!currentUser){
             throw new apiError(404, "User is missing")
         }
         const stories = await Story.find({
-            user:currentUser,
+            user:userId,
             createdAt: { $gt: new Date(Date.now() - 24*60*60*1000) } // all the documents whose date and timing are greater than 24 hours before now...
             //createdAt time should be greater than this given time
         
@@ -85,39 +87,50 @@ export const deleteStory = asyncHandler(async (req, res, next)=>{
     
 })
 
-export const createNewHightlights = asyncHandler(async (req, res, next)=>{
+export const createNewHighlights = asyncHandler(async (req, res, next) => {
     try {
         const { userId } = req.params;                      
         const currentUser = await User.findById(userId);
-        if(!currentUser){
-            throw new apiError(404, "either userId is wrong or user doesn't exists");
+        if (!currentUser) {
+            throw new apiError(404, "Either userId is wrong or user doesn't exist.");
         }
         
-        const { name, stories} = req.body;
+        const { name, stories } = req.body;
 
-        if(name.trim() === ''){
-            throw new apiError(404, "Highlights name is necessary!");
+        if (!name || name.trim() === '') {
+            throw new apiError(400, "Highlight name is necessary!");
         }
 
-        if(stories.trim() === ''){
-            throw new apiError(404, "no stories selected!");
+        if (!stories || stories.length === 0) {
+            throw new apiError(400, "No stories selected!");
         }
 
         const firstStory = await Story.findById(stories.split(',')[0]);
-        const newHighlight = {
-            name,
-            thumbnail: firstStory.contentURL,
-            stories: stories.split(','),
+        if (!firstStory) {
+            throw new apiError(404, "First story not found!");
         }
 
+        const newHighlight = await HighlightModel.create({
+            name,
+            author: userId, // Directly using the userId
+            thumbnail: firstStory.contentURL,
+            stories: stories.split(','), // Assuming stories is an array of story IDs
+        });
+
+        if (!newHighlight) {
+            throw new apiError(404, "Failed to create highlights");
+        }
         currentUser.highlights.push(newHighlight);
         await currentUser.save();
-
-        return res.status(200).json( new apiResponse(200, "new highlights has been created!", {currentUser, newHighlight}));
+        
+        // const populatedHighlight = await HighlightModel.findById(newHighlight._id).populate('author');
+        return res.status(200).json(new apiResponse(200, "New highlight has been created!", {currentUser, newHighlight} ));
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
+
+
 
 export const getHeighlightStories = asyncHandler(async (req, res, next)=>{
     try {
@@ -137,6 +150,48 @@ export const getHeighlightStories = asyncHandler(async (req, res, next)=>{
         console.log(fetchedStories)
         return res.status(200).json(new apiResponse(200, "highlight stories fetched", fetchedStories))
         
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const deleteHighlight = asyncHandler( async(req, res, next)=>{
+    console.log("control checkpoint 1")
+    try {
+        const { userId, highlightId } = req.params;
+        if(!(userId && highlightId)){
+            throw new apiError("userId or highlight story id is missing!")
+        }
+        console.log("control checkpoint 2")
+
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist")
+        }
+        console.log("control checkpoint 3")
+
+        const highlight = await HighlightModel.findById(highlightId);
+        if(!highlight){
+            throw new apiError(404, "highlight doesn't exist")
+        }
+        console.log("control checkpoint 4")
+
+        const index = currentUser?.highlights.indexOf(highlight?._id)
+        if(index != -1){
+            currentUser?.highlights.splice(index, 1);
+            await currentUser.save();
+        }
+        console.log("control checkpoint 5")
+
+        const deletedHighlight = await HighlightModel.findByIdAndDelete(highlight?._id);
+        if(!deletedHighlight){
+            throw new apiError(404, "highlight doesn't exists")
+        }
+        console.log("control checkpoint 6")
+
+        // console.log(deletedHighlight);
+        return res.status(200).json(new apiResponse(200, `highlights with name ${deletedHighlight.name} is deleted`, {currentUser, deletedHighlight}))
+
     } catch (error) {
         next(error)
     }

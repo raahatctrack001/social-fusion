@@ -35,16 +35,8 @@ const userSchema = mongoose.Schema({
         ref: 'Story'
     }],
     highlights: [{
-      name: {
-        type: String,
-      },
-      thumbnail:{
-        type:String,
-      },
-      stories:[{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Story'
-      }] 
+        ref:'HighlightModel'
     }],
     bio: {
         type: String,

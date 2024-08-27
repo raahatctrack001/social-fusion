@@ -38,13 +38,12 @@ const HighlightSelector = ({highlightName, stories, onClose, setHighlights }) =>
         if(!response.ok){
             throw new Error(data?.message || "Network response isn't ok while creating highlights!" )
         }
-        // console.log(data);
+
         if(data.success){
-            console.log("fromhighlightselector", data?.data?.currentUser?.highlights)
+            console.log("fromhighlightselector", data)
             dispatch(updateSuccess(data?.data?.currentUser));
-            setHighlights(data?.data?.currentUser?.highlights)
-            console.log("console.log0", data);
-        }
+            setHighlights(prev => [...prev, data?.data?.newHighlight]);
+          }
     } catch (error) {
         setError(error.message)
         console.log(error)

@@ -16,6 +16,7 @@ import StoryViewer from './StoryViewer';
 import HighlightSelector from './HighlightSelector';
 import HighlightNamePopup from './HighlightNamePopup';
 import apiError from '../../../backend/src/Utils/apiError';
+import HighlightViewer from './HighlightViewer';
 // import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
@@ -46,6 +47,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [highlightClick, setHighlightClick] = useState(false)
   const [highlightClickStories, setHighlightClickStories] = useState([])
   const [loading, setLoading] = useState(false);
+  const [sendHighlight, setSendHighlight] = useState(null);
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -56,11 +58,11 @@ const AuthorHeader = ({ author, setAuthor }) => {
         }
       })
       .then((response)=>{
-        console.log("resonse: ", response);
+        // console.log("resonse: ", response);
         return response.json();
       })
       .then((data)=>{
-          console.log(data.message)          
+          // console.log(data.message)          
           if(currentUser?.followings?.includes(author?._id)){
             setFollowersCount(followersCount-1)
           }
@@ -72,7 +74,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       })
     } catch (error) {
         alert(error.message);
-        console.log(error);
+        // console.log(error);
     }
   }
   
@@ -94,7 +96,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         if(data.success){
           setAuthor(data?.data)
           // alert(data.message);
-          console.log("dp change data", data);
+          // console.log("dp change data", data);
           dispatch(updateSuccess(data.data))
         }
             
@@ -121,19 +123,19 @@ const AuthorHeader = ({ author, setAuthor }) => {
           body: formData,
         });
 
-      console.log(response)
+      // console.log(response)
       const data = await response.json();
       if(!response.ok){
         throw new Error(data?.message || "Network response isn't ok while adding stories!")
       }
       if(data?.success){
-        setStories((prevstories) => [...prevstories, data?.data?.stories[0]]);
+        setStories((prevstories) => [...prevstories, ...data?.data?.stories]);
         console.log("story uploaded", data)
         dispatch(updateSuccess(data?.data?.currentUser))
       }
 
     } catch (error) {
-      console.log("inside add story", error)
+      // console.log("inside add story", error)
       setError(error.message)
     }
     finally{
@@ -144,7 +146,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   useEffect(()=>{
     const getStories = async ()=>{
       try {
-        console.log("inside useeffect", apiEndPoints.getStoriesOfUser(author?._id))
+        // console.log("inside useeffect", apiEndPoints.getStoriesOfUser(author?._id))
         const response = await fetch(apiEndPoints.getStoriesOfUser(author?._id));
         const data = await response.json();
         if(!response.ok){
@@ -152,6 +154,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         }
 
         if(data.success){
+        
           setStories(data?.data?.stories);
           setHighlights(data?.data?.currentUser?.highlights);
           console.log("stories data fetched", data);
@@ -161,7 +164,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       }
     };
     getStories();
-  }, [])
+  }, [author])
 
 
   const getHighlightName = (name)=>{
@@ -170,9 +173,10 @@ const AuthorHeader = ({ author, setAuthor }) => {
 
   
   const handleHighlightClick = async (highlight)=>{
+    console.log("highlight clicked",highlight)
     try {
       setLoading(true)
-      console.log(highlight)
+      setSendHighlight(highlight)
       const formData = new FormData();
       formData.append("stories", highlight.stories);
       const response = await fetch(apiEndPoints.getHighlightStories(), {method: "POST", body: formData});
@@ -183,28 +187,29 @@ const AuthorHeader = ({ author, setAuthor }) => {
       }
 
       if(data?.success){
-        console.log(data);
+        console.log("highlight stories data", data);
         setHighlightClickStories(data?.data);
         setHighlightClick(true)
       }
     } catch (error) {
       alert(error.message)
-      console.log(error)
+      // console.log(error)
     }
     finally{
       setLoading(false)
     }
 
   }
+
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
-    {showStory && <StoryViewer stories={stories} onClose={setShowStory} heading={"Recent Stories..."}/>}
+    {showStory && <StoryViewer highlight={false} stories={stories} onClose={setShowStory} heading={"Recent Stories..."}/>}
     {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={stories} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>}
     {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
-    {highlightClick && <StoryViewer stories={highlightClickStories} onClose={setHighlightClick} heading={"Highlight Stories"}/>}
+    {highlightClick && <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} onClose={setHighlightClick} heading={sendHighlight?.name}/>}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -350,20 +355,20 @@ const AuthorHeader = ({ author, setAuthor }) => {
   {/* Highlight creation button */}
 
         {/* Map through highlights */}
-          {highlights.length > 0 &&
+           {highlights?.length > 0 ? 
             highlights.map((highlight, index) => (
               <div onClick={()=>handleHighlightClick(highlight)}
                 key={index} // Add a unique key for each item
-                className='min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'
+                className='mb-5 grid place-items-center justify-center min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 cursor-pointer'
               >
-                <div className='flex flex-col justify-center items-center text-nowrap dark:text-white'>
+                <div className='relative top-2 flex flex-col justify-center items-center text-nowrap dark:text-white'>
                   <div className='w-full flex items-center justify-center p'>                   
                     <img src={highlight?.thumbnail} className='h-16 w-16 md:h-24 md:w-24 rounded-full ' />
                   </div>
                 </div>
-                {/* <div className='text-nowrap'>highlight.name</div> */}
+                <div className='text-nowrap text-white relative top-5'>{highlight?.name?.length > 13 ? highlight?.name?.substring(0, 13)+"...": highlight?.name}</div>
               </div>
-            ))}
+            )): <div className='w-full flex justify-center text-5xl'> No highlights yet! </div>}
           {author?._id === currentUser?._id && <div
             onClick={() => setShowHighlightName(true)}
             className=' min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'

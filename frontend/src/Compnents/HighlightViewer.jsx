@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { updateSuccess } from '../redux/slices/user.slice';
 
-const StoryViewer = ({highlight, stories, onClose,heading }) => {
+const HighlightViewer = ({highlight, highlights, setHighlights, stories, onClose,heading }) => {
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -128,16 +128,20 @@ const StoryViewer = ({highlight, stories, onClose,heading }) => {
 
         if(data.success){
           console.log(data)
-
+          //   console.log("before deletion", highlights);
+          //   const updatedHighlights = highlights.filter(highlight=>highlight?._id !== deletedHighlight);
+          //   console.log("after deletion", updatedHighlights);
           
+          const deletedHighlight = data?.data?.deletedHighlight
+          setHighlights(highlights.filter(highlight=>highlight?._id !== deletedHighlight?._id))
+        //   setHighlights(updatedHighlights);
           dispatch(updateSuccess(data?.data?.currentUser));
+          onClose(false)
         }
       } catch (error) {
       console.log(error);
     }
   }
-  // console.log(currentUser)
-  // console.log(stories[currentIndex])
   return (
     <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
       <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
@@ -172,11 +176,11 @@ const StoryViewer = ({highlight, stories, onClose,heading }) => {
                     <div className='cursor-pointer relative top-20 right-8  rounded-lg pl-2'>
                       {/* <HiDotsCircleHorizontal className='text-lg ' onClick={(e)=>{e.stopPropagation();setShowDropdown(true)}}/> */}
                       <div onClick={handleButtonClick} className='w-10 md:w-36 bg-white dark:bg-gray-700 h-24 flex flex-col justify-between py-2 rounded-lg pl-2'>
-                        {currentUser?._id !== stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiHeart className=''/> <span className='hidden md:inline'> Like </span> </p>}
-                        {currentUser?._id !== stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiReply className=''/> <span className='hidden md:inline'> Reply </span> </p>}
-                        {currentUser?._id !== stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiExclamationTriangle className=''/> <span className='hidden md:inline'> Report </span>  </p>}
-                        {currentUser?._id === stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiTrash className=''/> <span className='hidden md:inline'> Delete </span> </p>}
-                        {currentUser?._id === stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiPlus className=''/> <span className='hidden md:inline'> Highlights </span>  </p>}
+                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiHeart className=''/> <span className='hidden md:inline'> Like </span> </p>}
+                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiReply className=''/> <span className='hidden md:inline'> Reply </span> </p>}
+                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiExclamationTriangle className=''/> <span className='hidden md:inline'> Report </span>  </p>}
+                        {currentUser?._id === highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiTrash className=''/> <span className='hidden md:inline'> Delete </span> </p>}
+                        {currentUser?._id === highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiPlus className=''/> <span className='hidden md:inline'> Highlights </span>  </p>}
                         <span>  </span>
                       </div>
                     </div>
@@ -207,4 +211,4 @@ const StoryViewer = ({highlight, stories, onClose,heading }) => {
   );
 };
 
-export default StoryViewer;
+export default HighlightViewer;
