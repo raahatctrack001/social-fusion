@@ -9,10 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { updateSuccess } from '../redux/slices/user.slice';
 
-const StoryViewer = ({highlight, stories, onClose,heading }) => {
+const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(index < 0 ? 0 : index);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   // const [showDropdown, setShowDropdown] = useState(false);

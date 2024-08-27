@@ -48,6 +48,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [highlightClickStories, setHighlightClickStories] = useState([])
   const [loading, setLoading] = useState(false);
   const [sendHighlight, setSendHighlight] = useState(null);
+  const [index, setIndex] = useState(0) // index to start story from
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -129,7 +130,9 @@ const AuthorHeader = ({ author, setAuthor }) => {
         throw new Error(data?.message || "Network response isn't ok while adding stories!")
       }
       if(data?.success){
+        setIndex(stories?.length);
         setStories((prevstories) => [...prevstories, ...data?.data?.stories]);
+        setShowStory(true)
         console.log("story uploaded", data)
         dispatch(updateSuccess(data?.data?.currentUser))
       }
@@ -205,11 +208,11 @@ const AuthorHeader = ({ author, setAuthor }) => {
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
-    {showStory && <StoryViewer highlight={false} stories={stories} onClose={setShowStory} heading={"Recent Stories..."}/>}
+    {showStory && (stories?.length ? <StoryViewer index={index}  highlight={false} stories={stories} onClose={setShowStory} heading={"Recent Stories..."}/>:<h2>No stories yet! Add some stories and let the world know what you are doing rn...</h2>)}
     {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={stories} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>}
     {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
-    {highlightClick && <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} onClose={setHighlightClick} heading={sendHighlight?.name}/>}
+    {highlightClick && ( highlightClickStories ? <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} onClose={setHighlightClick} heading={sendHighlight?.name}/> :<h2>No stories yet! Please add stories to add to highlights...</h2>)}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -355,7 +358,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   {/* Highlight creation button */}
 
         {/* Map through highlights */}
-           {highlights?.length > 0 ? 
+           {highlights?.length > 0 &&
             highlights.map((highlight, index) => (
               <div onClick={()=>handleHighlightClick(highlight)}
                 key={index} // Add a unique key for each item
@@ -368,7 +371,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 </div>
                 <div className='text-nowrap text-white relative top-5'>{highlight?.name?.length > 13 ? highlight?.name?.substring(0, 13)+"...": highlight?.name}</div>
               </div>
-            )): <div className='w-full flex justify-center text-5xl'> No highlights yet! </div>}
+            ))}
+            {currentUser?._id === author?._id ? <div> </div> : <div className='w-full flex justify-center text-5xl'> No highlights yet! </div>}
           {author?._id === currentUser?._id && <div
             onClick={() => setShowHighlightName(true)}
             className=' min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'
