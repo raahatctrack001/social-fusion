@@ -50,6 +50,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [sendHighlight, setSendHighlight] = useState(null);
   const [index, setIndex] = useState(0) // index to start story from
   const [deleteHighlightLoading, setDeleteHighlightLoading] = useState(false);
+  const [dpChangeLoading, setDpChangeLoading] = useState(false)
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -241,6 +242,22 @@ const AuthorHeader = ({ author, setAuthor }) => {
       }
     
   }
+  const handleRemoveDPClick = async ()=>{
+    try {
+        const response = await fetch(apiEndPoints.removeDPAddress(currentUser?._id), {method: "PATCH"});
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data?.message || "Network response wasn' ok while removing dp")
+        } 
+        
+        if(data.success){
+          dispatch(updateSuccess(data?.data));
+          setAuthor(data?.data)
+        }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
@@ -251,6 +268,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
     {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting highlight! please wait!`} />}
     {highlightClick && ( highlightClickStories ? <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} setStories={setStories} onClose={setHighlightClick} heading={sendHighlight?.name}/> :<h2>No stories yet! Please add stories to add to highlights...</h2>)}
+    {dpChangeLoading && <LoaderPopup loading={dpChangeLoading} setLoading={setDpChangeLoading} info={"Removing your dp! please wait..."} />}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -277,12 +295,12 @@ const AuthorHeader = ({ author, setAuthor }) => {
               <HiPencil className='text-2xl text-gray-950 relative' 
             />
             </div>}
-            {showDropdown && <div className='bg-gray-300 text-black dark:bg-gray-700 dark:text-white rounded-lg font-semibold items-center relative top-32 left-20 z-10'>
+            {showDropdown && <div className='pl-3 bg-gray-300 text-black dark:bg-gray-700 dark:text-white rounded-lg font-semibold items-center absolute top-28 left-16 z-10 px-5 text-nowrap'>
               <div className='flex justify-between'> 
                 <span></span> <HiX onClick={()=>setShowDropdown(false)} className='mr-2 mt-1 cursor-pointer' />
               </div>
-              <span onClick={()=>{profileRef.current.click(), setShowDropdown(false)}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'><HiOutlineUserCircle /> Change DP</span>
-              
+              <span onClick={()=>{profileRef.current.click(), setShowDropdown(false)}} className='flex justify-start items-center gap-1 hover:text-lg cursor-pointer text-nowrap'><HiOutlineUserCircle /> Change DP</span>
+              <span onClick={handleRemoveDPClick} className='flex justify-start items-center gap-1 hover:text-lg cursor-pointer text-nowrap'><HiTrash /> Remove DP </span>
               <input
                 ref={storyRef}
                 type="file"
@@ -291,10 +309,11 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 multiple
                 accept="image/*"
               />
-                            <span onClick={()=>{storyRef.current.click()}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'> <HiPlus /> Add Story</span>
-              <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-center items-center hover:text-lg cursor-pointer gap-2'> <HiEye className='' /> Show DP</span>
+              <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-start items-center hover:text-lg cursor-pointer gap-1 text-nowrap'> <HiEye className='' /> Show DP</span>
+              <span onClick={()=>{storyRef.current.click()}} className='flex justify-start items-center gap-1 hover:text-lg cursor-pointer text-nowrap'> <HiPlus /> Add Story</span>
             </div>}
-            <div className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
+            <div 
+              className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
               <img 
                 onClick={()=>setShowStory(!showStory)}
                 src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
@@ -396,10 +415,12 @@ const AuthorHeader = ({ author, setAuthor }) => {
       </div>
 
         <div className='flex justify-center items-center'>
-            {author.bio && <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
+            {author.bio && 
+              <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>
         <Alert disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full justify-center items-center'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
-      <div className='w-full flex items-center overflow-x-scroll gap-3 pb-2 pl-2 h-40'>
+      <div 
+        className='w-full flex items-center overflow-x-scroll gap-3 pb-2 pl-2 h-40'>
   {/* Highlight creation button */}
 
         {/* Map through highlights */}

@@ -48,7 +48,7 @@ const ProfileEditPage = () => {
       })
       const data = await response.json();
       if(!response.ok){
-        setError(data.message || "Network response isn't ok while profile edit submit pgae!");
+        throw new Error(data.message || "Network response isn't ok while profile edit submit pgae!");
         // alert("failed to update profile");
       }
 
@@ -56,10 +56,9 @@ const ProfileEditPage = () => {
       
       if(data.success){
         dispatch(updateSuccess(data.data));
-        
+        navigate(`/authors/author/${currentUser?._id}`)
         return;
       }
-      setError(data.message)
     } catch (err) {
       setError(err.message || 'Failed to update profile');
     }

@@ -7,6 +7,7 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useNavigate } from 'react-router-dom';
 // import EditorWithDisplay from '../Compnents/EditorWithDisplay';
 import CustomDropdown from '../Compnents/CustomDropdown';
+import { useSelector } from 'react-redux';
 // import Editor from '../Compnents/EditorWithDisplay';
 
 const EditPost = ({ placeholder }) => {
@@ -44,7 +45,7 @@ const EditPost = ({ placeholder }) => {
   // const [thumbnailFile, setThumbnailFile] = useState(null);
   const [showURL, setShowURL] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('')
-
+  const { theme } = useSelector(state=>state.theme)
 
   const handleCategorySelect = (value) => {
     setSelectedCategory(value);
@@ -151,28 +152,23 @@ const EditPost = ({ placeholder }) => {
             method: "PUT",
             body: formData,
         })
-        
-        console.log("response", response)
-
+        const data = await response.json();
+      
         if(!response.ok){
-            setError(response.message)
-            return;
+            throw new Error(data.message || "Network response isn't ok while updating post")
             // throw new Error("failed to upload post!")
         }
-        const data = await response.json();
-        console.log("data", data);
-        
+       
         if(data.success){
             console.log("data");
             localStorage.removeItem("postToUpdate");
             navigate(`/posts/post/${data?.data?._id}`);
-        }else{
-            setError(data.message)
         }
         // console.log("data extracted", data.data);
-    } catch (error) {
-      setError(error.message)
-      console.log(error);
+      } catch (error) {
+        alert(error.message)
+        setError(error.message)
+        console.log(error);
     }
   }
   // console.log(selectedCategory)
@@ -180,6 +176,8 @@ const EditPost = ({ placeholder }) => {
 
     <div className='w-full border-2 md:px-10 rounded-lg'>
       <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Update Post </h1>  
+      {theme === 'dark' &&     <p className='w-full grid place-items-center'> Please switch to light mode for better experience while writing post! </p>    }
+
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
             <TextInput placeholder='Unique Title' className='mb-1 w-3/4' value={title} onChange={(e)=>setTitle(e.target.value)}/>

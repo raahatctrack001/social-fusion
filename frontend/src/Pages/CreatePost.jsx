@@ -43,6 +43,7 @@ const CreatePost = ({ placeholder }) => {
   const [loading, setLoading] = useState(false);
   const [showURL, setShowURL] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('')
+  const { theme } = useSelector(state=>state.theme)
 
 
   const handleCategorySelect = (value) => {
@@ -161,23 +162,18 @@ const CreatePost = ({ placeholder }) => {
           body:formData,
         })
         
+        const data = await response.json();
         if(!response.ok){
-          setLoading(false);
-          setError(response.message)
-          return;
+          throw new Error(data.message || "Network response is not ok while creating post!")
           // throw new Error("failed to upload post!")
         }
-        const data = await response.json();
         if(data.success){
           navigate(`/posts/post/${data?.data?._id}`);
-        }else{
-          setError(data.message)
         }
-        setLoading(false)
-        // console.log("data extracted", data.data);
+        
     } catch (error) {
       setError(error.message)
-      console.log(error);
+ 
     }
     finally{
       setLoading(false)
@@ -192,16 +188,17 @@ const CreatePost = ({ placeholder }) => {
       
          
     <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
-    <div className='flex justify-center items-center overflow-scroll mt-2 w-full'>
-      {thumbnailURL && <img className='p-5 w-1/2 max-h-96 rounded-3xl aspect-auto' src={thumbnailURL} alt="thumbnail" />}
-    </div>
+    {theme === 'dark' && <p className='w-full grid place-items-center'> Please switch to light mode for better experience while writing post! </p>    }
+    {thumbnailURL && <div className='flex justify-center items-center overflow-scroll mt-2 w-full'>
+      <img className='p-5 w-1/2 max-h-96 rounded-3xl aspect-auto' src={thumbnailURL} alt="thumbnail" />
+    </div>}
       <div className='m-5 min-h-screen'>
           <div className='flex w-full gap-2 justify-center items-center'>
             <TextInput placeholder='Unique Title' className='mb-1 w-3/4 border-2 rounded-lg' onChange={(e)=>setTitle(e.target.value)}/>
             <TextInput 
               onChange={handleFileUpload}
               type='file' ref={filePickerRef}  className='hidden' id='postImage' name='postImage'/>
-            <Button outline onClick={()=>filePickerRef.current.click()} color={''} className='w-1/4  h-8 md:h-10 mb-1 flex items-center border-2 hover:bg-gray-500 '> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Upload</span> Images </Button>
+            <Button outline onClick={()=>filePickerRef.current.click()} color={''} className='w-1/4  h-8 md:h-10 mb-1 flex items-center border-2 hover:bg-gray-500 '> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Insert</span> Image </Button>
           </div>
 
           <div>
@@ -221,9 +218,9 @@ const CreatePost = ({ placeholder }) => {
                 To enhance your post with images, follow these simple steps:
               </p>
               <ol className="list-decimal pl-5 text-blue-700">
-                <li className="mb-1">Upload Your Image: Use the provided upload image to select and upload your image.</li>
+                <li className="mb-1 flex justify-start items-center">Upload Your Image: Use the provided upload image <span className='border-2 p-1 rounded-lg flex gap-1 justify-center items-center w-32'><HiUpload /> <span className='hidden md:inline'> Insert </span> Image</span>to select and upload your image.</li>
                 <li className="mb-1">Get the Image URL: After uploading, copy the popped up URL of the uploaded image.</li>
-                <li>Insert the Image: Paste the copied URL into the "URL" field located at second last position in top right corner of the text editor similar to this <HiPhotograph className="inline" />.</li>
+                <li>Insert the Image: Paste the copied URL into the "URL" field located at second last position in top right corner of the text editor similar to this <HiPhotograph className="inline" /> also give name of image in alternate text field (Optional).</li>
               </ol>
               <p className="text-blue-700 mt-2">This will embed the image into your content. Happy posting!</p>
             </div>}

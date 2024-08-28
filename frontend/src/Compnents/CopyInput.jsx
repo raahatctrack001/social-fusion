@@ -22,7 +22,7 @@ const CopyInput = ({ url }) => {
           type="text"
           value={url}
           readOnly
-          className="p-2 border border-gray-300 rounded-md w-full"
+          className="p-2 border border-gray-300 rounded-md w-full dark:bg-gray-600"
         />
         <button
           onClick={handleCopy}

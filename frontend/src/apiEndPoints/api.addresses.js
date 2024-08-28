@@ -4,17 +4,18 @@ export  const apiEndPoints = {
     loginAddress : ()=> `/api/v1/auth/login`,
     logoutAddress : ()=> `/api/v1/auth/logout`,
     updatePasswordAddress: (authorId)=>`/api/v1/auth/update-password/${authorId}`,
-
+    
     getUserAddress : (userId)=> `/api/v1/users/get-user/${userId}`,
     getUsersAddress : ()=> `/api/v1/users/get-users/`,
     deleteUserAddress : (userId)=> `/api/v1/users/delete-user/${userId}`,
     updateUserAddress : (userId)=> `/api/v1/users/update-user/${userId}`,
+    removeDPAddress: (userId)=>`/api/v1/users/remove-dp/${userId}`,
     updateProfilePic : (userId)=> `/api/v1/users/upload-profile-picture/${userId}`,
     uploadStoryAddress: ()=>`/api/v1/users/upload-story`,
     toggleFollowUserAddress : (followId)=> `/api/v1/users/follow-user/${followId}`,
     updateDPAddress: (userId)=>`/api/v1/users/upload-profile-picture/${userId}`,
     toggleOnlineStatusAddress: (userId)=>`/api/v1/users/toggle-online-status/${userId}`,
-
+    
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
     searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,

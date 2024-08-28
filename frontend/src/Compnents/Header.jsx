@@ -22,6 +22,7 @@ export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector(state=>state.user);
   const { theme } = useSelector(state=>state.theme);
+  // console.log(theme)
 
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   // console.log(currentUser)
@@ -141,6 +142,7 @@ export default function Header() {
                    <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                   </Link>
                </Dropdown.Header>
+               <div onClick={()=>dispatch(toggleTheme())} className="flex justify-start items-center gap-2 pl-4"> {theme === 'dark' ? <HiSun /> : <HiMoon /> } toggle theme </div>
                <Dropdown.Item href="/dashboard?tab=home" icon={HiViewGrid}>Dashboard</Dropdown.Item>
                <Dropdown.Item href="/chatroom" icon={HiChatBubbleBottomCenterText}>Chat Room</Dropdown.Item>
 

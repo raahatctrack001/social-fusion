@@ -165,11 +165,11 @@ const PostPage = () => {
     }
   }
 
-
+console.log(post)
 
 
   return (
-    <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52'>
+    <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52 '>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>
       
       <div>
@@ -219,7 +219,10 @@ const PostPage = () => {
         {/* <img src={post?.imagesURLs[0]?.url} alt="" /> */}
         {/* <p className='w-full flex justify-center md:text-xl font-semibold my-3'> {post?.imagesURLs[0]?.original_filename} </p> */}
       </div>
+      <div className='w-full flex justify-center items-center'>
         <DisplayContent content={post?.content} />
+
+      </div>
 
         <div className='flex justify-between border-2 p-2 rounded-lg'>          
           <div className='flex justify-center items-center gap-3'>

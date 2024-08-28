@@ -1,45 +1,16 @@
 import React from 'react';
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaGithub, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaGithub, FaEnvelope, FaWhatsapp, FaGlobe } from 'react-icons/fa';
 
 const ContactPage = () => {
   const socialMediaLinks = [
-    { platform: 'Social Fusion', url: 'https://www.socialfusion.com', icon: 
-        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  {/* <!-- Central Node --> */}
-  <circle cx="12" cy="12" r="3" fill="#4A90E2" />
-  
-  {/* <!-- Extended Nodes and Connections --> */}
-  {/* <!-- Top Branch --> */}
-  <line x1="12" y1="12" x2="12" y2="2" stroke="#4A90E2" strokeWidth="2" />
-  <circle cx="12" cy="2" r="2" fill="#4A90E2" />
-  
-  {/* <!-- Bottom Branch --> */}
-  <line x1="12" y1="12" x2="12" y2="22" stroke="#4A90E2" strokeWidth="2" />
-  <circle cx="12" cy="22" r="2" fill="#4A90E2" />
-  
-  {/* <!-- Left Branch --> */}
-  <line x1="12" y1="12" x2="2" y2="12" stroke="#4A90E2" strokeWidth="2" />
-  <circle cx="2" cy="12" r="2" fill="#4A90E2" />
-  
-  {/* <!-- Right Branch --> */}
-  <line x1="12" y1="12" x2="22" y2="12" stroke="#4A90E2" strokeWidth="2" />
-  <circle cx="22" cy="12" r="2" fill="#4A90E2" />
-  
-  {/* <!-- Create a Closed Polygon --> */}
-  <line x1="2" y1="12" x2="12" y2="2" stroke="#4A90E2" strokeWidth="2" />
-  <line x1="12" y2="2" x2="22" y2="12" stroke="#4A90E2" strokeWidth="2" />
-  <line x1="22" y2="12" x2="12" y2="22" stroke="#4A90E2" strokeWidth="2" />
-  <line x1="12" y2="22" x2="2" y2="12" stroke="#4A90E2" strokeWidth="2" />
-</svg>
-
-},
-    { platform: 'Facebook', url: 'https://www.facebook.com/yourprofile', icon: <FaFacebookF className="text-blue-600" /> },
-    { platform: 'Twitter', url: 'https://www.twitter.com/yourprofile', icon: <FaTwitter className="text-blue-400" /> },
-    { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/yourprofile', icon: <FaLinkedinIn className="text-blue-700" /> },
-    { platform: 'Instagram', url: 'https://www.instagram.com/yourprofile', icon: <FaInstagram className="text-pink-500" /> },
-    { platform: 'GitHub', url: 'https://www.github.com/yourprofile', icon: <FaGithub className="text-gray-800 dark:text-white" /> },
-    { platform: 'Email', url: 'mailto:your.email@example.com', icon: <FaEnvelope className="text-red-600" /> },
-    { platform: 'WhatsApp', url: 'https://wa.me/yourWhatsAppNumber', icon: <FaWhatsapp className="text-green-500" /> },
+    { platform: 'Social Fusion', url: 'https://social-fusion.onrender.com/authors/author/66cf3d0fce7ad9beeb414b9b', icon: <FaGlobe /> },
+    // { platform: 'Facebook', url: 'https://www.facebook.com/yourprofile', icon: <FaFacebookF className="text-blue-600" /> },
+    // { platform: 'Twitter', url: 'https://www.twitter.com/yourprofile', icon: <FaTwitter className="text-blue-400" /> },
+    { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/raahat-khan-93722a22a', icon: <FaLinkedinIn className="text-blue-700" /> },
+    { platform: 'Instagram', url: 'https://www.instagram.com/captainr01', icon: <FaInstagram className="text-pink-500" /> },
+    { platform: 'GitHub', url: 'https://www.github.com/raahatctrack001', icon: <FaGithub className="text-gray-800 dark:text-white" /> },
+    { platform: 'Email', url: 'mailto:socialfusion001.sf@gmail.com', icon: <FaEnvelope className="text-red-600" /> },
+    { platform: 'WhatsApp', url: 'https://wa.me/+918920151361', icon: <FaWhatsapp className="text-green-500" /> },
   ];
 
   return (

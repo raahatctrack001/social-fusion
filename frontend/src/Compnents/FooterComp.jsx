@@ -1,6 +1,6 @@
 import { Alert, Button, Footer, Textarea, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
+import { BsDribbble, BsEnvelope, BsFacebook, BsGithub, BsGlobe, BsInstagram, BsLinkedin, BsMailbox, BsMailbox2, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import { HiDocument, HiX } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -94,10 +94,12 @@ export function FooterComp() {
           <div>
             <Footer.Title title="Help Center" />
             <Footer.LinkGroup col>
-              <Footer.Link href="#">Discord Server</Footer.Link>
-              <Footer.Link href="#">Twitter</Footer.Link>
-              <Footer.Link href="#">Facebook</Footer.Link>
-              <Footer.Link href="#">Contact Us</Footer.Link>
+              <Footer.Link href="mailto:socialfusion001.sf@gmail.com">E-Mail</Footer.Link>
+              <Footer.Link href="https://www.instagram.com/captainr0">Instagram</Footer.Link>
+              <Footer.Link href="https://wa.me/+918920151361">Whatsapp</Footer.Link>
+              <Footer.Link href="https://www.linkedin.com/in/raahat-khan-93722a22a">LinkedIn</Footer.Link>
+              <Footer.Link href="https://www.github.com/raahatctrack001">Github</Footer.Link>
+              <Footer.Link href="/contacts">Contact Us</Footer.Link>
             </Footer.LinkGroup>
           </div>
           <div>
@@ -163,11 +165,12 @@ export function FooterComp() {
         <div className="w-full bg-gray-700 px-4 py-6 sm:flex sm:items-center sm:justify-between">
           <Footer.Copyright href="#" by="Raahat Khan" year={new Date().getFullYear()} />
           <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
-            <Footer.Icon href="#" icon={BsFacebook} />
-            <Footer.Icon href="#" icon={BsInstagram} />
-            <Footer.Icon href="#" icon={BsTwitter} />
-            <Footer.Icon href="#" icon={BsGithub} />
-            <Footer.Icon href="#" icon={BsDribbble} />
+            <Footer.Icon href="mailto:socialfusion001.sf@gmail.com" icon={BsEnvelope} target="_blank" rel="noopener noreferrer"/>
+            <Footer.Icon href="https://www.instagram.com/captainr0" icon={BsInstagram}target="_blank" rel="noopener noreferrer" />
+            <Footer.Icon href="https://www.linkedin.com/in/raahat-khan-93722a22a" icon={BsLinkedin} />
+            <Footer.Icon href="https://www.github.com/raahatctrack001" icon={BsGithub}target="_blank" rel="noopener noreferrer" />
+            <Footer.Icon href="https://social-fusion.onrender.com/authors/author/66cf3d0fce7ad9beeb414b9b" icon={BsGlobe} />
+            <Footer.Icon href="https://wa.me/+918920151361" icon={BsWhatsapp} target="_blank" rel="noopener noreferrer"/>
           </div>
         </div>
       </div>

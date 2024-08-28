@@ -34,6 +34,29 @@ export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
     }
 })
 
+export const removeProfilePicture = asyncHandler(async (req, res, next)=>{
+    try {
+        const { userId } = req.params;
+        if(req.user?._id !== userId){
+            throw new apiError(404, "userId is missing")
+        }
+
+        const currentUser = await User.findByIdAndUpdate(userId, {
+            $set: {
+                profilePic: 'https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg'
+            }
+        }, {new: true});
+        if(!currentUser){
+            throw new apiError(404, "user id is missing or user doesn't exist")
+        }
+
+        return res.status(200).json(new apiResponse(200, "profle pic removed", currentUser));
+
+    } catch (error) {
+        next(error)
+    }
+})
+
 export const updateUser = asyncHandler(async (req, res, next)=>{
     if(req.user?._id != req.params?.userId){
         throw new apiError(401, "Unothorized Attempt!")

@@ -9,6 +9,7 @@ import {
     updateUser, 
     uploadProfilePicture, 
     toggleOnlineStatus,
+    removeProfilePicture,
 } from '../Controllers/user.controller.js';
 import { upload } from '../Middlewares/multer.middleware.js';
 
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.route('/upload-profile-picture/:userId').patch(isUserLoggedIn, upload.single("profilePicture"), uploadProfilePicture)
 router.route('/update-user/:userId').patch(isUserLoggedIn, upload.none(), updateUser)
+router.route('/remove-dp/:userId').patch(isUserLoggedIn, removeProfilePicture);
 router.route('/get-users').get(/* isUserLoggedIn, */ getUsers);
 router.route('/get-user/:userId').get(isUserLoggedIn, getUser)
 router.route('/delete-user/:userId').delete(isUserLoggedIn, deleteUser);

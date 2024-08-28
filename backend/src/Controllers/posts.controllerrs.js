@@ -262,12 +262,12 @@ export const updatePost = asyncHandler(async (req, res, next)=>{
        
         const { thumbnail, ...rest } = req.body;
         
-        const updatedPost = await Post.findByIdAndUpdate(postId, rest)
+        const updatedPost = await Post.findByIdAndUpdate(postId, rest, {new: true})
         if(!updatedPost){
             throw new apiError(500, "Failed to update post, try again later!")
         }    
         updatedPost.thumbnail.push(thumbnail);
-        updatedPost.save();
+        await updatedPost.save();
     
         return res
             .status(200)
