@@ -8,8 +8,9 @@ import { Button } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { updateSuccess } from '../redux/slices/user.slice';
+import LoaderPopup from './Loader';
 
-const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
+const StoryViewer = ({index, highlight, stories, setStories, onClose,heading }) => {
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(index < 0 ? 0 : index);
@@ -17,6 +18,8 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
   const [progress, setProgress] = useState(0);
   const [storyTime, setStoryTime] = useState(5000)
   const [countDownTimer, setCountDownTimer] = useState(5)
+  const [loading, setLoading] = useState();
+  const [deleteLoading, setDeleteLoading] = useState(false)
   const videoRef = useRef();
   // const [showDropdown, setShowDropdown] = useState(false);
 
@@ -88,23 +91,14 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
           setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
           return (prevIndex + 1) % stories.length;
         });
-      }, countDownTimer * 1000);
+      }, 5000);
     }
   
     return () => {
       clearInterval(timer);
       clearInterval(progressInterval);
     };
-  }, [isPaused, stories.length, countDownTimer]);
-  
-
-  const handleButtonClick = (event)=>{
-    
-      // Prevent the global area click event from being triggered
-      event.stopPropagation();
-      console.log('Inner div clicked!');
-    
-  }
+  }, [isPaused, stories.length, currentIndex]);
 
   const handleDeleteHighlight = async (e)=>{
     e.stopPropagation();
@@ -154,87 +148,239 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
     }
 }, [currentIndex]);
 
+const handleLikeButtonClick = async(e)=>{
+  e.stopPropagation();
+  try {
+    setLoading(true);
+    const response = await fetch(apiEndPoints.likeStoryAddress(stories[currentIndex]?._id, currentUser?._id), {method: "PATCH"})
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data?.message || "Network response isn't ok while liking the story")
+    }
+
+    if(data.success){
+      dispatch(updateSuccess(data?.data?.currentUser))
+      console.log(data);
+    }    
+  } catch (error) {
+    alert(error.message)
+    console.log(error)
+  }
+  finally{
+    setLoading(false)
+  }
+}
+const handleReplyButtonClick = async(e)=>{
+  e.stopPropagation();
+  console.log("clickekd")
+}
+const handleReportButtonClick = async(e)=>{
+  e.stopPropagation();
+  console.log("clickekd")
+}
+const handleDeleteStoryButtonClick = async(e)=>{
+  e.stopPropagation();
+  try {
+    setDeleteLoading(true)
+    const response  = await fetch(apiEndPoints.deleteStoryAddress(stories[currentIndex]?._id, currentUser?._id), {method: "DELETE"});
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.message || "Network response is not ok while deleting story!")
+    }
+
+    if(data.success){
+      dispatch(updateSuccess(data?.data?.currentUser));
+      const deletedStory = data?.data?.deletedStory;
+      const udpatedStories = stories.filter(story=>story?._id !== deletedStory?._id)
+      setStories(udpatedStories);
+      setCurrentIndex((prevIndex) => {
+        // setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
+        return (prevIndex + 1) % (stories.length-1);
+      });      
+      console.log(data);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  finally{
+    setDeleteLoading(false)
+  }
+}
+const handleAddToHighlightButtonClick = async(e)=>{
+  e.stopPropagation();
+  console.log("clickekd")
+}
   
-  return (
-    <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
-      <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
-        
-        <div className='flex flex-col gap-2 md:px-2'>
-          <div className='flex flex-col md:flex-row'>
-            <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> {heading} ({currentIndex+1}/{stories.length}) </h1>
-            {highlight && 
-              <div className='w-full flex justify-center md:relative top-3'>
-                {currentUser?._id === highlight?.author && <Button onClick={handleDeleteHighlight} color={'failure'} className='text-nowrap w-32'> Delete Highlight </Button>}
-              </div>
-            }
-          </div>
+return (
+  <div className="fixed inset-0 bg-opacity-95 flex items-center justify-center bg-black z-50">
+    {/* Main Container */}
+    <div
+      onClick={handleClick}
+      className="relative flex flex-col justify-between w-full h-full max-w-3xl p-4 bg-gray-800 dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg"
+    >
+      {/* Loading Popups */}
+      {loading && (
+        <LoaderPopup
+          loading={loading}
+          setLoading={setLoading}
+          info="Updating data for liked users! Please wait..."
+        />
+      )}
+      {deleteLoading && (
+        <LoaderPopup
+          loading={deleteLoading}
+          setLoading={setDeleteLoading}
+          info="Deleting story, please wait!"
+        />
+      )}
 
-          
-          <div
-            className="w-full p-2 flex items-center justify-center rounded-lg"
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+      {/* Story Header */}
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-lg md:text-xl font-bold text-white">
+          {heading} ({currentIndex + 1}/{stories.length})
+        </h1>
+        {highlight && currentUser?._id === highlight?.author && (
+          <Button
+            onClick={handleDeleteHighlight}
+            color={'failure'}
+            className="text-sm md:text-base"
           >
+            Delete Highlight
+          </Button>
+        )}
+      </div>
 
-            <div className="w-full mx-auto">
-              <p className='w-full flex items-center justify-center'>uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, {addSuffix: true})} </p>
-              <div className='flex'>
-                {stories[currentIndex]?.type === 'image' ? 
-                <img src={stories[currentIndex].contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain rounded-xl" />:
-                <video width="640" height="360" ref={videoRef} autoPlay>
-                  <source src={stories[currentIndex]?.contentURL} type="video/mp4"/>
-                      Your browser does not support the video tag.
-                  </video>              
+      {/* Story Content */}
+      <div
+        className="flex-1 flex items-center justify-center"
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="relative">
+          {/* Uploaded Time */}
+          <p className="text-sm text-gray-400 text-center mb-2">
+            Uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, { addSuffix: true })}
+          </p>
 
-                }
-                
-                <div className='flex flex-col'>
-                    <button onClick={() => onClose(false)} className="absolute dark:bg-gray-600 dark:text-white bg-red-600 text-white rounded-lg right-2 text-xl p-2">
-                      <HiX />
+          {/* Story Media */}
+          <div className="flex">
+            {stories[currentIndex]?.type === 'image' ? (
+              <img
+                src={stories[currentIndex].contentURL}
+                alt="Story"
+                className="max-h-[80vh] object-contain rounded-lg"
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                className="max-h-[80vh] object-contain rounded-lg"
+              >
+                <source src={stories[currentIndex]?.contentURL} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+
+            {/* Story Controls */}
+            <div className="absolute w-10 top-2 right-2 flex flex-col space-y-2">
+              <button
+                onClick={() => onClose(false)}
+                className="bg-red-600 text-white rounded-full p-2 text-xl md:z-10 relative md:left-10 md:top-4"
+              >
+                <HiX />
+              </button>
+
+              <div className="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg md:w-32 relative bottom-28 md:bottom-28 md:right-10">
+                {currentUser?._id !== stories[currentIndex]?.user && (
+                  <>
+                    <button
+                      onClick={handleLikeButtonClick}
+                      className="flex items-center gap-2 text-sm md:text-base hover:text-lg"
+                    >
+                      <HiHeart className={`text-lg ${currentUser?.likedStories?.includes(stories[currentIndex]?._id) ? 'text-red-500' : ''} hover:text-lg`} />
+                      <span className="hidden md:inline">
+                        {currentUser?.likedStories?.includes(stories[currentIndex]?._id) ? 'Liked' : 'Like'}
+                      </span>
                     </button>
-                    <div className='cursor-pointer relative top-20 right-8  rounded-lg pl-2'>
-                      {/* <HiDotsCircleHorizontal className='text-lg ' onClick={(e)=>{e.stopPropagation();setShowDropdown(true)}}/> */}
-                      <div onClick={handleButtonClick} className='w-10 md:w-36 bg-white dark:bg-gray-700 h-24 flex flex-col justify-between py-2 rounded-lg pl-2'>
-                        {currentUser?._id !== stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiHeart className=''/> <span className='hidden md:inline'> Like </span> </p>}
-                        {currentUser?._id !== stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiReply className=''/> <span className='hidden md:inline'> Reply </span> </p>}
-                        {currentUser?._id !== stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiExclamationTriangle className=''/> <span className='hidden md:inline'> Report </span>  </p>}
-                        {currentUser?._id === stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiTrash className=''/> <span className='hidden md:inline'> Delete </span> </p>}
-                        {currentUser?._id === stories[currentIndex]?.user && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiPlus className=''/> <span className='hidden md:inline'> Highlights </span>  </p>}
-                        <span>  </span>
-                      </div>
-                    </div>
-                  </div>
+
+                    <button
+                      onClick={handleReplyButtonClick}
+                      className="flex items-center gap-2 text-sm md:text-base hover:text-lg"
+                    >
+                      <HiReply className="text-lg" />
+                      <span className="hidden md:inline">Reply</span>
+                    </button>
+
+                    <button
+                      onClick={handleReportButtonClick}
+                      className="flex items-center gap-2 text-sm md:text-base hover:text-lg"
+                    >
+                      <HiExclamationTriangle className="text-lg" />
+                      <span className="hidden md:inline">Report</span>
+                    </button>
+                  </>
+                )}
+
+                {currentUser?._id === stories[currentIndex]?.user && (
+                  <>
+                    <button
+                      onClick={handleDeleteStoryButtonClick}
+                      className="flex items-center gap-2 text-sm md:text-base hover:text-lg"
+                    >
+                      <HiTrash className="text-lg" />
+                      <span className="hidden md:inline">Delete</span>
+                    </button>
+
+                    <button
+                      onClick={handleAddToHighlightButtonClick}
+                      className="flex items-center gap-2 text-sm md:text-base hover:text-lg"
+                    >
+                      <HiPlus className="text-lg hover:text-lg" />
+                      <span className="hidden md:inline hover:text-lg">Highlight</span>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="absolute top-2 left-2 flex items-center gap-2">
-          {isPaused ? (
-            <button onClick={handlePlay} className="bg-white dark:bg-gray-600 p-2 rounded-full">
-              <HiPlay className="text-black dark:text-white text-xl" />
-            </button>
-          ) : (
-            <button onClick={handlePause} className="bg-white dark:bg-gray-600 p-2 rounded-full">
-              <HiPause className="text-black dark:text-white text-xl" />
-            </button>
-          )}
-        </div>
-        <div className="absolute top-0 h-2 left-0 w-full bg-gray-400 ">
-          <div
-            // {countDownTimer}
-            // className="h-full bg-blue-500 dark:bg-blue-300 transition-all duration-50"
-            // style={{ width: `${progress}%` }}
-            className='relative top-11 left-2  font-bold border w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-full bg-white text-black'
-          >
+      </div>
 
-            {countDownTimer}
-          </div>
-        </div> 
+      {/* Story Controls - Bottom */}
+      <div className="absolute bottom-4 left-4 flex items-center gap-4">
+        {/* Play/Pause Button */}
+        <button
+          onClick={isPaused ? handlePlay : handlePause}
+          className="bg-white dark:bg-gray-600 p-2 rounded-full"
+        >
+          {isPaused ? (
+            <HiPlay className="text-black dark:text-white text-xl" />
+          ) : (
+            <HiPause className="text-black dark:text-white text-xl" />
+          )}
+        </button>
+
+        {/* Countdown Timer */}
+        <div className="relative top-1 left-2 font-bold border w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-full bg-white text-black">
+          {countDownTimer}
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gray-600">
+        <div
+          className="h-full bg-blue-500 transition-all duration-75"
+          style={{ width: `${progress}%` }}
+        />
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default StoryViewer;

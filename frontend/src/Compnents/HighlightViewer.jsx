@@ -8,13 +8,17 @@ import { Button } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { updateSuccess } from '../redux/slices/user.slice';
+import LoaderPopup from './Loader';
 
-const HighlightViewer = ({highlight, highlights, setHighlights, stories, onClose,heading }) => {
+const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStories, onClose,heading }) => {
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [deleteHighlightLoading, setDeleteHighlightLoading] = useState(false);
+  const [deleteStoryLoading, setDeleteStoryLoading] = useState(false);
   // const [showDropdown, setShowDropdown] = useState(false);
 
   // console.log(stories)
@@ -95,27 +99,52 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, onClose
       clearInterval(progressInterval);
     };
   }, [isPaused, stories.length]);
-
-  if(stories?.length === 0){
-    setTimeout(() => {
-      <PageLoader />
-    }, 5000);
-
-    onClose(false)
-  }
   
 
-  const handleButtonClick = (event)=>{
-    
-      // Prevent the global area click event from being triggered
-      event.stopPropagation();
-      console.log('Inner div clicked!');
-    
+  const handleLikeButtonClick = async(e)=>{
+    e.stopPropagation();
+    try {
+      setLoading(true);
+      const response = await fetch(apiEndPoints.likeStoryAddress(stories[currentIndex]?._id, currentUser?._id), {method: "PATCH"})
+      const data = await response.json();
+  
+      if(!response.ok){
+        throw new Error(data?.message || "Network response isn't ok while liking the story")
+      }
+  
+      if(data.success){
+        dispatch(updateSuccess(data?.data?.currentUser))
+        console.log(data);
+      }    
+    } catch (error) {
+      alert(error.message)
+      console.log(error)
+    }
+    finally{
+      setLoading(false)
+    }
+  }
+  const handleReplyButtonClick = async(e)=>{
+    e.stopPropagation();
+    console.log("clickekd")
+  }
+  const handleReportButtonClick = async(e)=>{
+    e.stopPropagation();
+    console.log("clickekd")
+  }
+  const handleDeleteButtonClick = async(e)=>{
+    e.stopPropagation();
+    console.log("clickekd")
+  }
+  const handleAddToHighlightButtonClick = async(e)=>{
+    e.stopPropagation();
+    console.log("clickekd")
   }
 
   const handleDeleteHighlight = async (e)=>{
     e.stopPropagation();
     console.log(highlight)
+    setDeleteHighlightLoading(true)
     try {
         
         console.log("triggered or not")
@@ -141,11 +170,53 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, onClose
       } catch (error) {
       console.log(error);
     }
+    finally{
+      setDeleteHighlightLoading(false)
+    }
+  }
+
+  const handleDeleteStoryButtonClick = async(e)=>{
+    e.stopPropagation();
+    try {
+      setDeleteStoryLoading(true)
+      const response  = await fetch(apiEndPoints.deleteStoryAddress(stories[currentIndex]?._id, currentUser?._id), {method: "DELETE"});
+      const data = await response.json();
+  
+      if(!response.ok){
+        throw new Error(data.message || "Network response is not ok while deleting story!")
+      }
+  
+      if(data.success){
+        dispatch(updateSuccess(data?.data?.currentUser));
+        const deletedStory = data?.data?.deletedStory;
+        const udpatedStories = stories.filter(story=>story?._id !== deletedStory?._id)
+        setStories(udpatedStories);
+        setCurrentIndex((prevIndex) => {
+          // setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
+          return (prevIndex + 1) % (stories.length-1);
+        });      
+        onClose(false)
+        console.log(data);
+        alert(data?.message)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    finally{
+      setDeleteStoryLoading(false)
+    }
+  }
+
+  console.log("inside highlight viewer", stories)
+  if(stories.length === 0){
+    onClose(false);
   }
   return (
     <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
       <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
-        
+        {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"updating like data!"} />}
+        {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting ${highlight?.name} highlight, please wait!`} />}
+        {deleteStoryLoading && <LoaderPopup loading={deleteStoryLoading} setLoading={setDeleteStoryLoading} info={'deleting story! please wait!'} />}
         <div className='flex flex-col gap-2 md:px-2'>
           <div className='flex flex-col md:flex-row'>
             <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> {heading} ({currentIndex+1}/{stories.length}) </h1>
@@ -175,11 +246,16 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, onClose
                     </button>
                     <div className='cursor-pointer relative top-20 right-8  rounded-lg pl-2'>
                       {/* <HiDotsCircleHorizontal className='text-lg ' onClick={(e)=>{e.stopPropagation();setShowDropdown(true)}}/> */}
-                      <div onClick={handleButtonClick} className='w-10 md:w-36 bg-white dark:bg-gray-700 h-24 flex flex-col justify-between py-2 rounded-lg pl-2'>
-                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiHeart className=''/> <span className='hidden md:inline'> Like </span> </p>}
-                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiReply className=''/> <span className='hidden md:inline'> Reply </span> </p>}
+                      <div className='w-10 md:w-36 bg-white dark:bg-gray-700 h-24 flex flex-col justify-between py-2 rounded-lg pl-2'>
+                      {currentUser?._id !== stories[currentIndex]?.user && 
+                          <div onClick={handleLikeButtonClick} className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> 
+                          {currentUser?.likedStories?.includes(stories[currentIndex]?._id) ?                  
+                            <div className='flex items-center justify-center gap-2'> <HiHeart className='text-red-500'/> <span className='hidden md:inline'> Liked </span> </div> :
+                            <div className='flex items-center justify-center gap-2'> <HiHeart className=''/> <span className='hidden md:inline'> Like </span> </div> 
+                          }
+                          </div>}                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiReply className=''/> <span className='hidden md:inline'> Reply </span> </p>}
                         {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiExclamationTriangle className=''/> <span className='hidden md:inline'> Report </span>  </p>}
-                        {currentUser?._id === highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiTrash className=''/> <span className='hidden md:inline'> Delete </span> </p>}
+                        {currentUser?._id === highlight?.author && <p onClick={handleDeleteStoryButtonClick} className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiTrash className=''/> <span className='hidden md:inline'> Delete </span> </p>}
                         {currentUser?._id === highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiPlus className=''/> <span className='hidden md:inline'> Highlights </span>  </p>}
                         <span>  </span>
                       </div>

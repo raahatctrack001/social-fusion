@@ -84,9 +84,6 @@ export const replyComment = asyncHandler(async (req, res, next) => {
     }
 });
 
-
-
-
 export const getComment = asyncHandler(async (req, res, next)=>{
     try {
         const { commentId } = req.params;
@@ -108,7 +105,6 @@ export const getComment = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
-
 
 export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
     console.log(req.params?.postId)
@@ -161,7 +157,6 @@ export const deleteComment = asyncHandler(async (req, res, next) => {
         next(error);
     }
 });
-
 
 export const updateComment = asyncHandler(async (req, res, next)=>{
     try {

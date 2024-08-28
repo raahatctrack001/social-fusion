@@ -29,6 +29,8 @@ import PageLoader from "./Compnents/PageLoader"
 import AllRoute from "./Pages/AllRoute"
 import OtpPopup from "./Compnents/OtpPopup"
 import AccountCreatedPopup from "./Compnents/AccountCreatedPopup"
+import FeaturesPage from "./Compnents/FeaturesPage"
+import ContactPage from "./Compnents/ContactPage"
 
 function App() {
   return   <BrowserRouter>
@@ -54,11 +56,11 @@ function App() {
                   <Route path="/register/post-registration" element={<PostRegistration /> } />
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
-                  <Route path="/about" element={<UnderDevelopment />} />
+                  <Route path="/about" element={<About />} />
                   <Route path="/projects" element={<UnderDevelopment />} />
-                  <Route path="/services" element={<UnderDevelopment />} />
+                  <Route path="/services" element={<FeaturesPage />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
-                  <Route path="/contacts" element={<UnderDevelopment />} />
+                  <Route path="/contacts" element={<ContactPage />} />
                   <Route path="/prices" element={<UnderDevelopment />} />
                   <Route path="/test-route" element={<AccountCreatedPopup heading={"Account Created!"} info={"your account has been created!"}  />} />
                   <Route path="/*" element={<AllRoute />} />

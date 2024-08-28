@@ -86,10 +86,6 @@ export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const deleteStory = asyncHandler(async (req, res, next)=>{
-    
-})
-
 export const createNewHighlights = asyncHandler(async (req, res, next) => {
     try {
         const { userId } = req.params;                      
@@ -132,8 +128,6 @@ export const createNewHighlights = asyncHandler(async (req, res, next) => {
         next(error);
     }
 });
-
-
 
 export const getHeighlightStories = asyncHandler(async (req, res, next)=>{
     try {
@@ -195,6 +189,87 @@ export const deleteHighlight = asyncHandler( async(req, res, next)=>{
         // console.log(deletedHighlight);
         return res.status(200).json(new apiResponse(200, `highlights with name ${deletedHighlight.name} is deleted`, {currentUser, deletedHighlight}))
 
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const likeStory = asyncHandler(async(req, res, next)=>{
+    const { userId, storyId } = req.params;
+    try {
+        if(req.user?._id !== userId){
+            throw new apiError(401, "Please sign in to interact with storyr")
+        }
+
+        const currentStory = await Story.findById(storyId);
+        const currentUser = await User.findById(userId);
+
+        if(!currentStory){
+            throw new apiError(404, "story doesn't exist");
+        }
+
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist");
+        }
+
+        const likes = currentStory.likes;
+        const index = likes.findIndex(item => item._id == userId);
+        if (index != -1) {
+            likes.splice(index, 1);
+            currentUser.likedStories.splice(currentUser.likedStories.indexOf(storyId), 1);
+            currentStory.updatedAt = new Date(); // Update the timestamp
+            await currentUser.save();
+            await currentStory.save();
+            return res
+                .status(200)
+                .json(
+                    new apiResponse(200, "story unliked", {currentUser, currentStory})
+                )
+        }
+        
+        likes.push(userId)
+        currentUser.likedStories.push(currentStory?._id);
+        currentStory.updatedAt = new Date(); // Update the timestamp
+
+        await currentUser.save();
+        await currentStory.save();
+
+        // console.log('reached at the end')
+        return res
+            .status(200)
+            .json(
+                new apiResponse(200, "story liked", {currentUser, currentStory})
+            )
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const deleteStory = asyncHandler(async (req, res, next)=>{
+    try {
+        const { storyId, userId } = req.params;
+        if(req.user?._id !== userId){
+            throw new apiError(401, "Unauthorized, u can delete only stories you have uploaded!")
+        }
+
+        const currentStory = await Story.findById(storyId);
+        if(!currentStory){
+            throw new apiError(404, "story doesn't exist")
+        }
+
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "userId is wrong or user doesn't exist")
+        }
+
+        const index = currentUser?.stories?.indexOf(currentStory?._id);
+        if(index != -1){
+            currentUser.stories.splice(index, 1);
+            await currentUser.save();
+        }
+
+        const deletedStory = await Story.findByIdAndDelete(storyId);
+        res.status(200).json(new apiResponse(200, "currentStory is being deleted", {currentUser, deletedStory}));
     } catch (error) {
         next(error)
     }

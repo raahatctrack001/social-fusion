@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Alert, Button } from 'flowbite-react';
-import { HiBadgeCheck, HiCheckCircle, HiEye, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiEye, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiTrash, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -49,6 +49,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [loading, setLoading] = useState(false);
   const [sendHighlight, setSendHighlight] = useState(null);
   const [index, setIndex] = useState(0) // index to start story from
+  const [deleteHighlightLoading, setDeleteHighlightLoading] = useState(false);
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -204,15 +205,52 @@ const AuthorHeader = ({ author, setAuthor }) => {
 
   }
   console.log("Stories is here", stories)
+
+
+  const handleDeleteHighlightClick = async (e, highlight)=>{
+      e.stopPropagation();
+      setDeleteHighlightLoading(true)
+      try {
+          
+          console.log("triggered or not")
+          const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
+          const data = await response.json();
+  
+          if(!response.ok){
+            throw new Error(data?.message || "network response isnt' ok while deleting highlights")
+          }
+  
+          if(data.success){
+            console.log(data)
+            //   console.log("before deletion", highlights);
+            //   const updatedHighlights = highlights.filter(highlight=>highlight?._id !== deletedHighlight);
+            //   console.log("after deletion", updatedHighlights);
+            
+            const deletedHighlight = data?.data?.deletedHighlight
+            setHighlights(highlights.filter(highlight=>highlight?._id !== deletedHighlight?._id))
+          //   setHighlights(updatedHighlights);
+            dispatch(updateSuccess(data?.data?.currentUser));
+            // onClose(false)
+          }
+        } catch (error) {
+          alert(error.message)
+        console.log(error);
+      }
+      finally{
+        setDeleteHighlightLoading(false)
+      }
+    
+  }
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
-    {showStory && (stories?.length ? <StoryViewer index={index}  highlight={false} stories={stories} onClose={setShowStory} heading={"Recent Stories..."}/>:<h2>No stories yet! Add some stories and let the world know what you are doing rn...</h2>)}
+    {showStory && (stories?.length ? <StoryViewer index={index}  highlight={false} stories={stories} setStories={setStories} onClose={setShowStory} heading={"Recent Stories..."}/>:<h2>No stories yet! Add some stories and let the world know what you are doing rn...</h2>)}
     {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={stories} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>}
     {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
-    {highlightClick && ( highlightClickStories ? <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} onClose={setHighlightClick} heading={sendHighlight?.name}/> :<h2>No stories yet! Please add stories to add to highlights...</h2>)}
+    {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting highlight! please wait!`} />}
+    {highlightClick && ( highlightClickStories ? <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} setStories={setStories} onClose={setHighlightClick} heading={sendHighlight?.name}/> :<h2>No stories yet! Please add stories to add to highlights...</h2>)}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -365,21 +403,37 @@ const AuthorHeader = ({ author, setAuthor }) => {
   {/* Highlight creation button */}
 
         {/* Map through highlights */}
-           {highlights?.length > 0 &&
-            highlights.map((highlight, index) => (
-              <div onClick={()=>handleHighlightClick(highlight)}
-                key={index} // Add a unique key for each item
-                className='mb-5 grid place-items-center justify-center min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 cursor-pointer'
-              >
-                <div className='relative top-2 flex flex-col justify-center items-center text-nowrap dark:text-white'>
-                  <div className='w-full flex items-center justify-center p'>                   
-                    <img src={highlight?.thumbnail} className='h-16 w-16 md:h-24 md:w-24 rounded-full ' />
-                  </div>
-                </div>
-                <div className='text-nowrap text-white relative top-5'>{highlight?.name?.length > 13 ? highlight?.name?.substring(0, 13)+"...": highlight?.name}</div>
+                                          
+        {highlights?.length > 0 &&
+          highlights.map((highlight, index) => (
+            <div
+              onClick={() => handleHighlightClick(highlight)}
+              key={index}
+              className="relative flex flex-col items-center justify-center min-h-20 min-w-20 md:h-32 md:w-32 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-xl cursor-pointer transition-transform transform hover:scale-105"
+            >
+              <div className="relative flex flex-col items-center justify-center mt-2">
+                <img
+                  src={highlight?.thumbnail}
+                  className="h-16 w-16 md:h-24 md:w-24 rounded-full object-cover"
+                />
               </div>
-            ))}
-            {currentUser?._id === author?._id ? <div> </div> : <div className='w-full flex justify-center text-5xl'> No highlights yet! </div>}
+              <div className="absolute bottom-4 w-full text-center">
+                <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg py-1 px-2 font-bold text-sm opacity-90">
+                  {highlight?.name?.length > 13
+                    ? highlight?.name?.substring(0, 13) + "..."
+                    : highlight?.name}
+                </div>
+              </div>
+              {currentUser?._id === highlight?.author && (
+                <HiTrash
+                  onClick={(e) => handleDeleteHighlightClick(e, highlight)}
+                  className="text-red-500 text-xl absolute top-2 right-2 bg-white dark:bg-gray-800 p-1 rounded-full z-10 hover:bg-gray-100 dark:hover:bg-gray-700"
+                />
+              )}
+            </div>
+          ))}
+
+          {/* {highlights?.length > 0 ? <div> </div> : <div className='w-full flex justify-center text-5xl'> No highlights yet! </div>} */}
           {author?._id === currentUser?._id && <div
             onClick={() => setShowHighlightName(true)}
             className=' min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'

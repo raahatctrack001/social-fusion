@@ -77,6 +77,10 @@ const userSchema = mongoose.Schema({
     likedComments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
+    }],
+    likedStories: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Story'
     }], 
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
