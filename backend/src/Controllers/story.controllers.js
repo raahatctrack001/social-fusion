@@ -9,6 +9,9 @@ import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 export const uploadStory = asyncHandler(async (req, res, next)=>{ 
     // console.log("upload story hits");
     // return;     
+    // const index = await Story.collection.dropIndex('createdAt_1'); // Replace 'createdAt_1' with your index name
+    // console.log("dropped index", index)
+    // return;
     try {
         const { userId } = req.params;
         if(!userId){

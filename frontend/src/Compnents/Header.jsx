@@ -175,7 +175,7 @@ export default function Header() {
       <Navbar.Toggle />
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}
-      <Navbar.Collapse className="hidden">
+      <Navbar.Collapse className="">
           <Navbar.Link className="" href="/" active = {path === '/'} >
             Home
           </Navbar.Link>
@@ -184,8 +184,10 @@ export default function Header() {
           <Navbar.Link className="text-sm" href="/about" active = {path === '/about'} >About</Navbar.Link>
           <Navbar.Link className="text-sm" href="/services" active = {path === '/services'} >Services</Navbar.Link>
           <Navbar.Link className="text-sm" href="/prices" active = {path === '/prices'} >
-            <div> 
-              <span className="flex  justify-center items-center"> Notif<span className="lg:hidden">n</span> <span className="hidden lg:inline">ications</span> <HiOutlineBell /> </span> 
+          <span className="md:hidden flex justify-start items-center"> Notification </span> 
+
+            <div className="hidden md:inline"> 
+              <span className="flex justify-start items-center"> Notif<span className="lg:hidden">n</span> <span className="hidden lg:inline">ications</span> <HiOutlineBell /> </span> 
               <div className="flex justify-center items-center gap-2"> <HiChat /> <HiUserAdd /> <HiDocumentAdd /> </div>
             </div>
           </Navbar.Link>

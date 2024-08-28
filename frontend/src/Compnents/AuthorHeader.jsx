@@ -203,7 +203,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
     }
 
   }
-
+  console.log("Stories is here", stories)
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
@@ -241,12 +241,19 @@ const AuthorHeader = ({ author, setAuthor }) => {
             </div>}
             {showDropdown && <div className='bg-gray-300 text-black dark:bg-gray-700 dark:text-white rounded-lg font-semibold items-center relative top-32 left-20 z-10'>
               <div className='flex justify-between'> 
-                <span></span> <HiX onClick={()=>setShowDropdown(false)} className='mr-2 mt-1' />
+                <span></span> <HiX onClick={()=>setShowDropdown(false)} className='mr-2 mt-1 cursor-pointer' />
               </div>
               <span onClick={()=>{profileRef.current.click(), setShowDropdown(false)}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'><HiOutlineUserCircle /> Change DP</span>
               
-              <input ref={storyRef} type='file' className='hidden' onChange={handleAddStory} multiple="multiple"/>
-              <span onClick={()=>{storyRef.current.click()}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'> <HiPlus /> Add Story</span>
+              <input
+                ref={storyRef}
+                type="file"
+                className="hidden"
+                onChange={handleAddStory}
+                multiple
+                accept="image/*"
+              />
+                            <span onClick={()=>{storyRef.current.click()}} className='flex justify-center items-center gap-1 hover:text-lg cursor-pointer'> <HiPlus /> Add Story</span>
               <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-center items-center hover:text-lg cursor-pointer gap-2'> <HiEye className='' /> Show DP</span>
             </div>}
             <div className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>

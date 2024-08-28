@@ -15,6 +15,9 @@ const storySchema = new mongoose.Schema({
     enum: ['image', 'video'], // Type of content
     required: true,
   },
+  music: {
+    type: String,
+  },
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

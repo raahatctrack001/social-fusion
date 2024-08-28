@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useReducer, useRef } from 'react';
 import { HiX, HiPause, HiPlay, HiDotsHorizontal, HiDotsVertical, HiOutlineDotsVertical, HiSwitchVertical, HiDotsCircleHorizontal, HiHeart, HiTrash, HiReply, HiPlus, HiStar, HiBan } from 'react-icons/hi';
 import PageLoader from './PageLoader';
 import { formatDistanceToNow } from 'date-fns';
@@ -15,6 +15,9 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
   const [currentIndex, setCurrentIndex] = useState(index < 0 ? 0 : index);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [storyTime, setStoryTime] = useState(5000)
+  const [countDownTimer, setCountDownTimer] = useState(5)
+  const videoRef = useRef();
   // const [showDropdown, setShowDropdown] = useState(false);
 
   // console.log(stories)
@@ -68,41 +71,31 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
   }, [handleNext, handlePrev]);
 
   useEffect(() => {
+    // console.log(videoRef.current);
     let timer;
     let progressInterval;
-
+  
     if (!isPaused) {
+      // Update countDownTimer every second
       progressInterval = setInterval(() => {
-        setProgress((prevProgress) => {
-          if (prevProgress < 100) {
-            return prevProgress + 1;
-          } else {
-            return 0;
-          }
-        });
-      }, 50); // Progress bar updates every 50ms
-
+        setCountDownTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+  
+      // Change story every 5 seconds
       timer = setInterval(() => {
+        
         setCurrentIndex((prevIndex) => {
-          setProgress(0);
+          setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
           return (prevIndex + 1) % stories.length;
         });
-      }, 5000); // Change story every 5 seconds
+      }, countDownTimer * 1000);
     }
-
+  
     return () => {
       clearInterval(timer);
       clearInterval(progressInterval);
     };
-  }, [isPaused, stories.length]);
-
-  if(stories?.length === 0){
-    setTimeout(() => {
-      <PageLoader />
-    }, 5000);
-
-    onClose(false)
-  }
+  }, [isPaused, stories.length, countDownTimer]);
   
 
   const handleButtonClick = (event)=>{
@@ -136,8 +129,32 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
       console.log(error);
     }
   }
-  // console.log(currentUser)
-  // console.log(stories[currentIndex])
+  
+  useEffect(() => {
+    const video = videoRef.current;
+
+    // Check if videoRef.current is defined
+    if (video) {
+        setCountDownTimer(60)
+        const handleLoadedMetadata = () => {
+            // Get the duration in seconds
+            console.log(video.duration);
+        };
+
+        // Add event listener to update duration once metadata is loaded
+        video.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        };
+    }
+    else{
+      setCountDownTimer(5)
+    }
+}, [currentIndex]);
+
+  
   return (
     <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
       <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
@@ -164,7 +181,15 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
             <div className="w-full mx-auto">
               <p className='w-full flex items-center justify-center'>uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, {addSuffix: true})} </p>
               <div className='flex'>
-                <img src={stories[currentIndex].contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain rounded-xl" />
+                {stories[currentIndex]?.type === 'image' ? 
+                <img src={stories[currentIndex].contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain rounded-xl" />:
+                <video width="640" height="360" ref={videoRef} autoPlay>
+                  <source src={stories[currentIndex]?.contentURL} type="video/mp4"/>
+                      Your browser does not support the video tag.
+                  </video>              
+
+                }
+                
                 <div className='flex flex-col'>
                     <button onClick={() => onClose(false)} className="absolute dark:bg-gray-600 dark:text-white bg-red-600 text-white rounded-lg right-2 text-xl p-2">
                       <HiX />
@@ -196,12 +221,17 @@ const StoryViewer = ({index, highlight, stories, onClose,heading }) => {
             </button>
           )}
         </div>
-        <div className="absolute top-0 h-2 left-0 w-full bg-gray-400">
+        <div className="absolute top-0 h-2 left-0 w-full bg-gray-400 ">
           <div
-            className="h-full bg-blue-500 dark:bg-blue-300 transition-all duration-50"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
+            // {countDownTimer}
+            // className="h-full bg-blue-500 dark:bg-blue-300 transition-all duration-50"
+            // style={{ width: `${progress}%` }}
+            className='relative top-11 left-2  font-bold border w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-full bg-white text-black'
+          >
+
+            {countDownTimer}
+          </div>
+        </div> 
       </div>
     </div>
   );
