@@ -24,7 +24,7 @@ const router = express.Router();
 
 router.route("/create-post").post(upload.any(), isUserLoggedIn, createPost);
 router.route("/search-posts").post(isUserLoggedIn, searchPosts);
-router.route("/get-posts").get(isUserLoggedIn, getPosts);
+router.route("/get-posts/:page").get(isUserLoggedIn, getPosts);
 router.route("/get-post/:postId").get(isUserLoggedIn, getPost);
 router.route("/delete-post/:postId").delete(isUserLoggedIn, deletePost);
 router.route("/edit-post/:postId").put(upload.any(), isUserLoggedIn, updatePost);

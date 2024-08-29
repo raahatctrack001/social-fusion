@@ -114,12 +114,15 @@ export const searchPosts = asyncHandler(async (req, res, next) => {
 });
 
 export const getPosts = asyncHandler(async (req, res, next)=>{
+    const { page } = req.params;
     try {        
+        const totalCount = await Post.countDocuments({});
+
         await Post
             .find({})
             .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
-            // .skip(19)
-            // .limit(10)
+            .skip((page-1)*10)
+            .limit(10)
             .sort({createdAt: -1})
             .then((posts)=>{
                 // console.log(posts)
@@ -129,7 +132,7 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
                 res
                     .status(200)
                     .json(
-                        new apiResponse(200, "posts fetched!, Populating", posts)
+                        new apiResponse(200, "posts fetched!, Populating", {posts, totalCount})
                     )
             })
             .catch(error=>next(error));

@@ -9,6 +9,7 @@ const AuthorCard = ({ author }) => {
         <p className='font-semibold text-gray-800 dark:text-white'>{author.fullName}</p>
         <p className='text-gray-600 dark:text-gray-400'>{author.username}</p>
       </div>
+      {/* <p>{author?.bio}</p> */}
     </div>
   );
 };

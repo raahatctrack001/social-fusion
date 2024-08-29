@@ -38,8 +38,7 @@ export const uploadProfilePicture = asyncHandler(async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  });
-  
+  });  
 
 export const removeProfilePicture = asyncHandler(async (req, res, next)=>{
     try {
@@ -105,9 +104,12 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
 })
 
 export const getUsers = asyncHandler(async (req, res, next)=>{
+    const page = 1;
     try {        
         await User
         .find({})
+        .skip((page-1)*10)
+        .limit(10)
         .select("-password")
         .then((users)=>{
             if(!users){

@@ -13,18 +13,32 @@ import { useDispatch, useSelector } from 'react-redux'
 import ShowPosts from '../Compnents/ShowPosts'
 import { updateSuccess } from '../redux/slices/user.slice'
 import PageLoader from '../Compnents/PageLoader'
+import { current } from '@reduxjs/toolkit'
 
 const Home = () => {
   const { currentUser } = useSelector(state=>state.user)
   const [postData, setPostData] = useState();
   const [users, setUsers] = useState(); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPost, setTotalPost] = useState(0)
   
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   useEffect(()=>{
-    fetch(apiEndPoints.getPostsAddress())
+    (()=>{
+      //fetch user count
+    })()
+  }, [])
+
+  useEffect(()=>{
+    (()=>{
+      //fetch post count
+    })()
+  }, [])
+  useEffect(()=>{
+    fetch(apiEndPoints.getPostsAddress(currentPage))
       .then((posts)=>{
         if(!posts){
           throw new Error("network response wasn't ok!");
@@ -32,14 +46,16 @@ const Home = () => {
         return posts.json()
       })
       .then((data)=>{
-        const fetchedData = data.data;
+        const fetchedData = data.data?.posts;
         console.log("fetched post"); 
         setPostData(fetchedData)
+        const total = data?.data?.totalCount;
+        setTotalPost(Math.floor(total/10+1))
       })
       .catch((err)=>{
         throw new Error("Error fetching posts", err);
       })
-  }, [])
+  }, [currentPage])
 
 
   useEffect(()=>{
@@ -99,9 +115,19 @@ const Home = () => {
   if(!postData){
     return <PageLoader />
   }
+  console.log("tatalpsots", totalPost)
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
+   <div className='flex flex-col'>
     {postData ? <ShowPosts heading={"Our recent posts!"} postData={postData} /> : <NotFoundPage /> }
+      <div className='w-full flex items-center justify-center gap-4 mb-4'> 
+          <Button disabled={currentPage <= 1} onClick={()=>setCurrentPage(currentPage=>currentPage-1)}> Prev </Button> 
+            {currentPage-3 > 0 && <span> 0... </span>}{ currentPage-2 > 0 && currentPage-2} {currentPage-1 > 0 && currentPage-1} 
+              <span className='border w-20 py-1 grid place-items-center rounded-lg bg-gray-400 font-bold mb-1'>  {currentPage} </span> 
+              { (currentPage+1 <= totalPost) && currentPage+1} {(currentPage+2 <=  totalPost) && currentPage+2}{currentPage+2 < totalPost && <span className=''>...{totalPost}</span>}
+          <Button disabled={currentPage >= totalPost} onClick={()=>setCurrentPage(currentPage=>currentPage+1)}> Next </Button> 
+      </div>
+   </div>
 
     <div className='flex-1/4 m-2 px-2 mx-2'>
       <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors </h1>
