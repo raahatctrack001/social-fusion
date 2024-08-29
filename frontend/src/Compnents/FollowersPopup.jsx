@@ -97,7 +97,7 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
               >
                 <div className="flex items-center cursor-pointer" onClick={()=>handleFollowerClick(follower?._id)}>
                   <img
-                    src={follower.profilePic}
+                    src={follower.profilePic.at(-1)}
                     alt={follower.username}
                     className="w-8 h-8 rounded-full object-cover mr-3"
                   />

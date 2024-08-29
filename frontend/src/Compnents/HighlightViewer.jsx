@@ -11,7 +11,7 @@ import { updateSuccess } from '../redux/slices/user.slice';
 import LoaderPopup from './Loader';
 import PopupWindow from '../Pages/PopupWindow';
 
-const HighlightViewer = ({highlight, highlights, setHighlights, onClose,heading }) => {
+const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading }) => {
   // highlight: current highligth
   // highlights: collection of all highlights takes here as parameter only to manage delete highlights and re render to update ui
   // stories: stories inside current highlights takes here as parameter only to manage delete highlights and re render to update ui

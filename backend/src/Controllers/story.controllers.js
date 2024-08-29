@@ -129,6 +129,47 @@ export const createNewHighlights = asyncHandler(async (req, res, next) => {
     }
 });
 
+export const addStoryToHighlight = asyncHandler(async (req, res, next)=>{
+    try {
+
+        const { highlightId, storyId, userId } = req.params;
+        if(req.user?._id !== userId){
+            throw new apiError(401, "unauthorized, you can only add your story!")
+        }
+        
+        const currentStory = await Story.findById(storyId);
+        if(!currentStory){
+            throw new apiError(404, "selected story doesn't exist")
+        }
+        
+        const currentHighlight = await HighlightModel.findByIdAndUpdate(highlightId, {
+            $push: {
+                stories: storyId,
+            }
+        },{new: true});
+
+        if(!currentHighlight){
+            throw new apiError(404, "selected highlight doesn't exist")
+        }
+
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "current user doesn't exist or userId missing")
+        }        
+
+        const index = currentUser?.highlights?.indexOf(currentHighlight?._id);
+        currentUser[index] = currentHighlight;
+        await currentUser.save();
+        // console.log(currentUser)
+        // console.log(currentHighlight)
+        // console.log(currentStory)
+        return res.status(200).json(new apiResponse(200, `story added to ${currentHighlight.name}`, {currentUser, currentHighlight, currentStory}))
+
+    } catch (error) {
+        next(error)
+    }
+})
+
 export const getHeighlightStories = asyncHandler(async (req, res, next)=>{    
     try {
         const { highlightId, userId } = req.params;
@@ -266,7 +307,6 @@ export const deleteStory = asyncHandler(async (req, res, next)=>{
     }
 })
 
-
 export const removeStoryFromHighlights = asyncHandler( async (req, res, next)=>{
     try {
         const { highlightId, storyId, userId } = req.params;
@@ -309,4 +349,19 @@ export const removeStoryFromHighlights = asyncHandler( async (req, res, next)=>{
     } catch (error) {
         next(error);
     }
+})
+
+export const getHighlightOfUser = asyncHandler( async (req, res, next)=>{
+    try {
+        const { userId } = req.params;
+        const currentUser = await User.findById(userId).populate("highlights");
+        if(!currentUser){
+            throw new apiError(404, "userId is missing or user doesn't exist")
+        }
+
+        return res.status(200).json(new apiResponse(200, "highlights fetched", currentUser.highlights))
+    } catch (error) {
+        next(error)
+    }
+
 })

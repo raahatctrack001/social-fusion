@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { updateSuccess } from '../redux/slices/user.slice';
 import LoaderPopup from './Loader';
+import HighlightSelector from './HighlightSelector';
+import SelectHighlightPopup from './SelectHighlightPopup';
 
 const StoryViewer = ({index, highlight, stories, setStories, onClose,heading }) => {
   const { currentUser } = useSelector(state=>state.user);
@@ -19,7 +21,9 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose,heading }) 
   const [storyTime, setStoryTime] = useState(5000)
   const [countDownTimer, setCountDownTimer] = useState(5)
   const [loading, setLoading] = useState();
-  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [selectHighlight, setSelectHighlight] = useState(false);
+  const [storyToHighlight, setStoryToHighlight] = useState();
   const videoRef = useRef();
   // const [showDropdown, setShowDropdown] = useState(false);
 
@@ -132,7 +136,7 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose,heading }) 
         setCountDownTimer(60)
         const handleLoadedMetadata = () => {
             // Get the duration in seconds
-            console.log(video.duration);
+            // console.log(video.duration);
         };
 
         // Add event listener to update duration once metadata is loaded
@@ -161,11 +165,11 @@ const handleLikeButtonClick = async(e)=>{
 
     if(data.success){
       dispatch(updateSuccess(data?.data?.currentUser))
-      console.log(data);
+      // console.log(data);
     }    
   } catch (error) {
     alert(error.message)
-    console.log(error)
+    // console.log(error)
   }
   finally{
     setLoading(false)
@@ -199,7 +203,7 @@ const handleDeleteStoryButtonClick = async(e)=>{
         // setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
         return (prevIndex + 1) % (stories.length-1);
       });      
-      console.log(data);
+      // console.log(data);
     }
   } catch (error) {
     console.log(error);
@@ -208,16 +212,19 @@ const handleDeleteStoryButtonClick = async(e)=>{
     setDeleteLoading(false)
   }
 }
-const handleAddToHighlightButtonClick = async(e)=>{
+const handleAddToHighlightButtonClick = async(e, story)=>{
   e.stopPropagation();
-  console.log("clickekd")
+  setStoryToHighlight(story)
+  setSelectHighlight(true);  
 }
 
-console.log("highlights from story viewre", highlight)
+// console.log("highlights from story viewre", highlight)
   
 return (
   <div className="fixed inset-0 bg-opacity-95 flex items-center justify-center bg-black z-50">
+    {selectHighlight && <SelectHighlightPopup isOpen={selectHighlight} setIsOpen={setSelectHighlight} story={storyToHighlight}  />}
     {/* Main Container */}
+
     <div
       onClick={handleClick}
       className="relative flex flex-col justify-between w-full h-full max-w-3xl p-4 bg-gray-800 dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg"
@@ -338,7 +345,7 @@ return (
                     </button>
 
                     <button
-                      onClick={handleAddToHighlightButtonClick}
+                      onClick={(e)=>handleAddToHighlightButtonClick(e,stories[currentIndex])}
                       className="flex items-center gap-2 text-sm md:text-base hover:text-lg"
                     >
                       <HiPlus className="text-lg hover:text-lg" />

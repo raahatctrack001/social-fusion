@@ -48,10 +48,12 @@ export  const apiEndPoints = {
     addStoriesAddress: (userId)=>`/api/v1/story/upload-story/${userId}`,
     getStoriesOfUser: (userId)=>`/api/v1/story/get-stories-of-user/${userId}`,
     createNewHighlights: (userId)=>`/api/v1/story/create-new-highlights/${userId}`,
+    addStoryToHighlight: (highlightId, storyId, userId)=>`/api/v1/story/add-story-to-highlight/${highlightId}/${storyId}/${userId}`,
     getHighlightStories: ()=>`/api/v1/story/get-highlights`,
     deleteHighlightAddress: (userId, highlightId)=>`/api/v1/story/delete-highlight/${userId}/${highlightId}`,
     likeStoryAddress: (storyId, userId)=>`/api/v1/story/like-story/${storyId}/${userId}`,
     deleteStoryAddress: (storyId, userId)=>`/api/v1/story/delete-story/${storyId}/${userId}`,
     removeStoryFromHighlights: (highlightId, storyId, userId)=>`/api/v1/story/remove-story-from-highlights/${highlightId}/${storyId}/${userId}`,
-    getStoriesOfHighlight: (highlightId, userId)=>`/api/v1/story/get-stories-of-highlights/${highlightId}/${userId}`
+    getStoriesOfHighlight: (highlightId, userId)=>`/api/v1/story/get-stories-of-highlights/${highlightId}/${userId}`,
+    getHighlightsOfUser: (userId)=>`/api/v1/story/get-user-highlight/${userId}`,
 }

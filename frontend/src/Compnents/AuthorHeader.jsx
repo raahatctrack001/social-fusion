@@ -137,7 +137,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         setIndex(stories?.length);
         setStories((prevstories) => [...prevstories, ...data?.data?.stories]);
         setShowStory(true)
-        console.log("story uploaded", data)
+        // console.log("story uploaded", data)
         dispatch(updateSuccess(data?.data?.currentUser))
       }
 
@@ -164,7 +164,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         
           setStories(data?.data?.stories);
           setHighlights(data?.data?.currentUser?.highlights);
-          console.log("stories data fetched", data);
+          // console.log("stories data fetched", data);
         }
       } catch (error) {
         setError(error.message);
@@ -184,7 +184,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       setDeleteHighlightLoading(true)
       try {
           
-          console.log("triggered or not")
+          // console.log("triggered or not")
           const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
           const data = await response.json();
   
@@ -193,7 +193,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
           }
   
           if(data.success){
-            console.log(data)
+            // console.log(data)
             //   console.log("before deletion", highlights);
             //   const updatedHighlights = highlights.filter(highlight=>highlight?._id !== deletedHighlight);
             //   console.log("after deletion", updatedHighlights);
@@ -206,7 +206,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
           }
         } catch (error) {
           alert(error.message)
-        console.log(error);
+        // console.log(error);
       }
       finally{
         setDeleteHighlightLoading(false)
@@ -227,7 +227,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
           // alert(data.message)
         }
     } catch (error) {
-      console.log(error)
+      alert(error.message)
+      // console.log(error)
     }
   }
   const handleHighlightClick = (highlight)=>{

@@ -8,32 +8,38 @@ import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
 import { emailSchema, updateUserSchema, userSchema } from "../Validators/user.validator.js";
 import bcryptjs from 'bcryptjs'
 
-export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
+export const uploadProfilePicture = asyncHandler(async (req, res, next) => {
     try {
-        const response = await uploadOnCloudinary(req.file?.path)
-        if(!response){
-            throw new apiError(500, "failed to update profile")
-        }
-
-        const user = await User.findByIdAndUpdate(req.params?.userId, {
-            $push: {
-                profilePic: response.url
-            }
-        }, {new: true})
-        if(!user){
-            throw new apiError(404, "user doesn't exist");
-        }
-        const currentUser = await user.populate("posts")
-        res
-            .status(200)
-            .json(
-                new apiResponse(200, "profile picture updated!", currentUser)
-            )
-
+      const response = await uploadOnCloudinary(req.file?.path);
+  
+      if (!response || !response.url) {
+        throw new apiError(500, "Failed to upload profile picture to Cloudinary");
+      }
+  
+      const user = await User.findByIdAndUpdate(
+        req.params?.userId,
+        {
+          $push: {
+            profilePic: response.url,
+          },
+        },
+        { new: true }
+      );
+  
+      if (!user) {
+        throw new apiError(404, "User doesn't exist");
+      }
+  
+      const currentUser = await user.populate("posts");
+  
+      res.status(200).json(
+        new apiResponse(200, "Profile picture updated successfully!", currentUser)
+      );
     } catch (error) {
-        next(error)
+      next(error);
     }
-})
+  });
+  
 
 export const removeProfilePicture = asyncHandler(async (req, res, next)=>{
     try {

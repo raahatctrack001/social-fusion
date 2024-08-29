@@ -69,7 +69,7 @@ const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
               >
                 <div className="flex items-center cursor-pointer" onClick={()=>handleFollowingClick(following?._id)}>
                   <img
-                    src={following.profilePic}
+                    src={following.profilePic.at(-1)}
                     alt={following.username}
                     className="w-8 h-8 rounded-full object-cover mr-3"
                   />

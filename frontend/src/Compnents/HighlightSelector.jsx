@@ -43,6 +43,7 @@ const HighlightSelector = ({highlightName, stories, onClose, setHighlights }) =>
             console.log("fromhighlightselector", data)
             dispatch(updateSuccess(data?.data?.currentUser));
             setHighlights(prev => [...prev, data?.data?.newHighlight]);
+            onClose(false)
           }
     } catch (error) {
         setError(error.message)

@@ -6,7 +6,7 @@ import { users } from '../dataSeeders/author50';
 import DisplayContent from './DisplayContent';
 
 const PostCard = ({ post }) => {
-  console.log("postcard", post)
+  // console.log("postcard", post)
   const navigate = useNavigate();
   return (   
       <div className=' w-full flex flex-col p-2 rounded-lg object-contain cursor-pointer ' onClick={()=>navigate(`/posts/post/${post?._id}`)} >

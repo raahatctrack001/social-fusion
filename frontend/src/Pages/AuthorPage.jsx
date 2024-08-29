@@ -11,6 +11,9 @@ import LoaderPopup from '../Compnents/Loader'
 import PageLoader from '../Compnents/PageLoader'
 import { useSelector } from 'react-redux'
 import LikersPopup from '../Compnents/PostLikersPopup'
+import PopupWindow from './PopupWindow'
+import SharePopup from '../Compnents/ShareURL'
+// import { head } from 'lodash'
 
 const Author = () => {
   const { authorId } = useParams();
@@ -21,6 +24,7 @@ const Author = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
   const [showLikers, setShowLikers] = useState({});
+  const [share, setShare] = useState(false)
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -57,7 +61,6 @@ const Author = () => {
   return (     
       <div className='m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
         <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>
-        
 
         <div className='border-2 w-full min-h-screen flex flex-col rounded-3xl'>
           <span className=' md:h-14 items-center border-b-2 p-2  flex flex-col md:flex-row justify-center font-semibold'> <span className='mr-2'>Total Posts</span> {authorData?.posts?.length} </span>
@@ -71,8 +74,9 @@ const Author = () => {
                   <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
                       <button onClick={()=>setShowLikers({[post?._id]: true})} className="text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
                       <button disabled onClick={()=>alert("button clicked!")} className="cursor-not-allowed text-green-500 dark:text-green-300">Comments { post?.comments?.length || 0}</button>
-                      <button disabled onClick={()=>alert("button clicked!")} className="cursor-not-allowed text-red-500 dark:text-red-300">Shares {post?.shares?.length || 0}</button>
+                      <button onClick={()=>setShare(true)} className=" text-red-500 dark:text-red-300">Shares {post?.shares?.length || 0}</button>
                     </div>
+                    {share && <SharePopup postUrl={`${window.location.origin}/posts/post/${post?._id}`} heading={"share post"} onClose={setShare}/>}
                     <PostCard post={post}  />
                   </div>
                 </div>

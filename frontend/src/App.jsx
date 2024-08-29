@@ -32,6 +32,7 @@ import AccountCreatedPopup from "./Compnents/AccountCreatedPopup"
 import FeaturesPage from "./Compnents/FeaturesPage"
 import ContactPage from "./Compnents/ContactPage"
 import QRCodeGenerator from "./Compnents/QRCodeGenerator"
+import SelectHighlightPopup from "./Compnents/SelectHighlightPopup"
 
 function App() {
   return   <BrowserRouter>
@@ -63,7 +64,7 @@ function App() {
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
-                  <Route path="/test-route" element={<AccountCreatedPopup heading={"Account Created!"} info={"your account has been created!"}  />} />
+                  <Route path="/test-route" element={<SelectHighlightPopup />} />
                   <Route path="/*" element={<QRCodeGenerator data={"hello"} />} />
                 </Routes>
                 <FooterComp />
