@@ -4,6 +4,7 @@ import {
         createNewHighlights, 
         deleteHighlight, 
         deleteStory, 
+        getFollowersStory, 
         getHeighlightStories, 
         getHighlightOfUser, 
         getStoriesOfUser, 
@@ -27,4 +28,5 @@ router.route('/delete-story/:storyId/:userId').delete(isUserLoggedIn, deleteStor
 router.route('/remove-story-from-highlights/:highlightId/:storyId/:userId').post(isUserLoggedIn, removeStoryFromHighlights)
 router.route('/get-stories-of-highlights/:highlightId/:userId').get(isUserLoggedIn, getHeighlightStories);
 router.route('/get-user-highlight/:userId').get(isUserLoggedIn, getHighlightOfUser);
+router.route('/get-followers-stories/:userId').get(isUserLoggedIn, getFollowersStory);
 export default router;

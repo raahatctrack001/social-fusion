@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import LikersPopup from '../Compnents/PostLikersPopup'
 import PopupWindow from './PopupWindow'
 import SharePopup from '../Compnents/ShareURL'
+import StoryViewer from '../Compnents/StoryViewer'
 // import { head } from 'lodash'
 
 const Author = () => {
@@ -25,10 +26,14 @@ const Author = () => {
   const navigate = useNavigate();
   const [showLikers, setShowLikers] = useState({});
   const [share, setShare] = useState(false)
+  const [postToShare, setPostToShare] = useState()
+  const [storiesOfFollowings, setStoriesOfFollowings] = useState([])
+  const [storiesToSend, setStoriesToSend] = useState([]);
+  const [showStories, setShowStories] = useState(false)
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
-    window.scrollTo(0, 0);
+  
   }, []);
   
   useEffect(()=>{
@@ -54,12 +59,78 @@ const Author = () => {
   }, [ authorId ])
   // console.log(authorData)
 
+  useEffect(()=>{
+    (async()=>{
+        try {
+          const response = await fetch(apiEndPoints.getFollowerStory(currentUser?._id));
+          const data = await response.json();
+  
+          if(!response.ok){
+            throw new Error(data?.message || "Network response wasn't ok while fetching followers story to put on header" )
+          }
+          console.log(data)
+          if(data.success){
+            console.log("stories of followings",data);
+            setStoriesOfFollowings(data?.data)
+          }
+        } catch (error) {
+          console.log(error);
+        }
+    })()
+  }, [])
  
   if(authorData?.length == 0){
-    return <PageLoader />
+    return <PageLoader info={"if it's taking longer time than expected please refresh the page"} />
+  }
+  const handleStoryImageclick = async(story)=>{
+    // console.log("clicked story", story)
+    try {
+      const response = await fetch(apiEndPoints.getStoriesOfUser(story?._id));
+      const data = await response.json();
+      
+      if(!response.ok){
+        throw new Error(data?.message || "Network response wasn't ok while fetching stories from folllowings at author header")
+      }
+
+      if(data.success){
+        console.log(data)
+        setStoriesToSend(data?.data?.stories);
+        setShowStories(true)
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.message)
+    }
   }
   return (     
       <div className='m-5 p-2 rounded-lg flex flex-col justify-center items-center relative md:px-16 lg:px-24 xl:px-28'>
+      {showStories && <StoryViewer
+                        index={0}
+                        highlight={false}
+                        stories={storiesToSend}
+                        setStories={setStoriesToSend}
+                        onClose={setShowStories}
+                        heading={`recent stories`}
+                       /> }
+      <div className='flex overflow-x-auto w-full gap-3 p-4 bg-gray-100 dark:bg-gray-800 shadow-lg rounded-lg justify-center items-center'>
+      {currentUser?._id === authorData?._id && storiesOfFollowings?.length > 0 && storiesOfFollowings.map((story, index) => (
+          <div 
+            onClick={() => handleStoryImageclick(story)} 
+            key={index} 
+            className='relative min-h-24 min-w-24 flex flex-col items-center justify-center p-2 bg-gradient-to-b from-red-600 via-white to-violet-600 rounded-lg cursor-pointer transform hover:scale-105 transition-transform duration-300'
+          >
+            <img 
+              src={story?.profilePic.at(-1)} 
+              alt={story.fullName}  
+              className='h-20 w-20 rounded-full border-4 border-green-700 shadow-md'
+            />
+            <span className='absolute bottom-2 text-black text-sm font-semibold bg-white bg-opacity-90 rounded-full px-2 py-1 text-nowrap'>
+              {story?.fullName?.length > 10 ? story?.fullName?.substring(0, 10) + "..." : story?.fullName}
+            </span>
+          </div>
+        ))}
+      </div>
+
         <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>
 
         <div className='border-2 w-full min-h-screen flex flex-col rounded-3xl'>
@@ -74,9 +145,9 @@ const Author = () => {
                   <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
                       <button onClick={()=>setShowLikers({[post?._id]: true})} className="text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
                       <button disabled onClick={()=>alert("button clicked!")} className="cursor-not-allowed text-green-500 dark:text-green-300">Comments { post?.comments?.length || 0}</button>
-                      <button onClick={()=>setShare(true)} className=" text-red-500 dark:text-red-300">Shares {post?.shares?.length || 0}</button>
+                      <button onClick={()=>{setPostToShare(post);setShare(true)}} className=" text-red-500 dark:text-red-300">Shares {post?.shares?.length || 0}</button>
                     </div>
-                    {share && <SharePopup postUrl={`${window.location.origin}/posts/post/${post?._id}`} heading={"share post"} onClose={setShare}/>}
+                    {share && <SharePopup postUrl={`${window.location.origin}/posts/post/${postToShare?._id}`} heading={"share post"} onClose={setShare}/>}
                     <PostCard post={post}  />
                   </div>
                 </div>

@@ -57,8 +57,8 @@ export const uploadStory = asyncHandler(async (req, res, next)=>{
 
 export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
     try {
-        console.log("inside get stories")
-        const { userId } = req.params;
+        // console.log("inside get stories")
+        const { userId } = req.params; // can't fetch followings story if check req.user?._id === userId
         if(!userId){
             throw new apiError(404, "UserId is missing")
         } 
@@ -360,6 +360,23 @@ export const getHighlightOfUser = asyncHandler( async (req, res, next)=>{
         }
 
         return res.status(200).json(new apiResponse(200, "highlights fetched", currentUser.highlights))
+    } catch (error) {
+        next(error)
+    }
+
+})
+
+export const getFollowersStory = asyncHandler(async (req, res, next)=>{
+    try {
+        const { userId } = req.params;
+        const currentUser = await User.findById(userId).populate("followings");
+        if(!currentUser){
+            throw new apiError(404, "current user doesn't exist");
+        }
+
+        const followingWithStories = currentUser?.followings?.filter(user=>user?.stories?.length !== 0);
+        return res.status(200).json(new apiResponse(200, "stories of followings fetched!", followingWithStories));
+
     } catch (error) {
         next(error)
     }

@@ -127,6 +127,7 @@ const Home = () => {
   console.log('totalUsers', totalUser)
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
+    
    <div className='flex flex-col'>
     {postData ? <ShowPosts heading={`Our recent posts page ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
       <div className='w-full flex items-center justify-center gap-4 mb-4'> 

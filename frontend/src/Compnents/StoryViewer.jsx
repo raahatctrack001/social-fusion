@@ -12,7 +12,7 @@ import LoaderPopup from './Loader';
 import HighlightSelector from './HighlightSelector';
 import SelectHighlightPopup from './SelectHighlightPopup';
 
-const StoryViewer = ({index, highlight, stories, setStories, onClose,heading }) => {
+const StoryViewer = ({index, highlight, stories, setStories, onClose, heading }) => {
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState(index < 0 ? 0 : index);

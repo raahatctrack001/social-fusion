@@ -56,4 +56,5 @@ export  const apiEndPoints = {
     removeStoryFromHighlights: (highlightId, storyId, userId)=>`/api/v1/story/remove-story-from-highlights/${highlightId}/${storyId}/${userId}`,
     getStoriesOfHighlight: (highlightId, userId)=>`/api/v1/story/get-stories-of-highlights/${highlightId}/${userId}`,
     getHighlightsOfUser: (userId)=>`/api/v1/story/get-user-highlight/${userId}`,
+    getFollowerStory: (userId)=>`/api/v1/story/get-followers-stories/${userId}`,
 }

@@ -79,8 +79,12 @@ export default function Header() {
     if(searchTerm?.trim() !== ''){      
       const timeout = setTimeout(() => {
         navigate(`/search-posts?query=${encodeURIComponent(searchTerm)}`);
+        
       }, 2000);
       return ()=>clearTimeout(timeout)
+    }
+    if(searchTerm?.trim() === ''){
+      navigate("/")
     }
     
     
@@ -101,11 +105,9 @@ export default function Header() {
             <div> </div>
             <div onClick={()=>setShowSearchPopup(!showSearchPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700"/> </div>
             </div>
-           <TextInput 
-                
+           <TextInput                 
                 onChange={(e)=>setSearchTerm(e.target.value)}
-                type="text" placeholder="search title content or category of post..." /> 
-            
+                type="text" placeholder="search title content or category of post..." />             
           </div>
         </div>
       )}

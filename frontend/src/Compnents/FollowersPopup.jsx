@@ -89,7 +89,7 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
             <h3 className="text-lg font-bold mb-2 text-gray-800 dark:text-white">followed By: </h3>
             <HiX className='cursor-pointer' onClick={()=>setIsHovered(false)} />
           </div>          
-          <ul className="max-h-80 overflow-y-auto space-y-2">
+          <ul className="max-h-80 overflow-y-scroll space-y-2">
             {followers?.length && followers.map((follower, index) => (
               <li
                 key={index}
