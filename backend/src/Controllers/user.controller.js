@@ -104,8 +104,9 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
 })
 
 export const getUsers = asyncHandler(async (req, res, next)=>{
-    const page = 1;
+    const { page } = req.params;
     try {        
+        const totalUsers = await User.countDocuments({})
         await User
         .find({})
         .skip((page-1)*10)
@@ -124,7 +125,7 @@ export const getUsers = asyncHandler(async (req, res, next)=>{
             res
             .status(200)
             .json(
-                new apiResponse(200, "users fetched", safeUsers)
+                new apiResponse(200, "users fetched", {safeUsers, totalUsers})
                 )
             })
         } catch (error) {

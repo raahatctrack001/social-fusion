@@ -62,7 +62,8 @@ const SelectHighlightPopup = ({isOpen, setIsOpen, story}) => {
 
         if(data.success){
             alert(data.message);
-            dispatch(updateSuccess(data?.data?.currentUser));            
+            dispatch(updateSuccess(data?.data?.currentUser));  
+            setIsOpen(false)          
         }
     } catch (error) {
         console.log(error)

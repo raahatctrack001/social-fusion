@@ -20,7 +20,9 @@ const Home = () => {
   const [postData, setPostData] = useState();
   const [users, setUsers] = useState(); 
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPost, setTotalPost] = useState(0)
+  const [totalPost, setTotalPost] = useState(0);
+  const [totalUser, setTotalUser] = useState(0);
+  const [currentUserPage, setCurrentUserPage] = useState(1);
   
   const dispatch = useDispatch();
 
@@ -60,7 +62,7 @@ const Home = () => {
 
   useEffect(()=>{
     const fetchUser = async ()=>{ 
-      await fetch(apiEndPoints.getUsersAddress())
+      await fetch(apiEndPoints.getUsersAddress(currentUserPage))
         .then((users)=>{
           if(!users){
             throw new Error("error getting author's detail")
@@ -71,7 +73,9 @@ const Home = () => {
         .then((data)=>{
           console.log("fetched user")
           // console.log(data);
-          setUsers(data.data);
+          setUsers(data.data?.safeUsers);
+          const totalUser = data?.data?.totalUsers;
+          setTotalUser(Math.floor(totalUser/10)+1);
           // dispatch(updateSuccess(  ))
         })
         .catch((error)=>{
@@ -83,7 +87,7 @@ const Home = () => {
             fetchUser()
           }, 100000);
     return ()=>clearInterval(interval)
-  }, [])
+  }, [currentUserPage])
 
   const handleToggleFollowButtonClick = async (author)=>{
     try {
@@ -116,15 +120,30 @@ const Home = () => {
     return <PageLoader />
   }
   console.log("tatalpsots", totalPost)
+  console.log('totalUsers', totalUser)
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
    <div className='flex flex-col'>
     {postData ? <ShowPosts heading={"Our recent posts!"} postData={postData} /> : <NotFoundPage /> }
       <div className='w-full flex items-center justify-center gap-4 mb-4'> 
           <Button disabled={currentPage <= 1} onClick={()=>setCurrentPage(currentPage=>currentPage-1)}> Prev </Button> 
-            {currentPage-3 > 0 && <span> 0... </span>}{ currentPage-2 > 0 && currentPage-2} {currentPage-1 > 0 && currentPage-1} 
-              <span className='border w-20 py-1 grid place-items-center rounded-lg bg-gray-400 font-bold mb-1'>  {currentPage} </span> 
-              { (currentPage+1 <= totalPost) && currentPage+1} {(currentPage+2 <=  totalPost) && currentPage+2}{currentPage+2 < totalPost && <span className=''>...{totalPost}</span>}
+            {currentPage-3 > 0 && 
+              <div className='flex gap-2'> 
+                <span> 1 </span>
+                <span> . </span>
+                <span> . </span>
+                <span> . </span>              
+              </div>              
+              }
+              { currentPage-2 > 0 && currentPage-2} {currentPage-1 > 0 && currentPage-1} 
+              <span className='border w-12 py-1 grid place-items-center rounded-lg bg-gray-700 text-white font-bold mb-1'>  {currentPage} </span> 
+              { (currentPage+1 <= totalPost) && currentPage+1} {(currentPage+2 <=  totalPost) && currentPage+2}{currentPage+2 < totalPost && 
+              <div className='flex gap-2'>
+                <span> . </span>
+                <span> . </span>
+                <span> . </span>
+                <span> {totalPost} </span>
+              </div>}
           <Button disabled={currentPage >= totalPost} onClick={()=>setCurrentPage(currentPage=>currentPage+1)}> Next </Button> 
       </div>
    </div>
@@ -161,6 +180,25 @@ const Home = () => {
              
             </div>
         ))}
+        <div className='w-full flex justify-center items-center gap-1'> 
+          <Button disabled={currentUserPage === 1} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage-1)}> prev </Button>
+           { currentUserPage-3 >0 && <div className='flex justify-center items-center gap-1'>
+              <span> 1 </span>
+              <span> . </span>
+              <span> . </span>
+              <span> . </span>
+            </div>}
+            <div> {currentUserPage-2 > 0 && currentUserPage-2} {currentUserPage-1 > 0 && currentUserPage-1} </div>
+            <div className=' w-12 flex justify-center items-center font-bold bg-gray-700 text-white rounded-lg py-1'> {currentUserPage} </div>
+            <div> {currentUserPage+1 <= totalUser && currentUserPage+1} {currentUserPage+2 <= totalUser && currentUserPage+2} </div>
+            {currentUserPage+3 <= totalUser && <div className='flex justify-center items-center gap-1'>
+              <span> . </span>
+              <span> . </span>
+              <span> . </span>
+              <span> {totalUser} </span>
+            </div>}
+          <Button disabled={currentUserPage === totalUser} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage+1)}> Next </Button>
+        </div>
       </div>        
     </div>   
   </div>

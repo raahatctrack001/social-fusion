@@ -6,7 +6,7 @@ export  const apiEndPoints = {
     updatePasswordAddress: (authorId)=>`/api/v1/auth/update-password/${authorId}`,
     
     getUserAddress : (userId)=> `/api/v1/users/get-user/${userId}`,
-    getUsersAddress : ()=> `/api/v1/users/get-users/`,
+    getUsersAddress : (currentPage)=> `/api/v1/users/get-users/${currentPage}`,
     deleteUserAddress : (userId)=> `/api/v1/users/delete-user/${userId}`,
     updateUserAddress : (userId)=> `/api/v1/users/update-user/${userId}`,
     removeDPAddress: (userId)=>`/api/v1/users/remove-dp/${userId}`,
