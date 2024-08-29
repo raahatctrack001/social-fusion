@@ -10,6 +10,7 @@ import { current } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSuccess } from '../redux/slices/user.slice'
 import LikersPopup from './PostLikersPopup'
+import SharePopup from './ShareURL'
 
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
@@ -19,7 +20,7 @@ const ShowPosts = ({heading, postData}) => {
     // const [likers, setLikers] = useState([]);
     const [showLikers, setShowLikers] = useState({})
     const [postId, setPostId] = useState(null);
-
+    const [share, setShare] = useState(false)
     const handleToggleFollowButtonClick = async (author)=>{
       // console.log("post", post);
       // console.log("currentUser", currentUser);
@@ -72,10 +73,10 @@ const ShowPosts = ({heading, postData}) => {
         <div className='flex-3/4 flex flex-col m-2 px-2 mb-14'>
         <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> {heading} </h1>
         <div className="flex flex-col  justify-center items-center md:grid lg:grid-cols-2 xl:grid-cols-3 gap-5  p-2">
-
         {postData?.length ? postData.map((post, index) => ( //handle the edge case if there's not post
               <div className=' shadow-2xl dark:hover:shadow-white border hover:shadow-black rounded-xl w-full md:max-w-96 h-full' key={index} >
                 {/* <AuthorCard author={post?.author} /> */}
+                {share && <SharePopup postUrl={`${window.location.href}posts/post/${post?._id}`} onClose={setShare}/>}
                 <div className='flex justify-between hover:dark:bg-gray-700 hover:bg-gray-100 p-2 rounded-lg '>
                   <div 
                   onClick={
@@ -104,7 +105,7 @@ const ShowPosts = ({heading, postData}) => {
                     <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
                       <button onClick={()=>handleShowLikers(post)} className=" cursor-pointer text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
                       <button disabled className="cursor-not-allowed text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
-                      <button disabled className="cursor-not-allowed text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
+                      <button onClick={()=>setShare(true)} className=" text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
                     </div>
                   {showLikers[post?._id] && <LikersPopup postId={postId} isHovered={showLikers} setIsHovered={setShowLikers} />}
                   <PostCard post={post}  />

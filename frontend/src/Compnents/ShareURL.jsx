@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { BsWhatsapp, BsInstagram, BsTwitter, BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Button } from "flowbite-react";
-
-function SharePopup({ postUrl, onClose }) {
+import QRCodeGenerator from "./QRCodeGenerator";
+function SharePopup({ postUrl, heading, onClose }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = () => {
@@ -49,12 +49,12 @@ function SharePopup({ postUrl, onClose }) {
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
       <div className="dark:bg-gray-800 bg-gray-200 p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-1/2">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Share Post</h2>
-          <button onClick={onClose} className="dark:text-gray-500 hover:text-red-700">
+          <h2 className="text-lg font-semibold">{heading ||"Share Post"}</h2>
+          <button onClick={()=>onClose(false)} className="dark:text-gray-500 hover:text-red-700">
             ✕
           </button>
         </div>
-
+        <div className="w-full"> <QRCodeGenerator data={postUrl} />  </div>
         {/* Copy Link Section */}
         <div className="mb-4 flex gap-2 items-center justify-center">
           <input

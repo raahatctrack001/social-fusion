@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Alert, Button } from 'flowbite-react';
-import { HiBadgeCheck, HiCheckCircle, HiEye, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiTrash, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
+import { HiBadgeCheck, HiCheckCircle, HiEye, HiOutlineUserCircle, HiOutlineUsers, HiPencil, HiPlus, HiPlusCircle, HiSelector, HiShare, HiTrash, HiUser, HiUserAdd, HiUserCircle, HiUserRemove, HiX, HiXCircle } from 'react-icons/hi';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSuccess } from '../redux/slices/user.slice';
@@ -17,6 +17,7 @@ import HighlightSelector from './HighlightSelector';
 import HighlightNamePopup from './HighlightNamePopup';
 import apiError from '../../../backend/src/Utils/apiError';
 import HighlightViewer from './HighlightViewer';
+import SharePopup from './ShareURL';
 // import { info } from 'console';
 // import { update } from 'lodash';
 // import { signInSuccess } from '../redux/slices/user.slice';
@@ -51,6 +52,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [index, setIndex] = useState(0) // index to start story from
   const [deleteHighlightLoading, setDeleteHighlightLoading] = useState(false);
   const [dpChangeLoading, setDpChangeLoading] = useState(false)
+  const [shareProfile, setShareProfile] = useState(false)
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -243,6 +245,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
     {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting highlight! please wait!`} />}
     {highlightClick &&  <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} onClose={setHighlightClick} heading={sendHighlight?.name}/>}
     {dpChangeLoading && <LoaderPopup loading={dpChangeLoading} setLoading={setDpChangeLoading} info={"Removing your dp! please wait..."} />}
+    {shareProfile && <SharePopup postUrl={`${window.location.href}` } onClose={setShareProfile} heading={"Share Profile"} />}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -350,8 +353,9 @@ const AuthorHeader = ({ author, setAuthor }) => {
                   </div>
                   
                   <div className='flex items-center justify-between my-2 mt-5 md:ml-10' >
-                    {author?._id === currentUser?._id && <Button onClick={(()=>navigate("/edit-profile"))}> Edit Profile </Button>}
-                    {author?._id !== currentUser?._id ? 
+                  <div className='flex justify-between items-center w-full'> {author?._id === currentUser?._id &&  <Button onClick={(()=>navigate("/edit-profile"))}> Edit Profile </Button>} 
+                  <Button onClick={()=>setShareProfile(true)} className=''>  <span className='hidden md:inline'> Share Profile </span> <HiShare className='md:hidden'/> </Button>  </div>
+                {author?._id !== currentUser?._id &&
                 (<Button 
                   onClick={()=>handleToggleFollowButtonClick(author)}
                   outline className=''> 
@@ -359,9 +363,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                                               {currentUser?.followings?.includes(author?._id)?
                                               ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
                                               (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
-                </Button>) : 
-                
-                  (<Button disabled className=''> <HiBadgeCheck className='text-xl w-20 h-5' /> </Button>)}   
+                </Button>)} 
                   </div>        
                 </div>
             </div>
