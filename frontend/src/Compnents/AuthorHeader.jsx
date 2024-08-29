@@ -176,37 +176,6 @@ const AuthorHeader = ({ author, setAuthor }) => {
     setHighlightName(name);
   }
 
-  
-  const handleHighlightClick = async (highlight)=>{
-    console.log("highlight clicked",highlight)
-    try {
-      setLoading(true)
-      setSendHighlight(highlight)
-      const formData = new FormData();
-      formData.append("stories", highlight.stories);
-      const response = await fetch(apiEndPoints.getHighlightStories(), {method: "POST", body: formData});
-      const data = await response.json();
-
-      if(!response.ok){
-        throw new Error(data?.message || "Network response isn't ok while fetching highligh stories")
-      }
-
-      if(data?.success){
-        console.log("highlight stories data", data);
-        setHighlightClickStories(data?.data);
-        setHighlightClick(true)
-      }
-    } catch (error) {
-      alert(error.message)
-      // console.log(error)
-    }
-    finally{
-      setLoading(false)
-    }
-
-  }
-  console.log("Stories is here", stories)
-
 
   const handleDeleteHighlightClick = async (e, highlight)=>{
       e.stopPropagation();
@@ -259,6 +228,10 @@ const AuthorHeader = ({ author, setAuthor }) => {
       console.log(error)
     }
   }
+  const handleHighlightClick = (highlight)=>{
+    setSendHighlight(highlight)
+    setHighlightClick(true)
+  }
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
@@ -268,7 +241,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
     {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
     {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting highlight! please wait!`} />}
-    {highlightClick && ( highlightClickStories ? <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} stories={highlightClickStories} setStories={setStories} onClose={setHighlightClick} heading={sendHighlight?.name}/> :<h2>No stories yet! Please add stories to add to highlights...</h2>)}
+    {highlightClick &&  <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} onClose={setHighlightClick} heading={sendHighlight?.name}/>}
     {dpChangeLoading && <LoaderPopup loading={dpChangeLoading} setLoading={setDpChangeLoading} info={"Removing your dp! please wait..."} />}
 {/* show dp popup starts here */}
 
@@ -429,7 +402,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         {highlights?.length > 0 &&
           highlights.map((highlight, index) => (
             <div
-              onClick={() => handleHighlightClick(highlight)}
+              onClick={()=>handleHighlightClick(highlight)}
               key={index}
               className="relative flex flex-col items-center justify-center min-h-20 min-w-20 md:h-32 md:w-32 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-xl cursor-pointer transition-transform transform hover:scale-105"
             >

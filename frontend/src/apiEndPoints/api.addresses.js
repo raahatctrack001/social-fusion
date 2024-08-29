@@ -52,5 +52,6 @@ export  const apiEndPoints = {
     deleteHighlightAddress: (userId, highlightId)=>`/api/v1/story/delete-highlight/${userId}/${highlightId}`,
     likeStoryAddress: (storyId, userId)=>`/api/v1/story/like-story/${storyId}/${userId}`,
     deleteStoryAddress: (storyId, userId)=>`/api/v1/story/delete-story/${storyId}/${userId}`,
-    removeStoryFromHighlights: (storyId, userId)=>`/api/v1/story/remove-story-from-highlights/${storyId}/${userId}`
+    removeStoryFromHighlights: (highlightId, storyId, userId)=>`/api/v1/story/remove-story-from-highlights/${highlightId}/${storyId}/${userId}`,
+    getStoriesOfHighlight: (highlightId, userId)=>`/api/v1/story/get-stories-of-highlights/${highlightId}/${userId}`
 }

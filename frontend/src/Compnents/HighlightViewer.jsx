@@ -9,20 +9,45 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { updateSuccess } from '../redux/slices/user.slice';
 import LoaderPopup from './Loader';
+import PopupWindow from '../Pages/PopupWindow';
 
-const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStories, onClose,heading }) => {
+const HighlightViewer = ({highlight, highlights, setHighlights, onClose,heading }) => {
+  // highlight: current highligth
+  // highlights: collection of all highlights takes here as parameter only to manage delete highlights and re render to update ui
+  // stories: stories inside current highlights takes here as parameter only to manage delete highlights and re render to update ui
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
-  const [myHighlightStories, setMyHighlightStories] = useState(stories);
+  const [myHighlightStories, setMyHighlightStories] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
   const [deleteHighlightLoading, setDeleteHighlightLoading] = useState(false);
   const [deleteStoryLoading, setDeleteStoryLoading] = useState(false);
-  // const [showDropdown, setShowDropdown] = useState(false);
+  const [noStoryPopup, setNoStoryPopup] = useState(false);
+  
+  useEffect(()=>{
+    try {      
+      const getStoriesOfHighlights = async ()=>{
+        const response = await fetch(apiEndPoints.getStoriesOfHighlight(highlight?._id, currentUser?._id));
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data.message || "Network response isn't ok while fetching highlight stories")
+        }
 
-  // console.log(stories)
+        if(data.success){
+          setMyHighlightStories(data?.data);
+          console.log("ny stories", myHighlightStories)
+        }
+      }
+      getStoriesOfHighlights();
+    } catch (error) {
+      console.log(error)
+    }
+  }, [highlight])
+  
+
+
   const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       setProgress(0);
@@ -88,10 +113,13 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
       }, 50); // Progress bar updates every 50ms
 
       timer = setInterval(() => {
+        const prev = currentIndex;
         setCurrentIndex((prevIndex) => {
           setProgress(0);
           return (prevIndex + 1) % myHighlightStories.length;
         });
+
+        
       }, 5000); // Change story every 5 seconds
     }
 
@@ -142,6 +170,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
     console.log("clickekd")
   }
 
+
   const handleDeleteHighlight = async (e)=>{
     e.stopPropagation();
     // console.log("highlight ot delete", highlight)
@@ -179,13 +208,30 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
 
   const removeStoryFromHighlight = async (e, story)=>{
       e.stopPropagation();
+      setDeleteHighlightLoading(true)
       try {
-        
+        const response = await fetch(apiEndPoints.removeStoryFromHighlights(highlight?._id, story?._id, currentUser?._id), {method: "POST"});
+        const data = await response.json();
+
+        if(!response.ok){
+          throw new Error(data.message || "Network response isn't ok while removing story from highlights")
+        }
+
+        if(data.success){
+          const updatedhighlight = data?.data?.currentHighlight;
+          const removedStory = data?.data?.currentStory;
+          const updatedHighlights = highlights.filter(highlight=>highlight?._id === updatedhighlight?._id ? updatedhighlight : highlight)
+          const udpatedStory = myHighlightStories.filter(story=>story?._id !== removedStory?._id);
+          setMyHighlightStories(udpatedStory)
+          setHighlights(updatedHighlights)
+          dispatch(updateSuccess(data?.data?.currentUser));
+        }
+
       } catch (error) {
-        
+        alert(error.message);
       }
       finally{
-
+        setDeleteHighlightLoading(false)
       }
   }
   const handleDeleteStoryButtonClick = async(e)=>{
@@ -203,14 +249,8 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
         dispatch(updateSuccess(data?.data?.currentUser));
         const deletedStory = data?.data?.deletedStory;
         const udpatedStories = myHighlightStories.filter(story=>story?._id !== deletedStory?._id)
-        setMyHighlightStories(udpatedStories);
-        setCurrentIndex((prevIndex) => {
-          // setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
-          return (prevIndex + 1) % (myHighlightStories.length-1);
-        });  
-        setStories(udpatedStories);
-        // console.log(myHighlightStories.length)    
-        // console.log(data);
+        setMyHighlightStories(udpatedStories); 
+        
         if(currentIndex === myHighlightStories.length){
           onClose(false)
         }
@@ -224,15 +264,22 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
     }
   }
 
+  // if(myHighlightStories.length === 0){
+  //   return <h1 className=''> No Stories added to this highlight yet!</h1>
+  // }
+  
   if(myHighlightStories.length === 0){
-    onClose(false);
+    return <h2 className=' p-2 rounded-lg  mb-3 text-white bg-gray-500 font-bold'> Highlight is empty! Please make new collection to show the world your best moments!</h2>
   }
+
+  console.log(highlight)
   return (
     <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
       <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"updating like data!"} />}
         {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting ${highlight?.name} highlight, please wait!`} />}
         {deleteStoryLoading && <LoaderPopup loading={deleteStoryLoading} setLoading={setDeleteStoryLoading} info={'deleting story! please wait!'} />}
+        {/* {noStoryPopup && <PopupWindow heading={"Highlight Empty!"} information={"Please add some stories here to see your collectionss"} setShowPopup={setNoStoryPopup} />} */}
         <div className='flex flex-col gap-2 md:px-2'>
           <div className='flex flex-col md:flex-row'>
             <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> {heading} ({currentIndex+1}/{myHighlightStories.length}) </h1>
@@ -252,7 +299,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
             onTouchEnd={handleTouchEnd}
           >
 
-            <div className="w-full mx-auto">
+            <div className="w-full mx-auto" >
               {myHighlightStories[currentIndex] && <p className='w-full flex items-center justify-center'>uploaded: {formatDistanceToNow(myHighlightStories[currentIndex]?.createdAt, {addSuffix: true})} </p>}
               <div className='flex'>
                 <img src={myHighlightStories[currentIndex]?.contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain rounded-xl" />

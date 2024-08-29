@@ -129,24 +129,15 @@ export const createNewHighlights = asyncHandler(async (req, res, next) => {
     }
 });
 
-export const getHeighlightStories = asyncHandler(async (req, res, next)=>{
+export const getHeighlightStories = asyncHandler(async (req, res, next)=>{    
     try {
-        const { stories } = req.body;
-        if(!stories.length){
-            throw new apiError(404, "stories doesn't exist in this heighlights")
+        const { highlightId, userId } = req.params;
+        const currentHighlight = await HighlightModel.findById(highlightId).populate("stories");
+        if(!currentHighlight){
+            throw new apiError(404, "highlight doesn't exist");
         }
 
-        const fetchedStories = await Story.find({
-            _id: { $in: stories.split(',') }
-          });
-
-        if(fetchedStories.length === 0){
-            throw new apiError(404, "No stories exists in this highlights")
-        }
-
-        console.log(fetchedStories)
-        return res.status(200).json(new apiResponse(200, "highlight stories fetched", fetchedStories))
-        
+        return res.status(200).json(new apiResponse(200, "stories from highlight is fetched", currentHighlight.stories))
     } catch (error) {
         next(error)
     }
@@ -275,36 +266,47 @@ export const deleteStory = asyncHandler(async (req, res, next)=>{
     }
 })
 
-export const deleteStoryFromHighlights = asyncHandler(async(req, res, next)=>{
+
+export const removeStoryFromHighlights = asyncHandler( async (req, res, next)=>{
     try {
-        const { storyId, userId } = req.params;
-        if(req.user?._id !== userId){
-            throw new apiError(401, "Unauthorized, u can remove only stories you have uploaded!")
+        const { highlightId, storyId, userId } = req.params;
+        console.log(req.params);
+        if([highlightId, storyId, userId].some(field=>field?0:1)){
+            throw new apiError("highlightId or storyId or userId is missing")
         }
 
+        const currentHighlight = await HighlightModel.findById(highlightId);
+        if(!currentHighlight){
+            throw new apiError(404, "Highlight doesn't exist");
+        }
+        
         const currentStory = await Story.findById(storyId);
         if(!currentStory){
-            throw new apiError(404, "story doesn't exist")
+            throw new apiError(404, "Story doesn't exist");
+
         }
 
         const currentUser = await User.findById(userId);
+        // console.log(currentUser)
         if(!currentUser){
-            throw new apiError(404, "userId is wrong or user doesn't exist")
+            throw new apiError(404, "User doesn't exist");
+
+        }
+        const index = currentHighlight?.stories?.indexOf(storyId);
+        if(index != -1){
+            currentHighlight.stories.splice(index, 1);
+            await currentHighlight.save();
         }
 
-        const index = currentUser?.stories?.indexOf(currentStory?._id);
-        if(index != -1){
-            currentUser.stories.splice(index, 1);
+        const i = currentUser.highlights.indexOf(currentHighlight?._id);
+        if(i != -1){
+            currentUser.highlights[i] = currentHighlight;
             await currentUser.save();
         }
 
-        const deletedStory = await Story.findByIdAndDelete(storyId);
-        res.status(200).json(new apiResponse(200, "currentStory has been moved out of this highlights", {currentUser, deletedStory}));
-    } catch (error) {
-        next(error)
-    }
-})
+        return res.status(200).json(new apiResponse(200, "story removed from highlight but still exists in story or archive", {currentUser, currentHighlight, currentStory}))
 
-export const removeStoryFromHighlights = asyncHandler( async (req, res, next)=>{
-    console.log(req.params);
+    } catch (error) {
+        next(error);
+    }
 })
