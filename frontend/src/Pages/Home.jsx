@@ -39,6 +39,7 @@ const Home = () => {
       //fetch post count
     })()
   }, [])
+
   useEffect(()=>{
     fetch(apiEndPoints.getPostsAddress(currentPage))
       .then((posts)=>{
@@ -52,7 +53,8 @@ const Home = () => {
         console.log("fetched post"); 
         setPostData(fetchedData)
         const total = data?.data?.totalCount;
-        setTotalPost(Math.floor(total/10+1))
+        setTotalPost(Math.floor(total/9+1))
+        window.scrollTo(0, 0);
       })
       .catch((err)=>{
         throw new Error("Error fetching posts", err);
@@ -76,6 +78,8 @@ const Home = () => {
           setUsers(data.data?.safeUsers);
           const totalUser = data?.data?.totalUsers;
           setTotalUser(Math.floor(totalUser/10)+1);
+          window.scrollTo(0, 0);
+
           // dispatch(updateSuccess(  ))
         })
         .catch((error)=>{
@@ -124,21 +128,24 @@ const Home = () => {
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
    <div className='flex flex-col'>
-    {postData ? <ShowPosts heading={"Our recent posts!"} postData={postData} /> : <NotFoundPage /> }
+    {postData ? <ShowPosts heading={`Our recent posts page ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
       <div className='w-full flex items-center justify-center gap-4 mb-4'> 
           <Button disabled={currentPage <= 1} onClick={()=>setCurrentPage(currentPage=>currentPage-1)}> Prev </Button> 
             {currentPage-3 > 0 && 
-              <div className='flex gap-2'> 
-                <span> 1 </span>
+              <div className='flex gap-2 cursor-pointer' onClick={()=>setCurrentPage(1)}> 
+                <span > 1 </span>
                 <span> . </span>
                 <span> . </span>
                 <span> . </span>              
               </div>              
               }
-              { currentPage-2 > 0 && currentPage-2} {currentPage-1 > 0 && currentPage-1} 
+              <span onClick={()=>setCurrentPage(currentPage-2)} className='cursor-pointer'>{currentPage-2 > 0 && currentPage-2}</span> 
+              <span onClick={()=>setCurrentPage(currentPage-1)} className='cursor-pointer'>{currentPage-1 > 0 && currentPage-1}</span> 
               <span className='border w-12 py-1 grid place-items-center rounded-lg bg-gray-700 text-white font-bold mb-1'>  {currentPage} </span> 
-              { (currentPage+1 <= totalPost) && currentPage+1} {(currentPage+2 <=  totalPost) && currentPage+2}{currentPage+2 < totalPost && 
-              <div className='flex gap-2'>
+              <span className='cursor-pointer' onClick={()=>setCurrentPage(currentPage+1)}>{(currentPage+1 <= totalPost) && currentPage+1} </span>
+              <span className='cursor-pointer' onClick={()=>setCurrentPage(currentPage+2)}>{(currentPage+2 <=  totalPost) && currentPage+2}</span>
+              {currentPage+2 < totalPost && 
+              <div className='flex gap-2 cursor-pointer' onClick={()=>setCurrentPage(totalPost)}>
                 <span> . </span>
                 <span> . </span>
                 <span> . </span>
@@ -149,7 +156,7 @@ const Home = () => {
    </div>
 
     <div className='flex-1/4 m-2 px-2 mx-2'>
-      <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors </h1>
+      <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors ({currentUserPage}/{totalUser}) </h1>
       <div className="flex flex-col bg-gray-100 dark:bg-gray-900 gap-3  ">
       {users && users.map((author, index) => (
             <div 
@@ -182,16 +189,22 @@ const Home = () => {
         ))}
         <div className='w-full flex justify-center items-center gap-1'> 
           <Button disabled={currentUserPage === 1} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage-1)}> prev </Button>
-           { currentUserPage-3 >0 && <div className='flex justify-center items-center gap-1'>
+           { currentUserPage-3 >0 && <div className='flex justify-center items-center gap-1 cursor-pointer' onClick={()=>setCurrentUserPage(1)}>
               <span> 1 </span>
               <span> . </span>
               <span> . </span>
               <span> . </span>
             </div>}
-            <div> {currentUserPage-2 > 0 && currentUserPage-2} {currentUserPage-1 > 0 && currentUserPage-1} </div>
+            <div> 
+              <span className='cursor-pointer' onClick={()=>setCurrentUserPage(currentUserPage-2)}> {currentUserPage-2 > 0 && currentUserPage-2}</span> 
+              <span className='cursor-pointer' onClick={()=>setCurrentUserPage(currentUserPage-1)}> {currentUserPage-1 > 0 && currentUserPage-1}</span> 
+            </div>
             <div className=' w-12 flex justify-center items-center font-bold bg-gray-700 text-white rounded-lg py-1'> {currentUserPage} </div>
-            <div> {currentUserPage+1 <= totalUser && currentUserPage+1} {currentUserPage+2 <= totalUser && currentUserPage+2} </div>
-            {currentUserPage+3 <= totalUser && <div className='flex justify-center items-center gap-1'>
+            <div> 
+              <span className='cursor-pointer' onClick={()=>setCurrentUserPage(currentUserPage+1)}>{currentUserPage+1 <= totalUser && currentUserPage+1} </span>
+              <span className='cursor-pointer' onClick={()=>setCurrentUserPage(currentUserPage+2)}>{currentUserPage+2 <= totalUser && currentUserPage+2} </span>
+            </div>
+            {currentUserPage+3 <= totalUser && <div className='flex justify-center items-center gap-1 cursor-pointer' onClick={()=>setCurrentUserPage(totalUser)}>
               <span> . </span>
               <span> . </span>
               <span> . </span>

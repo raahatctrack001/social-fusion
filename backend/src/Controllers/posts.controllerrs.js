@@ -121,8 +121,8 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
         await Post
             .find({})
             .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
-            .skip((page-1)*10)
-            .limit(10)
+            .skip((page-1)*9)
+            .limit(9)
             .sort({createdAt: -1})
             .then((posts)=>{
                 // console.log(posts)
