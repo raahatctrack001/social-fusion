@@ -274,3 +274,37 @@ export const deleteStory = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
+export const deleteStoryFromHighlights = asyncHandler(async(req, res, next)=>{
+    try {
+        const { storyId, userId } = req.params;
+        if(req.user?._id !== userId){
+            throw new apiError(401, "Unauthorized, u can remove only stories you have uploaded!")
+        }
+
+        const currentStory = await Story.findById(storyId);
+        if(!currentStory){
+            throw new apiError(404, "story doesn't exist")
+        }
+
+        const currentUser = await User.findById(userId);
+        if(!currentUser){
+            throw new apiError(404, "userId is wrong or user doesn't exist")
+        }
+
+        const index = currentUser?.stories?.indexOf(currentStory?._id);
+        if(index != -1){
+            currentUser.stories.splice(index, 1);
+            await currentUser.save();
+        }
+
+        const deletedStory = await Story.findByIdAndDelete(storyId);
+        res.status(200).json(new apiResponse(200, "currentStory has been moved out of this highlights", {currentUser, deletedStory}));
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const removeStoryFromHighlights = asyncHandler( async (req, res, next)=>{
+    console.log(req.params);
+})

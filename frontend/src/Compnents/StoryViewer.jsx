@@ -100,29 +100,29 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose,heading }) 
     };
   }, [isPaused, stories.length, currentIndex]);
 
-  const handleDeleteHighlight = async (e)=>{
-    e.stopPropagation();
-    console.log(highlight)
-    try {
+  // const handleDeleteHighlight = async (e)=>{
+  //   e.stopPropagation();
+  //   console.log(highlight)
+  //   try {
         
-        console.log("triggered or not")
-        const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
-        const data = await response.json();
+  //       console.log("triggered or not")
+  //       const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
+  //       const data = await response.json();
 
-        if(!response.ok){
-          throw new Error(data?.message || "network response isnt' ok while deleting highlights")
-        }
+  //       if(!response.ok){
+  //         throw new Error(data?.message || "network response isnt' ok while deleting highlights")
+  //       }
 
-        if(data.success){
-          console.log(data)
+  //       if(data.success){
+  //         console.log(data)
 
           
-          dispatch(updateSuccess(data?.data?.currentUser));
-        }
-      } catch (error) {
-      console.log(error);
-    }
-  }
+  //         dispatch(updateSuccess(data?.data?.currentUser));
+  //       }
+  //     } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   
   useEffect(() => {
     const video = videoRef.current;
@@ -212,6 +212,8 @@ const handleAddToHighlightButtonClick = async(e)=>{
   e.stopPropagation();
   console.log("clickekd")
 }
+
+console.log("highlights from story viewre", highlight)
   
 return (
   <div className="fixed inset-0 bg-opacity-95 flex items-center justify-center bg-black z-50">

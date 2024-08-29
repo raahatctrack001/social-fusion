@@ -47,6 +47,11 @@ function App() {
                   <Route path="/reset-password/:authorId" element={<ResetPassword />} />
                   <Route path="delete-account" element={<DeleteAccount />} />       
                   <Route path="/search-posts" element={<SearchPostResult />} />
+                  <Route path="/projects" element={<UnderDevelopment />} />
+                  <Route path="/services" element={<FeaturesPage />} />
+                  <Route path="/contacts" element={<ContactPage />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/notifications" element={<UnderDevelopment />} />
                 </Route>
                   
                   <Route path="/posts/post/:postId" element={<PostPage />} />
@@ -56,12 +61,7 @@ function App() {
                   <Route path="/register/post-registration" element={<PostRegistration /> } />
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/projects" element={<UnderDevelopment />} />
-                  <Route path="/services" element={<FeaturesPage />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
-                  <Route path="/contacts" element={<ContactPage />} />
-                  <Route path="/prices" element={<UnderDevelopment />} />
                   <Route path="/test-route" element={<AccountCreatedPopup heading={"Account Created!"} info={"your account has been created!"}  />} />
                   <Route path="/*" element={<AllRoute />} />
                 </Routes>

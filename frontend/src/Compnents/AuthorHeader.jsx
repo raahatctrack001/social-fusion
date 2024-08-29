@@ -253,6 +253,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         if(data.success){
           dispatch(updateSuccess(data?.data));
           setAuthor(data?.data)
+          // alert(data.message)
         }
     } catch (error) {
       console.log(error)
@@ -316,7 +317,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
               className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
               <img 
                 onClick={()=>setShowStory(!showStory)}
-                src={author.profilePic || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
+                src={author.profilePic.at(-1) || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
                 alt="Author" 
                 className="w-32 h-32 rounded-full  object-cover cursor-pointer"
               />

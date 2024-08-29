@@ -15,13 +15,14 @@ export const uploadProfilePicture = asyncHandler(async (req, res, next)=>{
             throw new apiError(500, "failed to update profile")
         }
 
-        const user = await User.findById(req.params?.userId)
+        const user = await User.findByIdAndUpdate(req.params?.userId, {
+            $push: {
+                profilePic: response.url
+            }
+        }, {new: true})
         if(!user){
             throw new apiError(404, "user doesn't exist");
         }
-
-        user.profilePic = response.url;
-        await user.save();
         const currentUser = await user.populate("posts")
         res
             .status(200)
@@ -41,10 +42,10 @@ export const removeProfilePicture = asyncHandler(async (req, res, next)=>{
             throw new apiError(404, "userId is missing")
         }
 
-        const currentUser = await User.findByIdAndUpdate(userId, {
-            $set: {
+        const currentUser = await User.findByIdAndUpdate(userId, {            
+            $push: {
                 profilePic: 'https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg'
-            }
+            },
         }, {new: true});
         if(!currentUser){
             throw new apiError(404, "user id is missing or user doesn't exist")

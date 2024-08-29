@@ -64,7 +64,7 @@ export default function Header() {
 
       // console.log("response", response);
       console.log("data", data);
-      alert(data.message)  
+      // alert(data.message)  
       localStorage.removeItem("currentUser")
       dispatch(signoutSuccess())
       // navigate("/sign-in")
@@ -133,7 +133,7 @@ export default function Header() {
       {currentUser ?
       <div className=" flex gap-2" >
           <span className={`h-2 w-2 ${currentUser?.isActive ? "bg-green-600": "bg-red-600"} rounded-full relative top-1 left-12`}></span>
-          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden lg:inline" src={currentUser.profilePic} alt={currentUser.username} />
+          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden lg:inline" src={currentUser.profilePic.at(-1)} alt={currentUser.username} />
           <div ref={dropdownRef} className=""> 
             <Dropdown label={currentUser?.fullName?.split(' ')[0].length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName.split(' ')[0]} outline arrowIcon={false}>
                <Dropdown.Header>
@@ -142,7 +142,7 @@ export default function Header() {
                    <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                   </Link>
                </Dropdown.Header>
-               <div onClick={()=>dispatch(toggleTheme())} className="flex justify-start items-center gap-2 pl-4"> {theme === 'dark' ? <HiSun /> : <HiMoon /> } toggle theme </div>
+               <div onClick={()=>dispatch(toggleTheme())} className="flex justify-start items-center gap-2 pl-4 cursor-pointer hover:bg-gray-500 h-9 hover-text-white"> {theme === 'dark' ? <HiSun /> : <HiMoon /> } toggle theme </div>
                <Dropdown.Item href="/dashboard?tab=home" icon={HiViewGrid}>Dashboard</Dropdown.Item>
                <Dropdown.Item href="/chatroom" icon={HiChatBubbleBottomCenterText}>Chat Room</Dropdown.Item>
 
@@ -177,7 +177,7 @@ export default function Header() {
       <Navbar.Toggle />
       </div>
         {/* <div className="flex gap-2 lg:gap-5 "> */}
-      <Navbar.Collapse className="">
+      {currentUser && <Navbar.Collapse className="">
           <Navbar.Link className="" href="/" active = {path === '/'} >
             Home
           </Navbar.Link>
@@ -185,7 +185,7 @@ export default function Header() {
 
           <Navbar.Link className="text-sm" href="/about" active = {path === '/about'} >About</Navbar.Link>
           <Navbar.Link className="text-sm" href="/services" active = {path === '/services'} >Services</Navbar.Link>
-          <Navbar.Link className="text-sm" href="/prices" active = {path === '/prices'} >
+          <Navbar.Link className="text-sm" href="/notifications" active = {path === '/notifications'} >
           <span className="md:hidden flex justify-start items-center"> Notification </span> 
 
             <div className="hidden md:inline"> 
@@ -194,7 +194,7 @@ export default function Header() {
             </div>
           </Navbar.Link>
           <Navbar.Link className="text-sm" href="/contacts" active = {path === '/contacts'} >Contact</Navbar.Link>
-      </Navbar.Collapse>
+      </Navbar.Collapse>}
         {/* </div> */}
     </Navbar>
     </div>

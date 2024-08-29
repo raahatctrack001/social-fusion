@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { HiX, HiPause, HiPlay, HiDotsHorizontal, HiDotsVertical, HiOutlineDotsVertical, HiSwitchVertical, HiDotsCircleHorizontal, HiHeart, HiTrash, HiReply, HiPlus, HiStar, HiBan } from 'react-icons/hi';
+import { HiX, HiPause, HiPlay, HiDotsHorizontal, HiDotsVertical, HiOutlineDotsVertical, HiSwitchVertical, HiDotsCircleHorizontal, HiHeart, HiTrash, HiReply, HiPlus, HiStar, HiBan, HiMinus } from 'react-icons/hi';
 import PageLoader from './PageLoader';
 import { formatDistanceToNow } from 'date-fns';
 import { current } from '@reduxjs/toolkit';
@@ -13,6 +13,7 @@ import LoaderPopup from './Loader';
 const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStories, onClose,heading }) => {
   const { currentUser } = useSelector(state=>state.user);
   const dispatch = useDispatch();
+  const [myHighlightStories, setMyHighlightStories] = useState(stories);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -25,16 +26,16 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
   const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       setProgress(0);
-      return (prevIndex + 1) % stories.length;
+      return (prevIndex + 1) % myHighlightStories.length;
     });
-  }, [stories.length]);
+  }, [myHighlightStories.length]);
 
   const handlePrev = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       setProgress(0);
-      return (prevIndex - 1 + stories.length) % stories.length;
+      return (prevIndex - 1 + myHighlightStories.length) % myHighlightStories.length;
     });
-  }, [stories.length]);
+  }, [myHighlightStories.length]);
 
   const handlePause = useCallback(() => {
     setIsPaused(true);
@@ -89,7 +90,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
       timer = setInterval(() => {
         setCurrentIndex((prevIndex) => {
           setProgress(0);
-          return (prevIndex + 1) % stories.length;
+          return (prevIndex + 1) % myHighlightStories.length;
         });
       }, 5000); // Change story every 5 seconds
     }
@@ -98,14 +99,14 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
       clearInterval(timer);
       clearInterval(progressInterval);
     };
-  }, [isPaused, stories.length]);
+  }, [isPaused, myHighlightStories.length]);
   
 
   const handleLikeButtonClick = async(e)=>{
     e.stopPropagation();
     try {
       setLoading(true);
-      const response = await fetch(apiEndPoints.likeStoryAddress(stories[currentIndex]?._id, currentUser?._id), {method: "PATCH"})
+      const response = await fetch(apiEndPoints.likeStoryAddress(myHighlightStories[currentIndex]?._id, currentUser?._id), {method: "PATCH"})
       const data = await response.json();
   
       if(!response.ok){
@@ -143,7 +144,8 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
 
   const handleDeleteHighlight = async (e)=>{
     e.stopPropagation();
-    console.log(highlight)
+    // console.log("highlight ot delete", highlight)
+    // return;
     setDeleteHighlightLoading(true)
     try {
         
@@ -175,11 +177,22 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
     }
   }
 
+  const removeStoryFromHighlight = async (e, story)=>{
+      e.stopPropagation();
+      try {
+        
+      } catch (error) {
+        
+      }
+      finally{
+
+      }
+  }
   const handleDeleteStoryButtonClick = async(e)=>{
     e.stopPropagation();
     try {
       setDeleteStoryLoading(true)
-      const response  = await fetch(apiEndPoints.deleteStoryAddress(stories[currentIndex]?._id, currentUser?._id), {method: "DELETE"});
+      const response  = await fetch(apiEndPoints.deleteStoryAddress(myHighlightStories[currentIndex]?._id, currentUser?._id), {method: "DELETE"});
       const data = await response.json();
   
       if(!response.ok){
@@ -189,15 +202,19 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
       if(data.success){
         dispatch(updateSuccess(data?.data?.currentUser));
         const deletedStory = data?.data?.deletedStory;
-        const udpatedStories = stories.filter(story=>story?._id !== deletedStory?._id)
-        setStories(udpatedStories);
+        const udpatedStories = myHighlightStories.filter(story=>story?._id !== deletedStory?._id)
+        setMyHighlightStories(udpatedStories);
         setCurrentIndex((prevIndex) => {
           // setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
-          return (prevIndex + 1) % (stories.length-1);
-        });      
-        onClose(false)
-        console.log(data);
-        alert(data?.message)
+          return (prevIndex + 1) % (myHighlightStories.length-1);
+        });  
+        setStories(udpatedStories);
+        // console.log(myHighlightStories.length)    
+        // console.log(data);
+        if(currentIndex === myHighlightStories.length){
+          onClose(false)
+        }
+        // console.log(currentIndex, myHighlightStories.length)
       }
     } catch (error) {
       console.log(error);
@@ -207,8 +224,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
     }
   }
 
-  console.log("inside highlight viewer", stories)
-  if(stories.length === 0){
+  if(myHighlightStories.length === 0){
     onClose(false);
   }
   return (
@@ -219,7 +235,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
         {deleteStoryLoading && <LoaderPopup loading={deleteStoryLoading} setLoading={setDeleteStoryLoading} info={'deleting story! please wait!'} />}
         <div className='flex flex-col gap-2 md:px-2'>
           <div className='flex flex-col md:flex-row'>
-            <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> {heading} ({currentIndex+1}/{stories.length}) </h1>
+            <h1 className='w-full flex justify-center items-center mt-3 tracking-wider font-bold text-black dark:text-white text-lg '> {heading} ({currentIndex+1}/{myHighlightStories.length}) </h1>
             {highlight && 
               <div className='w-full flex justify-center md:relative top-3'>
                 {currentUser?._id === highlight?.author && <Button onClick={handleDeleteHighlight} color={'failure'} className='text-nowrap w-32'> Delete Highlight </Button>}
@@ -237,9 +253,9 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
           >
 
             <div className="w-full mx-auto">
-              <p className='w-full flex items-center justify-center'>uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, {addSuffix: true})} </p>
+              {myHighlightStories[currentIndex] && <p className='w-full flex items-center justify-center'>uploaded: {formatDistanceToNow(myHighlightStories[currentIndex]?.createdAt, {addSuffix: true})} </p>}
               <div className='flex'>
-                <img src={stories[currentIndex].contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain rounded-xl" />
+                <img src={myHighlightStories[currentIndex]?.contentURL} alt="Story" className="w-full h-auto cursor-pointer max-h-screen object-contain rounded-xl" />
                 <div className='flex flex-col'>
                     <button onClick={() => onClose(false)} className="absolute dark:bg-gray-600 dark:text-white bg-red-600 text-white rounded-lg right-2 text-xl p-2">
                       <HiX />
@@ -247,16 +263,16 @@ const HighlightViewer = ({highlight, highlights, setHighlights, stories, setStor
                     <div className='cursor-pointer relative top-20 right-8  rounded-lg pl-2'>
                       {/* <HiDotsCircleHorizontal className='text-lg ' onClick={(e)=>{e.stopPropagation();setShowDropdown(true)}}/> */}
                       <div className='w-10 md:w-36 bg-white dark:bg-gray-700 h-24 flex flex-col justify-between py-2 rounded-lg pl-2'>
-                      {currentUser?._id !== stories[currentIndex]?.user && 
+                      {currentUser?._id !== myHighlightStories[currentIndex]?.user && 
                           <div onClick={handleLikeButtonClick} className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> 
-                          {currentUser?.likedStories?.includes(stories[currentIndex]?._id) ?                  
+                          {currentUser?.likedStories?.includes(myHighlightStories[currentIndex]?._id) ?                  
                             <div className='flex items-center justify-center gap-2'> <HiHeart className='text-red-500'/> <span className='hidden md:inline'> Liked </span> </div> :
                             <div className='flex items-center justify-center gap-2'> <HiHeart className=''/> <span className='hidden md:inline'> Like </span> </div> 
                           }
                           </div>}                        {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiReply className=''/> <span className='hidden md:inline'> Reply </span> </p>}
                         {currentUser?._id !== highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiExclamationTriangle className=''/> <span className='hidden md:inline'> Report </span>  </p>}
                         {currentUser?._id === highlight?.author && <p onClick={handleDeleteStoryButtonClick} className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'> <HiTrash className=''/> <span className='hidden md:inline'> Delete </span> </p>}
-                        {currentUser?._id === highlight?.author && <p className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiPlus className=''/> <span className='hidden md:inline'> Highlights </span>  </p>}
+                        {currentUser?._id === highlight?.author && <p onClick={(e)=>removeStoryFromHighlight(e, myHighlightStories[currentIndex])} className=' hover:text-xl text-lg text-nowrap flex items-center gap-2 hover:font-bold'>  <HiMinus className=''/> <span className='hidden md:inline'> Highlights </span>  </p>}
                         <span>  </span>
                       </div>
                     </div>

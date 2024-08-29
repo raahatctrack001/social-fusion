@@ -188,7 +188,7 @@ const CreatePost = ({ placeholder }) => {
       
          
     <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> Create Post </h1>  
-    {theme === 'dark' && <p className='w-full grid place-items-center'> Please switch to light mode for better experience while writing post! </p>    }
+    {theme === 'dark' && <p className='w-full grid place-items-center font-bold text-red-700'> Please switch to light mode for better experience while writing post! </p>    }
     {thumbnailURL && <div className='flex justify-center items-center overflow-scroll mt-2 w-full'>
       <img className='p-5 w-1/2 max-h-96 rounded-3xl aspect-auto' src={thumbnailURL} alt="thumbnail" />
     </div>}
