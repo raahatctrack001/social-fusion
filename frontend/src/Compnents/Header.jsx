@@ -83,9 +83,7 @@ export default function Header() {
       }, 2000);
       return ()=>clearTimeout(timeout)
     }
-    if(searchTerm?.trim() === ''){
-      navigate("/")
-    }
+    
     
     
   }, [searchTerm])

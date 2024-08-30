@@ -14,7 +14,7 @@ const LoaderPopup = ({ loading, setLoading, info }) => {
         <div className='flex  w-full justify-between text-red-900 relative right-28'>
             <div></div>
             
-            {showCancel && <HiX onClick={()=>setLoading(false)} className='cursor-pointer text-xl font-bold hover:border-2' />}
+            {showCancel && <HiX onClick={()=>setLoading(false)} className='cursor-pointer text-xl font-bold hover:border-2 bg-white text-black rounded-lg' />}
         </div>
       <div className="flex flex-col items-center">
         <div className="loader border-t-4 border-blue-500 rounded-full w-16 h-16"></div>

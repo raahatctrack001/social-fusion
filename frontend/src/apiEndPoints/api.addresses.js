@@ -47,6 +47,7 @@ export  const apiEndPoints = {
 
     addStoriesAddress: (userId)=>`/api/v1/story/upload-story/${userId}`,
     getStoriesOfUser: (userId)=>`/api/v1/story/get-stories-of-user/${userId}`,
+    getAllStoriesOfUser: (userId)=>`/api/v1/story/get-all-stories-of-user/${userId}`,
     createNewHighlights: (userId)=>`/api/v1/story/create-new-highlights/${userId}`,
     addStoryToHighlight: (highlightId, storyId, userId)=>`/api/v1/story/add-story-to-highlight/${highlightId}/${storyId}/${userId}`,
     getHighlightStories: ()=>`/api/v1/story/get-highlights`,

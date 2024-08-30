@@ -40,8 +40,9 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [isFollowerHovered, setisFollowerHovered] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false) //dp drop down to let user decide see dp add story or change dp
   const [stories, setStories] = useState([]); //fetched story data to display on click
+  const [storiesForHighlight, setStoriesForHighlight] = useState([]); //select stories to select from while creating new highllight
   const [showStory, setShowStory] = useState(false); //condition check to show story or not
-  const [showHighlightSelector, setShowHighlightSelector] = useState(false); //popup to display highlight story select
+  const [showHighlightSelector, setShowHighlightSelector] = useState(false); //popup to display highlight story for selecting
   const [showHighlightName, setShowHighlightName] = useState(false); //whether to display popup to take highlght name or not
   const [highlightName, setHighlightName] = useState('') //when user create new highlight ask them to enter name
   const [highlights, setHighlights] = useState([]); //initial data to display in screen's highlight row
@@ -53,6 +54,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   const [deleteHighlightLoading, setDeleteHighlightLoading] = useState(false);
   const [dpChangeLoading, setDpChangeLoading] = useState(false)
   const [shareProfile, setShareProfile] = useState(false)
+  const [highlightStoryLoading, setHighlightStoryLoading] = useState(false); //when create new highlight is clicked let all the story of user fetched at client side
 
   const handleToggleFollowButtonClick = async ()=>{
     try {
@@ -213,6 +215,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       }
     
   }
+
   const handleRemoveDPClick = async ()=>{
     try {
         const response = await fetch(apiEndPoints.removeDPAddress(currentUser?._id), {method: "PATCH"});
@@ -231,22 +234,49 @@ const AuthorHeader = ({ author, setAuthor }) => {
       // console.log(error)
     }
   }
+
   const handleHighlightClick = (highlight)=>{
     setSendHighlight(highlight)
     setHighlightClick(true)
   }
+
+  const handleCreateNewHighlightClick = async()=>{
+    setHighlightStoryLoading(true)
+    try {
+      const response = await fetch(apiEndPoints.getAllStoriesOfUser(currentUser?._id));
+      const data = await response.json();
+
+      if(!response.ok){
+        throw new Error(data?.message || "Network response isn't ok while fetching all stories for selection of highlight")
+      }
+
+      if(data?.success){
+        console.log(data);
+        setStoriesForHighlight(data?.data)
+        setShowHighlightName(true)
+      }
+    } catch (error) {
+      alert(error.message)
+      console.log(error)
+    }
+    finally{
+      setHighlightStoryLoading(false)
+    }
+  }
+
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
     {storyLoading && <LoaderPopup loading={storyLoading} setLoading={setStoryLoading} info={"Updating your story!"} /> }
     {showStory && (stories?.length ? <StoryViewer index={index}  highlight={false} stories={stories} setStories={setStories} onClose={setShowStory} heading={"Recent Stories..."}/>:<h2>No stories yet! Add some stories and let the world know what you are doing rn...</h2>)}
-    {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={stories} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>}
+    {showHighlightSelector && <HighlightSelector setHighlights={setHighlights} highlightName={highlightName} stories={storiesForHighlight} isOpen={showHighlightSelector} onClose={setShowHighlightSelector}/>} {/*////creating new highglight and selecting stories for it*/}
     {showHighlightName && <HighlightNamePopup isOpen={showHighlightName} onClose={setShowHighlightName} onSave={getHighlightName} selectHighlights={setShowHighlightSelector}/>}
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"fetching highlights"} />}
     {deleteHighlightLoading && <LoaderPopup loading={deleteHighlightLoading} setLoading={setDeleteHighlightLoading} info={`Deleting highlight! please wait!`} />}
     {highlightClick &&  <HighlightViewer  highlights={highlights} setHighlights={setHighlights} highlight={sendHighlight} onClose={setHighlightClick} heading={sendHighlight?.name}/>}
     {dpChangeLoading && <LoaderPopup loading={dpChangeLoading} setLoading={setDpChangeLoading} info={"Removing your dp! please wait..."} />}
     {shareProfile && <SharePopup postUrl={`${window.location.href}` } onClose={setShareProfile} heading={"Share Profile"} />}
+    {highlightStoryLoading && <LoaderPopup loading={highlightStoryLoading} setLoading={setHighlightStoryLoading} info={"Loading your stories, please wait"} />}
 {/* show dp popup starts here */}
 
       {showDP && (
@@ -433,7 +463,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
 
           {/* {highlights?.length > 0 ? <div> </div> : <div className='w-full flex justify-center text-5xl'> No highlights yet! </div>} */}
           {author?._id === currentUser?._id && <div
-            onClick={() => setShowHighlightName(true)}
+            onClick={handleCreateNewHighlightClick}
             className=' min-h-20 min-w-20 md:h-28  md:w-28 bg-gray-300 hover:bg-gray-400 text-gray-800 dark:hover:bg-gray-500 dark:bg-gray-700 rounded-full mt-2 grid place-items-center cursor-pointer'
           >
             <div className='flex flex-col justify-center items-center text-nowrap dark:text-white'>

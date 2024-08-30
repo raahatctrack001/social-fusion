@@ -8,7 +8,7 @@ const PageLoader = ({info}) => {
         <div className="text-center text-gray-700">
             <p className="text-lg font-semibold">Hold tight! We're loading your content.</p>
             <p className="mt-2">Thanks for your patience.</p>
-            {info && <p> { info }</p>}
+            {info && <p> { info || "If it's taking longer time than expected, please check your internet connection or refresh the page!" }</p>}
         </div>
     </div>
   );

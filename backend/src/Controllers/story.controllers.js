@@ -1,3 +1,4 @@
+import { kMaxLength } from "buffer";
 import HighlightModel from "../Models/story.highlight.model.js";
 import Story from "../Models/story.model.js";
 import User from "../Models/user.model.js";
@@ -11,6 +12,9 @@ export const uploadStory = asyncHandler(async (req, res, next)=>{
     // return;     
     // const index = await Story.collection.dropIndex('createdAt_1'); // Replace 'createdAt_1' with your index name
     // console.log("dropped index", index)
+
+    // const stories = await User.findById(req.params.userId).populate("stories");
+    // console.log(stories.stories.length)
     // return;
     try {
         const { userId } = req.params;
@@ -85,6 +89,56 @@ export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
+export const getAllStoriesOfUser = asyncHandler(async (req, res, next)=>{  // for selecting stories for highlights
+    try {
+        const { userId } = req.params;
+        if(req.user?._id !== userId){
+            throw new apiError(401, "You are not authorized to add stories into this account's highlights")
+        }
+        
+        const stories = await Story.find({user: userId});
+        if(!stories.length === 0){
+            throw new apiError(404, "No stories present! please add some stories to highlight")
+        }
+
+        return res.status(200).json(new apiResponse(200, "all stories are now in selection area", stories))
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+// export const getStoriesOfUserForHighlight = asyncHandler(async (req, res, next)=>{
+//     try {
+//         // console.log("inside get stories")
+//         const { userId } = req.params; // can't fetch followings story if check req.user?._id === userId
+//         if(!userId){
+//             throw new apiError(404, "UserId is missing")
+//         } 
+
+//         const currentUser = await User.findById(userId).populate("highlights");
+//         if(!currentUser){
+//             throw new apiError(404, "User is missing")
+//         }
+//         const stories = await Story.find({
+//             user:userId,
+//             createdAt: { $gt: new Date(Date.now() - 24*60*60*1000) } // all the documents whose date and timing are greater than 24 hours before now...
+//             //createdAt time should be greater than this given time
+        
+//         })
+//         console.log(stories.length)
+//         if(!stories){
+//             throw new apiError(404, "No recent stories")
+//         }
+        
+
+//         return res.status(200).json(new apiResponse(200, "stories fetched", {currentUser, stories}))
+        
+//     } catch (error) {
+//         next(error)
+//     }
+// })
 
 export const createNewHighlights = asyncHandler(async (req, res, next) => {
     try {

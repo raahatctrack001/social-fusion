@@ -69,6 +69,7 @@ const SelectHighlightPopup = ({isOpen, setIsOpen, story}) => {
         console.log(error)
     }
   }
+
   return (
     <div className="p-4">
       {/* <Button onClick={openModal}>
