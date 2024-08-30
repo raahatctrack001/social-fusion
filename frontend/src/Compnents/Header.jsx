@@ -14,14 +14,17 @@ import { HiChatBubbleBottomCenterText } from "react-icons/hi2";
 
 
 export default function Header() {
+  const { currentUser } = useSelector(state=>state.user);
+  const { theme } = useSelector(state=>state.theme);
 
   const [isOnline, setIsOnline] = useState(window.navigator.onLine)
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchedPost, setSearchedPost] = useState([]);
+  const [showSearchedResult, setShowSearchedResult] = useState(false);
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const path = useLocation().pathname;
-  const { currentUser } = useSelector(state=>state.user);
-  const { theme } = useSelector(state=>state.theme);
   // console.log(theme)
 
   const [showSearchPopup, setShowSearchPopup] = useState(false);
@@ -76,17 +79,34 @@ export default function Header() {
 
 
   useEffect(()=>{
-    if(searchTerm?.trim() !== ''){      
-      const timeout = setTimeout(() => {
-        navigate(`/search-posts?query=${encodeURIComponent(searchTerm)}`);
+    try {
+        if(searchTerm.trim() === ''){
+          setShowSearchedResult(false)
+        }
+        if(searchTerm.trim()!==''){         
+        fetch(apiEndPoints.searchPostsAddress(searchTerm), {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+            .then((response)=>{
+                // console.log("response", response)
+                // if(!response.ok){
+                //     alert(response.message);
+                // }
+                return response.json();
+            })
+            .then((data)=>{
+                
+                setSearchedPost(data.posts);
         
-      }, 2000);
-      return ()=>clearTimeout(timeout)
+                
+            })}
+    } catch (error) {   
+        console.log(error);
     }
-    
-    
-    
-  }, [searchTerm])
+}, [searchTerm])
   
   // console.log(searchTerm)
   return (
@@ -95,17 +115,26 @@ export default function Header() {
     {showSearchPopup && (
         <div 
             // onMouseLeave={()=>console.log("mouse left")}
-            className="fixed inset-0 bg-opacity-50 z-20"
+            className="fixed inset-0 bg-opacity-50 z-20 flex items-start justify-center"
              >
-          <div className="bg-blue-950 p-6 rounded-lg shadow-lg flex flex-col">
+          <div className= "bg-white dark:bg-gray-800 p-6 flex flex-col w-full max-w-lg rounded-lg border border-b-0 border-gray-800">
             <div className="flex justify-between relative">
-            <p> search substring of title, content, category... </p>
+            <p className="pl-1 font-semibold"> search post...</p>
             <div> </div>
-            <div onClick={()=>setShowSearchPopup(!showSearchPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700"/> </div>
+            <div onClick={()=>setShowSearchPopup(!showSearchPopup)} className="relative bottom-3 right-2"> <HiX className="text-red-700 cursor-pointer"/> </div>
             </div>
-           <TextInput                 
-                onChange={(e)=>setSearchTerm(e.target.value)}
-                type="text" placeholder="search title content or category of post..." />             
+            <TextInput 
+            className="w-full max-w-lg"
+            placeholder="search post..."
+            rightIcon={HiDocumentSearch}
+            icon={HiSearch}
+            id="searchTerm"
+            value={searchTerm}
+            autoComplete="off"
+            // onBlur={() => setSearchTerm('')}
+            onChange={(e) => {setShowSearchedResult(true); setSearchTerm(e.target.value)}}
+          />
+
           </div>
         </div>
       )}
@@ -117,14 +146,23 @@ export default function Header() {
         <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">Social Fusion</span>
       </Navbar.Brand>
 
-      {currentUser && <TextInput 
-        className="hidden lg:inline w-44 lg:w-44 xl:w-96 border-gray-900 rounded-2xl font-bold "
-        placeholder="search post..."
-        rightIcon={HiDocumentSearch}
-        icon={HiSearch}
-        id="searchTerm"
-        onChange={(e)=>setSearchTerm(e.target.value)}
-      />}
+      {currentUser && 
+        <div className="hidden lg:flex flex-col gap-3 w-44 lg:w-44 xl:w-96 p-2 rounded-2xl">
+          <TextInput 
+            autoComplete="off"
+            className=""
+            placeholder="search post..."
+            rightIcon={HiDocumentSearch}
+            icon={HiSearch}
+            id="searchTerm"
+            value={searchTerm}
+            // onBlur={() => setSearchTerm('')}
+            onChange={(e) => { setShowSearchedResult(true); setSearchTerm(e.target.value)}}
+          />
+        </div>
+      }
+      
+
 
       <Button onClick={()=>setShowSearchPopup(!showSearchPopup)} outline className="bg-gray-800 lg:hidden"> <span className="flex justify-center items-center"><HiSearch /></span> </Button>
 
@@ -197,6 +235,36 @@ export default function Header() {
       </Navbar.Collapse>}
         {/* </div> */}
     </Navbar>
+      <div className="w-full flex justify-center items-center">
+        {showSearchedResult && (
+          <div 
+            onWheel={(e) => e.stopPropagation()} 
+            className="bg-white dark:bg-gray-800 shadow-lg w-full max-w-lg z-20 relative top-10 py-2 lg:-top-4 lg:right-24 xl:right-44 rounded-lg px-2 mx-1 flex flex-col items-start gap-1 max-h-60 overflow-y-scroll border border-t-0 border-gray-800 dark:border-gray-700"
+          >
+            {searchedPost?.length > 0 ? (
+              searchedPost.map((post, index) => (
+                <div 
+                  onClick={()=>{ setShowSearchedResult(false); navigate(`/posts/post/${post?._id}`); setSearchTerm('')}}
+                  key={index} 
+                  className="cursor-pointer flex items-center justify-between gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white rounded-lg py-2 px-3 transition-colors duration-150 ease-in-out w-full"
+                >
+                  <div className="flex  justify-center items-center gap-2">
+                    <HiSearch className="text-gray-600 dark:text-gray-300" />
+                    <h1 className="text-gray-800 dark:text-gray-100 font-medium truncate">{post?.title?.length > 50 ? post?.title?.substring(0, 45)+"..." : post?.title}</h1>
+                  </div>
+                  <img src={post?.thumbnail?.at(-1) || "https://www.freeiconspng.com/uploads/no-image-icon-4.png"} className="h-8 w-8 rounded-lg"/>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500 dark:text-gray-400 w-full text-center py-2">
+                No results found
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      
+
     </div>
   );
 }

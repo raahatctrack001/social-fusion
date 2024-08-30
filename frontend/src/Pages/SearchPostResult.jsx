@@ -9,7 +9,7 @@ import ShowPosts from '../Compnents/ShowPosts'
 
 const SearchPostResult = () => {
     const navigate = useNavigate();
-    const [postData, setPostData] = useState(null);
+    const [postData, setPostData] = useState([]);
     
     const location = useLocation();
     const query = new URLSearchParams(location.search).get('query');
@@ -48,8 +48,12 @@ const SearchPostResult = () => {
     // console.log("query", query)
 
   return (
-    <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
-        <ShowPosts heading={"Search Result"} postData={postData} />
+    <div className='flex flex-nowrap flex-col w-full mx-2 px-4 white justify-center'>
+        {/* <ShowPosts heading={"Search Result"} postData={postData} /> */}
+        
+        {postData?.length && postData.map((post, index)=>{
+            return <h1 className='w-full border'>{post.title}</h1>
+        })}
     </div>
   )
 }
