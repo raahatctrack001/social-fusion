@@ -219,7 +219,9 @@ const handleAddToHighlightButtonClick = async(e, story)=>{
 }
 
 // console.log("highlights from story viewre", highlight)
-  
+if(stories.length === 0){
+  return <h2 className=' p-2 rounded-lg  mb-3 text-white bg-gray-500 font-bold'> No Story Found!!!</h2>
+}
 return (
   <div className="fixed inset-0 bg-opacity-95 flex items-center justify-center bg-black z-50">
     {selectHighlight && <SelectHighlightPopup isOpen={selectHighlight} setIsOpen={setSelectHighlight} story={storyToHighlight}  />}
@@ -271,9 +273,9 @@ return (
       >
         <div className="relative">
           {/* Uploaded Time */}
-          <p className="text-sm text-gray-400 text-center mb-2">
+          {stories[currentIndex] && <p className="text-sm text-gray-400 text-center mb-2">
             Uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, { addSuffix: true })}
-          </p>
+          </p>}
 
           {/* Story Media */}
           <div className="flex">

@@ -262,6 +262,33 @@ export default function Header() {
             )}
           </div>
         )}
+
+        {/* {showSearchedResult && (
+          <div 
+            onWheel={(e) => e.stopPropagation()} 
+            className="bg-white dark:bg-gray-800 shadow-lg w-full max-w-lg z-20 relative top-10 py-2 lg:-top-4 lg:right-24 xl:right-44 rounded-lg px-2 mx-1 flex flex-col items-start gap-1 max-h-60 overflow-y-scroll border border-t-0 border-gray-800 dark:border-gray-700"
+          >
+            {searchedPost?.length > 0 ? (
+              searchedPost.map((post, index) => (
+                <div 
+                  onClick={()=>{ setShowSearchedResult(false); navigate(`/posts/post/${post?._id}`); setSearchTerm('')}}
+                  key={index} 
+                  className="cursor-pointer flex items-center justify-between gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white rounded-lg py-2 px-3 transition-colors duration-150 ease-in-out w-full"
+                >
+                  <div className="flex  justify-center items-center gap-2">
+                    <HiSearch className="text-gray-600 dark:text-gray-300" />
+                    <h1 className="text-gray-800 dark:text-gray-100 font-medium truncate">{post?.title?.length > 50 ? post?.title?.substring(0, 45)+"..." : post?.title}</h1>
+                  </div>
+                  <img src={post?.thumbnail?.at(-1) || "https://www.freeiconspng.com/uploads/no-image-icon-4.png"} className="h-8 w-8 rounded-lg"/>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500 dark:text-gray-400 w-full text-center py-2">
+                No results found
+              </div>
+            )}
+          </div>
+        )} */}
       </div>
       
 

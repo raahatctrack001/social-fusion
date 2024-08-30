@@ -3,15 +3,6 @@ import React from 'react';
 const FeaturesPage = () => {
   const categories = [
     {
-      title: 'Comments',
-      features: [
-        'Create, reply, show, delete, and edit recursive comment section.',
-        'Like comments.',
-        'Create, get, search, edit, delete, report, like, save comments.',
-        'Disable comments.',
-      ],
-    },
-    {
       title: 'Users',
       features: [
         'Register using Google Auth and OTP on email.',
@@ -21,18 +12,27 @@ const FeaturesPage = () => {
       ],
     },
     {
-      title: 'Stories',
-      features: [
-        'Upload story, delete story, create and delete highlights from story.',
-        'Like, reply, and report story.',
-      ],
-    },
-    {
       title: 'Posts',
       features: [
         'See who liked your posts.',
         'Advanced post analytics.',
         'Create, edit, delete, and manage posts.',
+      ],
+    },
+    {
+      title: 'Comments',
+      features: [
+        'Create, reply, show, delete, and edit recursive comment section.',
+        'Like comments.',
+        'Create, get, search, edit, delete, report, like, save comments.',
+        'Disable comments.',
+      ],
+    },
+    {
+      title: 'Stories',
+      features: [
+        'Upload story, delete story, create and delete highlights from story.',
+        'Like, reply, and report story.',
       ],
     },
     {

@@ -82,10 +82,10 @@ const Author = () => {
   if(authorData?.length == 0){
     return <PageLoader info={"if it's taking longer time than expected please refresh the page"} />
   }
-  const handleStoryImageclick = async(story)=>{
+  const handleStoryImageclick = async(storyId)=>{
     // console.log("clicked story", story)
     try {
-      const response = await fetch(apiEndPoints.getStoriesOfUser(story?._id));
+      const response = await fetch(apiEndPoints.getStoriesOfUser(storyId));
       const data = await response.json();
       
       if(!response.ok){
@@ -115,7 +115,7 @@ const Author = () => {
       <div className='flex overflow-x-auto w-full gap-3 p-4 bg-gray-100 dark:bg-gray-800 shadow-lg rounded-lg justify-center items-center'>
       {currentUser?._id === authorData?._id && storiesOfFollowings?.length > 0 && storiesOfFollowings.map((story, index) => (
           <div 
-            onClick={() => handleStoryImageclick(story)} 
+            onClick={() => handleStoryImageclick(story?._id)} 
             key={index} 
             className='relative min-h-24 min-w-24 flex flex-col items-center justify-center p-2 bg-gradient-to-b from-red-600 via-white to-violet-600 rounded-lg cursor-pointer transform hover:scale-105 transition-transform duration-300'
           >

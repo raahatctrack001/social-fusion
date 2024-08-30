@@ -423,12 +423,25 @@ export const getHighlightOfUser = asyncHandler( async (req, res, next)=>{
 export const getFollowersStory = asyncHandler(async (req, res, next)=>{
     try {
         const { userId } = req.params;
-        const currentUser = await User.findById(userId).populate("followings");
+        const currentUser = await User.findById(userId);
         if(!currentUser){
             throw new apiError(404, "current user doesn't exist");
         }
 
-        const followingWithStories = currentUser?.followings?.filter(user=>user?.stories?.length !== 0);
+        // const followingWithStories = currentUser?.followings?.filter(user=>user?.stories?.length !== 0);
+        // console.log(followingWithStories);
+        const followings = currentUser?.followings;
+
+        const now = new Date();
+        const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        const recentStories = await Story.find({
+            user: { $in: followings },
+            createdAt: { $gte: twentyFourHoursAgo }
+          }).populate("user");
+      
+        const set = new Set();
+        recentStories.forEach((story)=>set.add(story.user));
+        const followingWithStories = [...set];
         return res.status(200).json(new apiResponse(200, "stories of followings fetched!", followingWithStories));
 
     } catch (error) {

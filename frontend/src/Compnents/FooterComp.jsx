@@ -78,7 +78,7 @@ export function FooterComp() {
   }
 
   return (
-    <Footer bgDark className="rounded-none">
+    <Footer bgDark className="rounded-none bg-gray-100">
     {loading && <LoaderPopup loading={loading} setLoading={setLoading} />}
       <div className="w-full">
         <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
@@ -94,12 +94,12 @@ export function FooterComp() {
           <div>
             <Footer.Title title="Help Center" />
             <Footer.LinkGroup col>
-              <Footer.Link href="mailto:socialfusion001.sf@gmail.com">E-Mail</Footer.Link>
-              <Footer.Link href="https://www.instagram.com/captainr0">Instagram</Footer.Link>
-              <Footer.Link href="https://wa.me/+918920151361">Whatsapp</Footer.Link>
-              <Footer.Link href="https://www.linkedin.com/in/raahat-khan-93722a22a">LinkedIn</Footer.Link>
-              <Footer.Link href="https://www.github.com/raahatctrack001">Github</Footer.Link>
-              <Footer.Link href="/contacts">Contact Us</Footer.Link>
+              <Footer.Link target="_blank" rel="noopener noreferrer" href="mailto:socialfusion001.sf@gmail.com">E-Mail</Footer.Link>
+              <Footer.Link target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/captainr0">Instagram</Footer.Link>
+              <Footer.Link target="_blank" rel="noopener noreferrer" href="https://wa.me/+918920151361">Whatsapp</Footer.Link>
+              <Footer.Link target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/raahat-khan-93722a22a">LinkedIn</Footer.Link>
+              <Footer.Link target="_blank" rel="noopener noreferrer" href="https://www.github.com/raahatctrack001">Github</Footer.Link>
+              <Footer.Link target="_blank" rel="noopener noreferrer" href="/contacts">Contact Us</Footer.Link>
             </Footer.LinkGroup>
           </div>
           <div>
@@ -116,12 +116,12 @@ export function FooterComp() {
 
             {/* feedback popup starts here! */}
             {showFeedbackPopup && (
-              <div className="fixed inset-0 top-16 md:flex justify-center items-center bg-black bg-opacity-50 z-20 p-5">
-                <div className="bg-gray-500 p-6 w-full md:w-2/3 rounded-lg shadow-lg">
+              <div className="fixed inset-0 top-16 md:flex justify-center items-center bg-opacity-50 z-20 p-5">
+                <div className=" p-6 w-full md:w-2/3 rounded-lg shadow-lg">
                   <div className="flex justify-between relative">
                     <div> </div>
                     <div onClick={()=>setShowFeedbackPopup(!showFeedbackPopup)} className="relative bottom-3 right-2"> 
-                      <HiX className="text-red-700 cursor-pointer"/> 
+                      <HiX className=" cursor-pointer"/> 
                     </div>
                   </div>
                   <h1 className=" flex justify-center items-center p-2 border-2 border-b-8 border-b-gray-500 relative top-2 z-10 rounded-lg md:w-96">
@@ -162,13 +162,13 @@ export function FooterComp() {
             {/* feedback popup ends here */}
           </div>
         </div>
-        <div className="w-full bg-gray-700 px-4 py-6 sm:flex sm:items-center sm:justify-between">
+        <div className="w-full  px-4 py-6 sm:flex sm:items-center sm:justify-between">
           <Footer.Copyright href="#" by="Raahat Khan" year={new Date().getFullYear()} />
           <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
             <Footer.Icon href="mailto:socialfusion001.sf@gmail.com" icon={BsEnvelope} target="_blank" rel="noopener noreferrer"/>
-            <Footer.Icon href="https://www.instagram.com/captainr0" icon={BsInstagram}target="_blank" rel="noopener noreferrer" />
+            <Footer.Icon href="https://www.instagram.com/captainr0" icon={BsInstagram} target="_blank" rel="noopener noreferrer" />
             <Footer.Icon href="https://www.linkedin.com/in/raahat-khan-93722a22a" icon={BsLinkedin} />
-            <Footer.Icon href="https://www.github.com/raahatctrack001" icon={BsGithub}target="_blank" rel="noopener noreferrer" />
+            <Footer.Icon href="https://www.github.com/raahatctrack001" icon={BsGithub} target="_blank" rel="noopener noreferrer" />
             <Footer.Icon href="https://social-fusion.onrender.com/authors/author/66cf3d0fce7ad9beeb414b9b" icon={BsGlobe} />
             <Footer.Icon href="https://wa.me/+918920151361" icon={BsWhatsapp} target="_blank" rel="noopener noreferrer"/>
           </div>
