@@ -19,6 +19,8 @@ import jwt from 'jsonwebtoken'
 import bcryptjs from 'bcryptjs';
 import Otp from "../Models/otp.model.js";
 import { kMaxLength } from "buffer";
+import { resetPasswordHTML } from "../EmailTemplates.js/reset.password.url.js";
+import { sendEmail } from "../Services/sendEmail.js";
 
 export const isAuthorised = asyncHandler(async (req, res, next)=>{
     console.log(req.user)
@@ -211,6 +213,45 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
         console.log(error)
         next(error)
     }
+})
+
+export const forgotPassword = asyncHandler(async (req, res, next)=>{
+    const { userEmail } = req.body;
+    
+    const query = uniqueIdValidator(userEmail);
+    let currentUser = await User.findOne(query); // Define currentUser outside of try block 
+
+    try {
+        if (!currentUser) {
+            throw new apiError(404, "User doesn't exist");
+        }
+        
+        const resetToken = currentUser.generateResetPasswordToken();
+        currentUser.resetPasswordToken = resetToken;
+        currentUser.resetPasswordTokenExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes from now
+        await currentUser.save();
+    
+        const resetPasswordURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+        const html = resetPasswordHTML(resetPasswordURL);
+        // console.log(html);
+        const subject = "Reset Your Account Password";
+        const emailStatus = await sendEmail(currentUser?.email, subject, html); // Ensure sendEmail returns a promise
+    
+        
+        console.log(emailStatus);
+    
+    } catch (error) {
+        if (currentUser) { // Ensure currentUser is defined before attempting to reset the token
+            currentUser.resetPasswordToken = undefined;
+            currentUser.resetPasswordTokenExpiry = undefined;
+            await currentUser.save();
+        }
+        next(error);
+    }
+    
+    
+
+    
 })
 
 export const googleLogin = asyncHandler(async (req, res)=>{

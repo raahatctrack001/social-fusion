@@ -1,4 +1,8 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 // Create a transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
@@ -11,6 +15,8 @@ const transporter = nodemailer.createTransport({
 
 // Send an email
 export const sendEmail = async (to, subject, html) => {
+
+  // console.log(process.env.GMAIL_USER, process.env.GMAIL_PASS)
   const mailOptions = {
     from: process.env.GMAIL_USER,
     to,

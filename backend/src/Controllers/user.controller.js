@@ -263,6 +263,22 @@ export const toggleOnlineStatus = asyncHandler( async (req, res, next)=>{
     }
 })
 
+export const checkIfUsernameExists = asyncHandler(async (req, res, next)=>{
+    try {
+        const { username } = req.body;
+        if(!username){
+            throw new apiError(404, "username is required to verify its existence")
+        }
+        const user = await User.findOne({username});
+        if(user){
+            return res.status(404).json( new apiResponse(404, "username not available", {"available": false}))
+        }
+        
+        return res.status(200).json( new apiResponse(200, "username available", {"available": true}))
+    } catch (error) {
+        next(error)
+    }
+})
 const markUsersOffline = async () => {
     const offlineThreshold = new Date(Date.now() - 2 * 60 * 1000); // 2 minutes ago
     console.log('Offline Threshold:', offlineThreshold);

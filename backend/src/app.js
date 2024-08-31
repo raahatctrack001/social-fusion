@@ -23,6 +23,7 @@ import dataSeederRouter from './Routes/data.seeder.js';
 import feedbackRouter from './Routes/feedback.router.js';
 import otpRouter from './Routes/otp.router.js';
 import storyRouter from './Routes/story.routes.js';
+import conversationRouter from './Routes/conversation.routes.js';
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter);
@@ -32,6 +33,7 @@ app.use('/api/v1/data', dataSeederRouter);
 app.use('/api/v1/feedback', feedbackRouter);
 app.use('/api/v1/otp', otpRouter);
 app.use('/api/v1/story', storyRouter);
+app.use('/api/v1/conversation', conversationRouter);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, '/frontend/dist')));

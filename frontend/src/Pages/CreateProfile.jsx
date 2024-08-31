@@ -18,6 +18,8 @@ export default function CreateProfile() {
   const [loading, setLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [username, setUsername] = useState('');
   const registerationData = JSON.parse(localStorage.getItem("registerationData"));
   
   // const [error, setError] = useState(null)
@@ -57,14 +59,10 @@ export default function CreateProfile() {
     isVerified();
   }, [])
   
-
+ 
   const handleInputChange = (e)=>{
     setProfileData({...profileData, [e.target.id]: e.target.value});
   }
-
-
-  
-
   const handleCreateAccount = async(e)=>{
     e.preventDefault();
     setLoading(true);
@@ -72,14 +70,15 @@ export default function CreateProfile() {
     try {
       setError(null)
       setMessage(null)
+      if(!usernameAvailable){
+        throw new Error("this username is not available, please choose anther username")
+      }
       if(!agree){
-        setError("Please agree to the Terms and Conditions to proceed.");
-        return;
+        throw new Error("Please agree to the Terms and Conditions to proceed.");
       }
       
       if([profileData.username, profileData.fullName].some(value=>value?.trim()?0:1)){
-        setError("All field's are necessary!");
-        return;
+        throw new Error("All field's are necessary!");
       }
       
       const formData = {...registerationData, ...profileData};
@@ -91,22 +90,17 @@ export default function CreateProfile() {
         body: JSON.stringify(formData)
       })
 
-      console.log(response)
-      
+      const data = await response.json();
       if(!response.ok){
-        setError(response.message);
+        throw new ERror( data?.message || "Network response isn't ok while creating account!");
       }
       
-      const data = await response.json();
       data.success ? setMessage(data.message) : setError(data.message);
       if(data.success){
         localStorage.removeItem("registerationData");
         localStorage.removeItem("profileData");
         setShowSuccessPopup(true)
       }
-
-      console.log(data)
-      
     } catch (error) {
       setError(error);
     }
@@ -115,6 +109,31 @@ export default function CreateProfile() {
     }
   }
   // console.log(agree);
+  // useEffect(()=>{
+  //   const timeout = setTimeout(() => {      
+  //     (async ()=>{
+  //       try {
+  //       setUsernameAvailable(false)
+  //       const formData = new FormData();
+  //       formData.append("username", profileData.username)
+  //       const response = await fetch(apiEndPoints.checkIfUsernameExistsAddress(), {method: "POST", body: formData});
+  //       const data = await response.json();
+  //       if(!response.ok){
+  //         throw new Error(data.message || "Network response wasn't ok while checking for availablity of username")
+  //       }
+        
+  //       if(data.success){
+  //         setUsernameAvailable(true)
+  //         console.log(data)
+  //       }
+  //     } catch (error) {
+  //       // alert(error.message);
+  //       console.log(error)
+  //     }
+  //   })()
+  // }, 2000);
+  // return ()=>clearTimeout(timeout)
+  // }, [username])
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-10 lg:my-8 xl:my-10 ">
       {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"please be patient, we are creating your account!"} />}
@@ -139,9 +158,12 @@ export default function CreateProfile() {
         <form className=" m-10 mt-5 flex flex-col w-full gap-4 justify-center  rounded px-2" >
         <div>
             <div className="mb-2 block">
-              <Label htmlFor="username" value="username" />
+              <div className="flex items-center justify-start gap-2">
+                <Label htmlFor="username" value="username" />
+                {profileData?.username && (usernameAvailable ? <p className="text-green-500"> (available) </p> : <p className="text-red-500"> (not available)</p>)}
+              </div>
             </div>
-            <TextInput value={profileData.username && profileData.username} onChange={handleInputChange} id="username" type="text" placeholder="your unique identifier"  required shadow />
+            <TextInput value={profileData.username && profileData.username} onChange={(e)=>{setUsername(e.target.value), handleInputChange(e)}} id="username" type="text" placeholder="your unique identifier"  required shadow />
           </div>
           
           <div>

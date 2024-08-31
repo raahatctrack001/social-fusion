@@ -15,6 +15,7 @@ export  const apiEndPoints = {
     toggleFollowUserAddress : (followId)=> `/api/v1/users/follow-user/${followId}`,
     updateDPAddress: (userId)=>`/api/v1/users/upload-profile-picture/${userId}`,
     toggleOnlineStatusAddress: (userId)=>`/api/v1/users/toggle-online-status/${userId}`,
+    checkIfUsernameExistsAddress: ()=>'/api/v1/users/is-username-available',
     
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
@@ -58,4 +59,6 @@ export  const apiEndPoints = {
     getStoriesOfHighlight: (highlightId, userId)=>`/api/v1/story/get-stories-of-highlights/${highlightId}/${userId}`,
     getHighlightsOfUser: (userId)=>`/api/v1/story/get-user-highlight/${userId}`,
     getFollowerStory: (userId)=>`/api/v1/story/get-followers-stories/${userId}`,
+
+    createNewConversation: (senderId, receiverId)=> `/api/v1/conversation/create-new-conversation/${senderId}/${receiverId}`,
 }
