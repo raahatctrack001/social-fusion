@@ -33,6 +33,7 @@ import FeaturesPage from "./Compnents/FeaturesPage"
 import ContactPage from "./Compnents/ContactPage"
 import QRCodeGenerator from "./Compnents/QRCodeGenerator"
 import SelectHighlightPopup from "./Compnents/SelectHighlightPopup"
+import Chatroom from "./Pages/Chatroom"
 
 function App() {
   return   <BrowserRouter>
@@ -54,6 +55,7 @@ function App() {
                   <Route path="/contacts" element={<ContactPage />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/notifications" element={<UnderDevelopment />} />
+                  <Route path="/chatroom" element={<Chatroom />} />
                 </Route>
                   
                   <Route path="/posts/post/:postId" element={<PostPage />} />
