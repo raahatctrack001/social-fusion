@@ -271,9 +271,9 @@ return (
       >
         <div className="relative">
           {/* Uploaded Time */}
-          <p className="text-sm text-gray-400 text-center mb-2">
+          {stories[currentIndex] && <p className="text-sm text-gray-400 text-center mb-2">
             Uploaded: {formatDistanceToNow(stories[currentIndex]?.createdAt, { addSuffix: true })}
-          </p>
+          </p>}
 
           {/* Story Media */}
           <div className="flex">

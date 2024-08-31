@@ -6,7 +6,8 @@ import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { createPost } from "./posts.controllerrs.js";
 // import { createPost } from "./posts.controllerrs.js";
-
+// const { Vonage } = require('@vonage/server-sdk')
+// import { Vonage } from '@vonage/server-sdk';
 
 export const sendEmailToUser = asyncHandler(async (req, res, next)=>{
     
@@ -158,4 +159,26 @@ export const verifyOTP = asyncHandler(async (req, res, next)=>{
         throw new apiError(401, "The OTP you entered is invalid. Please check the OTP and try again.")
     }
 
+})
+
+
+
+export const sendMessageToMobile = asyncHandler(async (req, res, next)=>{
+
+  const vonage = new Vonage({
+    apiKey: process.env.VONAGE_API_KEY,
+    apiSecret: process.env.VONAGE_API_SECRET
+  })
+
+  console.log("inside send message")
+  const from = "Raahat Khan"
+  const to = "+918920151361"
+  const text = ' your otp for social fusion under beta mode is: 789432'
+
+  async function sendSMS() {
+      await vonage.sms.send({to, from, text})
+          .then(resp => { console.log('Message sent successfully'); console.log(resp); })
+          .catch(err => { console.log('There was an error sending the messages.'); next(err); });
+  }
+  sendSMS();
 })
