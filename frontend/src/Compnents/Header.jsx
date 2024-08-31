@@ -182,7 +182,7 @@ export default function Header() {
                </Dropdown.Header>
                <div onClick={()=>dispatch(toggleTheme())} className="flex justify-start items-center gap-2 pl-4 cursor-pointer hover:bg-gray-500 h-9 hover-text-white"> {theme === 'dark' ? <HiSun /> : <HiMoon /> } toggle theme </div>
                <Dropdown.Item href="/dashboard?tab=home" icon={HiViewGrid}>Dashboard</Dropdown.Item>
-               <Dropdown.Item href="/chatroom" icon={HiChatBubbleBottomCenterText}>Chat Room</Dropdown.Item>
+               <Dropdown.Item href="/chatroom?tab=chat" icon={HiChatBubbleBottomCenterText}>Chat Room</Dropdown.Item>
 
                <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
                {/* <Dropdown.Item href=  icon={HiLockOpen}>Update Password</Dropdown.Item> */}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import conversations from '../../../conversation'
-import { HiPaperAirplane, HiPencil, HiSearch } from 'react-icons/hi'
+import { HiPaperAirplane, HiPencil, HiPlus, HiSearch } from 'react-icons/hi'
 import { TextInput } from 'flowbite-react'
 import ChatBoxHeader from './ChatBox'
 import ChatPage from './Chatpage'
-import { HiFunnel } from 'react-icons/hi2'
+import { HiFunnel, HiUserPlus } from 'react-icons/hi2'
 import { useNavigate } from 'react-router-dom'
 import UnderDevelopment from '../TestComponent/UnderDevelopment'
 import WelcomePage from './Welcome'
@@ -27,7 +27,7 @@ const MessageComponent = () => {
                 <p className='font-bold '> Chats </p>
                 <div className='flex items-center gap-2 pr-2'>
                     <div className='cursor-pointer hover:text-gray-800'> 
-                        <HiPencil />
+                        <HiPlus />
                     </div>
                     <div className='cursor-pointer hover:text-gray-800'> <HiFunnel className='text-2xl mt-1'/> </div>
                 </div>
@@ -61,6 +61,7 @@ const MessageComponent = () => {
         {showChatBox ? <div className='flex flex-col w-full'>           
             <ChatBoxHeader conversation={conversation} />
             <ChatPage />
+            <div className='w-10 bg-green-700 py-2 px-2 rounded-lg relative right-[4rem] top-[5rem] cursor-pointer hover:bg-green-500'> <HiUserPlus /> </div>
             <TextInput
                 className='border-2 rounded-lg border-white ml-4 mr-1 relative top-10'
                 placeholder='send message...'
