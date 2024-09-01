@@ -8,6 +8,7 @@ import {
     loginUser, 
     logoutUser, 
     registerUser,
+    resetPassword,
     updatePassword, 
 } from '../Controllers/auth.controllers.js'; 
 import { upload } from '../Middlewares/multer.middleware.js';   
@@ -35,6 +36,7 @@ router.route("/login").post(upload.none(), loginUser);
 router.route("/logout").post(isUserLoggedIn, logoutUser);
 router.route("/update-password/:userId").patch(upload.none(), isUserLoggedIn,  updatePassword);
 router.route("/forgot-password").post(upload.none(), forgotPassword);
+router.route("/reset-password/:token").patch(upload.none(), resetPassword);
 router.route("/delete-user").delete(isUserLoggedIn, deleteUser);
 router.route("/is-email-verified").post(upload.none(), isEmailVerified);
 export default router;

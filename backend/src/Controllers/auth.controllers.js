@@ -21,6 +21,7 @@ import Otp from "../Models/otp.model.js";
 import { kMaxLength } from "buffer";
 import { resetPasswordHTML } from "../EmailTemplates.js/reset.password.url.js";
 import { sendEmail } from "../Services/sendEmail.js";
+import crypto from 'crypto';
 
 export const isAuthorised = asyncHandler(async (req, res, next)=>{
     console.log(req.user)
@@ -219,26 +220,29 @@ export const forgotPassword = asyncHandler(async (req, res, next)=>{
     const { userEmail } = req.body;
     
     const query = uniqueIdValidator(userEmail);
-    let currentUser = await User.findOne(query); // Define currentUser outside of try block 
-
+    let currentUser = await User.findOne(query).select("+resetPasswordToken +resetPasswordTokenExpiry +password");
+    
     try {
         if (!currentUser) {
             throw new apiError(404, "User doesn't exist");
         }
         
         const resetToken = currentUser.generateResetPasswordToken();
-        currentUser.resetPasswordToken = resetToken;
-        currentUser.resetPasswordTokenExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes from now
+        // currentUser.resetPasswordToken = resetToken;
+        // currentUser.resetPasswordTokenExpiry = Date.now() + 30 * 60 * 1000;
         await currentUser.save();
-    
-        const resetPasswordURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-        const html = resetPasswordHTML(resetPasswordURL);
+        // ${currentUser?.email?.substring(0, currentUser?.email.indexOf('@'))}/
+        const resetPasswordURL = `${process.env.FRONTEND_URL}/api/v1/auth/reset-password/${resetToken}`;
+        const html = resetPasswordHTML(currentUser?.fullName, resetPasswordURL);
         // console.log(html);
-        const subject = "Reset Your Account Password";
+        const subject = "Social Fusion Account Recovery!";
         const emailStatus = await sendEmail(currentUser?.email, subject, html); // Ensure sendEmail returns a promise
     
         
-        console.log(emailStatus);
+        if(emailStatus.success){
+            return res.status(200).json(new apiResponse(200, `reset token has been sent at ${currentUser?.email}, please click on the given link inside to reset password.`, {}))
+        }
+        throw new apiError(500, "failed to send email!, please again after sometime.")
     
     } catch (error) {
         if (currentUser) { // Ensure currentUser is defined before attempting to reset the token
@@ -247,12 +251,74 @@ export const forgotPassword = asyncHandler(async (req, res, next)=>{
             await currentUser.save();
         }
         next(error);
-    }
-    
-    
-
-    
+    }   
 })
+
+export const resetPassword = asyncHandler(async (req, res, next) => {
+    try {
+        // Hash the token from the URL
+        const resetPasswordToken = crypto
+            .createHash("sha256")
+            .update(req.params.token)
+            .digest("hex");
+
+        // console.log("token for req.params: ", req.params);
+        // console.log("hashed password", resetPasswordToken);
+        
+
+        // Find the user by the hashed token and check if the token is still valid
+        const currentUser = await User.findOne({
+            resetPasswordToken,
+            resetPasswordTokenExpiry: { $gt: Date.now() } // Check if the token hasn't expired
+        }).select("+resetPasswordToken +password +restePasswordTokenExpiry");
+
+        if (!currentUser) {
+            throw new apiError(400, "Invalid or expired reset password token");
+        }
+
+        // If user exists and the token is valid, you can now reset the password
+
+        const { newPassword, repeatPassword } = req.body;
+        // console.log(req.body);
+        // console.log(currentUser)
+        if(newPassword !== repeatPassword){
+            throw new apiError(404, "repeat password didn't match");
+        }
+        
+        const result = passwordSchema.safeParse(newPassword);
+        // console.log(result.error.errors[0].message)
+        if(!result.success){        
+            throw new apiError(406, result?.error?.errors[0]?.message)
+        }
+
+        // console.log(bcryptjs.compareSync(newPassword, currentUser?.password))
+
+        if(bcryptjs.compareSync(newPassword, currentUser?.password)){
+            throw new apiError(406, "Old and new password can't be same!")
+        }
+        
+        // $2a$10$SRXXe4DkFPelHf3BxVEdoOAEDiPo5BlBZC5sqfKr0ouioGMdzRuOm
+
+        // { //this error occurs generally when hashing function gets undefined value...
+        //     "statusCode": 400,
+        //     "message": "Illegal arguments: undefined, string",
+        //     "data": {},
+        //     "success": false
+        // }
+
+        currentUser.password = req.body.newPassword; // Make sure to hash the password before saving
+        currentUser.resetPasswordToken = undefined; // Clear the reset token fields
+        currentUser.resetPasswordTokenExpiry = undefined;
+        const updatedUser = await currentUser.save();
+
+        console.log(currentUser);
+        res.status(200).json(new apiResponse(200, "Password reset successful", {updatedUser}));
+
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 export const googleLogin = asyncHandler(async (req, res)=>{
 })

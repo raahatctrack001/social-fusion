@@ -1,4 +1,4 @@
-export const resetPasswordHTML = (resetPasswordURL) => `
+export const resetPasswordHTML = (name, resetPasswordURL) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +62,7 @@ export const resetPasswordHTML = (resetPasswordURL) => `
             <h1>Password Reset Request</h1>
         </div>
         <div class="content">
-            <p>Hi Social Fusion user...,</p>
+            <p>Hi ${name},</p>
             <p>It seems like you’ve requested a password reset. If this was you, simply click the button below to set a new password:</p>
             <p><a href="${resetPasswordURL}" class="button">Reset Your Password</a></p>
             <p>If you didn’t make this request, no worries—you can safely ignore this email.</p>

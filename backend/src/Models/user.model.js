@@ -183,7 +183,7 @@ userSchema.methods.generateRefreshToken = function(){
 // Generate password reset token
 userSchema.methods.generateResetPasswordToken = function () {
     // Gernerate token
-    const resetToken = crypto.randomBytes(100).toString("hex");
+    const resetToken = crypto.randomBytes(32).toString("hex");
   
     // Hash and set to resetPasswordToken field
     this.resetPasswordToken = crypto
@@ -192,8 +192,7 @@ userSchema.methods.generateResetPasswordToken = function () {
       .digest("hex");
   
     // Set token expire time
-    this.resetPasswordTokenExpiry = Date.now() + 30 * 60 * 1000;
-  
+    this.resetPasswordTokenExpiry = Date.now() + 30 * 60 * 1000;  
     return resetToken;
   };
 
