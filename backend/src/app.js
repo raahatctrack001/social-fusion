@@ -23,7 +23,7 @@ import dataSeederRouter from './Routes/data.seeder.js';
 import feedbackRouter from './Routes/feedback.router.js';
 import otpRouter from './Routes/otp.router.js';
 import storyRouter from './Routes/story.routes.js';
-import conversationRouter from './Routes/conversation.routes.js';
+import conversationRouter from './Routes/message routes/conversation.routes.js'
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter);
