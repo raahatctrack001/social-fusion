@@ -239,7 +239,7 @@ export default function Header() {
         {showSearchedResult && (
           <div 
             onWheel={(e) => e.stopPropagation()} 
-            className="bg-white dark:bg-gray-800 shadow-lg w-full max-w-lg z-20 relative top-10 py-2 lg:-top-4 lg:right-24 xl:right-44 rounded-lg px-2 mx-1 flex flex-col items-start gap-1 max-h-60 overflow-y-scroll border border-t-0 border-gray-800 dark:border-gray-700"
+            className="bg-white dark:bg-gray-800 shadow-lg w-full max-w-lg z-20 relative top-10 py-2 lg:-top-4 lg:right-24 xl:right-44 rounded-lg px-2 mx-1 flex flex-col items-start gap-1 max-h-80 overflow-y-scroll border border-t-0 border-gray-800 dark:border-gray-700"
           >
             {searchedPost?.length > 0 ? (
               searchedPost.map((post, index) => (
