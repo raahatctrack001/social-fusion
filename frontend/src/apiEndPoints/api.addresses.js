@@ -60,5 +60,5 @@ export  const apiEndPoints = {
     getHighlightsOfUser: (userId)=>`/api/v1/story/get-user-highlight/${userId}`,
     getFollowerStory: (userId)=>`/api/v1/story/get-followers-stories/${userId}`,
 
-    createNewConversation: (senderId, receiverId)=> `/api/v1/conversation/create-new-conversation/${senderId}/${receiverId}`,
+    openOrCreateNewConversationAddress: (senderId, receiverId)=> `/api/v1/conversation/open-or-create/${senderId}/${receiverId}`,
 }
