@@ -8,6 +8,7 @@ import { apiEndPoints } from "../apiEndPoints/api.addresses";
 import { useDispatch } from "react-redux";
 import { signInFailure, signInStart, signInSuccess } from "../redux/slices/user.slice";
 import LoaderPopup from "../Compnents/Loader";
+import ResetPasswordPopup from "../Compnents/ResetPassword/FindUserPopup";
 
 const hasUpperCase = /[A-Z]/;
 const hasLowerCase = /[a-z]/;
@@ -37,6 +38,7 @@ export default function SignIn() {
   const [error, setError] = useState(null);
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
   const [loading, setLoading] = useState(false);
+  const [openForgotPasswordPopup, setOpenForgotPasswordPopup] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -90,6 +92,7 @@ export default function SignIn() {
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10 xl:m-52 xl:mt-28 ">
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"verifying credentials"} />}
+        {openForgotPasswordPopup && <ResetPasswordPopup isOpen={openForgotPasswordPopup} onClose={setOpenForgotPasswordPopup} />}
         <div className=" flex flex-col justify-start items-center mt-5 gap-5 px-5 rounded-xl">
           <div className="">
             <h1 className=" flex lg:mb-10 justify-center items-center text-3xl tracking-widest md:tracking-normal md:text-6xl font-bold mb-2 text-nowrap"> Welcome Back! </h1>
@@ -185,6 +188,7 @@ export default function SignIn() {
           </div> */}
           {error && <Alert color={"failure"} > {error} </Alert>}
           <Button onClick={handleSignIn} type="submit" outline className="hover:bg-gray-800"> Proceed </Button>
+          <p className="w-full flex justify-center items-center text-red-500"> <span onClick={()=>setOpenForgotPasswordPopup(true)} className="hover:text-lg cursor-pointer"> forgot password </span> </p>
           <p> Doesn't have an accound? <Link to={"/register"} className="text-blue-400 text-lg tracking-widest"> Register Here </Link></p>
       </form>
     </div>

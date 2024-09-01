@@ -5,7 +5,7 @@ import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
-import { emailSchema, updateUserSchema, userSchema } from "../Validators/user.validator.js";
+import { emailSchema, uniqueIdValidator, updateUserSchema, userSchema } from "../Validators/user.validator.js";
 import bcryptjs from 'bcryptjs'
 
 export const uploadProfilePicture = asyncHandler(async (req, res, next) => {
@@ -275,6 +275,20 @@ export const checkIfUsernameExists = asyncHandler(async (req, res, next)=>{
         }
         
         return res.status(200).json( new apiResponse(200, "username available", {"available": true}))
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const checkIfUserExists = asyncHandler(async (req, res, next)=>{
+    try {
+        const { userEmail } = req.body;
+        const query = uniqueIdValidator(userEmail);
+        const currentUser = await User.findOne(query);
+        if(!currentUser){
+            throw new apiError(404, "user doesn't exist")
+        }
+        return res.status(200).json(new apiResponse(200, "user exists", currentUser));
     } catch (error) {
         next(error)
     }

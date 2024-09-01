@@ -34,6 +34,10 @@ import ContactPage from "./Compnents/ContactPage"
 import QRCodeGenerator from "./Compnents/QRCodeGenerator"
 import SelectHighlightPopup from "./Compnents/SelectHighlightPopup"
 import Chatroom from "./Pages/Chatroom"
+// import { forgotPassword } from "../../backend/src/Controllers/auth.controllers"
+// import resetPassword from "./Compnents/ResetForgotPassword"
+import ResetForgotPassword from "./Compnents/ResetForgotPassword"
+import ResetTokenSent from "./Compnents/ResetPassword/ResetTokenSent"
 
 function App() {
   return   <BrowserRouter>
@@ -58,6 +62,7 @@ function App() {
                   <Route path="/chatroom" element={<Chatroom />} />
                 </Route>
                   
+                  <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
                   <Route path="/posts/post/:postId" element={<PostPage />} />
                   <Route path="/" element={<HomePage />} />
                   <Route path="/register" element={<Register />} />
@@ -67,7 +72,7 @@ function App() {
                   <Route path="/sign-in" element={<SignIn />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
                   <Route path="/test-route" element={<SelectHighlightPopup />} />
-                  <Route path="/*" element={<QRCodeGenerator data={"hello"} />} />
+                  <Route path="/*" element={<ResetTokenSent isOpen={true} email={'sfsdfsfs2@dseu.ac.in'} />} />
                 </Routes>
                 <FooterComp />
             </BrowserRouter>

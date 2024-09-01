@@ -232,7 +232,7 @@ export const forgotPassword = asyncHandler(async (req, res, next)=>{
         // currentUser.resetPasswordTokenExpiry = Date.now() + 30 * 60 * 1000;
         await currentUser.save();
         // ${currentUser?.email?.substring(0, currentUser?.email.indexOf('@'))}/
-        const resetPasswordURL = `${process.env.FRONTEND_URL}/api/v1/auth/reset-password/${resetToken}`;
+        const resetPasswordURL = `${process.env.FRONTEND_URL}/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/${resetToken}`;
         const html = resetPasswordHTML(currentUser?.fullName, resetPasswordURL);
         // console.log(html);
         const subject = "Social Fusion Account Recovery!";
@@ -254,8 +254,29 @@ export const forgotPassword = asyncHandler(async (req, res, next)=>{
     }   
 })
 
+export const verifyResetPasswordToken = asyncHandler(async (req, res, next)=>{
+        const resetPasswordToken = crypto
+            .createHash("sha256")
+            .update(req.params.token)
+            .digest("hex");
+
+        
+        const currentUser = await User.findOne({
+            resetPasswordToken,
+            resetPasswordTokenExpiry: { $gt: Date.now() } // Check if the token hasn't expired
+        }).select("+resetPasswordToken +password +restePasswordTokenExpiry");
+
+        if (!currentUser) {
+            return res.status(400).json(new apiResponse(400, "reset password token is Invalid or expired ", {}));
+        }
+
+        return res.status(200). json(new apiResponse(200, "token is valid", {}));
+})
+
 export const resetPassword = asyncHandler(async (req, res, next) => {
     try {
+        // console.log(req.body);
+        // return;
         // Hash the token from the URL
         const resetPasswordToken = crypto
             .createHash("sha256")
@@ -273,7 +294,7 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
         }).select("+resetPasswordToken +password +restePasswordTokenExpiry");
 
         if (!currentUser) {
-            throw new apiError(400, "Invalid or expired reset password token");
+            throw new apiError(400, "reset password token is Invalid or expired ");
         }
 
         // If user exists and the token is valid, you can now reset the password

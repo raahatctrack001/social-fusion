@@ -4,6 +4,9 @@ export  const apiEndPoints = {
     loginAddress : ()=> `/api/v1/auth/login`,
     logoutAddress : ()=> `/api/v1/auth/logout`,
     updatePasswordAddress: (authorId)=>`/api/v1/auth/update-password/${authorId}`,
+    sendResetPasswordToken: ()=>`/api/v1/auth/forgot-password`,
+    verifyResetPasswordToken: (token)=>`/api/v1/auth/verify-reset-password-token/${token}`,
+    resetForgotPasswordAddress: (token)=>`/api/v1/auth/reset-password/${token}`,
     
     getUserAddress : (userId)=> `/api/v1/users/get-user/${userId}`,
     getUsersAddress : (currentPage)=> `/api/v1/users/get-users/${currentPage}`,
@@ -16,6 +19,7 @@ export  const apiEndPoints = {
     updateDPAddress: (userId)=>`/api/v1/users/upload-profile-picture/${userId}`,
     toggleOnlineStatusAddress: (userId)=>`/api/v1/users/toggle-online-status/${userId}`,
     checkIfUsernameExistsAddress: ()=>'/api/v1/users/is-username-available',
+    checkIfUserExistsAddress: ()=>`/api/v1/users/check-if-user-exists`,
     
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,

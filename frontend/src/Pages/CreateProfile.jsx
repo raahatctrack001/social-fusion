@@ -63,6 +63,7 @@ export default function CreateProfile() {
   const handleInputChange = (e)=>{
     setProfileData({...profileData, [e.target.id]: e.target.value});
   }
+
   const handleCreateAccount = async(e)=>{
     e.preventDefault();
     setLoading(true);
@@ -92,7 +93,7 @@ export default function CreateProfile() {
 
       const data = await response.json();
       if(!response.ok){
-        throw new ERror( data?.message || "Network response isn't ok while creating account!");
+        throw new Error( data?.message || "Network response isn't ok while creating account!");
       }
       
       data.success ? setMessage(data.message) : setError(data.message);
