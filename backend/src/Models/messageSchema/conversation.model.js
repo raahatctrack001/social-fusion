@@ -5,7 +5,7 @@ const conversationSchema = new mongoose.Schema({
         type: String, 
         required:true
     },
-    isGoup: {
+    isGroup: {
         type: Boolean,
         default: false
     },
