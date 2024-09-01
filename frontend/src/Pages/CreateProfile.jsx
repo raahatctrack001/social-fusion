@@ -63,7 +63,6 @@ export default function CreateProfile() {
   const handleInputChange = (e)=>{
     setProfileData({...profileData, [e.target.id]: e.target.value});
   }
-
   const handleCreateAccount = async(e)=>{
     e.preventDefault();
     setLoading(true);
@@ -93,7 +92,7 @@ export default function CreateProfile() {
 
       const data = await response.json();
       if(!response.ok){
-        throw new Error( data?.message || "Network response isn't ok while creating account!");
+        throw new ERror( data?.message || "Network response isn't ok while creating account!");
       }
       
       data.success ? setMessage(data.message) : setError(data.message);
@@ -109,32 +108,32 @@ export default function CreateProfile() {
       setLoading(false);
     }
   }
-  // console.log(agree);
-  // useEffect(()=>{
-  //   const timeout = setTimeout(() => {      
-  //     (async ()=>{
-  //       try {
-  //       setUsernameAvailable(false)
-  //       const formData = new FormData();
-  //       formData.append("username", profileData.username)
-  //       const response = await fetch(apiEndPoints.checkIfUsernameExistsAddress(), {method: "POST", body: formData});
-  //       const data = await response.json();
-  //       if(!response.ok){
-  //         throw new Error(data.message || "Network response wasn't ok while checking for availablity of username")
-  //       }
+  console.log(agree);
+  useEffect(()=>{
+    const timeout = setTimeout(() => {      
+      (async ()=>{
+        try {
+        setUsernameAvailable(false)
+        const formData = new FormData();
+        formData.append("username", profileData.username)
+        const response = await fetch(apiEndPoints.checkIfUsernameExistsAddress(), {method: "POST", body: formData});
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data.message || "Network response wasn't ok while checking for availablity of username")
+        }
         
-  //       if(data.success){
-  //         setUsernameAvailable(true)
-  //         console.log(data)
-  //       }
-  //     } catch (error) {
-  //       // alert(error.message);
-  //       console.log(error)
-  //     }
-  //   })()
-  // }, 2000);
-  // return ()=>clearTimeout(timeout)
-  // }, [username])
+        if(data.success){
+          setUsernameAvailable(true)
+          console.log(data)
+        }
+      } catch (error) {
+        // alert(error.message);
+        console.log(error)
+      }
+    })()
+  }, 2000);
+  return ()=>clearTimeout(timeout)
+  }, [username])
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-10 lg:my-8 xl:my-10 ">
       {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"please be patient, we are creating your account!"} />}
