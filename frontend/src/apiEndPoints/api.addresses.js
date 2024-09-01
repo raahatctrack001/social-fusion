@@ -20,6 +20,7 @@ export  const apiEndPoints = {
     toggleOnlineStatusAddress: (userId)=>`/api/v1/users/toggle-online-status/${userId}`,
     checkIfUsernameExistsAddress: ()=>'/api/v1/users/is-username-available',
     checkIfUserExistsAddress: ()=>`/api/v1/users/check-if-user-exists`,
+    searchUsersAddress: (searchTerm)=>`/api/v1/users/search-users?searchTerm=${searchTerm}`,
     
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,

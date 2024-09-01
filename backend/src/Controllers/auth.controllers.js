@@ -294,7 +294,7 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
         }).select("+resetPasswordToken +password +restePasswordTokenExpiry");
 
         if (!currentUser) {
-            throw new apiError(400, "reset password token is Invalid or expired ");
+            throw new apiError(400, "reset password token is Invalid or expired or has been used!");
         }
 
         // If user exists and the token is valid, you can now reset the password

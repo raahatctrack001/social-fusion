@@ -12,6 +12,7 @@ import {
     removeProfilePicture,
     checkIfUsernameExists,
     checkIfUserExists,
+    searchUsers,
 } from '../Controllers/user.controller.js';
 import { upload } from '../Middlewares/multer.middleware.js';
 
@@ -28,4 +29,5 @@ router.route('/follow-user/:followId').post(isUserLoggedIn, toggleFollowUser);
 router.route('/toggle-online-status/:userId').patch(upload.none(), isUserLoggedIn, toggleOnlineStatus);
 router.route('/is-username-available').post(upload.none(), checkIfUsernameExists);//only username
 router.route('/check-if-user-exists').post(upload.none(), checkIfUserExists);//username or email
+router.route('/search-users').post(upload.none(), searchUsers);
 export default router;

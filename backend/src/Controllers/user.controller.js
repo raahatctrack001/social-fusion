@@ -293,6 +293,50 @@ export const checkIfUserExists = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
+export const searchUsers = asyncHandler(async (req, res, next) => {
+    try {
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.order === 'asc' ? 1 : -1;
+        
+        const users = await User.find({
+            // ...(req.query.userId && { _id: req.query.userId }),
+            // ...(req.query.searchTerm && {
+                $or: [
+                    { fullName: { $regex: req.query.searchTerm, $options: 'i' } },
+                    { email: { $regex: req.query.searchTerm, $options: 'i' } },
+                    { username: { $regex: req.query.searchTerm, $options: 'i' } },
+                    // { mobile: { $regex: req.query.searchTerm, $options: 'i' } },
+                ],
+            // }),
+        })
+        // .select('-password') // Exclude sensitive fields like password
+        .sort({ updatedAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit);
+  
+        const totalUsers = await User.countDocuments();
+  
+        const now = new Date();
+  
+        const oneMonthAgo = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1,
+            now.getDate()
+        );
+  
+        const lastMonthUsers = await User.countDocuments({
+            createdAt: { $gte: oneMonthAgo },
+        });
+  
+        res.status(200).json(new apiResponse(200, "users fetched", users));
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 const markUsersOffline = async () => {
     const offlineThreshold = new Date(Date.now() - 2 * 60 * 1000); // 2 minutes ago
     console.log('Offline Threshold:', offlineThreshold);
