@@ -7,8 +7,9 @@ const messageSchema = new mongoose.Schema({
     },
     receivers: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
     }],
+    
     conversation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Conversation',
@@ -20,7 +21,7 @@ const messageSchema = new mongoose.Schema({
     },
     status: {
         type: String, 
-        enum: ["sent", "delivered", "received"],
+        enum: ["sent", "delivered", "read"],
     },
     isReadByAll: {
         type: Boolean,
@@ -37,6 +38,10 @@ const messageSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean, 
         default: false
+    },
+    viewOnce: {
+        type: Boolean,
+        default: false,
     }
 }, {timestamps: true});
 

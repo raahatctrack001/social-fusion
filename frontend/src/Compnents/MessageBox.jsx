@@ -9,28 +9,32 @@ const messages = [
   // Add more messages as needed
 ];
 
-const ChatPage = () => {
+const MessageBox = ({ messages }) => {
   return (
-    <div className="flex h-screen">
-      {/* Contacts List */}
-      
+    <div className="flex h-[650px]">
+      {/* Contacts List */}  
 
       {/* Chat Window */}
       <div className="w-full flex flex-col ">
         
         <div className="flex-1 p-4 overflow-y-auto">
-          {messages.map(message => (
+          {messages?.length > 0 ? messages.map(message => (
             <div key={message.id} className={`mb-4 ${message.user === 'You' ? 'text-right' : 'text-left'}`}>
               <div className={`inline-block px-4 py-2 rounded-lg ${message.user === 'You' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
                 <p>{message.text}</p>
                 <p className="text-xs text-gray-500">{message.time}</p>
               </div>
             </div>
-          ))}
+          )) : <div className='w-full h-full flex flex-col items-center justify-center gap-3'> 
+                <h1 className='font-bold text-2xl'> No Messages yet! </h1>
+                <p className=''> Tu hi bat shuru karde! chhota nhi ho jaega! </p>
+           </div>}
         </div>
       </div>
+      
+
     </div>
   );
 };
 
-export default ChatPage;
+export default MessageBox;

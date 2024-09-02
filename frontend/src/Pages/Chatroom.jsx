@@ -7,7 +7,7 @@ import conversations from '../../../conversation'
 import { useLocation, useNavigate } from 'react-router-dom'
 // import ChatBox from '../Compnents/ChatBox'
 import ChatBoxHeader from '../Compnents/ChatBox'
-import ChatPage from '../Compnents/Chatpage'
+import ChatPage from '../Compnents/MessageBox'
 import MessageComponent from '../Compnents/MessageComponent'
 import UnderDevelopment from '../TestComponent/UnderDevelopment'
 

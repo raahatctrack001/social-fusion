@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import conversations from '../../../conversation'
-import { HiPaperAirplane, HiPencil, HiPlus, HiSearch } from 'react-icons/hi'
+// import conversations from '../../../conversation'
+import { HiPaperAirplane, HiPencil, HiPlus, HiSearch, HiUser, HiUserGroup } from 'react-icons/hi'
 import { TextInput } from 'flowbite-react'
 import ChatBoxHeader from './ChatBox'
-import ChatPage from './Chatpage'
+import ChatPage from './MessageBox'
 import { HiFunnel, HiUserPlus } from 'react-icons/hi2'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import UnderDevelopment from '../TestComponent/UnderDevelopment'
 import WelcomePage from './Welcome'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
+import { useDispatch, useSelector } from 'react-redux'
+import ConversationPage from './MessageComponents/ConversationPage'
+
 
 const MessageComponent = () => {
-    const [conversation, setConversation] = useState();
+    const { currentUser } = useSelector(state=>state.user);
+
+    const [conversations, setConversations] = useState([]); // all conversations between different users
+    const [sendToChatBox, setSendToChatBox] = useState({}) //converstion to carry out right now
     const [showChatBox, setShowChatBox] = useState(false);
     const [searchTerm, setSearchTerm] = useState('')
     const [searchedUsers, setSearchedUsers] = useState([])
@@ -22,6 +28,29 @@ const MessageComponent = () => {
             console.log("enter key is pressed!")
         }
     }
+    useEffect(()=>{
+        (async ()=>{
+            console.log(apiEndPoints.getAllConversationsOfUser(currentUser?._id))
+            try {
+                const response = await fetch(apiEndPoints.getAllConversationsOfUser(currentUser?._id));
+                const data = await response.json();
+    
+                if(!response.ok){
+                    throw new Error(data.message || "Network response wasn't ok while fetching conversation");
+                }
+    
+                if(data.success){
+                    console.log(data)
+                    setConversations(data?.data)
+                }
+    
+            } catch (error) {
+                console.log(error)
+            }
+
+        })()
+    }, [])
+
     useEffect(()=>{
         const timeout = setTimeout(() => {
             if(searchTerm.trim() === ''){
@@ -50,7 +79,7 @@ const MessageComponent = () => {
         }, 2000);
         return ()=>clearTimeout(timeout)
     }, [searchTerm])
-    console.log(searchedUsers)
+    console.log("conversations from message componenets", conversations);
     return (
     <div className='flex w-full h-[825px]'>
         {/* conversations lists */}
@@ -84,26 +113,41 @@ const MessageComponent = () => {
                 })}
             </div>
 
-            <div className={`flex flex-col w-60 md:w-96 gap-1 mt-2 ml-3 h-[725px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
-                {conversations.map((conversation, index)=>{
-                    return <div key={index} className='flex justify-between' onClick={()=>{setShowChatBox(true); setConversation(conversation)}}>
+            <div className={`flex flex-col w-60 md:w-96 gap-2 py-1 px-2 mt-2 ml-3 h-[725px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
+                {conversations?.length > 0 ? conversations.map((conversation, index)=>{
+                    return <div key={index} className='flex justify-between shadow-lg pb-2 max-h-16 overflow-hidden' onClick={()=>{setShowChatBox(true); setSendToChatBox(conversation)}}>
                             <div className='flex start gap-2 cursor-pointer'>
-                                <img className='h-12 w-12 rounded-lg' src={conversation?.img} alt="" />
-                                <div className='flex flex-col items-start'> 
-                                    <p className='font-bold'> {conversation.name} </p>
-                                    <p> {conversation.lastMessage} </p>
+                                <img 
+                                    className='h-12 w-12 rounded-full' 
+                                    src={conversation?.participants[0]?._id === currentUser?._id ? conversation?.participants[1]?.profilePic?.at(-1) : conversation?.participants[0]?.profilePic?.at(-1) || 'social-fusion-icon'} 
+                                />
+                                <div className='flex flex-col items-start'>  
+                                    <p className='font-bold'> 
+                                    {conversation?.participants[0]?._id === currentUser?._id ? conversation?.name[1] : conversation?.name[0]} 
+                                    </p>
+                                    <p> {conversation?.lastMessage?.content?.length ? conversation?.lastMessage?.content?.substring(0, 30)+"..." : conversation?.lastMessage?.content  || "No conversations yet!"} </p>
                                 </div>
                             </div>
-                            {/* <div className='pr-5 text-2xl'> <HiUserGroup /> </div> */}
+                            <div className='pr-5 text-2xl flex justify-center items-center'>
+                                {conversation?.isGroup ? <HiUserGroup /> : <HiUser />}
+                            </div>
                            </div>
-                })}
+                }) : <div className='flex flex-col justify-center items-center w-full h-full'>
+                    <h1> No Conversation Yet!</h1>
+                    <div className='flex flex-col items-center justify-center mt-2 text-xl font-semibold cursor-pointer'>
+                        <HiPlus className='text-2xl' />
+                        <span className=''> Start a new conversation. </span>
+                    </div>
+                 </div>}
             </div>
         </div>
 
         {/* main chat box */}
-        {showChatBox ? <div className='flex flex-col w-full'>           
-            <ChatBoxHeader conversation={conversation} />
-            <ChatPage />
+        {showChatBox && <ConversationPage conversation={sendToChatBox} conversations={conversations} setConversations={setConversations} />}
+
+        {/* <div className='flex flex-col w-full'>            */}
+            {/* <ChatBoxHeader conversation={sendToChatBox} /> */}
+            {/* <ChatPage  />
             <div className='w-10 bg-green-700 py-2 px-2 rounded-lg relative right-[3rem] top-[3rem] cursor-pointer hover:bg-green-500'> <HiUserPlus /> </div>
             <TextInput
                 className='border-2 rounded-lg border-white ml-4 mr-1 relative top-10'
@@ -113,9 +157,10 @@ const MessageComponent = () => {
              <div className='flex justify-between'>
                 <div></div>
                 <HiPaperAirplane className='relative bottom-2 right-4 rounded-lg px-2 text-5xl cursor-pointer' />
-             </div>
-        </div>:<div className='w-full'> <WelcomePage /> </div> }
-    </div>
+             </div> */}
+        </div>
+        // :<div className='w-full'> <WelcomePage /> </div> 
+    // </div>
   )
 }
 

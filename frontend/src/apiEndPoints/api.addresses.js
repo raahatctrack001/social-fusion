@@ -1,3 +1,4 @@
+
 export  const apiEndPoints = {
     isAuthorisedAddress: ()=>`/api/v1/auth/authorisation-status`,
     registerAddress : () => `/api/v1/auth/register`,
@@ -66,4 +67,8 @@ export  const apiEndPoints = {
     getFollowerStory: (userId)=>`/api/v1/story/get-followers-stories/${userId}`,
 
     openOrCreateNewConversationAddress: (senderId, receiverId)=> `/api/v1/conversation/open-or-create/${senderId}/${receiverId}`,
+    getAllConversationsOfUser: (userId)=> `/api/v1/conversation/get-conversations/${userId}`,
+
+    sendPrivateMessageAddress: (senderId, receiverId, conversationId)=>`/api/v1/message/send-message/${senderId}/${receiverId}/${conversationId}`,
+    getAllMessageOfUserWithAnotherUserAddress:(senderId, receiverId, conversationId)=>`/api/v1/message/get-all-messages/${senderId}/${receiverId}/${conversationId}`,
 }

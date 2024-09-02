@@ -16,7 +16,7 @@ export const openOrCreateNewConverstaion = asyncHandler(async (req, res, next)=>
             throw new apiError(404, "receiverId is missing");
         }
         
-        const conversation = await Conversation.find({
+        const conversation = await Conversation.find({ //private conversations only!
             isGroup: false,
             participants: {
                 $all: [senderId, receiverId]
@@ -25,11 +25,18 @@ export const openOrCreateNewConverstaion = asyncHandler(async (req, res, next)=>
 
         if(conversation.length === 0){
             const receiver = await User.findById(receiverId);
+            const sender = await User.findById(senderId);
+
             if(!receiver){
-                throw new apiError(404, "receiver doesn't exist")
+                throw new apiError(404, "receiver doesn't exist");
             }
+            
+            if(!sender){
+                throw new apiError(404, "sender doesn't exist");
+            }
+
             const newConversation = await Conversation.create({
-                name: receiver.fullName,
+                name: [sender.fullName, receiver.fullName],
                 participants: [senderId, receiverId],
                 isGroup: false,
             })
@@ -43,15 +50,21 @@ export const openOrCreateNewConverstaion = asyncHandler(async (req, res, next)=>
     }
 })
 
-export const getAllConversationOfSender = asyncHandler(async (req, res, next)=>{
+export const getAllConversationOfUser = asyncHandler(async (req, res, next)=>{
+    console.log(req.params);
     try {
-        const { senderId } = req.params;
+        const { userId } = req.params;
         const conversations = await Conversation.find({
             isGroup: false,
-            participants: {$elemMatch: {$eq: senderId}}
-        });
+            participants: {$elemMatch: {$eq: userId}}
+        })
+        .populate(["participants", "lastMessage"]);
 
-        console.log(conversations)
+
+        if(!conversations){
+            throw new apiError(404, "no conversations found");
+        }
+        return res.status(200).json(new apiResponse(200, "conversations fetched", conversations));
     } catch (error) {
         next(error)
     }

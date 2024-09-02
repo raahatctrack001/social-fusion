@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
 
+
 const conversationSchema = new mongoose.Schema({
-    name: {
+    name: [{
         type: String, 
         required:true
-    },
+    }],
     isGroup: {
         type: Boolean,
         default: false
@@ -16,6 +17,15 @@ const conversationSchema = new mongoose.Schema({
     lastMessage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
+    },
+    scheduledEvent: {
+        name: {
+            type: String, 
+            enum: ["birthday", "anniversary", "first date", "first meeting"]
+        },
+        eventDate: {
+            type: Date,
+        }
     }
 }, {timestamps: true})
 

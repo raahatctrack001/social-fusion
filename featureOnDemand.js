@@ -1,0 +1,2 @@
+//schedule something to celebrate with someone one on opening
+// the app there should be a screen with celebration popup scheduled by someone for some other user like birthday or anniversary like this.
