@@ -11,16 +11,19 @@ import WelcomePage from './Welcome'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { useDispatch, useSelector } from 'react-redux'
 import ConversationPage from './MessageComponents/ConversationPage'
+import LoaderPopup from './Loader'
 
 
 const MessageComponent = () => {
     const { currentUser } = useSelector(state=>state.user);
 
     const [conversations, setConversations] = useState([]); // all conversations between different users
-    const [sendToChatBox, setSendToChatBox] = useState({}) //converstion to carry out right now
+    const [sendConversationId, setSendConversationId] = useState(''); //converstion to carry out right now
     const [showChatBox, setShowChatBox] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('')
-    const [searchedUsers, setSearchedUsers] = useState([])
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchedUsers, setSearchedUsers] = useState([]);
+    const [createConversationLoading, setCreateConversationLoading] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleMessageInputKeydown = (e)=>{
@@ -30,7 +33,7 @@ const MessageComponent = () => {
     }
     useEffect(()=>{
         (async ()=>{
-            console.log(apiEndPoints.getAllConversationsOfUser(currentUser?._id))
+            // console.log(apiEndPoints.getAllConversationsOfUser(currentUser?._id))
             try {
                 const response = await fetch(apiEndPoints.getAllConversationsOfUser(currentUser?._id));
                 const data = await response.json();
@@ -40,11 +43,14 @@ const MessageComponent = () => {
                 }
     
                 if(data.success){
-                    console.log(data)
-                    setConversations(data?.data)
+                    // console.log(data)
+                    setConversations(data?.data?.sort((a, b)=>new Date(b.updatedAt) - new Date(a.updatedAt)));
+                    // setSendConversationId(conversations[0]?._id);
+                    // setShowChatBox(true)
                 }
     
             } catch (error) {
+                setError(error.message)
                 console.log(error)
             }
 
@@ -76,12 +82,51 @@ const MessageComponent = () => {
                     }
                 })()
             }
-        }, 2000);
+        }, 1000);
         return ()=>clearTimeout(timeout)
     }, [searchTerm])
-    console.log("conversations from message componenets", conversations);
+    
+    const openOrCreateConversation = async (receiver)=>{
+        setCreateConversationLoading(true)
+        try {
+            // console.log(apiEndPoints.openOrCreateNewConversationAddress(currentUser?._id, receiver?._id))
+            const response = await fetch(apiEndPoints.openOrCreateNewConversationAddress(currentUser?._id, receiver?._id), 
+            {method: "POST"});
+            const data = await response.json();
+
+            if(!response.ok){
+                throw new Error(data.message || "Network response wasn't ok while creating conversation");
+            }
+
+            if(data.success){
+                const newConversation = data?.data;
+                if(data.statusCode === 202){
+                    setSendConversationId(newConversation[0]?._id);
+                    console.log("data for existing conversation", data);
+                }
+                else{
+                    console.log("data for new conversation", data);
+                    const updatedConversations = [...conversations, newConversation];
+                    setConversations(updatedConversations.sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt)));
+                    setSendConversationId(newConversation?._id);
+                    
+                }      
+                setSearchTerm('')
+                setShowChatBox(true); 
+            }
+
+        } catch (error) {
+            alert(error.message);
+            console.log(error)
+        }
+        finally{
+            setCreateConversationLoading(false)
+        }
+    }
+    // console.log("conversations from message componenets", conversations);
     return (
     <div className='flex w-full h-[825px]'>
+        {createConversationLoading && <LoaderPopup loading={createConversationLoading} setLoading={setCreateConversationLoading} info={"creating/opening conversation please wait!"} />}
         {/* conversations lists */}
         <div className='w-96 dark:bg-gray-600 pt-2 hidden md:inline'>
             <div className='flex justify-between pl-2 text-2xl'>
@@ -101,21 +146,24 @@ const MessageComponent = () => {
                     onChange={(e)=>setSearchTerm(e.target.value)}
                 />
             </div>
-            <div className='max-h-96 overflow-y-scroll'>
-                {searchedUsers.length > 0 && searchedUsers.map((user, index)=>{
-                    return <div key={index} className='flex gap-2 my-2 pl-2 shadow-lg py-1 cursor-pointer'> 
+            <div className='max-h-96 overflow-y-scroll '>
+                {searchedUsers.length > 0 ? searchedUsers.map((user, index)=>{
+                    return <div 
+                                onClick={()=>openOrCreateConversation(user)}
+                                key={index} 
+                                className='flex gap-2 my-2 pl-2 shadow-lg py-1 cursor-pointer'> 
                         <img src={user.profilePic.at(-1)} alt="" className='h-14 w-14 rounded-full' />
                         <div>
                             <p> { user.fullName } </p>
-                            <p> hello {user.username} </p>
+                            <p> {user.username} </p>
                         </div>
                     </div>
-                })}
+                }) : searchTerm.trim().length > 0 && <div className='w-full h-full grid place-items-center'> No user found </div>}
             </div>
 
             <div className={`flex flex-col w-60 md:w-96 gap-2 py-1 px-2 mt-2 ml-3 h-[725px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
                 {conversations?.length > 0 ? conversations.map((conversation, index)=>{
-                    return <div key={index} className='flex justify-between shadow-lg pb-2 max-h-16 overflow-hidden' onClick={()=>{setShowChatBox(true); setSendToChatBox(conversation)}}>
+                    return <div key={index} className='flex  justify-between' onClick={()=>{setShowChatBox(true); setSendConversationId(conversation?._id)}}>
                             <div className='flex start gap-2 cursor-pointer'>
                                 <img 
                                     className='h-12 w-12 rounded-full' 
@@ -143,7 +191,7 @@ const MessageComponent = () => {
         </div>
 
         {/* main chat box */}
-        {showChatBox && <ConversationPage conversation={sendToChatBox} conversations={conversations} setConversations={setConversations} />}
+        {showChatBox && <ConversationPage conversationId={sendConversationId}  conversations={conversations} setConversations={setConversations} />}
 
         {/* <div className='flex flex-col w-full'>            */}
             {/* <ChatBoxHeader conversation={sendToChatBox} /> */}

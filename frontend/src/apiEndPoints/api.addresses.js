@@ -68,6 +68,7 @@ export  const apiEndPoints = {
 
     openOrCreateNewConversationAddress: (senderId, receiverId)=> `/api/v1/conversation/open-or-create/${senderId}/${receiverId}`,
     getAllConversationsOfUser: (userId)=> `/api/v1/conversation/get-conversations/${userId}`,
+    getConversationAddress: (conversationId) => `/api/v1/conversation/get-conversation/${conversationId}`,
 
     sendPrivateMessageAddress: (senderId, receiverId, conversationId)=>`/api/v1/message/send-message/${senderId}/${receiverId}/${conversationId}`,
     getAllMessageOfUserWithAnotherUserAddress:(senderId, receiverId, conversationId)=>`/api/v1/message/get-all-messages/${senderId}/${receiverId}/${conversationId}`,

@@ -5,9 +5,11 @@ import { HiUserPlus } from 'react-icons/hi2'
 import { TextInput } from 'flowbite-react'
 import { useSelector } from 'react-redux'
 import { apiEndPoints } from '../../apiEndPoints/api.addresses'
+import PageLoader from '../PageLoader'
 
-const ConversationPage = ({conversation, conversations, setConversations}) => {
+const ConversationPage = ({conversationId, conversations, setConversations}) => {
     const { currentUser } = useSelector(state=>state.user);
+    const [conversation, setConversation] = useState(null);
     const [messageContent, setMessageContent] = useState('');
     const [messageToDisplay, setMessagesToDisplay] = useState('');
     const [error, setError] = useState('');
@@ -15,17 +17,36 @@ const ConversationPage = ({conversation, conversations, setConversations}) => {
         setMessageContent('')
     }, [conversation])
 
+    useEffect(()=>{
+        (async ()=>{
+            try {
+                const response = await fetch(apiEndPoints.getConversationAddress(conversationId));
+                const data = await response.json();
+
+                if(!response.ok){
+                    throw new Error(data.message || "Network response wasn't ok while fetching current Conversation!")
+                }
+
+                if(data.success){
+                    console.log(data)
+                    setConversation(data?.data);
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [conversationId])
     // useEffect(()=>{
     //     (async()=>{
     //         console.log(apiEndPoints.getAllMessageOfUserWithAnotherUserAddress(currentUser?._id, reciever))
     //     })()
     // }, [conversation])
     const sendMessageClick = async ()=>{
-        console.log("message clicked with following details");
-        console.log("sender: ", currentUser.fullName);
-        console.log("reciever: ", conversation?.participants[1]?.fullName);
-        console.log("conversation name: ", conversation.name)
-        console.log("message: ", messageContent);
+        // console.log("message clicked with following details");
+        // console.log("sender: ", currentUser.fullName);
+        // console.log("reciever: ", conversation?.participants[1]?.fullName);
+        // console.log("conversation name: ", conversation.name)
+        // console.log("message: ", messageContent);
         try {
             if(messageContent.trim() === ''){
                 throw new Error("Message content can't be empty");
@@ -61,7 +82,11 @@ const ConversationPage = ({conversation, conversations, setConversations}) => {
             setError(error.message)
         }
     }
-    console.log("conversations form conversation page", conversations)
+
+    if(!conversation){
+    return <PageLoader />
+    }
+    console.log("current conversation id", conversationId)
   return (
       <div className='w-full'>
       {/* //chat header */}
