@@ -31,31 +31,36 @@ const MessageComponent = () => {
             console.log("enter key is pressed!")
         }
     }
-    useEffect(()=>{
-        (async ()=>{
-            // console.log(apiEndPoints.getAllConversationsOfUser(currentUser?._id))
+
+    
+    useEffect(() => {
+        (async () => {
             try {
                 const response = await fetch(apiEndPoints.getAllConversationsOfUser(currentUser?._id));
                 const data = await response.json();
     
-                if(!response.ok){
+                if (!response.ok) {
                     throw new Error(data.message || "Network response wasn't ok while fetching conversation");
                 }
     
-                if(data.success){
-                    // console.log(data)
-                    setConversations(data?.data?.sort((a, b)=>new Date(b.updatedAt) - new Date(a.updatedAt)));
-                    // setSendConversationId(conversations[0]?._id);
-                    // setShowChatBox(true)
+                if (data.success) {
+                    const updatedConversations = data?.data?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                    
+                    setConversations(updatedConversations);
+                    
+                    // Use updatedConversations to set the conversation ID
+                    setSendConversationId(updatedConversations[0]?._id); //conversations doesn't reflect immediately hence user updated conversation array for it
+                    
+                    setShowChatBox(true);
                 }
     
             } catch (error) {
-                setError(error.message)
-                console.log(error)
+                setError(error.message);
+                console.log(error);
             }
-
-        })()
-    }, [])
+        })();
+    }, [currentUser?._id]);
+    
 
     useEffect(()=>{
         const timeout = setTimeout(() => {
@@ -75,7 +80,7 @@ const MessageComponent = () => {
                         
                         if(data.success){
                             setSearchedUsers(data?.data)
-                            console.log(data)
+                            // console.log(data)
                         }
                     } catch (error) {
                         console.log(error);
@@ -102,10 +107,10 @@ const MessageComponent = () => {
                 const newConversation = data?.data;
                 if(data.statusCode === 202){
                     setSendConversationId(newConversation[0]?._id);
-                    console.log("data for existing conversation", data);
+                    // console.log("data for existing conversation", data);
                 }
                 else{
-                    console.log("data for new conversation", data);
+                    // console.log("data for new conversation", data);
                     const updatedConversations = [...conversations, newConversation];
                     setConversations(updatedConversations.sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt)));
                     setSendConversationId(newConversation?._id);
@@ -123,7 +128,9 @@ const MessageComponent = () => {
             setCreateConversationLoading(false)
         }
     }
-    // console.log("conversations from message componenets", conversations);
+    if(conversations.length === 0){
+        return <div> No active conversation </div>
+    }
     return (
     <div className='flex w-full h-[825px]'>
         {createConversationLoading && <LoaderPopup loading={createConversationLoading} setLoading={setCreateConversationLoading} info={"creating/opening conversation please wait!"} />}

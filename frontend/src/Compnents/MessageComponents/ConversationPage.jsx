@@ -17,9 +17,30 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
         setMessageContent('')
     }, [conversation])
 
+    const getMesages = async(senderId, receiverId, conversationId)=>{
+        console.log("getting message")
+        try {
+            const participants = conversation;
+            console.log("participants: ", participants)
+            const response = await fetch(apiEndPoints.getAllMessageOfUserWithAnotherUserAddress(senderId, receiverId, conversationId))
+            const data = await response.json();
+
+            if(!response.ok){
+                throw new Error(data.message || "Network response wasn't ok while fetching messages")
+            }
+            
+            if(data.success){
+                console.log(data);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(()=>{
         (async ()=>{
             try {
+                console.log("getting converationid")
                 const response = await fetch(apiEndPoints.getConversationAddress(conversationId));
                 const data = await response.json();
 
@@ -28,19 +49,19 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
                 }
 
                 if(data.success){
-                    console.log(data)
+                    const participants = data?.data?.participants;
+                    const receiverId = currentUser?._id === participants[0]?._id ? participants[1]?._id : participants[0]?._id;
                     setConversation(data?.data);
+
+                    getMesages(currentUser?._id, receiverId, conversationId);
+
                 }
             } catch (error) {
                 console.log(error)
             }
         })()
     }, [conversationId])
-    // useEffect(()=>{
-    //     (async()=>{
-    //         console.log(apiEndPoints.getAllMessageOfUserWithAnotherUserAddress(currentUser?._id, reciever))
-    //     })()
-    // }, [conversation])
+   
     const sendMessageClick = async ()=>{
         // console.log("message clicked with following details");
         // console.log("sender: ", currentUser.fullName);
@@ -67,13 +88,12 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
             }
 
             if(data.success){
-                console.log(data)
-                const modifiedConversation = data?.data?.conversation;
-                // console.log(modifiedConversation);                            
+                // console.log(data)
+                const modifiedConversation = data?.data?.conversation;                          
                 const updatedConversations = conversations.map(conversation => 
                   conversation?._id === modifiedConversation?._id ? modifiedConversation : conversation
                 );
-                setConversations(updatedConversations);
+                setConversations(updatedConversations.sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt)));
                 setMessageContent('')
             }
         } catch (error) {
@@ -84,9 +104,9 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
     }
 
     if(!conversation){
-    return <PageLoader />
+    return <div className='w-full grid place-items-center'> <PageLoader /> </div>
     }
-    console.log("current conversation id", conversationId)
+    // console.log("current conversation id", conversation)
   return (
       <div className='w-full'>
       {/* //chat header */}

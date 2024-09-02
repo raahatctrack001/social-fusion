@@ -66,5 +66,8 @@ export const sendPrivateMessage = asyncHandler(async (req, res, next)=>{
 })
 
 export const getAllMessageOfUserWithAnotherUser = asyncHandler(async (req, res, next)=>{
+    console.log("insde message")
     console.log(req.params);
+    
+    
 })

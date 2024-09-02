@@ -78,7 +78,7 @@ export const getAllConversationOfUser = asyncHandler(async (req, res, next)=>{
 export const getConversation = asyncHandler(async (req, res, next)=>{
     try {
         const { conversationId } = req.params;
-        console.log(conversationId)
+        // console.log(conversationId)
         if(!conversationId){
             throw new apiError(404, "conversationId is missing")
         }
