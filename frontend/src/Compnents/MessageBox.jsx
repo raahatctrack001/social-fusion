@@ -1,38 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
+import { HiDotsVertical } from 'react-icons/hi';
 
-// Example list of messages
-const messages = [
-  { id: 1, user: 'Alice', text: 'Hey, how are you?', time: '10:30 AM' },
-  { id: 2, user: 'You', text: 'I am good, thanks! How about you?', time: '10:31 AM' },
-  { id: 3, user: 'Alice', text: 'I am great! Working on a new project.', time: '10:32 AM' },
-  { id: 4, user: 'You', text: 'That’s awesome. Can’t wait to hear more about it.', time: '10:33 AM' },
-  // Add more messages as needed
-];
+const MessageBox = ({ messages, scrollToLastMessage }) => {
+  const { currentUser } = useSelector(state => state.user);
+  const [showMessageOptions, setShowMessageOptions] = useState({});
 
-const MessageBox = ({ messages }) => {
+  const handleMessageOptions = async (message) => {
+    console.log("edit reply delete or copy message clicked", message.content);
+  };
+
   return (
-    <div className="flex h-[650px]">
-      {/* Contacts List */}  
-
+    <div className="flex h-[710px]">
       {/* Chat Window */}
-      <div className="w-full flex flex-col ">
-        
-        <div className="flex-1 p-4 overflow-y-auto">
-          {messages?.length > 0 ? messages.map(message => (
-            <div key={message.id} className={`mb-4 ${message.user === 'You' ? 'text-right' : 'text-left'}`}>
-              <div className={`inline-block px-4 py-2 rounded-lg ${message.user === 'You' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-                <p>{message.text}</p>
-                <p className="text-xs text-gray-500">{message.time}</p>
+      <div className="w-full flex flex-col m-2">
+        <div className="flex-1 overflow-y-auto">
+          {messages?.length > 0 ? (
+            messages.map((message) => (
+              <div key={message._id} className={`mb-4 ${message.sender === currentUser?._id ? 'text-right' : 'text-left'}`}>
+                <div className={`inline-block px-4 py-2 mx-3 rounded-lg ${message.sender === currentUser?._id ? 'dark:bg-gray-500 bg-gray-200' : 'dark:bg-red-800 bg-red-100'}`}>
+                  <div className='flex justify-center items-center'> 
+                    <div className='flex flex-col max-w-3/4'>
+                      <div className='max-w-3/4'> <p>{message.content}</p> </div>
+                      <p className="text-xs w-full flex justify-end">{format(new Date(message.createdAt),  'h:mm a')}</p>
+                    </div>
+                    {currentUser?._id === message?.sender && (
+                      <HiDotsVertical 
+                        className="text-2xl cursor-pointer" 
+                        onClick={() => setShowMessageOptions({ [message._id]: !showMessageOptions[message._id] })}
+                      />
+                    )}
+                  </div>
+                  {showMessageOptions[message._id] && (
+                    <div className='flex flex-col items-start dark:bg-gray-700 bg-gray-400 rounded-lg p-2'>
+                      <span className='hover:text-lg text-sm cursor-pointer' onClick={() => handleMessageOptions(message)}> Reply </span>
+                      <span className='hover:text-lg text-sm cursor-pointer' onClick={() => handleMessageOptions(message)}> Edit </span>
+                      <span className='hover:text-lg text-sm cursor-pointer' onClick={() => handleMessageOptions(message)}> Delete </span>
+                      <span className='hover:text-lg text-sm cursor-pointer' onClick={() => handleMessageOptions(message)}> Copy </span>
+                    </div>
+                  )}
+                </div>
+                <div ref={scrollToLastMessage} />
               </div>
+            ))
+          ) : (
+            <div className='w-full h-full flex flex-col items-center justify-center gap-3'> 
+              <h1 className='font-bold text-2xl'> No Messages yet! </h1>
+              <p> Tu hi baat shuru karde! Chhota nahi ho jaega! </p>
             </div>
-          )) : <div className='w-full h-full flex flex-col items-center justify-center gap-3'> 
-                <h1 className='font-bold text-2xl'> No Messages yet! </h1>
-                <p className=''> Tu hi bat shuru karde! chhota nhi ho jaega! </p>
-           </div>}
+          )}
         </div>
       </div>
-      
-
     </div>
   );
 };

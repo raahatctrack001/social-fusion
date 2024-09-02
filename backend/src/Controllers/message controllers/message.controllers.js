@@ -66,8 +66,32 @@ export const sendPrivateMessage = asyncHandler(async (req, res, next)=>{
 })
 
 export const getAllMessageOfUserWithAnotherUser = asyncHandler(async (req, res, next)=>{
-    console.log("insde message")
-    console.log(req.params);
+    try {
+        const {senderId, receiverId, conversationId } = req.params;
+        if([senderId, receiverId, conversationId].some(field=>field?0:1)){
+            throw new apiError(404, "senderId or receiverId or conversationId is missing and is necessary for getting messages")
+        }
+
+        // const sender = await User.findById(senderId);
+        // const receiver = await User.findById(receiverId);
+        // const conversation = await Conversation.findById(conversationId);
+
+        // console.log(sender.fullName, receiver.fullName, conversation.name);
+
+        const messages = await Message.find({
+            // sender: senderId,
+            // receivers: {$elemMatch: {$eq: receiverId}},
+            conversation: conversationId,
+        }).sort({createdAt: -1})
+        .limit(20);
+        console.log(messages)
+        return res.status(200).json(new apiResponse(200, `${ messages.length === 0 ? "no conversations yet!" : "messages fetched" }`, messages.reverse()))
+
+
+        
+    } catch (error) {
+        next(error);
+    }
     
     
 })

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { HiPaperAirplane, HiPhone, HiSearch, HiVideoCamera } from 'react-icons/hi'
 import MessageBox from '../MessageBox'
 import { HiUserPlus } from 'react-icons/hi2'
-import { TextInput } from 'flowbite-react'
+import { Button, TextInput } from 'flowbite-react'
 import { useSelector } from 'react-redux'
 import { apiEndPoints } from '../../apiEndPoints/api.addresses'
 import PageLoader from '../PageLoader'
@@ -11,17 +11,25 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
     const { currentUser } = useSelector(state=>state.user);
     const [conversation, setConversation] = useState(null);
     const [messageContent, setMessageContent] = useState('');
-    const [messageToDisplay, setMessagesToDisplay] = useState('');
+    const [messageToDisplay, setMessagesToDisplay] = useState([]);
     const [error, setError] = useState('');
+    const messagesEndRef = useRef(null);
+
     useEffect(()=>{
         setMessageContent('')
     }, [conversation])
 
+    useEffect(() => {
+        // Scroll to bottom when messages change
+        if (messagesEndRef.current) {
+          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, [messageToDisplay]);
+    
+    
+    // get messages of two users
     const getMesages = async(senderId, receiverId, conversationId)=>{
-        console.log("getting message")
         try {
-            const participants = conversation;
-            console.log("participants: ", participants)
             const response = await fetch(apiEndPoints.getAllMessageOfUserWithAnotherUserAddress(senderId, receiverId, conversationId))
             const data = await response.json();
 
@@ -30,12 +38,33 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
             }
             
             if(data.success){
-                console.log(data);
+                console.log(data)
+                setMessagesToDisplay(data?.data);
             }
         } catch (error) {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        if (!conversation || !currentUser) return;
+    
+        const interval = setInterval(() => {
+          const participants = conversation.participants;
+          const receiverId = currentUser._id === participants[0]?._id ? participants[1]?._id : participants[0]?._id;
+          getMesages(currentUser._id, receiverId, conversationId);
+          console.log("Interval triggered"); // Logging for debugging
+        }, 1000);
+    
+        // Cleanup the interval on component unmount or dependency change
+        return () => clearInterval(interval);
+    
+      }, [conversation, currentUser]);
+    
+  
+    //    setInterval(() => {
+    //     }, 1000);
+     
 
     useEffect(()=>{
         (async ()=>{
@@ -88,13 +117,15 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
             }
 
             if(data.success){
-                // console.log(data)
+                console.log(data)
                 const modifiedConversation = data?.data?.conversation;                          
                 const updatedConversations = conversations.map(conversation => 
                   conversation?._id === modifiedConversation?._id ? modifiedConversation : conversation
                 );
                 setConversations(updatedConversations.sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt)));
                 setMessageContent('')
+                setMessagesToDisplay(prev=>[...prev, data?.data?.message])
+                // messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
             }
         } catch (error) {
             alert(error.message)
@@ -106,9 +137,10 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
     if(!conversation){
     return <div className='w-full grid place-items-center'> <PageLoader /> </div>
     }
+    console.log("Message to display: ", messageToDisplay)
     // console.log("current conversation id", conversation)
   return (
-      <div className='w-full'>
+      <div className='w-full flex flex-col'>
       {/* //chat header */}
         <div className='flex justify-between dark:bg-gray-600 border-b-2'>
             <div className='pb-1 flex items-center'> 
@@ -131,22 +163,25 @@ const ConversationPage = ({conversationId, conversations, setConversations}) => 
 
 
         {/* //message box */}
-        <MessageBox />
-
-        <div className='w-10 bg-green-700 py-2 px-2 rounded-lg relative right-[4rem] top-[3rem] cursor-pointer hover:bg-green-500'> 
-            <HiUserPlus /> 
+        <MessageBox messages={messageToDisplay} scrollToLastMessage={messagesEndRef}/>
+        <div className='relative bottom-16'>
+            <div className='w-10 bg-green-700 py-2 px-2 rounded-lg relative right-[4rem] top-[3rem] cursor-pointer hover:bg-green-500'> 
+                <HiUserPlus /> 
+            </div>
+            <TextInput
+                className='border-2 rounded-lg border-white ml-4 mr-1 relative top-10'
+                placeholder='send message...'
+                onChange={(e)=>(setMessageContent(e.target.value))}
+                value = {messageContent}
+                onKeyDown={(e)=>{if(e.key === 'Enter' && !e.shiftKey){sendMessageClick}}}
+            />
+             <div className='flex justify-between'>
+                <div></div>
+                <Button color={''} disabled={messageContent.trim()===''} className={`relative bottom-2 right-4 rounded-lg px-2 ${messageContent?.trim() === '' ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+                    <HiPaperAirplane onClick={sendMessageClick} className='text-3xl' />
+                </Button>
+             </div>
         </div>
-        <TextInput
-            className='border-2 rounded-lg border-white ml-4 mr-1 relative top-10'
-            placeholder='send message...'
-            onChange={(e)=>(setMessageContent(e.target.value))}
-            value = {messageContent}
-            // onKeyDown={(e)=>{if(e.key === 'Enter' && !e.shiftKey){sendMessageClick}}}
-        />
-         <div className='flex justify-between'>
-            <div></div>
-            <HiPaperAirplane onClick={sendMessageClick} className='relative bottom-2 right-4 rounded-lg px-2 text-5xl cursor-pointer' />
-         </div>
     </div>
   )
 }

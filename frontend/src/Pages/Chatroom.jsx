@@ -27,7 +27,7 @@ const Chatroom = () => {
     console.log("tab", tab)
 
   return (
-    <div className='w-full dark:bg-gray-700 h-[825px] flex'>
+    <div className='w-full dark:bg-gray-700 flex z-10'>
         {/* left most part for icons and icon with term */}
         <div className='flex'>
             <div className={`w-[50px] dark:bg-gray-800 pt-4 pl-2 h-[825px] flex flex-col items-start justify-between gap-5`}>            

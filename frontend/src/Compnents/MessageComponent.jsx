@@ -32,7 +32,7 @@ const MessageComponent = () => {
         }
     }
 
-    
+    //get all conversations
     useEffect(() => {
         (async () => {
             try {
@@ -61,7 +61,7 @@ const MessageComponent = () => {
         })();
     }, [currentUser?._id]);
     
-
+    //search user
     useEffect(()=>{
         const timeout = setTimeout(() => {
             if(searchTerm.trim() === ''){
@@ -91,6 +91,7 @@ const MessageComponent = () => {
         return ()=>clearTimeout(timeout)
     }, [searchTerm])
     
+    //open or create new conversation
     const openOrCreateConversation = async (receiver)=>{
         setCreateConversationLoading(true)
         try {
@@ -128,6 +129,7 @@ const MessageComponent = () => {
             setCreateConversationLoading(false)
         }
     }
+
     if(conversations.length === 0){
         return <div> No active conversation </div>
     }
@@ -168,7 +170,7 @@ const MessageComponent = () => {
                 }) : searchTerm.trim().length > 0 && <div className='w-full h-full grid place-items-center'> No user found </div>}
             </div>
 
-            <div className={`flex flex-col w-60 md:w-96 gap-2 py-1 px-2 mt-2 ml-3 h-[725px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
+            <div className={`flex resize-x flex-col w-60 md:w-80 gap-2 py-1 px-2 mt-2 ml-3 h-[725px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
                 {conversations?.length > 0 ? conversations.map((conversation, index)=>{
                     return <div key={index} className='flex  justify-between' onClick={()=>{setShowChatBox(true); setSendConversationId(conversation?._id)}}>
                             <div className='flex start gap-2 cursor-pointer'>
@@ -180,7 +182,16 @@ const MessageComponent = () => {
                                     <p className='font-bold'> 
                                     {conversation?.participants[0]?._id === currentUser?._id ? conversation?.name[1] : conversation?.name[0]} 
                                     </p>
-                                    <p> {conversation?.lastMessage?.content?.length ? conversation?.lastMessage?.content?.substring(0, 30)+"..." : conversation?.lastMessage?.content  || "No conversations yet!"} </p>
+                                    <p>
+                                      {conversation?.lastMessage?.content?.length
+                                        ? conversation.lastMessage.content.substring(0, 30) + "..."
+                                        : conversation?.lastMessage?.content || 
+                                          `${conversation?.participants[0]?._id === currentUser?._id
+                                            ? conversation?.participants[1]?.fullName
+                                            : conversation?.participants[0]?.fullName
+                                          } started a conversation...`
+                                      }
+                                    </p>                                  
                                 </div>
                             </div>
                             <div className='pr-5 text-2xl flex justify-center items-center'>
