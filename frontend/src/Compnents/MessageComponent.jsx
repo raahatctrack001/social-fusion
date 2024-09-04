@@ -14,6 +14,7 @@ import ConversationPage from './MessageComponents/ConversationPage'
 import LoaderPopup from './Loader'
 import { formatDistanceToNow } from 'date-fns'
 
+
 const MessageComponent = () => {
     const { currentUser } = useSelector(state=>state.user);
 
@@ -25,6 +26,7 @@ const MessageComponent = () => {
     const [createConversationLoading, setCreateConversationLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     const handleMessageInputKeydown = (e)=>{
         if(e.key === 'Enter'){
@@ -32,6 +34,7 @@ const MessageComponent = () => {
         }
     }
 
+    
     //get all conversations
     useEffect(() => {
         (async () => {
@@ -234,5 +237,7 @@ const MessageComponent = () => {
     // </div>
   )
 }
+
+
 
 export default MessageComponent

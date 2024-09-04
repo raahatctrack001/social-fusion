@@ -8,51 +8,23 @@ import { apiEndPoints } from '../../apiEndPoints/api.addresses'
 import PageLoader from '../PageLoader'
 import EmojiPickerComponent from './EmojiPicker'
 import EmojiPicker from 'emoji-picker-react'
-import { useNavigate } from 'react-router-dom'
-import SocketContext from '../../Context/SocketContext'
+import { useFetcher, useNavigate } from 'react-router-dom'
 
 
-const ConversationPage = ({conversationId, conversations, setConversations, socket}) => {
+
+const ConversationPage = ({conversationId, conversations, setConversations }) => {
     const { theme } = useSelector(state=>state.theme)
     const { currentUser } = useSelector(state=>state.user);
     const [conversation, setConversation] = useState(null);
     const [messageContent, setMessageContent] = useState('');
     const [messageToDisplay, setMessagesToDisplay] = useState([]);
     const [showEmojis, setShowEmojis] = useState(false);
-    const [showAttachmentOptions, setShowAttachmentOptions] = useState(false)
+    const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
+    const [onlineUsers, setOnlineUsers] = useState([]);
     const messageRef = useRef();
     const [error, setError] = useState('');
     const messagesEndRef = useRef(null);
     const navigate = useNavigate();
-
-
-   
-    useEffect(()=>{
-        setMessageContent('')
-        // console.log(conversation)
-        if(conversation){
-            // const participants = conversation.participants;
-            // const userId = participants[0]?._id === currentUser?._id ? participants[1]?._id : participants[0]?._id;
-            // Join the room with user's ID
-            // socket.emit('join roPom', currentUser?._id);
-
-            // Listen for incoming messages
-            socket.on('receive message', (data) => {
-                console.log('Message received:', data);
-                const message = data.message;
-                const newConversation = data.conversation;
-                setMessagesToDisplay((prevMessages) => [...prevMessages, data.message]);
-                const updatedConversations = conversations.map(conversation=>conversation?._id === newConversation?._id ? newConversation : conversation);
-                setConversations(updatedConversations.sort((a, b)=> new Date(b.udpatedAt) - new Date(a.updatedAt)));
-            });
-
-        // Clean up on component unmount
-        return () => {
-            socket.off('receive message');
-        };
-        }
-        
-    }, [conversation])
 
     useEffect(() => {
         // Scroll to bottom when messages change
@@ -126,7 +98,7 @@ const ConversationPage = ({conversationId, conversations, setConversations, sock
             }
         })()
     }, [conversationId])
-   
+    
     const sendMessageClick = async ()=>{
         // console.log("message clicked with following details");
         // console.log("sender: ", currentUser.fullName);
@@ -154,7 +126,7 @@ const ConversationPage = ({conversationId, conversations, setConversations, sock
 
             if(data.success){
                 console.log(data);
-                console.log(data);
+                // console.log(data);
                 const modifiedConversation = data?.data?.conversation;                          
                 const updatedConversations = conversations.map(conversation => 
                   conversation?._id === modifiedConversation?._id ? modifiedConversation : conversation
@@ -162,7 +134,7 @@ const ConversationPage = ({conversationId, conversations, setConversations, sock
                 setConversations(updatedConversations.sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt)));
                 setMessageContent('')
                 setMessagesToDisplay(prev=>[...prev, data?.data?.message])
-                socket.emit("send message", data?.data)
+           
             }
         } catch (error) {
             alert(error.message)
@@ -183,7 +155,7 @@ const ConversationPage = ({conversationId, conversations, setConversations, sock
   return (
       <div className='w-full flex flex-col'>
       {/* //chat header */}
-        <div className='sticky top-4 z-50 w-full flex justify-between py-1 bg-white dark:bg-gray-600 border-b-2'>
+        <div className='w-full flex justify-between py-1 bg-white dark:bg-gray-600 border-b-2'>
             <div className='pb-1 flex items-center cursor-pointer' onClick={()=>{navigate(`/authors/author/${conversation?.participants[0]?._id === currentUser?._id ? conversation?.participants[1]?._id : conversation?.participants[0]?._id}`)}}> 
                 <img 
                 src={conversation?.participants[0]?._id === currentUser?._id ? conversation?.participants[1]?.profilePic?.at(-1) : conversation?.participants[0]?.profilePic?.at(-1) || 'social-fusion-icon'} 
@@ -299,10 +271,6 @@ const ConversationPage = ({conversationId, conversations, setConversations, sock
     </div>
   )
 }
-const ConversationWithSocket = (props) => (
-    <SocketContext.Consumer>
-      {(socket) => <ConversationPage {...props} socket={socket} />}
-    </SocketContext.Consumer>
-  );
-// export default ChatRoomWithSocket;
-export default ConversationWithSocket
+
+
+export default ConversationPage;

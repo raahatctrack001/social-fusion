@@ -10,10 +10,9 @@ import ChatBoxHeader from '../Compnents/ChatBox'
 import ChatPage from '../Compnents/MessageBox'
 import MessageComponent from '../Compnents/MessageComponent'
 import UnderDevelopment from '../TestComponent/UnderDevelopment'
-import SocketContext from '../Context/SocketContext'
 import { useSelector } from 'react-redux'
 
-const Chatroom = ({socket}) => {
+const Chatroom = () => {
     const { currentUser } = useSelector(state=>state.user)
     const [openLeftMost, setOpenLeftMost] = useState(false);
     const [conversation, setConversation] = useState(null)  
@@ -27,12 +26,7 @@ const Chatroom = ({socket}) => {
         setTab(tabFromUrl);
       }
     }, [location.search]);
-    console.log("tab", tab)
-
-    useEffect(()=>{
-        socket.emit('join room', currentUser?._id);
-    }, [])
-
+    console.log("tab", tab)    
     
   return (
     <div className='w-full dark:bg-gray-700 flex z-10'>
@@ -88,9 +82,4 @@ const Chatroom = ({socket}) => {
   )
 }
 
-const ChatRoomWithSocket = (props) => (
-    <SocketContext.Consumer>
-      {(socket) => <Chatroom {...props} socket={socket} />}
-    </SocketContext.Consumer>
-  );
-export default ChatRoomWithSocket;
+export default Chatroom
