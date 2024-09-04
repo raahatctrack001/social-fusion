@@ -84,7 +84,7 @@ export const getAllMessageOfUserWithAnotherUser = asyncHandler(async (req, res, 
             conversation: conversationId,
         }).sort({createdAt: -1})
         .limit(20);
-        console.log(messages)
+        // console.log(messages)
         return res.status(200).json(new apiResponse(200, `${ messages.length === 0 ? "no conversations yet!" : "messages fetched" }`, messages.reverse()))
 
 

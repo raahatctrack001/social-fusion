@@ -10,8 +10,11 @@ import ChatBoxHeader from '../Compnents/ChatBox'
 import ChatPage from '../Compnents/MessageBox'
 import MessageComponent from '../Compnents/MessageComponent'
 import UnderDevelopment from '../TestComponent/UnderDevelopment'
+import SocketContext from '../Context/SocketContext'
+import { useSelector } from 'react-redux'
 
-const Chatroom = () => {
+const Chatroom = ({socket}) => {
+    const { currentUser } = useSelector(state=>state.user)
     const [openLeftMost, setOpenLeftMost] = useState(false);
     const [conversation, setConversation] = useState(null)  
     const navigate = useNavigate();
@@ -26,11 +29,16 @@ const Chatroom = () => {
     }, [location.search]);
     console.log("tab", tab)
 
+    useEffect(()=>{
+        socket.emit('join room', currentUser?._id);
+    }, [])
+
+    
   return (
     <div className='w-full dark:bg-gray-700 flex z-10'>
         {/* left most part for icons and icon with term */}
-        <div className='flex'>
-            <div className={`w-[50px] dark:bg-gray-800 pt-4 pl-2 h-[825px] flex flex-col items-start justify-between gap-5`}>            
+        <div className='hidden md:flex'>
+            <div className={`w-[50px] dark:bg-gray-800 pt-4 pl-2 h-[780px] flex flex-col items-start justify-between gap-5`}>            
                 <div className='flex flex-col gap-5'>
                     <div onClick={()=>setOpenLeftMost(!openLeftMost)} className='flex items-center justify-start pl-1 cursor-pointer'>
                         <HiBars3 className=' text-2xl rounded-lg hover:text-gray-400'/> 
@@ -80,4 +88,9 @@ const Chatroom = () => {
   )
 }
 
-export default Chatroom
+const ChatRoomWithSocket = (props) => (
+    <SocketContext.Consumer>
+      {(socket) => <Chatroom {...props} socket={socket} />}
+    </SocketContext.Consumer>
+  );
+export default ChatRoomWithSocket;

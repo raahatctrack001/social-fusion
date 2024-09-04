@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 // import conversations from '../../../conversation'
-import { HiPaperAirplane, HiPencil, HiPlus, HiSearch, HiUser, HiUserGroup } from 'react-icons/hi'
+import { HiArrowLeft, HiPaperAirplane, HiPencil, HiPlus, HiSearch, HiUser, HiUserGroup } from 'react-icons/hi'
 import { TextInput } from 'flowbite-react'
 import ChatBoxHeader from './ChatBox'
 import ChatPage from './MessageBox'
@@ -12,7 +12,7 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { useDispatch, useSelector } from 'react-redux'
 import ConversationPage from './MessageComponents/ConversationPage'
 import LoaderPopup from './Loader'
-
+import { formatDistanceToNow } from 'date-fns'
 
 const MessageComponent = () => {
     const { currentUser } = useSelector(state=>state.user);
@@ -137,7 +137,7 @@ const MessageComponent = () => {
     <div className='flex w-full h-[825px]'>
         {createConversationLoading && <LoaderPopup loading={createConversationLoading} setLoading={setCreateConversationLoading} info={"creating/opening conversation please wait!"} />}
         {/* conversations lists */}
-        <div className='w-96 dark:bg-gray-600 pt-2 hidden md:inline'>
+        <div className='w-96 max-h-[780px] dark:bg-gray-600 pt-2 hidden md:inline'>
             <div className='flex justify-between pl-2 text-2xl'>
                 <p className='font-bold '> Chats </p>
                 <div className='flex items-center gap-2 pr-2'>
@@ -149,16 +149,18 @@ const MessageComponent = () => {
             </div>
 
             <div className='mt-2 border-b-2'>
+                {searchTerm.trim() !== '' && <HiArrowLeft onClick={()=>setSearchTerm('')} className='text-2xl bg-gray-700 relative top-8 left-2 z-10 cursor-pointer' />}
                 <TextInput 
                     icon={HiSearch}
                     placeholder='search contact...'
                     onChange={(e)=>setSearchTerm(e.target.value)}
+                    value={searchTerm}
                 />
             </div>
             <div className='max-h-96 overflow-y-scroll '>
                 {searchedUsers.length > 0 ? searchedUsers.map((user, index)=>{
                     return <div 
-                                onClick={()=>openOrCreateConversation(user)}
+                                onClick={(e)=>{ e.stopPropagation(), openOrCreateConversation(user)}}
                                 key={index} 
                                 className='flex gap-2 my-2 pl-2 shadow-lg py-1 cursor-pointer'> 
                         <img src={user.profilePic.at(-1)} alt="" className='h-14 w-14 rounded-full' />
@@ -170,16 +172,16 @@ const MessageComponent = () => {
                 }) : searchTerm.trim().length > 0 && <div className='w-full h-full grid place-items-center'> No user found </div>}
             </div>
 
-            <div className={`flex resize-x flex-col w-60 md:w-80 gap-2 py-1 px-2 mt-2 ml-3 h-[725px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
+            <div className={`flex resize-x flex-col w-60 md:w-80 gap-2 py-1 px-2 mt-2 ml-3 h-[680px] overflow-y-scroll ${searchedUsers.length > 0 && 'opacity-0'}`}>
                 {conversations?.length > 0 ? conversations.map((conversation, index)=>{
-                    return <div key={index} className='flex  justify-between' onClick={()=>{setShowChatBox(true); setSendConversationId(conversation?._id)}}>
+                    return conversation?.lastMessage && <div key={index} className='flex  justify-between' onClick={()=>{setShowChatBox(true); setSendConversationId(conversation?._id)}}>
                             <div className='flex start gap-2 cursor-pointer'>
                                 <img 
                                     className='h-12 w-12 rounded-full' 
                                     src={conversation?.participants[0]?._id === currentUser?._id ? conversation?.participants[1]?.profilePic?.at(-1) : conversation?.participants[0]?.profilePic?.at(-1) || 'social-fusion-icon'} 
                                 />
                                 <div className='flex flex-col items-start'>  
-                                    <p className='font-bold'> 
+                                    <p className='font-bold text-nowrap'> 
                                     {conversation?.participants[0]?._id === currentUser?._id ? conversation?.name[1] : conversation?.name[0]} 
                                     </p>
                                     <p>
@@ -194,8 +196,11 @@ const MessageComponent = () => {
                                     </p>                                  
                                 </div>
                             </div>
-                            <div className='pr-5 text-2xl flex justify-center items-center'>
-                                {conversation?.isGroup ? <HiUserGroup /> : <HiUser />}
+                            <div className='pr-5 text-xs text-gray-400 flex items-end'>
+                                {/* {conversation?.isGroup ? <HiUserGroup /> : <HiUser />} */}
+                                <p className=''>
+                                    {conversation?.updatedAt && formatDistanceToNow(new Date(conversation?.updatedAt), { addSuffix: true })} 
+                                </p>
                             </div>
                            </div>
                 }) : <div className='flex flex-col justify-center items-center w-full h-full'>
@@ -209,7 +214,7 @@ const MessageComponent = () => {
         </div>
 
         {/* main chat box */}
-        {showChatBox && <ConversationPage conversationId={sendConversationId}  conversations={conversations} setConversations={setConversations} />}
+        {showChatBox && <ConversationPage conversationId={sendConversationId} conversations={conversations} setConversations={setConversations} />}
 
         {/* <div className='flex flex-col w-full'>            */}
             {/* <ChatBoxHeader conversation={sendToChatBox} /> */}

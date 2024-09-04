@@ -303,6 +303,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
               <HiPencil className='text-2xl text-gray-950 relative' 
             />
             </div>}
+            {currentUser?._id !== author?._id && <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-start items-center absolute top-24 left-[105px] p-1 bg-red-500 rounded-lg cursor-pointer gap-1 text-nowrap'> <HiEye className='text-xl text-white' /> </span>}
             {showDropdown && <div className='pl-3 bg-gray-300 text-black dark:bg-gray-700 dark:text-white rounded-lg font-semibold items-center absolute top-28 left-16 z-10 px-5 text-nowrap'>
               <div className='flex justify-between'> 
                 <span></span> <HiX onClick={()=>setShowDropdown(false)} className='mr-2 mt-1 cursor-pointer' />
@@ -317,7 +318,6 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 multiple
                 accept="image/*"
               />
-              <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-start items-center hover:text-lg cursor-pointer gap-1 text-nowrap'> <HiEye className='' /> Show DP</span>
               <span onClick={()=>{storyRef.current.click()}} className='flex justify-start items-center gap-1 hover:text-lg cursor-pointer text-nowrap'> <HiPlus /> Add Story</span>
             </div>}
             <div 

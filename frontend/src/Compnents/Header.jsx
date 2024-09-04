@@ -30,34 +30,35 @@ export default function Header() {
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   // console.log(currentUser)
   const dispatch = useDispatch();
-  useEffect(()=>{
-     try {
-      const heartBeat = async ()=>{
-        const formData = new FormData();
-        formData.append("status", window.navigator.onLine);
-        const response = await fetch(apiEndPoints.toggleOnlineStatusAddress(currentUser?._id), {method: "PATCH", body: formData});
-        const data = await response.json();
-        console.log(data);
-        if(data.success){
-          // alert(data.success)
-          console.log(data)
-          console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
-          dispatch(updateSuccess(data?.data))
-          setIsOnline(data?.data?.isActive);
-        }
-      }
-        heartBeat();
-        const interval = setInterval(() => {
-          heartBeat();
-        }, 90000);
+  // useEffect(()=>{
+  //    try {
+  //     const heartBeat = async ()=>{
+  //       const formData = new FormData();
+  //       formData.append("status", window.navigator.onLine);
+  //       const response = await fetch(apiEndPoints.toggleOnlineStatusAddress(currentUser?._id), {method: "PATCH", body: formData});
+  //       const data = await response.json();
+  //       console.log(data);
+  //       if(data.success){
+  //         // alert(data.success)
+  //         console.log(data)
+  //         console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
+  //         dispatch(updateSuccess(data?.data))
+  //         setIsOnline(data?.data?.isActive);
+  //       }
+  //     }
+  //       heartBeat();
+  //       const interval = setInterval(() => {
+  //         heartBeat();
+  //       }, 90000);
 
-        return ()=>clearInterval(interval)
-     } catch (error) {
-      console.log(error)
-     }
-  }, [])
+  //       return ()=>clearInterval(interval)
+  //    } catch (error) {
+  //     console.log(error)
+  //    }
+  // }, [])
   
   // console.log(isOnline)
+  
   const handleSignOut = async()=>{
     try {
       const response = await fetch(apiEndPoints.logoutAddress(), {

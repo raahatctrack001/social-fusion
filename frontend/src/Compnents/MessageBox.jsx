@@ -10,20 +10,23 @@ const MessageBox = ({ messages, scrollToLastMessage }) => {
   const handleMessageOptions = async (message) => {
     console.log("edit reply delete or copy message clicked", message.content);
   };
-
+  
   return (
-    <div className="flex h-[710px]">
+    <div className="flex h-[625px]">
       {/* Chat Window */}
       <div className="w-full flex flex-col m-2">
         <div className="flex-1 overflow-y-auto">
           {messages?.length > 0 ? (
-            messages.map((message) => (
-              <div key={message._id} className={`mb-4 ${message.sender === currentUser?._id ? 'text-right' : 'text-left'}`}>
+            messages.map((message, index) => (
+              <div key={index} className={`mb-4 ${message.sender === currentUser?._id ? 'text-right' : 'text-left'}`}>
                 <div className={`inline-block px-4 py-2 mx-3 rounded-lg ${message.sender === currentUser?._id ? 'dark:bg-gray-500 bg-gray-200' : 'dark:bg-red-800 bg-red-100'}`}>
                   <div className='flex justify-center items-center'> 
                     <div className='flex flex-col max-w-3/4'>
                       <div className='max-w-3/4'> <p>{message.content}</p> </div>
+                      { message.createdAt && 
                       <p className="text-xs w-full flex justify-end">{format(new Date(message.createdAt),  'h:mm a')}</p>
+
+                      }
                     </div>
                     {currentUser?._id === message?.sender && (
                       <HiDotsVertical 

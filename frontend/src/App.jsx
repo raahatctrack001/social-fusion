@@ -38,9 +38,19 @@ import Chatroom from "./Pages/Chatroom"
 // import resetPassword from "./Compnents/ResetForgotPassword"
 import ResetForgotPassword from "./Compnents/ResetForgotPassword"
 import ResetTokenSent from "./Compnents/ResetPassword/ResetTokenSent"
+import { io } from 'socket.io-client'
+import { useEffect } from "react"
+import SocketContext from "./Context/SocketContext"
 
 function App() {
-  return   <BrowserRouter>
+  // console.log("META", import.meta.env);
+  const socket = io(import.meta.env.VITE_BACKEND_API_URL)
+  socket.on("connect", ()=>{ //each browser will have their own unique socket id
+    console.log(`socket connection has been established with socket id: ${socket.id}`);
+  })
+  
+  return  <SocketContext.Provider value={socket} >
+            <BrowserRouter>
               <Header />
                 <Routes>
 
@@ -74,8 +84,9 @@ function App() {
                   <Route path="/test-route" element={<SelectHighlightPopup />} />
                   <Route path="/*" element={<ResetTokenSent isOpen={true} email={'sfsdfsfs2@dseu.ac.in'} />} />
                 </Routes>
-                <FooterComp />
+                {/* <FooterComp /> */}
             </BrowserRouter>
+          </SocketContext.Provider>
 }
 
 export default App
