@@ -130,7 +130,7 @@ const Home = () => {
     
    <div className='flex flex-col'>
    <div className=' overflow-y-scroll' style={{ height: '780px' }} >
-    {postData ? <ShowPosts heading={`Our recent posts page ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
+    {postData ? <ShowPosts heading={`Our recent posts ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
 
    </div>
       <div className='w-full flex items-center justify-center gap-4 mb-4'> 

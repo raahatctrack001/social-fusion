@@ -10,7 +10,7 @@ const PostCard = ({ post }) => {
 
   const navigate = useNavigate();
   return (   
-      <div className=' w-full flex flex-col p-2 rounded-lg object-contain cursor-pointer ' onClick={()=>navigate(`/posts/post/${post?._id}`)} >
+      <div className=' w-full flex border flex-col p-2 rounded-lg object-contain cursor-pointer ' onClick={()=>navigate(`/posts/post/${post?._id}`)} >
         {/* <div className='flex justify-between'>
           <Link className='flex items-center gap-2'>
             <img className='h-8 rounded-full' src={author?.profilePic } alt="" />

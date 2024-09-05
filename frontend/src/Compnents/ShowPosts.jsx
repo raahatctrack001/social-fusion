@@ -71,52 +71,91 @@ const ShowPosts = ({heading, postData}) => {
 
     
   return (
-    <div>
-        <div className='flex-3/4 flex flex-col m-2 px-2 mb-14'>
-        <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> {heading} </h1>
-        <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5  p-2 ml-20">
-        {postData?.length ? postData.map((post, index) => ( //handle the edge case if there's not post
-              <div className=' shadow-2xl dark:hover:shadow-white border hover:shadow-black rounded-xl w-full md:max-w-96 h-full' key={index} >
-                {/* <AuthorCard author={post?.author} /> */}
-                {share && <SharePopup postUrl={`${window.location.href}posts/post/${postToShare?._id}`} onClose={setShare}/>}
-                <div className='flex justify-between hover:dark:bg-gray-700 hover:bg-gray-100 p-2 rounded-lg '>
-                  <div 
-                  onClick={
-                    ()=>{
-                      navigate(`authors/author/${post?.author?._id}`)
-                      }
-                    } className='flex items-center gap-2 cursor-pointer'>                      
-                    <img className='h-8 rounded-full' src={post?.author?.profilePic.at(-1) } alt="" />
-                    <p className='text-xs font-semibold'> {post?.author?.username } </p>
+    <div className="container mx-auto p-4">
+  <div className="flex flex-col mb-14">
+    <h1 className="text-center font-bold text-3xl tracking-widest py-4 mt-5"> 
+      {heading} 
+    </h1>
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-4">
+      {postData?.length ? postData.map((post, index) => (
+        <div className="shadow-lg dark:hover:shadow-white border border-gray-200 dark:border-gray-700 rounded-lg w-full hover:shadow-xl transition duration-300 ease-in-out" key={index}>
+          {share && (
+            <SharePopup 
+              postUrl={`${window.location.href}posts/post/${postToShare?._id}`} 
+              onClose={setShare} 
+            />
+          )}
+          <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-t-lg">
+            <div 
+              onClick={() => navigate(`authors/author/${post?.author?._id}`)} 
+              className="flex items-center gap-2 cursor-pointer">
+              <img className="h-10 w-10 rounded-full object-cover" src={post?.author?.profilePic?.at(-1)} alt={post?.author?.username} />
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100"> 
+                {post?.author?.username} 
+              </p>
+            </div>
+            {post?.author?._id !== currentUser?._id ? (
+              <button 
+                onClick={() => handleToggleFollowButtonClick(post?.author)}
+                className="border rounded-lg px-3 py-1 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 text-sm font-medium">
+                {currentUser?.followings?.includes(post?.author?._id) ? (
+                  <div className="flex gap-1 items-center">
+                    <HiUser className="text-lg" />
+                    <HiCheckCircle className="text-green-500 text-xs" />
                   </div>
+                ) : (
+                  <div className="flex items-center">
+                    <HiUser className="text-lg mr-1" />
+                    <HiPlusCircle className="text-blue-500 text-xs" />
+                  </div>
+                )}
+              </button>
+            ) : (
+              <button disabled className="text-gray-400 dark:text-gray-500">
+                <HiBadgeCheck />
+              </button>
+            )}
+          </div>
+          
+          <div className="relative group">
+            <div className="relative p-4 bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+              <PostCard post={post} />
+            </div>
+            <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-3 bg-gray-100 dark:bg-gray-700 rounded-b-lg">
+              <button 
+                onClick={() => handleShowLikers(post)} 
+                className="text-sm text-blue-500 dark:text-blue-300">
+                Likes {post?.likes?.length || 0}
+              </button>
+              <button 
+                disabled 
+                className="text-sm text-green-500 dark:text-green-300">
+                Comments {post?.comments?.length || 0}
+              </button>
+              <button 
+                onClick={() => { setPostToShare(post); setShare(true); }} 
+                className="text-sm text-red-500 dark:text-red-300">
+                Share {post?.shares?.length || 0}
+              </button>
+            </div>
+            {showLikers[post?._id] && (
+              <LikersPopup 
+                postId={post._id} 
+                isHovered={showLikers} 
+                setIsHovered={setShowLikers} 
+              />
+            )}
+          </div>
+        </div>
+      )) : (
+        <div className="flex justify-center items-center w-full">
+          <NotFoundPage />
+        </div>
+      )}
+    </div>
+  </div>
+</div>
 
-                {post?.author && post?.author?._id !== currentUser?._id ? 
-                (<button 
-                  onClick={()=>handleToggleFollowButtonClick(post?.author)}
-                  outline="true" className=' border rounded-lg px-4 hover:bg-gray-300 hover:dark:bg-gray-900'> 
-                                              {/* {author?.followers?.includes(currentUser?._id) ?  */}
-                                              {currentUser?.followings?.includes(post?.author?._id)?
-                                              ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  </div> ) : 
-                                              (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/>  </div>)}  
-                </button>) : 
-                
-                (<Button disabled> <HiBadgeCheck /> </Button>)}                  
-                
-                </div>
-                <div className="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
-                    <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
-                      <button onClick={()=>handleShowLikers(post)} className=" cursor-pointer text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
-                      <button disabled className="cursor-not-allowed text-green-500 dark:text-green-300">Comment { post?.comments?.length || 0}</button>
-                      <button onClick={()=>{setPostToShare(post), setShare(true)}} className=" text-red-500 dark:text-red-300">Share {post?.shares?.length || 0}</button>
-                    </div>
-                  {showLikers[post?._id] && <LikersPopup postId={postId} isHovered={showLikers} setIsHovered={setShowLikers} />}
-                  <PostCard post={post}  />
-                </div>
-              </div>
-          )) : <div className='w-full justify-center items-center'> <NotFoundPage /> </div>}
-      </div>
-    </div>
-    </div>
   )
 }
 
