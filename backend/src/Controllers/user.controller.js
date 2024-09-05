@@ -317,19 +317,7 @@ export const searchUsers = asyncHandler(async (req, res, next) => {
         .skip(startIndex)
         .limit(limit);
   
-        const totalUsers = await User.countDocuments();
-  
-        const now = new Date();
-  
-        const oneMonthAgo = new Date(
-            now.getFullYear(),
-            now.getMonth() - 1,
-            now.getDate()
-        );
-  
-        const lastMonthUsers = await User.countDocuments({
-            createdAt: { $gte: oneMonthAgo },
-        });
+        // const totalUs 
   
         res.status(200).json(new apiResponse(200, "users fetched", users));
     } catch (error) {

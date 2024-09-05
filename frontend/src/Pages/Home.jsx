@@ -6,19 +6,23 @@ import { shuffle } from 'lodash'
 import { testPosts } from '../dataSeeders/post50'
 import { apiEndPoints } from '../apiEndPoints/api.addresses'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button } from 'flowbite-react'
-import { HiBadgeCheck, HiCheckCircle, HiPlusCircle, HiUser, HiUserAdd, HiUserRemove } from 'react-icons/hi'
+import { Button, TextInput } from 'flowbite-react'
+import { HiBadgeCheck, HiCheckCircle, HiPlusCircle, HiSearch, HiUser, HiUserAdd, HiUserRemove } from 'react-icons/hi'
 import NotFoundPage from './NotFoundPage'
 import { useDispatch, useSelector } from 'react-redux'
 import ShowPosts from '../Compnents/ShowPosts'
 import { updateSuccess } from '../redux/slices/user.slice'
 import PageLoader from '../Compnents/PageLoader'
 import { current } from '@reduxjs/toolkit'
+import { HiServerStack } from 'react-icons/hi2'
 
 const Home = () => {
   const { currentUser } = useSelector(state=>state.user)
-  const [postData, setPostData] = useState();
-  const [users, setUsers] = useState(); 
+  const [postData, setPostData] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [searchedUsers, setSearchedUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [userFound, setUserFound] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPost, setTotalPost] = useState(0);
   const [totalUser, setTotalUser] = useState(0);
@@ -78,7 +82,7 @@ const Home = () => {
           setUsers(data.data?.safeUsers);
           const totalUser = data?.data?.totalUsers;
           setTotalUser(Math.floor(totalUser/10)+1);
-          window.scrollTo(0, 0);
+          // window.scrollTo(0, 0);
 
           // dispatch(updateSuccess(  ))
         })
@@ -89,7 +93,7 @@ const Home = () => {
     fetchUser();
     const interval = setInterval(() => {    
             fetchUser()
-          }, 100000);
+          }, 90000);
     return ()=>clearInterval(interval)
   }, [currentUserPage])
 
@@ -120,17 +124,44 @@ const Home = () => {
         //console.log(error);
     }
   }
+  useEffect(()=>{
+    if(searchTerm.trim() !== ''){
+      const timeout = setTimeout(() => {      
+        (async ()=>{
+          const response = await fetch(apiEndPoints.searchUsersAddress(searchTerm), {method: "POST"});
+          const data = await response.json();
+
+          if(!response.ok){
+            throw new Error(data.message || "Network response wasn't ok while searching user...")
+          }
+
+          if(data.success){
+            setSearchedUsers(data.data)
+            setUserFound(true)
+          }
+        })()
+      }, 1000);
+      return ()=>clearTimeout(timeout)
+    }
+    else{
+      setSearchedUsers([]);
+      setUserFound(false)
+    }
+      
+  }, [searchTerm])
   if(!postData){
     return <PageLoader />
   }
+  // console.log(searchedUsers);
   // console.log("tatalpsots", totalPost)
   // console.log('totalUsers', totalUser)
+  const mapperList = searchedUsers.length > 0 ? searchedUsers : users;
   return (
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     
    <div className='flex flex-col'>
    <div className=' overflow-y-scroll' style={{ height: '780px' }} >
-    {postData ? <ShowPosts heading={`Our recent posts page ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
+    {postData ? <ShowPosts heading={`Our recent posts ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
 
    </div>
       <div className='w-full flex items-center justify-center gap-4 mb-4'> 
@@ -159,25 +190,30 @@ const Home = () => {
       </div>
    </div>
 
-   <div className="m-4 p-4 border rounded-lg shadow-lg bg-white dark:bg-gray-800">
-  <h1 className="text-center font-bold text-3xl tracking-wide py-4 mt-2 text-gray-800 dark:text-gray-200">
-    Our Authors ({currentUserPage}/{totalUser})
+    <div className="mt-1 p-2 border rounded-lg shadow-lg bg-white dark:bg-gray-800">
+  <h1 className="text-center font-bold text-3xl tracking-wide text-gray-800 dark:text-gray-200 mb-1">
+    Users ({currentUserPage}/{totalUser})
+    {searchTerm?.length > 0 && searchedUsers.length === 0 && (
+  <p> {searchTerm.length > 0 && !userFound ? <p className='text-green-500'> searching... </p> : <p className='text-red-500'> user not found </p>} </p>
+)}
+
   </h1>
+  <TextInput  
+      className='mb-2'
+      icon={HiSearch} 
+      placeholder='searc user...'
+      onChange={(e)=>setSearchTerm(e.target.value)}
+      />
   
-  <div className="flex flex-col gap-4 overflow-y-scroll bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow-inner" style={{ height: '700px' }}>
-    {users ? users.map((author, index) => (
+  <div className="flex flex-col gap-4 overflow-y-scroll bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow-inner" style={{ height: '650px' }}>
+    {mapperList?.length > 0 ? mapperList.map((author, index) => (
       <div 
+        onClick={()=>navigate(`/authors/author/${author?._id}`)}
         className="flex justify-between items-center gap-4 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300 p-4 rounded-lg cursor-pointer"
         key={index}>
         
         {/* Author Info */}
-        <div onClick={() => navigate(`/authors/author/${author?._id}`)} className="flex items-center gap-4 cursor-pointer">
-          <img className="h-12 w-12 rounded-full object-cover" src={author?.profilePic?.at(-1)} alt="" />
-          <div>
-            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">{author?.username}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">View Profile</p>
-          </div>
-        </div>
+        <AuthorCard author={author}/>
 
         {/* Follow/Unfollow Button */}
         {author?._id !== currentUser?._id ? 
