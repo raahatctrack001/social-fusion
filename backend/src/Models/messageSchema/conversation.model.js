@@ -10,7 +10,7 @@ const conversationSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    p: [{
+    participants: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],

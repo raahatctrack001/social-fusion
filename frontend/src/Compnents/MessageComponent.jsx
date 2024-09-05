@@ -133,9 +133,9 @@ const MessageComponent = () => {
         }
     }
 
-    if(conversations.length === 0){
-        return <div> No active conversation </div>
-    }
+    // if(conversations.length === 0){
+    //     return <div> No active conversation </div>
+    // }
     return (
     <div className='flex w-full h-[825px]'>
         {createConversationLoading && <LoaderPopup loading={createConversationLoading} setLoading={setCreateConversationLoading} info={"creating/opening conversation please wait!"} />}

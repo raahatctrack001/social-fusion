@@ -287,7 +287,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
               <div onClick={()=>setShowDP(!showDP)} className="relative bottom-1 right-1 cursor-pointer"> <HiXCircle className="text-red-700 text-lg"/> </div>
             </div>
             <div className='max-w-lg'>
-              <img className='rounded-lg' src={author?.profilePic} alt="" />
+              <img className='rounded-lg' src={author?.profilePic.at(-1)} alt="" />
             </div>
           </div>
         </div>

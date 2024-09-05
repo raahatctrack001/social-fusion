@@ -74,7 +74,7 @@ function App() {
                   <Route path="/test-route" element={<SelectHighlightPopup />} />
                   <Route path="/*" element={<ResetTokenSent isOpen={true} email={'sfsdfsfs2@dseu.ac.in'} />} />
                 </Routes>
-                <FooterComp />
+                {/* <FooterComp /> */}
           </BrowserRouter>
           
 }

@@ -53,20 +53,21 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
         }
     }
 
-    // useEffect(() => {
-    //     if (!conversation || !currentUser) return;
+  
+    useEffect(() => {
+        if (!conversation || !currentUser) return;
     
-    //     const interval = setInterval(() => {
-    //       const participants = conversation.participants;
-    //       const receiverId = currentUser._id === participants[0]?._id ? participants[1]?._id : participants[0]?._id;
-    //       getMesages(currentUser._id, receiverId, conversationId);
-    //       console.log("Interval triggered"); // Logging for debugging
-    //     }, 1000);
+        const interval = setInterval(() => {
+          const participants = conversation.participants;
+          const receiverId = currentUser._id === participants[0]?._id ? participants[1]?._id : participants[0]?._id;
+          getMesages(currentUser._id, receiverId, conversationId);
+          console.log("Interval triggered"); // Logging for debugging
+        }, 1000);
     
-    //     // Cleanup the interval on component unmount or dependency change
-    //     return () => clearInterval(interval);
+        // Cleanup the interval on component unmount or dependency change
+        return () => clearInterval(interval);
     
-    //   }, [conversation, currentUser]);
+      }, [conversation, currentUser]);
     
   
     //    setInterval(() => {
@@ -146,9 +147,9 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
 
        
 
-    if(!conversation){
-    return <div className='w-full grid place-items-center'> <PageLoader /> </div>
-    }
+    // if(!conversation){
+    // return <div className='w-full grid place-items-center'> <PageLoader /> </div>
+    // }
     // console.log(messageContent)
     // console.log("Message to display: ", messageToDisplay)
     // console.log("current conversation id", conversation)
