@@ -130,7 +130,7 @@ const Home = () => {
     
    <div className='flex flex-col'>
    <div className=' overflow-y-scroll' style={{ height: '780px' }} >
-    {postData ? <ShowPosts heading={`Our recent posts ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
+    {postData ? <ShowPosts heading={`Our recent posts page ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
 
    </div>
       <div className='w-full flex items-center justify-center gap-4 mb-4'> 
@@ -159,65 +159,92 @@ const Home = () => {
       </div>
    </div>
 
-    <div className='flex-1/4 m-2 px-2 mx-2'>
-      <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors ({currentUserPage}/{totalUser}) </h1>
-      <div className="flex flex-col bg-gray-100 dark:bg-gray-900 gap-3  overflow-y-scroll" style={{ height: '700px' }}  >
-      {users ? users.map((author, index) => (
-            <div 
-              className='flex justify-between items-center gap-2 border-2 shadow-2xl hover:shadow-white hover:shadow-sm-light border-gray-500 p-1 rounded-xl min-w-64 max-w-80 cursor-pointer'
-             key={index} >
-              <div onClick={() => navigate(`/authors/author/${author?._id}`)}>
-              <AuthorCard author={author}  />
-              </div>
-
-              {author?._id !== currentUser?._id ? 
-                (<Button 
-                  onClick={()=>handleToggleFollowButtonClick(author)}
-                  outline className='bg-gray-800 '> 
-                                              {/* {author?.followers?.includes(currentUser?._id) ?  */}
-                                              {currentUser?.followings?.includes(author?._id)?
-                                              ( <div className='flex gap-1 items-center relative'> <HiUser className='text-lg'/> <HiCheckCircle className='relative bottom-1 right-2 text-xs' />  Following</div> ) : 
-                                              (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
-                </Button>) : 
-                
-                (<Button disabled> You </Button>)}
-                
-              {/* <Button
-                onClick={()=>handleToggleFollowButtonClick(author)} 
-                outline className='bg-gray-800 '> 
-                <span className='flex justify-center items-center'> <HiUserAdd /> </span>
-                <span className='hidden md:inline'> Follow </span>
-              </Button> */}
-             
-            </div>
-        )) : <div> No Users! Be the first to sign in </div>}
-      </div>        
-        <div className='w-full flex justify-center items-center gap-1 '> 
-          <Button disabled={currentUserPage === 1} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage-1)}> prev </Button>
-           { currentUserPage-3 >0 && <div className='flex justify-center items-center gap-1 cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(1)}>
-              <span> 1 </span>
-              <span> . </span>
-              <span> . </span>
-              <span> . </span>
-            </div>}
-            <div> 
-              <span className='cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(currentUserPage-2)}> {currentUserPage-2 > 0 && currentUserPage-2}</span> 
-              <span className='cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(currentUserPage-1)}> {currentUserPage-1 > 0 && currentUserPage-1}</span> 
-            </div>
-            <div className=' w-12 flex justify-center items-center font-bold bg-gray-700 text-white rounded-lg py-1'> {currentUserPage} </div>
-            <div> 
-              <span className='cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(currentUserPage+1)}>{currentUserPage+1 <= totalUser && currentUserPage+1} </span>
-              <span className='cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(currentUserPage+2)}>{currentUserPage+2 <= totalUser && currentUserPage+2} </span>
-            </div>
-            {currentUserPage+3 <= totalUser && <div className='flex justify-center items-center gap-1 cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(totalUser)}>
-              <span> . </span>
-              <span> . </span>
-              <span> . </span>
-              <span> {totalUser} </span>
-            </div>}
-          <Button disabled={currentUserPage === totalUser} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage+1)}> Next </Button>
+   <div className="m-4 p-4 border rounded-lg shadow-lg bg-white dark:bg-gray-800">
+  <h1 className="text-center font-bold text-3xl tracking-wide py-4 mt-2 text-gray-800 dark:text-gray-200">
+    Our Authors ({currentUserPage}/{totalUser})
+  </h1>
+  
+  <div className="flex flex-col gap-4 overflow-y-scroll bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow-inner" style={{ height: '700px' }}>
+    {users ? users.map((author, index) => (
+      <div 
+        className="flex justify-between items-center gap-4 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300 p-4 rounded-lg cursor-pointer"
+        key={index}>
+        
+        {/* Author Info */}
+        <div onClick={() => navigate(`/authors/author/${author?._id}`)} className="flex items-center gap-4 cursor-pointer">
+          <img className="h-12 w-12 rounded-full object-cover" src={author?.profilePic?.at(-1)} alt="" />
+          <div>
+            <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">{author?.username}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">View Profile</p>
+          </div>
         </div>
-    </div>   
+
+        {/* Follow/Unfollow Button */}
+        {author?._id !== currentUser?._id ? 
+          (<Button 
+            onClick={() => handleToggleFollowButtonClick(author)}
+            className={`px-4 py-2 rounded-lg ${currentUser?.followings?.includes(author?._id) ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'} transition-colors duration-300`}>
+            {currentUser?.followings?.includes(author?._id) ? 'Following' : 'Follow'}
+          </Button>) :
+          (<Button disabled className="px-4 py-2 bg-gray-500 text-white rounded-lg">You</Button>)
+        }
+      </div>
+    )) : <div>No Users! Be the first to sign in.</div>}
+  </div>
+
+  {/* Pagination */}
+  <div className="flex justify-center items-center gap-2 mt-4">
+    <Button disabled={currentUserPage === 1} onClick={() => setCurrentUserPage(prev => prev - 1)} className="px-3 py-2 bg-gray-700 text-white rounded-md">Prev</Button>
+
+    {/* Pagination numbers */}
+    {currentUserPage - 3 > 0 && (
+      <div className="flex items-center cursor-pointer" onClick={() => setCurrentUserPage(1)}>
+        <span>1</span>
+        <span className="mx-1">...</span>
+      </div>
+    )}
+
+    <div className="flex gap-1">
+      {currentUserPage - 2 > 0 && (
+        <span className="cursor-pointer hover:bg-gray-300 rounded-md px-2" onClick={() => setCurrentUserPage(currentUserPage - 2)}>
+          {currentUserPage - 2}
+        </span>
+      )}
+      {currentUserPage - 1 > 0 && (
+        <span className="cursor-pointer hover:bg-gray-300 rounded-md px-2" onClick={() => setCurrentUserPage(currentUserPage - 1)}>
+          {currentUserPage - 1}
+        </span>
+      )}
+    </div>
+
+    <div className="font-bold text-white bg-blue-600 px-3 py-1 rounded-lg">
+      {currentUserPage}
+    </div>
+
+    <div className="flex gap-1">
+      {currentUserPage + 1 <= totalUser && (
+        <span className="cursor-pointer hover:bg-gray-300 rounded-md px-2" onClick={() => setCurrentUserPage(currentUserPage + 1)}>
+          {currentUserPage + 1}
+        </span>
+      )}
+      {currentUserPage + 2 <= totalUser && (
+        <span className="cursor-pointer hover:bg-gray-300 rounded-md px-2" onClick={() => setCurrentUserPage(currentUserPage + 2)}>
+          {currentUserPage + 2}
+        </span>
+      )}
+    </div>
+
+    {currentUserPage + 3 <= totalUser && (
+      <div className="flex items-center cursor-pointer" onClick={() => setCurrentUserPage(totalUser)}>
+        <span className="mx-1">...</span>
+        <span>{totalUser}</span>
+      </div>
+    )}
+
+    <Button disabled={currentUserPage === totalUser} onClick={() => setCurrentUserPage(prev => prev + 1)} className="px-3 py-2 bg-gray-700 text-white rounded-md">Next</Button>
+  </div>
+</div>
+  
   </div>
   )
 }
