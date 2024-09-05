@@ -30,34 +30,34 @@ export default function Header() {
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   // console.log(currentUser)
   const dispatch = useDispatch();
-  // useEffect(()=>{
-  //    try {
-  //     const heartBeat = async ()=>{
-  //       const formData = new FormData();
-  //       formData.append("status", window.navigator.onLine);
-  //       const response = await fetch(apiEndPoints.toggleOnlineStatusAddress(currentUser?._id), {method: "PATCH", body: formData});
-  //       const data = await response.json();
-  //       console.log(data);
-  //       if(data.success){
-  //         // alert(data.success)
-  //         console.log(data)
-  //         console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
-  //         dispatch(updateSuccess(data?.data))
-  //         setIsOnline(data?.data?.isActive);
-  //       }
-  //     }
-  //       heartBeat();
-  //       const interval = setInterval(() => {
-  //         heartBeat();
-  //       }, 90000);
+  useEffect(()=>{
+     try {
+      const heartBeat = async ()=>{
+        const formData = new FormData();
+        formData.append("status", window.navigator.onLine);
+        const response = await fetch(apiEndPoints.toggleOnlineStatusAddress(currentUser?._id), {method: "PATCH", body: formData});
+        const data = await response.json();
+        // console.log(data);
+        if(data.success){
+          // alert(data.success)
+          // console.log(data)
+          console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
+          dispatch(updateSuccess(data?.data))
+          setIsOnline(data?.data?.isActive);
+        }
+      }
+        heartBeat();
+        const interval = setInterval(() => {
+          heartBeat();
+        }, 90000);
 
-  //       return ()=>clearInterval(interval)
-  //    } catch (error) {
-  //     console.log(error)
-  //    }
-  // }, [])
+        return ()=>clearInterval(interval)
+     } catch (error) {
+      console.log(error)
+     }
+  }, [])
   
-  // console.log(isOnline)
+  console.log(isOnline)
   
   const handleSignOut = async()=>{
     try {
@@ -181,7 +181,7 @@ export default function Header() {
                    <span className="block truncate text-sm font-medium">{currentUser.email}</span>
                   </Link>
                </Dropdown.Header>
-               <div onClick={()=>dispatch(toggleTheme())} className="flex justify-start items-center gap-2 pl-4 cursor-pointer hover:bg-gray-500 h-9 hover-text-white"> {theme === 'dark' ? <HiSun /> : <HiMoon /> } toggle theme </div>
+               <div onClick={()=>dispatch(toggleTheme())} className="flex justify-start items-center gap-2 pl-4 cursor-pointer hover:bg-gray-500 h-9 hover-text-white sm:hidden"> {theme === 'dark' ? <HiSun /> : <HiMoon /> } toggle theme </div>
                <Dropdown.Item href="/dashboard?tab=home" icon={HiViewGrid}>Dashboard</Dropdown.Item>
                <Dropdown.Item href="/chatroom?tab=chat" icon={HiChatBubbleBottomCenterText}>Chat Room</Dropdown.Item>
 

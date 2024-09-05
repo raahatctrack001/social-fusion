@@ -152,6 +152,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 
         // console.log(currentUser);
         currentUser.isActive = false;
+        currentUser.lastActive = new Date();
         await currentUser.save();
         // Clear cookies and respond
         return res

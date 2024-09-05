@@ -129,7 +129,7 @@ const Home = () => {
   <div className='flex flex-nowrap gap-4 flex-col md:flex-row mx-2 px-4 white justify-center'>
     
    <div className='flex flex-col'>
-   <div className=' overflow-y-scroll' style={{ height: '700px' }} >
+   <div className=' overflow-y-scroll' style={{ height: '780px' }} >
     {postData ? <ShowPosts heading={`Our recent posts page ${currentPage}/${totalPost}`} postData={postData} /> : <NotFoundPage /> }
 
    </div>
@@ -161,8 +161,8 @@ const Home = () => {
 
     <div className='flex-1/4 m-2 px-2 mx-2'>
       <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> Our Authors ({currentUserPage}/{totalUser}) </h1>
-      <div className="flex flex-col bg-gray-100 dark:bg-gray-900 gap-3  overflow-y-scroll" style={{ height: '600px' }}  >
-      {users && users.map((author, index) => (
+      <div className="flex flex-col bg-gray-100 dark:bg-gray-900 gap-3  overflow-y-scroll" style={{ height: '700px' }}  >
+      {users ? users.map((author, index) => (
             <div 
               className='flex justify-between items-center gap-2 border-2 shadow-2xl hover:shadow-white hover:shadow-sm-light border-gray-500 p-1 rounded-xl min-w-64 max-w-80 cursor-pointer'
              key={index} >
@@ -190,7 +190,7 @@ const Home = () => {
               </Button> */}
              
             </div>
-        ))}
+        )) : <div> No Users! Be the first to sign in </div>}
       </div>        
         <div className='w-full flex justify-center items-center gap-1 '> 
           <Button disabled={currentUserPage === 1} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage-1)}> prev </Button>

@@ -74,7 +74,7 @@ const ShowPosts = ({heading, postData}) => {
     <div>
         <div className='flex-3/4 flex flex-col m-2 px-2 mb-14'>
         <h1 className='flex justify-center items-center font-bold text-2xl tracking-widest py-2 mt-5'> {heading} </h1>
-        <div className="flex flex-col  justify-center items-center md:grid lg:grid-cols-2 xl:grid-cols-3 gap-5  p-2">
+        <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5  p-2 ml-20">
         {postData?.length ? postData.map((post, index) => ( //handle the edge case if there's not post
               <div className=' shadow-2xl dark:hover:shadow-white border hover:shadow-black rounded-xl w-full md:max-w-96 h-full' key={index} >
                 {/* <AuthorCard author={post?.author} /> */}

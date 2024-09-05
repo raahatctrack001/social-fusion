@@ -356,7 +356,7 @@ const markUsersOffline = async () => {
         { $set: { isActive: false } }
       );
   
-      console.log('Update result:', result);
+    //   console.log('Update result:', result);
       console.log(`${result.nModified || result.modifiedCount} users marked as offline.`);
     } catch (error) {
       console.error('Error marking users as offline:', error);

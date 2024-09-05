@@ -25,6 +25,7 @@ export  const apiEndPoints = {
     
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
+    getPostOfUserAddress: (userId)=>`/api/v1/posts/user-posts/${userId}`,
     searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,
     getPostsAddress : (currentPage)=> `/api/v1/posts/get-posts/${currentPage}`,
     deletePostAddress : (postId)=> `/api/v1/posts/delete-post/${postId}`,

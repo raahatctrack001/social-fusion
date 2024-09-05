@@ -60,9 +60,9 @@ const postSchema = new mongoose.Schema({
           type: String,
       }
     }],
-    updatedAt: {
-        type: Date,
-        default: Date.now
+    status: {
+        type: String, 
+        enum: ["Draft", "Published"]
     }
 
 },

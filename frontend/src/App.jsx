@@ -43,14 +43,9 @@ import { useEffect } from "react"
 import SocketContext from "./Context/SocketContext"
 
 function App() {
-  // console.log("META", import.meta.env);
-  const socket = io(import.meta.env.VITE_BACKEND_API_URL)
-  socket.on("connect", ()=>{ //each browser will have their own unique socket id
-    console.log(`socket connection has been established with socket id: ${socket.id}`);
-  })
+ 
   
-  return  <SocketContext.Provider value={socket} >
-            <BrowserRouter>
+  return  <BrowserRouter>
               <Header />
                 <Routes>
 
@@ -84,9 +79,9 @@ function App() {
                   <Route path="/test-route" element={<SelectHighlightPopup />} />
                   <Route path="/*" element={<ResetTokenSent isOpen={true} email={'sfsdfsfs2@dseu.ac.in'} />} />
                 </Routes>
-                {/* <FooterComp /> */}
-            </BrowserRouter>
-          </SocketContext.Provider>
+                <FooterComp />
+          </BrowserRouter>
+          
 }
 
 export default App

@@ -48,10 +48,8 @@ const FeaturesPage = () => {
     'Voice and video calls (individual and group).',
     'Live streaming and video uploads (short and long videos).',
     'Filters and snaps.',
-    'Story reactions and quick replies.',
     'Event creation and management.',
     'In-app notifications for likes, comments, and follows.',
-    'Dark and light mode with theme customization.',
     'Integration with third-party apps and services.',
   ];
 

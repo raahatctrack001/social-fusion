@@ -119,7 +119,9 @@ const DashHome = () => {
 
         {/* Content Area */}
         <main className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">Dashboard Overview</h2>
+          <h2 className="text-2xl font-semibold mb-4">Dashboard Overview 
+            {/* <Alert color={'warning'} className='font-bold text-xl md:hidden fixed top-16 z-10 w-full flex justify-center items-center'> consider larger screen for dashboard analysis </Alert> */}
+          </h2>
 
           {/* Key Metrics */}
           <div className="flex flex-col gap-4 mb-8">
@@ -158,16 +160,16 @@ const DashHome = () => {
                 </Table.Head>
                 <Table.Body>
                   {postData?.length > 0 && postData.map((post, index) => (
-                    <Table.Row key={index}>
+                    currentUser?._id === post?.author?._id && <Table.Row key={index}>
                       <Table.Cell><div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
-                      <Table.Cell> {post?.author ? <div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "Author" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
+                      <Table.Cell> {post?.author ? <div className='cursor-pointer font-bold text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "You" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
                       <Table.Cell>{post.category}</Table.Cell>
                       <Table.Cell>Published</Table.Cell>
                       <Table.Cell>
-                        {currentUser?._id === post?.author?._id ? <div className='flex gap-1'>
+                        <div className='flex gap-1'>
                           <Button onClick={()=>handleUpdatePostClick(post)} color={'warning'} size="xs">Edit</Button>
                           <Button onClick={()=>handleDeletePost(post)} color={'failure'} size="xs">Delete</Button>
-                        </div> : <Button disabled color={'failure'}> N/A </Button>}
+                        </div>
                       </Table.Cell>
                     </Table.Row>
                   ))}

@@ -5,14 +5,14 @@ import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useNavigate } from 'react-router-dom';
 
 const DashPosts = () => {
-    const [postData, setPostData] = useState(null);
+    const [postData, setPostData] = useState([]);
     const { currentUser } = useSelector(state=>state.user);
     const navigate = useNavigate();
 
     useEffect(()=>{
         (async()=>{
             try {
-                const response = await fetch(apiEndPoints.getUserAddress(currentUser?._id));
+                const response = await fetch(apiEndPoints.getPostOfUserAddress(currentUser?._id));
                 
                 const data = await response.json();
                 console.log("response", response);
@@ -21,7 +21,7 @@ const DashPosts = () => {
                     throw new Error(response.message || "network response is not ok")
                 }
                 if(data.success){
-                    setPostData(data?.data?.posts);
+                    setPostData(data?.data);
                 }
 
             } catch (error) {

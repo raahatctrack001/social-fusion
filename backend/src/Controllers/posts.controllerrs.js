@@ -162,6 +162,23 @@ export const getPost = asyncHandler(async (req, res, next)=>{
     }
 })
 
+export const getPostOfUser = asyncHandler(async (req, res, next)=>{
+    const { userId } = req.params;
+    try {
+        if(!userId){
+            throw new apiError(404, "userId is missing")
+        }
+
+        const posts = await Post.find({author: userId}).populate("author");
+        if(posts.length === 0){
+            throw new apiError(404, "no post found")
+        }
+
+        return res.status(200).json(new apiResponse(200, "posts of user is here!", posts));
+    } catch (error) {
+        next(error)
+    }
+})
 export const deletePost = asyncHandler(async (req, res, next)=>{
 
     try {

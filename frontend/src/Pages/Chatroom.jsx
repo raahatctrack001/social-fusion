@@ -28,58 +28,60 @@ const Chatroom = () => {
     }, [location.search]);
     console.log("tab", tab)    
     
-  return (
-    <div className='w-full dark:bg-gray-700 flex z-10'>
-        {/* left most part for icons and icon with term */}
-        <div className='hidden md:flex'>
-            <div className={`w-[50px] dark:bg-gray-800 pt-4 pl-2 h-[780px] flex flex-col items-start justify-between gap-5`}>            
-                <div className='flex flex-col gap-5'>
-                    <div onClick={()=>setOpenLeftMost(!openLeftMost)} className='flex items-center justify-start pl-1 cursor-pointer'>
-                        <HiBars3 className=' text-2xl rounded-lg hover:text-gray-400'/> 
-                    </div>
-                    <div onClick={()=>navigate("/chatroom/?tab=chat")} className='flex items-center justify-start pl-1 cursor-pointer'>
-                        <HiChatAlt className=' text-2xl rounded-lg hover:text-gray-400'/>
-                    </div>
-                    <div  onClick={()=>navigate("/chatroom?tab=calls")} className='flex items-center justify-start pl-1 cursor-pointer'>
-                        <HiPhone className=' text-2xl rounded-lg hover:text-gray-400'/>
-                    </div>
-                    <div onClick={()=>navigate("/chatroom?tab=stories")} className='flex items-center justify-start pl-1 cursor-pointer'>
-                        <HiStatusOnline className=' text-2xl rounded-lg hover:text-gray-400'/>
-                    </div>
-                </div>
-                <div className='flex items-center justify-start pl-1 cursor-pointer pb-2'>
-                    <HiCog className=' text-2xl rounded-lg hover:text-3xl'/>
-                </div>
-            </div>
-            {openLeftMost && <div className={`w-[100px] dark:bg-gray-800 pt-4 pl-2 h-[825px] flex flex-col items-start justify-between gap-5`}>            
-                <div className='flex flex-col gap-5'>
-                    <div className='flex items-center justify-start pl-1 cursor-pointer'>
+  return ( <UnderDevelopment />)}
+  export default Chatroom;
+
+//     <div className='w-full dark:bg-gray-700 flex z-10'>
+//         {/* left most part for icons and icon with term */}
+//         <div className='hidden md:flex'>
+//             <div className={`w-[50px] dark:bg-gray-800 pt-4 pl-2 h-[780px] flex flex-col items-start justify-between gap-5`}>            
+//                 <div className='flex flex-col gap-5'>
+//                     <div onClick={()=>setOpenLeftMost(!openLeftMost)} className='flex items-center justify-start pl-1 cursor-pointer'>
+//                         <HiBars3 className=' text-2xl rounded-lg hover:text-gray-400'/> 
+//                     </div>
+//                     <div onClick={()=>navigate("/chatroom/?tab=chat")} className='flex items-center justify-start pl-1 cursor-pointer'>
+//                         <HiChatAlt className=' text-2xl rounded-lg hover:text-gray-400'/>
+//                     </div>
+//                     <div  onClick={()=>navigate("/chatroom?tab=calls")} className='flex items-center justify-start pl-1 cursor-pointer'>
+//                         <HiPhone className=' text-2xl rounded-lg hover:text-gray-400'/>
+//                     </div>
+//                     <div onClick={()=>navigate("/chatroom?tab=stories")} className='flex items-center justify-start pl-1 cursor-pointer'>
+//                         <HiStatusOnline className=' text-2xl rounded-lg hover:text-gray-400'/>
+//                     </div>
+//                 </div>
+//                 <div className='flex items-center justify-start pl-1 cursor-pointer pb-2'>
+//                     <HiCog className=' text-2xl rounded-lg hover:text-3xl'/>
+//                 </div>
+//             </div>
+//             {openLeftMost && <div className={`w-[100px] dark:bg-gray-800 pt-4 pl-2 h-[825px] flex flex-col items-start justify-between gap-5`}>            
+//                 <div className='flex flex-col gap-5'>
+//                     <div className='flex items-center justify-start pl-1 cursor-pointer'>
                          
-                    </div>
-                    <div onClick={()=>navigate("/chatroom/?tab=chat")} className='flex items-center justify-start pl-1 cursor-pointer pt-6'>
-                        Chat
-                    </div>
-                    <div onClick={()=>navigate("/chatroom?tab=calls")}  className='flex items-center justify-start pl-1 cursor-pointer'>
-                        Call
-                    </div>
-                    <div onClick={()=>navigate("/chatroom?tab=stories")} className='flex items-center justify-start pl-1 cursor-pointer'>
-                        Status
-                    </div>
-                </div>
-                <div className='flex items-center justify-start pl-1 cursor-pointer pb-2'>
-                    Settings
-                </div>
-            </div>}            
-        </div>
-        <div className='w-full h-[600px]'>
-            {tab === 'chat' && <MessageComponent />}
-            {tab === 'calls' && <UnderDevelopment />}
-            {tab === 'stories' && <UnderDevelopment />}
-        </div>
+//                     </div>
+//                     <div onClick={()=>navigate("/chatroom/?tab=chat")} className='flex items-center justify-start pl-1 cursor-pointer pt-6'>
+//                         Chat
+//                     </div>
+//                     <div onClick={()=>navigate("/chatroom?tab=calls")}  className='flex items-center justify-start pl-1 cursor-pointer'>
+//                         Call
+//                     </div>
+//                     <div onClick={()=>navigate("/chatroom?tab=stories")} className='flex items-center justify-start pl-1 cursor-pointer'>
+//                         Status
+//                     </div>
+//                 </div>
+//                 <div className='flex items-center justify-start pl-1 cursor-pointer pb-2'>
+//                     Settings
+//                 </div>
+//             </div>}            
+//         </div>
+//         <div className='w-full h-[600px]'>
+//             {tab === 'chat' && <MessageComponent />}
+//             {tab === 'calls' && <UnderDevelopment />}
+//             {tab === 'stories' && <UnderDevelopment />}
+//         </div>
 
         
-    </div>
-  )
-}
+//     </div>
+//   )
+// }
 
-export default Chatroom
+// export default Chatroom

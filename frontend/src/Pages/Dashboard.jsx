@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Sidebar, Navbar, Dropdown, Button, Table } from 'flowbite-react';
+import { Sidebar, Navbar, Dropdown, Button, Table, Alert } from 'flowbite-react';
 import { apiEndPoints } from '../apiEndPoints/api.addresses';
 import { useSelector } from 'react-redux';
 import DisplayContent from '../Compnents/DisplayContent';
@@ -13,20 +13,24 @@ import DashPosts from '../Compnents/DashPosts';
 import DashSavedPosts from '../Compnents/DashSavedPosts';
 import DashCategorised from '../Compnents/DashCategorised';
 import DashComments from '../Compnents/DashComments';
-import DashUsers from '../Compnents/DashUsers';
+import DashUsers from '../Compnents/DashAudience';
 import DashAnalytics from '../Compnents/DashAnalytics';
 import DashSettings from '../Compnents/DashSettings';
+import DashAudience from '../Compnents/DashAudience';
 // import { join } from 'path';
 
 const Dashboard = () => {
+
   const location = useLocation();   
   const [tab, setTab] = useState('');   
-    useEffect(() => {
+  
+  useEffect(() => {
       const urlParams = new URLSearchParams(location.search);
       const tabFromUrl = urlParams.get('tab');
       if (tabFromUrl) {
         setTab(tabFromUrl);
       }
+      window.scroll(0, 0)
     }, [location.search]);
 
     console.log("tab", tab)
@@ -40,6 +44,9 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
         <DashHeader />
+      <div className='flex flex-col w-full ml-10 justify-center items-center'>        
+        <Alert color={'warning'} className='font-bold text-xl md:hidden fixed top-16 z-10 w-full flex justify-start items-start'> consider larger screen for dashboard analysis </Alert>
+      </div>
 
         {/* Content Area */}
       {tab === 'home' && <DashHome />}
@@ -47,7 +54,7 @@ const Dashboard = () => {
       {tab === 'saved-posts' && <DashSavedPosts />} 
       {tab === 'categories' && <DashCategorised />}
       {tab === 'comments' && <DashComments />} 
-      {tab === 'users' && <DashUsers />} 
+      {tab === 'users' && <DashAudience />} 
       {tab === 'analytics' && <DashAnalytics />} 
       {tab === 'settings' && <DashSettings />} 
       </div>
