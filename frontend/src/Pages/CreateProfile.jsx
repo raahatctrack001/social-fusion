@@ -173,7 +173,7 @@ export default function CreateProfile() {
 
         <div className="flex items-center gap-2">
           <Checkbox id="agree" onChange={() => setAgree(agree ? false : true)} />
-          <Label htmlFor="agree" className="flex">
+          <Label htmlFor="agree" className="flex cursor-pointer">
             I agree with the&nbsp;
             <span onClick={() => navigate("/register/terms-and-conditions")} className="text-cyan-600 hover:underline dark:text-cyan-500">Terms and Conditions</span>
           </Label>
