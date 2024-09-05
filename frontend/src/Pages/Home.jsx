@@ -180,7 +180,7 @@ const Home = () => {
                                               (<div className='flex items-center justify-center'> <HiUser className='text-lg mr-1' /> <HiPlusCircle className='text-xs relative right-2 bottom-1'/> <span className=''> Follow </span> </div>)}  
                 </Button>) : 
                 
-                (<Button disabled> Owner </Button>)}
+                (<Button disabled> You </Button>)}
                 
               {/* <Button
                 onClick={()=>handleToggleFollowButtonClick(author)} 
@@ -194,7 +194,7 @@ const Home = () => {
       </div>        
         <div className='w-full flex justify-center items-center gap-1 '> 
           <Button disabled={currentUserPage === 1} onClick={()=>setCurrentUserPage(currentUserPage=>currentUserPage-1)}> prev </Button>
-           { currentUserPage-3 >0 && <div className='flex justify-center items-center gap-1 cursor-pointer hover:bg-gray-500 rounded-lg px-1 hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(1)}>
+           { currentUserPage-3 >0 && <div className='flex justify-center items-center gap-1 cursor-pointer hover:bg-gray-500 rounded-lg px-1' onClick={()=>setCurrentUserPage(1)}>
               <span> 1 </span>
               <span> . </span>
               <span> . </span>

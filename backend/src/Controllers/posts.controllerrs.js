@@ -6,10 +6,31 @@ import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../Utils/utils.cloudinary.js";
-
+// import postSeederData from '../Controllers/posts.js'
 export const createPost = asyncHandler(async (req, res, next)=>{
-        // console.log(req.body)
-        // return;
+    // try {
+    //     await Post.deleteMany({});
+    //     const postWithAuthor = postSeederData.forEach(async (post)=>{
+    //         const author = await User.find({email: post.author.email});
+    //         const newPost = await Post.create({
+    //             title: post.title,
+    //             content: post.content,
+    //             author: author[0]?._id,
+    //             thumbnail: post.thumbnail[0],
+    //             category: post.category,                
+    //         })
+
+    //         // console.log(newPost);
+    //     })
+
+    //     // You can now use postWithAuthor here
+    //     console.log(postSeederData);
+    // } catch (error) {
+    //     console.error(error);
+    // }
+    //     return
+        // const postsCreated = await Post.insertMany(postSeederData);
+        // console.log(postsCreated)
         if(!req.user){
             throw new apiError(401, "Unauthorized! please login")
         }
@@ -40,8 +61,8 @@ export const createPost = asyncHandler(async (req, res, next)=>{
                 if(!post){
                     throw new apiError(417, "Failed to upload the post!, plz try again")
                 }
-                post.thumbnail.push(req.body.thumbnail);
-                post.save();
+                // post.thumbnail.push(req.body.thumbnail);
+                // post.save();
                 User.findById(req.user?._id)
                     .then((user)=>{
                         if(!user){

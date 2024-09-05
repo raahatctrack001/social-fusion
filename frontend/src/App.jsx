@@ -38,34 +38,29 @@ import Chatroom from "./Pages/Chatroom"
 // import resetPassword from "./Compnents/ResetForgotPassword"
 import ResetForgotPassword from "./Compnents/ResetForgotPassword"
 import ResetTokenSent from "./Compnents/ResetPassword/ResetTokenSent"
-import { io } from 'socket.io-client'
-import { useEffect } from "react"
-import SocketContext from "./Context/SocketContext"
 
-function App() {
- 
-  
+
+function App() {  
   return  <BrowserRouter>
               <Header />
                 <Routes>
-
-                <Route element={<PrivateRoute />}>
-                  <Route path='/' element={<Home />} />
-                  <Route path="/authors/author/:authorId" element={<AuthorPage />} />
-                  <Route path="/edit-post/:postId" element={<EditPost />} />
-                  <Route path="/create-post" element={<CreatePost />} /> 
-                  <Route path="/edit-profile" element={<ProfileEditPage />} />  
-                  <Route path="/dashboard" element={<Dashboard />} />   
-                  <Route path="/reset-password/:authorId" element={<ResetPassword />} />
-                  <Route path="delete-account" element={<DeleteAccount />} />       
-                  <Route path="/search-posts" element={<SearchPostResult />} />
-                  <Route path="/projects" element={<UnderDevelopment />} />
-                  <Route path="/services" element={<FeaturesPage />} />
-                  <Route path="/contacts" element={<ContactPage />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/notifications" element={<UnderDevelopment />} />
-                  <Route path="/chatroom" element={<Chatroom />} />
-                </Route>
+                  <Route element={<PrivateRoute />}>
+                    <Route path='/' element={<Home />} />
+                    <Route path="/authors/author/:authorId" element={<AuthorPage />} />
+                    <Route path="/edit-post/:postId" element={<EditPost />} />
+                    <Route path="/create-post" element={<CreatePost />} /> 
+                    <Route path="/edit-profile" element={<ProfileEditPage />} />  
+                    <Route path="/dashboard" element={<Dashboard />} />   
+                    <Route path="/reset-password/:authorId" element={<ResetPassword />} />
+                    <Route path="delete-account" element={<DeleteAccount />} />       
+                    <Route path="/search-posts" element={<SearchPostResult />} />
+                    <Route path="/projects" element={<UnderDevelopment />} />
+                    <Route path="/services" element={<FeaturesPage />} />
+                    <Route path="/contacts" element={<ContactPage />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/notifications" element={<UnderDevelopment />} />
+                    <Route path="/chatroom" element={<Chatroom />} />
+                  </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
                   <Route path="/posts/post/:postId" element={<PostPage />} />

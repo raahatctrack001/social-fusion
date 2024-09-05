@@ -135,6 +135,10 @@ const userSchema = mongoose.Schema({
         type: Date,
         // default: Date.now()+30*60*1000,
         select: false,
+    }, 
+    aiGenerated: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 

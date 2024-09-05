@@ -22,6 +22,7 @@ import { kMaxLength } from "buffer";
 import { resetPasswordHTML } from "../EmailTemplates.js/reset.password.url.js";
 import { sendEmail } from "../Services/sendEmail.js";
 import crypto from 'crypto';
+import { users } from "../DataSeeders/author50.js";
 
 export const isAuthorised = asyncHandler(async (req, res, next)=>{
     console.log(req.user)
@@ -62,6 +63,19 @@ export const isEmailVerified = asyncHandler(async (req, res, next)=>{
 })
 
 export const registerUser = asyncHandler(async (req, res, next)=>{
+    // await User.deleteMany({})
+    // users.forEach(user=>user.password = bcryptjs.hashSync(user.password));
+    
+    // try {
+    //     const newUsers = await User.insertMany(users);
+    //     console.log(newUsers)
+    // } catch (error) {
+    //     next(error)
+    // }
+    // return;
+
+    
+
     const {username, email, password, repeatPassword, fullName} = req.body;
     if(password !== repeatPassword){
         throw new apiError (404, "Password and confirm password should be same!")
@@ -108,7 +122,7 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
 
 export const loginUser = asyncHandler(async (req, res, next) => {
     const { userEmail, password: pass} = req.body;
-    console.log(req.body)
+    // console.log(req.body)
     try {
         const query = uniqueIdValidator(userEmail);
         const user = await User.findOne(query).select("+password");

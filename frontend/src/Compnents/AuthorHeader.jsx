@@ -263,7 +263,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       setHighlightStoryLoading(false)
     }
   }
-
+  console.log(author)
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}
@@ -303,7 +303,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
               <HiPencil className='text-2xl text-gray-950 relative' 
             />
             </div>}
-            {currentUser?._id !== author?._id && <span onClick={()=>{setShowDP(!showDP)}} className='flex justify-start items-center absolute top-24 left-[105px] p-1 bg-red-500 rounded-lg cursor-pointer gap-1 text-nowrap'> <HiEye className='text-xl text-white' /> </span>}
+            {currentUser?._id !== author?._id && <span onClick={()=>{setShowDP(!showDP)}} className={`flex justify-start items-center absolute top-24 left-[105px] p-1 ${author?.isActive ? 'bg-green-500':'bg-red-500'} rounded-lg cursor-pointer gap-1 text-nowrap`}> 
+              <HiEye className='text-xl text-white' /> </span>}
             {showDropdown && <div className='pl-3 bg-gray-300 text-black dark:bg-gray-700 dark:text-white rounded-lg font-semibold items-center absolute top-28 left-16 z-10 px-5 text-nowrap'>
               <div className='flex justify-between'> 
                 <span></span> <HiX onClick={()=>setShowDropdown(false)} className='mr-2 mt-1 cursor-pointer' />
@@ -338,6 +339,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 <div className="flex flex-col justify-between w-full ">
                   <div className='flex justify-between'>
                     <div>
+                        {author?.aiGenerated && <p className='bg-red-500 text-white font-semi-bold rounded-lg flex justify-center px-2'> Test UserId: {author?._id.substring(0, 5)+"..."} </p>}
                         <h2 className="text-xl font-bold flex  ml-5 md:ml-10 justify-start">{author.fullName}</h2>
                         <p className="flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
                     </div>
@@ -425,7 +427,10 @@ const AuthorHeader = ({ author, setAuthor }) => {
             {author.bio && 
               <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>
-        <Alert disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full justify-center items-center'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
+        {
+          author?.lastActive && <Alert disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full justify-center items-center'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
+
+        }
       <div 
         className='w-full flex items-center overflow-x-scroll gap-3 pb-2 pl-2 h-40'>
   {/* Highlight creation button */}

@@ -211,6 +211,7 @@ console.log("postpage post", post)
       <div className='border-2 flex justify-center items-center text-xl py-3 font-semibold'>
         <div className='flex flex-col justify-center items-center gap-2'>
           {post.category}
+          {post?.aiGenerated && <p className='bg-red-500 text-white font-semibold flex justify-center rounded-lg px-2'> Test Post Id: {post?._id.substring(0,5)+"..."} </p>}
           {/* <div> */}
             {/* {post?.thumbnail && <img src={post?.thumbnail?.at(-1)} alt="" />} */}
             {/* <p> original_filename </p> */}
@@ -230,21 +231,21 @@ console.log("postpage post", post)
                 {showLikers[post?._id] && <LikersPopup postId={post?._id} isHovered={showLikers} setIsHovered={setShowLikers} />}
               <div onClick={handleLikePostClick}> 
                 {currentUser?.likedPosts?.includes(post?._id) ? 
-                <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-gray-800 hover:text-lg'/><span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} >  {likes||0}</span> </div>: 
-                <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg' /> <span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} > {likes||0} </span></div>}
+                <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-lg'/><span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} >  {likes||0}</span> </div>: 
+                <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-lg' /> <span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} > {likes||0} </span></div>}
               </div>
               
             
               {post?.enableComments ?
                 <div >
 
-                  <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/> 
+                  <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-lg'/> 
                                   
                 </div> :    
               
               <Button disabled className='h-10'> <HiOutlineBan /> </Button>} 
                 
-              <HiOutlineShare onClick={()=>setShowPopup(true)}  className='text-white-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>
+              <HiOutlineShare onClick={()=>setShowPopup(true)}  className='text-white-500 cursor-pointer hover:text-lg'/>
               {showPopup && (
                 <div className='w-full'>
                   <SharePopup postUrl={postUrl} onClose={() => setShowPopup(false)} />
@@ -254,7 +255,7 @@ console.log("postpage post", post)
           </div> 
           { currentUser?._id !== post?.author?._id && 
           <div onClick={handleSavePostClick}>
-            {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-gray-800 hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-gray-800 hover:text-lg'/>}
+            {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-lg'/>}
           </div>}
         </div>
         

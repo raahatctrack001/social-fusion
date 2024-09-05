@@ -112,6 +112,7 @@ export const getUsers = asyncHandler(async (req, res, next)=>{
         .skip((page-1)*10)
         .limit(10)
         .select("-password")
+        .sort({lastActive: -1})
         .then((users)=>{
             if(!users){
                 throw new apiError(404, "users doesn't exist")

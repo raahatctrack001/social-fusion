@@ -43,6 +43,7 @@ const postSchema = new mongoose.Schema({
     category: {
         type: String,
         required:true,
+        default: "Uncategorised"
     },
     imagesURLs: [{
         url: { 
@@ -62,8 +63,14 @@ const postSchema = new mongoose.Schema({
     }],
     status: {
         type: String, 
-        enum: ["Draft", "Published"]
+        enum: ["Draft", "Published"],
+        default: "Published"
+    },
+    aiGenerated: {
+        type: Boolean,
+        default: false,
     }
+
 
 },
 { timestamps: true })
