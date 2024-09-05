@@ -25,10 +25,10 @@ export default function Header() {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const path = useLocation().pathname;
-  // console.log(theme)
+  // //console.log(theme)
 
   const [showSearchPopup, setShowSearchPopup] = useState(false);
-  // console.log(currentUser)
+  // //console.log(currentUser)
   const dispatch = useDispatch();
   useEffect(()=>{
      try {
@@ -37,11 +37,11 @@ export default function Header() {
         formData.append("status", window.navigator.onLine);
         const response = await fetch(apiEndPoints.toggleOnlineStatusAddress(currentUser?._id), {method: "PATCH", body: formData});
         const data = await response.json();
-        // console.log(data);
+        // //console.log(data);
         if(data.success){
           // alert(data.success)
-          // console.log(data)
-          console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
+          // //console.log(data)
+          //console.log(formatDistanceToNow(new Date(data?.data?.lastActive), { addSuffix: true }))
           dispatch(updateSuccess(data?.data))
           setIsOnline(data?.data?.isActive);
         }
@@ -53,11 +53,11 @@ export default function Header() {
 
         return ()=>clearInterval(interval)
      } catch (error) {
-      console.log(error)
+      //console.log(error)
      }
   }, [])
   
-  console.log(isOnline)
+  //console.log(isOnline)
   
   const handleSignOut = async()=>{
     try {
@@ -66,15 +66,15 @@ export default function Header() {
       });
       const data = await response.json(); 
 
-      // console.log("response", response);
-      console.log("data", data);
+      // //console.log("response", response);
+      //console.log("data", data);
       // alert(data.message)  
       localStorage.removeItem("currentUser")
       dispatch(signoutSuccess())
       // navigate("/sign-in")
         
     } catch (error) {
-      console.log("error logging out!", error)
+      //console.log("error logging out!", error)
     }
   }
 
@@ -92,7 +92,7 @@ export default function Header() {
             }
         })
             .then((response)=>{
-                // console.log("response", response)
+                // //console.log("response", response)
                 // if(!response.ok){
                 //     alert(response.message);
                 // }
@@ -105,17 +105,17 @@ export default function Header() {
                 
             })}
     } catch (error) {   
-        console.log(error);
+        //console.log(error);
     }
 }, [searchTerm])
   
-  // console.log(searchTerm)
+  // //console.log(searchTerm)
   return (
     <div className="sticky top-0 z-50">
     {/* ///search popup starts here */}
     {showSearchPopup && (
         <div 
-            // onMouseLeave={()=>console.log("mouse left")}
+            // onMouseLeave={()=>//console.log("mouse left")}
             className="fixed inset-0 bg-opacity-50 z-20 flex items-start justify-center"
              >
           <div className= "bg-white dark:bg-gray-800 p-6 flex flex-col w-full max-w-lg rounded-lg border border-b-0 border-gray-800">

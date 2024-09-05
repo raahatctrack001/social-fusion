@@ -50,7 +50,7 @@ const Home = () => {
       })
       .then((data)=>{
         const fetchedData = data.data?.posts;
-        console.log("fetched post"); 
+        //console.log("fetched post"); 
         setPostData(fetchedData)
         const total = data?.data?.totalCount;
         setTotalPost(Math.floor(total/9+1))
@@ -73,7 +73,7 @@ const Home = () => {
           return users.json();
         })
         .then((data)=>{
-          console.log("fetched user")
+          //console.log("fetched user")
           // console.log(data);
           setUsers(data.data?.safeUsers);
           const totalUser = data?.data?.totalUsers;
@@ -109,7 +109,7 @@ const Home = () => {
         return response.json();
       })
       .then((data)=>{
-          console.log("toggle follow data", data);
+          //console.log("toggle follow data", data);
           if(data.success){
             dispatch(updateSuccess(data?.data?.follower))
           }
@@ -117,7 +117,7 @@ const Home = () => {
       })
     } catch (error) {
         alert(error.message);
-        console.log(error);
+        //console.log(error);
     }
   }
   if(!postData){

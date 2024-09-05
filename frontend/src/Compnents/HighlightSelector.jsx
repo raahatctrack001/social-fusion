@@ -24,8 +24,8 @@ const HighlightSelector = ({highlightName, stories, onClose, setHighlights }) =>
   };
 
   const onAddToHighlight = async ()=>{
-    //   console.log("stories selected are: ", selectedStories);
-    //   console.log("hightlights name chosen are: ", highlightName);
+    //   //console.log("stories selected are: ", selectedStories);
+    //   //console.log("hightlights name chosen are: ", highlightName);
       try {
         setError('')
         setLoading(true)
@@ -40,14 +40,14 @@ const HighlightSelector = ({highlightName, stories, onClose, setHighlights }) =>
         }
 
         if(data.success){
-            console.log("fromhighlightselector", data)
+            //console.log("fromhighlightselector", data)
             dispatch(updateSuccess(data?.data?.currentUser));
             setHighlights(prev => [...prev, data?.data?.newHighlight]);
             onClose(false)
           }
     } catch (error) {
         setError(error.message)
-        console.log(error)
+        //console.log(error)
     }   
     finally{
         setLoading(false)

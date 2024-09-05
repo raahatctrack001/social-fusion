@@ -27,7 +27,7 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose, heading })
   const videoRef = useRef();
   // const [showDropdown, setShowDropdown] = useState(false);
 
-  // console.log(stories)
+  // //console.log(stories)
   const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       setProgress(0);
@@ -78,7 +78,7 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose, heading })
   }, [handleNext, handlePrev]);
 
   useEffect(() => {
-    // console.log(videoRef.current);
+    // //console.log(videoRef.current);
     let timer;
     let progressInterval;
   
@@ -106,10 +106,10 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose, heading })
 
   // const handleDeleteHighlight = async (e)=>{
   //   e.stopPropagation();
-  //   console.log(highlight)
+  //   //console.log(highlight)
   //   try {
         
-  //       console.log("triggered or not")
+  //       //console.log("triggered or not")
   //       const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
   //       const data = await response.json();
 
@@ -118,13 +118,13 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose, heading })
   //       }
 
   //       if(data.success){
-  //         console.log(data)
+  //         //console.log(data)
 
           
   //         dispatch(updateSuccess(data?.data?.currentUser));
   //       }
   //     } catch (error) {
-  //     console.log(error);
+  //     //console.log(error);
   //   }
   // }
   
@@ -136,7 +136,7 @@ const StoryViewer = ({index, highlight, stories, setStories, onClose, heading })
         setCountDownTimer(60)
         const handleLoadedMetadata = () => {
             // Get the duration in seconds
-            // console.log(video.duration);
+            // //console.log(video.duration);
         };
 
         // Add event listener to update duration once metadata is loaded
@@ -165,11 +165,11 @@ const handleLikeButtonClick = async(e)=>{
 
     if(data.success){
       dispatch(updateSuccess(data?.data?.currentUser))
-      // console.log(data);
+      // //console.log(data);
     }    
   } catch (error) {
     alert(error.message)
-    // console.log(error)
+    // //console.log(error)
   }
   finally{
     setLoading(false)
@@ -177,11 +177,11 @@ const handleLikeButtonClick = async(e)=>{
 }
 const handleReplyButtonClick = async(e)=>{
   e.stopPropagation();
-  console.log("clickekd")
+  //console.log("clickekd")
 }
 const handleReportButtonClick = async(e)=>{
   e.stopPropagation();
-  console.log("clickekd")
+  //console.log("clickekd")
 }
 const handleDeleteStoryButtonClick = async(e)=>{
   e.stopPropagation();
@@ -203,10 +203,10 @@ const handleDeleteStoryButtonClick = async(e)=>{
         // setCountDownTimer(countDownTimer); // Reset the countdown timer to 5 seconds
         return (prevIndex + 1) % (stories.length-1);
       });      
-      // console.log(data);
+      // //console.log(data);
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
   finally{
     setDeleteLoading(false)
@@ -218,7 +218,7 @@ const handleAddToHighlightButtonClick = async(e, story)=>{
   setSelectHighlight(true);  
 }
 
-// console.log("highlights from story viewre", highlight)
+// //console.log("highlights from story viewre", highlight)
 if(stories.length === 0){
   return <h2 className=' p-2 rounded-lg  mb-3 text-white bg-gray-500 font-bold'> No Story Found!!!</h2>
 }

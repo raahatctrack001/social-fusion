@@ -76,8 +76,8 @@ const ProfileEditPage = () => {
       }
 
       const data = await response.json();
-      console.log(response);
-      console.log(data);
+      //console.log(response);
+      //console.log(data);
       if(data.success){
 
         dispatch(deleteUserSuccess());
@@ -88,7 +88,7 @@ const ProfileEditPage = () => {
     } catch (error) {
       setError(error.message)
       alert(error.message)
-      console.log(error);
+      //console.log(error);
     }
   }
   return (

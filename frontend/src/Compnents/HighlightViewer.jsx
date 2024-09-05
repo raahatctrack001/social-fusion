@@ -37,12 +37,12 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
 
         if(data.success){
           setMyHighlightStories(data?.data);
-          console.log("ny stories", myHighlightStories)
+          //console.log("ny stories", myHighlightStories)
         }
       }
       getStoriesOfHighlights();
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
   }, [highlight])
   
@@ -143,11 +143,11 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
   
       if(data.success){
         dispatch(updateSuccess(data?.data?.currentUser))
-        console.log(data);
+        //console.log(data);
       }    
     } catch (error) {
       alert(error.message)
-      console.log(error)
+      //console.log(error)
     }
     finally{
       setLoading(false)
@@ -155,30 +155,30 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
   }
   const handleReplyButtonClick = async(e)=>{
     e.stopPropagation();
-    console.log("clickekd")
+    //console.log("clickekd")
   }
   const handleReportButtonClick = async(e)=>{
     e.stopPropagation();
-    console.log("clickekd")
+    //console.log("clickekd")
   }
   const handleDeleteButtonClick = async(e)=>{
     e.stopPropagation();
-    console.log("clickekd")
+    //console.log("clickekd")
   }
   const handleAddToHighlightButtonClick = async(e)=>{
     e.stopPropagation();
-    console.log("clickekd")
+    //console.log("clickekd")
   }
 
 
   const handleDeleteHighlight = async (e)=>{
     e.stopPropagation();
-    // console.log("highlight ot delete", highlight)
+    // //console.log("highlight ot delete", highlight)
     // return;
     setDeleteHighlightLoading(true)
     try {
         
-        console.log("triggered or not")
+        //console.log("triggered or not")
         const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
         const data = await response.json();
 
@@ -187,10 +187,10 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
         }
 
         if(data.success){
-          console.log(data)
-          //   console.log("before deletion", highlights);
+          //console.log(data)
+          //   //console.log("before deletion", highlights);
           //   const updatedHighlights = highlights.filter(highlight=>highlight?._id !== deletedHighlight);
-          //   console.log("after deletion", updatedHighlights);
+          //   //console.log("after deletion", updatedHighlights);
           
           const deletedHighlight = data?.data?.deletedHighlight
           setHighlights(highlights.filter(highlight=>highlight?._id !== deletedHighlight?._id))
@@ -199,7 +199,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
           onClose(false)
         }
       } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
     finally{
       setDeleteHighlightLoading(false)
@@ -254,10 +254,10 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
         if(currentIndex === myHighlightStories.length){
           onClose(false)
         }
-        // console.log(currentIndex, myHighlightStories.length)
+        // //console.log(currentIndex, myHighlightStories.length)
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
     finally{
       setDeleteStoryLoading(false)
@@ -272,7 +272,7 @@ const HighlightViewer = ({highlight, highlights, setHighlights, onClose, heading
     return <h2 className=' p-2 rounded-lg  mb-3 text-white bg-gray-500 font-bold'> Highlight is empty! Please make new collection to show the world your best moments!</h2>
   }
 
-  console.log(highlight)
+  //console.log(highlight)
   return (
     <div className="fixed inset-0 bg-opacity-90 flex flex-col items-center justify-center bg-black z-50">
       <div onClick={handleClick} className="relative flex justify-center w-full min-h-screen bg-gray-300 dark:bg-gray-700 rounded-lg overflow-hidden">

@@ -7,7 +7,7 @@ const SuccessPopup = ({heading, info, setShowPopup }) => {
   const { theme } = useSelector(state=>state.theme);
   const darkTheme = theme === 'dark';
   const navigate = useNavigate();
-  console.log(darkTheme);
+  // console.log(darkTheme);
 
   const handleClickOk = ()=>{
     setShowPopup(false)

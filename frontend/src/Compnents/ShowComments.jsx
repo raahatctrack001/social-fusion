@@ -14,7 +14,7 @@ const   ShowComments = ({ localComments, handleLikeCommentClick }) => {
     const handleReplyClick = async (comment) => {
         setShowPopup(!showPopup)
         return;
-        console.log("inside reply click")
+        //console.log("inside reply click")
         setShowReplyBox(comment?._id)
         try {
             const response = await fetch(apiEndPoints.getCommentAddress(comment?._id));
@@ -23,15 +23,15 @@ const   ShowComments = ({ localComments, handleLikeCommentClick }) => {
             if (!response.ok) {
                 throw new Error(data.message || "Network response is not ok!");
             }
-            console.log("data", data);
+            //console.log("data", data);
             setCommentReplies((prevReplies) => ({
                 ...prevReplies,
                 [comment._id]: data?.data || [],
             }));
-            console.log('commentReplies', commentReplies);
-            console.log('showreplybox', showReplyBox)
+            //console.log('commentReplies', commentReplies);
+            //console.log('showreplybox', showReplyBox)
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
 
@@ -58,11 +58,11 @@ const   ShowComments = ({ localComments, handleLikeCommentClick }) => {
                 }));
                 setReplyContent('');
                 dispatch(updateSuccess(data?.data?.currentUser));
-                console.log("comment reply", commentReplies)
+                //console.log("comment reply", commentReplies)
             }
             
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     };
   return (

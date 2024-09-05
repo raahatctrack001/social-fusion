@@ -46,7 +46,7 @@ const Author = () => {
             }
 
             const author = await response.json();
-            // console.log(author)
+            // //console.log(author)
             if(author.success){
               setAuthorData(author.data);
               setPostData(author?.data?.posts)
@@ -54,10 +54,10 @@ const Author = () => {
         })()
       } catch (error) {
         setError(error)
-        console.log("error fetching author!", error)
+        //console.log("error fetching author!", error)
       }
   }, [ authorId ])
-  // console.log(authorData)
+  // //console.log(authorData)
 
   useEffect(()=>{
     (async()=>{
@@ -68,13 +68,13 @@ const Author = () => {
           if(!response.ok){
             throw new Error(data?.message || "Network response wasn't ok while fetching followers story to put on header" )
           }
-          console.log(data)
+          //console.log(data)
           if(data.success){
-            console.log("stories of followings",data);
+            //console.log("stories of followings",data);
             setStoriesOfFollowings(data?.data)
           }
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
     })()
   }, [])
@@ -83,7 +83,7 @@ const Author = () => {
     return <PageLoader info={"if it's taking longer time than expected please refresh the page"} />
   }
   const handleStoryImageclick = async(storyId)=>{
-    // console.log("clicked story", story)
+    // //console.log("clicked story", story)
     try {
       const response = await fetch(apiEndPoints.getStoriesOfUser(storyId));
       const data = await response.json();
@@ -93,12 +93,12 @@ const Author = () => {
       }
 
       if(data.success){
-        console.log(data)
+        //console.log(data)
         setStoriesToSend(data?.data?.stories);
         setShowStories(true)
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       alert(error.message)
     }
   }

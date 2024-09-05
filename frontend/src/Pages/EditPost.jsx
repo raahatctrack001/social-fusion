@@ -160,15 +160,15 @@ const EditPost = ({ placeholder }) => {
         }
        
         if(data.success){
-            console.log("data");
+            //console.log("data");
             localStorage.removeItem("postToUpdate");
             navigate(`/posts/post/${data?.data?._id}`);
         }
-        // console.log("data extracted", data.data);
+        // //console.log("data extracted", data.data);
       } catch (error) {
         alert(error.message)
         setError(error.message)
-        console.log(error);
+        //console.log(error);
     }
   }
   // console.log(selectedCategory)

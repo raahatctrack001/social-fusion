@@ -47,7 +47,7 @@ export default function CreateProfile() {
         }
       } catch (error) {
         setError(error.message);
-        console.log(error);
+        //console.log(error);
       }
 
     }
@@ -122,7 +122,7 @@ export default function CreateProfile() {
             setUsernameAvailable(true);
           }
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       })();
     }, 2000);

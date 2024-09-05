@@ -180,7 +180,7 @@ const CreatePost = ({ placeholder }) => {
     }
   }
   // console.log(selectedCategory)
-  console.log("laoding", loading)
+  // console.log("laoding", loading)
   return (
     <div className='w-full border-2 border-rose-900 md:px-10 rounded-lg'>
 

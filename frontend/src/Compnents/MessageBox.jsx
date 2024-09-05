@@ -8,7 +8,7 @@ const MessageBox = ({ messages, scrollToLastMessage }) => {
   const [showMessageOptions, setShowMessageOptions] = useState({});
 
   const handleMessageOptions = async (message) => {
-    console.log("edit reply delete or copy message clicked", message.content);
+    //console.log("edit reply delete or copy message clicked", message.content);
   };
   
   return (

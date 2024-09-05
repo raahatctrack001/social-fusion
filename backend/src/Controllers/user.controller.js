@@ -252,7 +252,7 @@ export const toggleOnlineStatus = asyncHandler( async (req, res, next)=>{
         if(!currentUser){
             throw new apiError(404, "userr doesn't exist")
         }
-        console.log(req.body)
+        // console.log(req.body)
         
         currentUser.isActive = req.body?.status;
         currentUser.lastActive = new Date();                                    
@@ -340,7 +340,7 @@ export const searchUsers = asyncHandler(async (req, res, next) => {
 
 const markUsersOffline = async () => {
     const offlineThreshold = new Date(Date.now() - 2 * 60 * 1000); // 2 minutes ago
-    console.log('Offline Threshold:', offlineThreshold);
+    // console.log('Offline Threshold:', offlineThreshold);
   
     try {
       // Find users who haven't been active in the last 2 minutes
@@ -349,7 +349,7 @@ const markUsersOffline = async () => {
         isActive: true,
       }).exec();
   
-      console.log('Users to mark offline:', inactiveUsers);
+    //   console.log('Users to mark offline:', inactiveUsers);
   
       // Mark those users as offline
       const result = await User.updateMany(
@@ -358,7 +358,7 @@ const markUsersOffline = async () => {
       );
   
     //   console.log('Update result:', result);
-      console.log(`${result.nModified || result.modifiedCount} users marked as offline.`);
+    //   console.log(`${result.nModified || result.modifiedCount} users marked as offline.`);
     } catch (error) {
       console.error('Error marking users as offline:', error);
     }

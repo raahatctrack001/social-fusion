@@ -26,7 +26,7 @@ const DashAudience = () => {
           setIsFollowers(true)
         }
       } catch (error) {
-        console.log(error);
+        ////console.log(error);
       }
     })()
   }, [])
@@ -45,7 +45,7 @@ const DashAudience = () => {
           setFollowings(data.data);
         }
       } catch (error) {
-         console.log(error);
+         ////console.log(error);
       }
     })()
   }, [])

@@ -25,7 +25,7 @@ import crypto from 'crypto';
 import { users } from "../DataSeeders/author50.js";
 
 export const isAuthorised = asyncHandler(async (req, res, next)=>{
-    console.log(req.user)
+    // console.log(req.user)
     if(req.user){
         return res.status(200).json( new apiResponse(401, "User is authorised to use this app!", {status:true}))
     }
@@ -38,7 +38,7 @@ export const isEmailVerified = asyncHandler(async (req, res, next)=>{
     // console.log(deletedOTP)
     try {
         const { email } = req.body;
-        console.log(req.body)
+        // console.log(req.body)
         if(!email){
             throw new apiError(404, "email is necessary to verify")
         }
@@ -103,10 +103,10 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
                 if(!newUser){
                     throw new apiError(401, "failed to register user");
                 }
-                console.log("newUser", newUser);
+                // console.log("newUser", newUser);
                 const {password, refreshToken, resetPasswordToken, ...data} = newUser._doc;
 
-                console.log("data", data);
+                // console.log("data", data);
                 res
                     .status(201)
                     .json(
@@ -148,7 +148,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
             throw new apiError(404, "User not found!");
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         next(error);
     }
 });
@@ -187,7 +187,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 export const updatePassword = asyncHandler(async (req, res, next)=>{
     
     try {        
-        console.log(req.body)
+        // console.log(req.body)
         if(req.user?._id !== req.params?.userId){
             throw new apiError(401, "Unauthorized attempt!")
         }
@@ -226,7 +226,7 @@ export const updatePassword = asyncHandler(async (req, res, next)=>{
             })
             .catch(err=>next(err));
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         next(error)
     }
 })
@@ -347,7 +347,7 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
         currentUser.resetPasswordTokenExpiry = undefined;
         const updatedUser = await currentUser.save();
 
-        console.log(currentUser);
+        // console.log(currentUser);
         res.status(200).json(new apiResponse(200, "Password reset successful", {updatedUser}));
 
     } catch (error) {

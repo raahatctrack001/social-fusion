@@ -52,12 +52,12 @@ const OtpPopup = ({email, setShowOTPBox }) => {
       if(data.success){
         setLoading(false);
         setVerified(true)
-        console.log(data);
+        //console.log(data);
       }
 
     } catch (error) {
       setError(error.message)
-      console.log(error)
+      //console.log(error)
     }
     finally{
       setLoading(false);

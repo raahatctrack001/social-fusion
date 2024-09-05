@@ -18,7 +18,7 @@ const FollowingsPopup = ({ author, isHovered, setIsHovered }) => {
         }
         // alert(data)
         if(data.success){
-            console.log(data)
+            //console.log(data)
             // alert(data.message);
             setFollowings(data?.data)
         }

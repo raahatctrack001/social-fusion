@@ -28,11 +28,11 @@ const DashHome = () => {
             if(!posts){
               throw new Error("network response wasn't ok for dashboard!");
             }
-            // console.log(posts)
+            // //console.log(posts)
             return posts.json()
           })
           .then((data)=>{
-            console.log("data", data)
+            //console.log("data", data)
             setPostData(data.data.allPosts)
             setPostsLastWeek(data.data.postsLastWeek)
             setPostsLastTwoWeeks(data.data.postsLastTwoWeeks)
@@ -42,7 +42,7 @@ const DashHome = () => {
             setPopularPosts(data.data.allPosts?.slice(10, 17))
           })
           .catch((err)=>{
-            console.log(err)
+            //console.log(err)
           })
         }, [])
 
@@ -56,9 +56,9 @@ const DashHome = () => {
         handleDeletePostClick();
       }
       const handleDeletePostClick = async()=>{
-        console.log("we are in right place to delete post section!")
+        //console.log("we are in right place to delete post section!")
         try {
-          // console.log(apiEndPoints.deletePostAddress(post?._id))
+          // //console.log(apiEndPoints.deletePostAddress(post?._id))
           // return;
           const response = await fetch(apiEndPoints.deletePostAddress(postToDelete?._id), {
             method: "DELETE"
@@ -70,8 +70,8 @@ const DashHome = () => {
     
           const data = await response.json();
     
-          console.log("response", response);
-          console.log("data", data);
+          //console.log("response", response);
+          //console.log("data", data);
           if(data.success){
             alert(data?.message);
             window.location.reload();
@@ -79,7 +79,7 @@ const DashHome = () => {
           }
         } catch (error) {
           setError("failed to delete post, please try again later!")
-          console.log(error)
+          //console.log(error)
         }
       }
     if(postData.length == 0){

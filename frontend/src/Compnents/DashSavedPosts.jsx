@@ -14,15 +14,15 @@ const DashSavedPosts = () => {
       try {
         const response = await fetch(apiEndPoints.getSavedPostAddress(currentUser?._id));
         const post = await response.json();
-        console.log("response", response);
-        console.log("data", post);
+        //console.log("response", response);
+        //console.log("data", post);
         if (post.success) {
           setPosts(post.data);
           setAuthor(post.data.author);
           // setLikes(post.data.likes.length); // Set likes count based on the fetched data
         }
       } catch (error) {
-        console.log("error fetching post!", error);
+        //console.log("error fetching post!", error);
         setError(error.message);
       }
     };

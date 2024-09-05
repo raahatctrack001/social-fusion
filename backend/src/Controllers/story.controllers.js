@@ -37,7 +37,7 @@ export const uploadStory = asyncHandler(async (req, res, next)=>{
                 contentURL: response?.url, 
                 type:response?.resource_type
             })
-            console.log(newStory);
+            // console.log(newStory);
             stories.push(newStory);
         }
         if(stories.length === 0){
@@ -46,7 +46,7 @@ export const uploadStory = asyncHandler(async (req, res, next)=>{
 
         currentUser.stories = [...currentUser?.stories, ...stories];
         await currentUser.save();
-        console.log(stories)
+        // console.log(stories)
         res
             .status(200)
             .json(
@@ -77,7 +77,7 @@ export const getStoriesOfUser = asyncHandler(async (req, res, next)=>{
             //createdAt time should be greater than this given time
         
         })
-        console.log(stories.length)
+        // console.log(stories.length)
         if(!stories){
             throw new apiError(404, "No recent stories")
         }
@@ -239,38 +239,38 @@ export const getHeighlightStories = asyncHandler(async (req, res, next)=>{
 })
 
 export const deleteHighlight = asyncHandler( async(req, res, next)=>{
-    console.log("control checkpoint 1")
+    // console.log("control checkpoint 1")
     try {
         const { userId, highlightId } = req.params;
         if(!(userId && highlightId)){
             throw new apiError("userId or highlight story id is missing!")
         }
-        console.log("control checkpoint 2")
+        // console.log("control checkpoint 2")
 
         const currentUser = await User.findById(userId);
         if(!currentUser){
             throw new apiError(404, "user doesn't exist")
         }
-        console.log("control checkpoint 3")
+        // console.log("control checkpoint 3")
 
         const highlight = await HighlightModel.findById(highlightId);
         if(!highlight){
             throw new apiError(404, "highlight doesn't exist")
         }
-        console.log("control checkpoint 4")
+        // console.log("control checkpoint 4")
 
         const index = currentUser?.highlights.indexOf(highlight?._id)
         if(index != -1){
             currentUser?.highlights.splice(index, 1);
             await currentUser.save();
         }
-        console.log("control checkpoint 5")
+        // console.log("control checkpoint 5")
 
         const deletedHighlight = await HighlightModel.findByIdAndDelete(highlight?._id);
         if(!deletedHighlight){
             throw new apiError(404, "highlight doesn't exists")
         }
-        console.log("control checkpoint 6")
+        // console.log("control checkpoint 6")
 
         // console.log(deletedHighlight);
         return res.status(200).json(new apiResponse(200, `highlights with name ${deletedHighlight.name} is deleted`, {currentUser, deletedHighlight}))
@@ -364,7 +364,7 @@ export const deleteStory = asyncHandler(async (req, res, next)=>{
 export const removeStoryFromHighlights = asyncHandler( async (req, res, next)=>{
     try {
         const { highlightId, storyId, userId } = req.params;
-        console.log(req.params);
+        // console.log(req.params);
         if([highlightId, storyId, userId].some(field=>field?0:1)){
             throw new apiError("highlightId or storyId or userId is missing")
         }

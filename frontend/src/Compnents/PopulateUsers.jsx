@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 const PopulateUsers = ({ users }) => {
     const navigate = useNavigate();
-  console.log("users: ", users)
+  //console.log("users: ", users)
   return (
     <div className='w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
       {users.length > 0 ? (

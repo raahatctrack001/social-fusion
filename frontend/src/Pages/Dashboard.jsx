@@ -33,7 +33,7 @@ const Dashboard = () => {
       window.scroll(0, 0)
     }, [location.search]);
 
-    console.log("tab", tab)
+    //console.log("tab", tab)
     
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-[rgb(16,23,42)]">

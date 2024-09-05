@@ -26,7 +26,7 @@ import SharePopup from './ShareURL';
 const AuthorHeader = ({ author, setAuthor }) => {
   const [followersCount, setFollowersCount] = useState(author?.followers?.length)
   // const [followingCount, setFollowingCount] = useState(author?.followings?.length)
-  // console.log(author)
+  // //console.log(author)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState()
@@ -65,11 +65,11 @@ const AuthorHeader = ({ author, setAuthor }) => {
         }
       })
       .then((response)=>{
-        // console.log("resonse: ", response);
+        // //console.log("resonse: ", response);
         return response.json();
       })
       .then((data)=>{
-          // console.log(data.message)          
+          // //console.log(data.message)          
           if(currentUser?.followings?.includes(author?._id)){
             setFollowersCount(followersCount-1)
           }
@@ -81,7 +81,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       })
     } catch (error) {
         alert(error.message);
-        // console.log(error);
+        // //console.log(error);
     }
   }
   
@@ -103,7 +103,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         if(data.success){
           setAuthor(data?.data)
           // alert(data.message);
-          // console.log("dp change data", data);
+          // //console.log("dp change data", data);
           dispatch(updateSuccess(data.data))
         }
             
@@ -130,7 +130,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
           body: formData,
         });
 
-      // console.log(response)
+      // //console.log(response)
       const data = await response.json();
       if(!response.ok){
         throw new Error(data?.message || "Network response isn't ok while adding stories!")
@@ -139,12 +139,12 @@ const AuthorHeader = ({ author, setAuthor }) => {
         setIndex(stories?.length);
         setStories((prevstories) => [...prevstories, ...data?.data?.stories]);
         setShowStory(true)
-        // console.log("story uploaded", data)
+        // //console.log("story uploaded", data)
         dispatch(updateSuccess(data?.data?.currentUser))
       }
 
     } catch (error) {
-      // console.log("inside add story", error)
+      // //console.log("inside add story", error)
       setError(error.message)
     }
     finally{
@@ -155,7 +155,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
   useEffect(()=>{
     const getStories = async ()=>{
       try {
-        // console.log("inside useeffect", apiEndPoints.getStoriesOfUser(author?._id))
+        // //console.log("inside useeffect", apiEndPoints.getStoriesOfUser(author?._id))
         const response = await fetch(apiEndPoints.getStoriesOfUser(author?._id));
         const data = await response.json();
         if(!response.ok){
@@ -166,7 +166,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         
           setStories(data?.data?.stories);
           setHighlights(data?.data?.currentUser?.highlights);
-          // console.log("stories data fetched", data);
+          // //console.log("stories data fetched", data);
         }
       } catch (error) {
         setError(error.message);
@@ -186,7 +186,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
       setDeleteHighlightLoading(true)
       try {
           
-          // console.log("triggered or not")
+          // //console.log("triggered or not")
           const response = await fetch(apiEndPoints.deleteHighlightAddress(currentUser?._id, highlight?._id), {method: "DELETE"});
           const data = await response.json();
   
@@ -195,10 +195,10 @@ const AuthorHeader = ({ author, setAuthor }) => {
           }
   
           if(data.success){
-            // console.log(data)
-            //   console.log("before deletion", highlights);
+            // //console.log(data)
+            //   //console.log("before deletion", highlights);
             //   const updatedHighlights = highlights.filter(highlight=>highlight?._id !== deletedHighlight);
-            //   console.log("after deletion", updatedHighlights);
+            //   //console.log("after deletion", updatedHighlights);
             
             const deletedHighlight = data?.data?.deletedHighlight
             setHighlights(highlights.filter(highlight=>highlight?._id !== deletedHighlight?._id))
@@ -208,7 +208,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
           }
         } catch (error) {
           alert(error.message)
-        // console.log(error);
+        // //console.log(error);
       }
       finally{
         setDeleteHighlightLoading(false)
@@ -231,7 +231,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
         }
     } catch (error) {
       alert(error.message)
-      // console.log(error)
+      // //console.log(error)
     }
   }
 
@@ -251,19 +251,19 @@ const AuthorHeader = ({ author, setAuthor }) => {
       }
 
       if(data?.success){
-        console.log(data);
+        //console.log(data);
         setStoriesForHighlight(data?.data)
         setShowHighlightName(true)
       }
     } catch (error) {
       alert(error.message)
-      console.log(error)
+      //console.log(error)
     }
     finally{
       setHighlightStoryLoading(false)
     }
   }
-  console.log(author)
+  //console.log(author)
   return (
     <div className="flex flex-col items-center p-2 w-full">
     {dpLoading && <LoaderPopup loading={dpLoading} setLoading={setdpLoading} info={"Changing your dp!"} />}

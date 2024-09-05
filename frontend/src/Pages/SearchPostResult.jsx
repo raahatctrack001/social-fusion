@@ -14,7 +14,7 @@ const SearchPostResult = () => {
     const location = useLocation();
     const query = new URLSearchParams(location.search).get('query');
     
-    // console.log(query)
+    // //console.log(query)
     useEffect(()=>{
         try {
             if(!query){
@@ -27,7 +27,7 @@ const SearchPostResult = () => {
                 }
             })
                 .then((response)=>{
-                    console.log("response", response)
+                    //console.log("response", response)
                     // if(!response.ok){
                     //     alert(response.message);
                     // }
@@ -40,12 +40,12 @@ const SearchPostResult = () => {
                     
                 })
         } catch (error) {   
-            console.log(error);
+            //console.log(error);
         }
     }, [query])
 
-    // console.log("inside searchedPostResult page, ", postData)
-    // console.log("query", query)
+    // //console.log("inside searchedPostResult page, ", postData)
+    // //console.log("query", query)
 
   return (
     <div className='flex flex-nowrap flex-col w-full mx-2 px-4 white justify-center'>

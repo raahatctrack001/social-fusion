@@ -51,7 +51,7 @@ const PostPage = () => {
           setLikes(post.data.likes.length); // Set likes count based on the fetched data
         }
       } catch (error) {
-        console.log("error fetching post!", error);
+        //console.log("error fetching post!", error);
         setError(error.message);
       }
     };
@@ -97,7 +97,7 @@ const PostPage = () => {
         }
       })
       .then((response)=>{
-        console.log("resonse: ", response);
+        //console.log("resonse: ", response);
         return response.json();
       })
       .then((data)=>{
@@ -107,11 +107,11 @@ const PostPage = () => {
           //   currentUser?.followings = data.followings;
           // }
           dispatch(updateSuccess(data?.data?.follower))
-          console.log(data)
+          //console.log(data)
       })
     } catch (error) {
         alert(error.message);
-        console.log(error);
+        //console.log(error);
     }
   }
 
@@ -127,7 +127,7 @@ const PostPage = () => {
 
         const data = await response.json();
         if(data.success){
-          console.log(data?.message)
+          //console.log(data?.message)
           dispatch(updateSuccess(data?.data?.currentUser));
           setLikes(data?.data?.currentPost?.likes?.length)
           return;
@@ -135,7 +135,7 @@ const PostPage = () => {
 
         setError(data.message)
       } catch (error) {
-        console.log(error);
+        //console.log(error);
         setError(error.message);
       }
   }
@@ -152,7 +152,7 @@ const PostPage = () => {
 
       const data = await response.json();
       if(data.success){
-        console.log("post saved", data)
+        //console.log("post saved", data)
         dispatch(updateSuccess(data?.data));
         // setLikes(data?.data?.currentPost?.likes?.length)
         return;
@@ -160,12 +160,12 @@ const PostPage = () => {
 
       setError(data.message)
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       setError(error.message);
     }
   }
 
-console.log("postpage post", post)
+//console.log("postpage post", post)
 
 
   return (

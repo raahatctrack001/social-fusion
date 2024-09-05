@@ -19,7 +19,7 @@ export const createFeedback = asyncHandler(async (req, res, next)=>{
         }
 
         const author = await User.findById(req.params?.authorId);
-        console.log(author)
+        // console.log(author)
         if(!author){
             throw new apiError(404,"User doesn't exist")
         }

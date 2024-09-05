@@ -30,7 +30,7 @@ const MessageComponent = () => {
 
     const handleMessageInputKeydown = (e)=>{
         if(e.key === 'Enter'){
-            console.log("enter key is pressed!")
+            //console.log("enter key is pressed!")
         }
     }
 
@@ -59,7 +59,7 @@ const MessageComponent = () => {
     
             } catch (error) {
                 setError(error.message);
-                console.log(error);
+                //console.log(error);
             }
         })();
     }, [currentUser?._id]);
@@ -83,10 +83,10 @@ const MessageComponent = () => {
                         
                         if(data.success){
                             setSearchedUsers(data?.data)
-                            // console.log(data)
+                            // //console.log(data)
                         }
                     } catch (error) {
-                        console.log(error);
+                        //console.log(error);
                     }
                 })()
             }
@@ -98,7 +98,7 @@ const MessageComponent = () => {
     const openOrCreateConversation = async (receiver)=>{
         setCreateConversationLoading(true)
         try {
-            // console.log(apiEndPoints.openOrCreateNewConversationAddress(currentUser?._id, receiver?._id))
+            // //console.log(apiEndPoints.openOrCreateNewConversationAddress(currentUser?._id, receiver?._id))
             const response = await fetch(apiEndPoints.openOrCreateNewConversationAddress(currentUser?._id, receiver?._id), 
             {method: "POST"});
             const data = await response.json();
@@ -111,10 +111,10 @@ const MessageComponent = () => {
                 const newConversation = data?.data;
                 if(data.statusCode === 202){
                     setSendConversationId(newConversation[0]?._id);
-                    // console.log("data for existing conversation", data);
+                    // //console.log("data for existing conversation", data);
                 }
                 else{
-                    // console.log("data for new conversation", data);
+                    // //console.log("data for new conversation", data);
                     const updatedConversations = [...conversations, newConversation];
                     setConversations(updatedConversations.sort((a, b)=> new Date(b.updatedAt) - new Date(a.updatedAt)));
                     setSendConversationId(newConversation?._id);
@@ -126,7 +126,7 @@ const MessageComponent = () => {
 
         } catch (error) {
             alert(error.message);
-            console.log(error)
+            //console.log(error)
         }
         finally{
             setCreateConversationLoading(false)
@@ -226,7 +226,7 @@ const MessageComponent = () => {
             <TextInput
                 className='border-2 rounded-lg border-white ml-4 mr-1 relative top-10'
                 placeholder='send message...'
-                onKeyDown={(e)=>{if(e.key === 'Enter' && !e.shiftKey){console.log("enter only")}}}
+                onKeyDown={(e)=>{if(e.key === 'Enter' && !e.shiftKey){//console.log("enter only")}}}
              />
              <div className='flex justify-between'>
                 <div></div>

@@ -15,7 +15,7 @@ import SharePopup from './ShareURL'
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
     const dispatch = useDispatch();
-    // console.log("currentUser", currentUser)
+    // //console.log("currentUser", currentUser)
     const navigate = useNavigate();
     // const [likers, setLikers] = useState([]);
     const [showLikers, setShowLikers] = useState({})
@@ -24,8 +24,8 @@ const ShowPosts = ({heading, postData}) => {
     const [postToShare, setPostToShare] = useState(false);
 
     const handleToggleFollowButtonClick = async (author)=>{
-      // console.log("post", post);
-      // console.log("currentUser", currentUser);
+      // //console.log("post", post);
+      // //console.log("currentUser", currentUser);
         
         try {
           fetch(apiEndPoints.toggleFollowUserAddress(author?._id), {
@@ -35,18 +35,18 @@ const ShowPosts = ({heading, postData}) => {
             }
           })
           .then((response)=>{
-            console.log("resonse: ", response);
+            //console.log("resonse: ", response);
             return response.json();
           })
           .then((data)=>{
-            console.log("data", data)
+            //console.log("data", data)
               // alert(data.message)
               dispatch(updateSuccess(data?.data?.follower))
-              console.log(data)
+              //console.log(data)
           })
         } catch (error) {
             alert(error.message);
-            console.log(error);
+            //console.log(error);
         }
       }
       
@@ -65,7 +65,7 @@ const ShowPosts = ({heading, postData}) => {
       //     setShowLikers(true);
       //   }
       // } catch (error) {
-      //   console.log(error)
+      //   //console.log(error)
       // }
     }
 

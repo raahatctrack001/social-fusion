@@ -46,7 +46,7 @@ const SelectHighlightPopup = ({isOpen, setIsOpen, story}) => {
             setHighlights(data?.data);
         }
        } catch (error) {
-            console.log(error);
+            //console.log(error);
        }
     })()
   }, [isOpen])
@@ -66,7 +66,7 @@ const SelectHighlightPopup = ({isOpen, setIsOpen, story}) => {
             setIsOpen(false)          
         }
     } catch (error) {
-        console.log(error)
+        //console.log(error)
     }
   }
 

@@ -75,7 +75,7 @@ export default function Register() {
       verifyEmail();
 
     } catch (err) {
-        console.log("error during registration page! email or password might be missing", err);
+        //console.log("error during registration page! email or password might be missing", err);
         setError(err.message);
     }
   }
@@ -97,11 +97,11 @@ export default function Register() {
         setShowOTPBox(true)
         setLoading(false)
         setOtpSent(true);
-        console.log(data);
+        //console.log(data);
       }
     } catch (error) {
       setError(error.message)
-      console.log(error);
+      //console.log(error);
     }
     finally{
       setLoading(false)
@@ -111,7 +111,7 @@ export default function Register() {
     e.preventDefault();
     setShowOTPBox(true)
   }
-  console.log(registerData)
+  //console.log(registerData)
   return (
     <div className="flex flex-col lg:flex-row justify-center max-w-full gap-3 items-center m-5 border-2 border-gray-400 rounded-xl md:m-16 lg:m-10  ">
         {loading && <LoaderPopup loading={loading} setLoading={setLoading} info={"Preparing to send OTP"} />}

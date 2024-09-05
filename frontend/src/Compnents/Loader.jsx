@@ -5,7 +5,7 @@ import { HiX } from 'react-icons/hi';
 const LoaderPopup = ({ loading, setLoading, info }) => {
   if (!loading) return null;
   const [showCancel, setShowCancel] = useState(false);
-  console.log(info); // Should log "We are uploading your file"
+  //console.log(info); // Should log "We are uploading your file"
   setTimeout(() => {
     setShowCancel(true);
   }, 5000);

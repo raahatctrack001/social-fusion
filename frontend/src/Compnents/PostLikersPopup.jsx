@@ -25,12 +25,12 @@ const LikersPopup = ({ postId, isHovered, setIsHovered }) => {
             }
             // alert(data)
             if(data.success){
-                console.log(data)
+                ////console.log(data)
                 // alert(data.message);
                 setLikers(data?.data)
             }
         } catch (error) {
-           console.log(error); 
+           ////console.log(error); 
         }
         finally{
             setLoading(false);

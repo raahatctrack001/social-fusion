@@ -20,8 +20,8 @@ const PostComment = ({ post }) => {
         try {
             const response = await fetch(apiEndPoints.getCommentsOnPostAddress(post?._id));
             const data = await response.json();
-            console.log(data)
-            console.log(response)
+            //console.log(data)
+            //console.log(response)
             if(!response.ok){
                 throw new Error(data?.message || "Network response isn't ok while fetchnig post comments!")
             }
@@ -31,7 +31,7 @@ const PostComment = ({ post }) => {
                 setComments(data?.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) || []);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     }
     getComments();
@@ -64,11 +64,11 @@ const PostComment = ({ post }) => {
                           
             dispatch(updateSuccess(data?.data?.currentUser));
             // setCommentContent('')
-            console.log(data);
+            //console.log(data);
         }
      } catch (error) {
         setError(error.message)
-        console.log(error);
+        //console.log(error);
      }
      finally{
         setLoading(false);
@@ -96,7 +96,7 @@ const PostComment = ({ post }) => {
         }
     } catch (error) {
         setError(error.message)
-        console.log()
+        //console.log()
     }
     finally{
         setLoading(false)
@@ -104,7 +104,7 @@ const PostComment = ({ post }) => {
   }
 
   const handleDeletePostCommentClick = async(commentId)=>{
-    // console.log("comment to delete", comment)
+    // //console.log("comment to delete", comment)
     setLoading(true)
     try {
         const response = await fetch(apiEndPoints.deleteCommentAddress(commentId), {method: "DELETE"});
@@ -114,11 +114,11 @@ const PostComment = ({ post }) => {
         }
 
         if(data?.success){
-            console.log("deletedComment", data)
+            //console.log("deletedComment", data)
             setComments((comments)=>comments?.filter(comment=>comment?._id !== data?.data?._id))
         }
     } catch (error) {
-        console.log(error)
+        //console.log(error)
     }
     finally{
         setLoading(false)
@@ -148,17 +148,17 @@ const PostComment = ({ post }) => {
             setComments(newComments)
 
             dispatch(updateSuccess(data?.data?.currentUser));
-            console.log("data", data);
-            console.log("current comments", comments);
+            //console.log("data", data);
+            //console.log("current comments", comments);
         }
     } catch (error) {
-        console.log(error)
+        //console.log(error)
     }
 
   }
 
   const handleReplyCommentClick = async(comment)=>{
-    console.log("replying on commment", comment);
+    //console.log("replying on commment", comment);
   }
 
   const handleShowReplies = async ()=>{

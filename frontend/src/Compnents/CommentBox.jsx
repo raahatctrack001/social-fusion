@@ -53,14 +53,14 @@ const CommentBox = ({
                 }
 
                 if(data?.success){
-                    console.log("comment replies", data)
+                    //console.log("comment replies", data)
                     
                     setCommentReplies(prev=>({...prev, [comment?._id]: data?.data || []}))
-                    console.log(commentReplies)
+                    //console.log(commentReplies)
                 }
             } catch (error) {
                 alert(error.message)
-                console.log(error);
+                //console.log(error);
             }
             finally{
                 setLoading(false)
@@ -87,16 +87,16 @@ const CommentBox = ({
             }
     
             if (data.success) {
-                console.log("reply data", data);
+                //console.log("reply data", data);
                 const parent = data?.data?.parent;
                 setCommentReplies(prev=>({...prev, [parent?._id]: parent.replies.sort((a, b)=> new Date(b.createdAt) - new Date(a.createdAt)) || []}))
                 setShowReplies(false)
-                console.log("rendered comment: ", commentReplies)
+                //console.log("rendered comment: ", commentReplies)
                 setReplyContent('')
             }
         } catch (error) {
             setError(error.message);
-            console.log(error);
+            //console.log(error);
         }
         finally{
             setLoading(false)
@@ -121,12 +121,12 @@ const CommentBox = ({
                 // setCommentReplies(newCommentReplies)
                 dispatch(updateSuccess(data?.data?.currentUser));
                 handleShowRepliesClick();
-                console.log("data", data);
-                console.log("current comments", comments);
+                //console.log("data", data);
+                //console.log("current comments", comments);
             }
         } catch (error) {
             alert(error.message)
-            console.log(error)
+            //console.log(error)
         }
         finally{
             setLoading(false)
@@ -144,12 +144,12 @@ const CommentBox = ({
             }
     
             if(data?.success){
-                console.log("deletedComment", data)
+                //console.log("deletedComment", data)
                 handleShowRepliesClick();
             }
         } catch (error) {
             alert(error.message)
-            console.log(error)
+            //console.log(error)
         }
         finally{
             setLoading(false)
@@ -160,8 +160,8 @@ const CommentBox = ({
     }
 
     const handleReplyEdit = async (comment, editedContent)=>{
-        // console.log("handlReplyEdit", comment);
-        // console.log("handlereplyEdit", editedContent);
+        // //console.log("handlReplyEdit", comment);
+        // //console.log("handlereplyEdit", editedContent);
 
         try {
             setLoading(true)
@@ -176,18 +176,18 @@ const CommentBox = ({
             }
     
             if(data?.success){
-                console.log("reply edited", data)
+                //console.log("reply edited", data)
                 handleShowRepliesClick();               
             }
         } catch (error) {
             setError(error.message)
-            console.log()
+            //console.log()
         }
         finally{
             setLoading(false)
         }
     }
-    console.log("edit comment click", editCommentContent)
+    //console.log("edit comment click", editCommentContent)
     return (
         <div className="w-full p-4 dark:bg-[rgb(16,23,42)] rounded-lg shadow-md dark:text-white m-1">
             {/* Top Row: Username and Time */}

@@ -27,7 +27,7 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
     }
     const handleDeletePostClick = async(e)=>{
       try {
-        // console.log(apiEndPoints.deletePostAddress(post?._id))
+        // //console.log(apiEndPoints.deletePostAddress(post?._id))
         // return;
         const response = await fetch(apiEndPoints.deletePostAddress(post?._id), {
           method: "DELETE"
@@ -39,8 +39,8 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
 
         const data = await response.json();
 
-        console.log("response", response);
-        console.log("data", data);
+        //console.log("response", response);
+        //console.log("data", data);
         if(data.success){
           alert(data?.message);
           navigate(`/authors/author/${currentUser?._id}`)
@@ -61,18 +61,18 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
       toggleComment();
       try {
         
-        // console.log(apiEndPoints.toggleCommentSectionAddress(post?._id))
+        // //console.log(apiEndPoints.toggleCommentSectionAddress(post?._id))
         const response = await fetch(`/api/v1/posts/toggle-comment-section/${post?._id}`, {method: "PATCH"})
         const data = await response.json()
         if(!response.ok){
-          console.log("netowrk response is not ok")
+          //console.log("netowrk response is not ok")
         }
         if(data.success){
           setPost(data?.data)
-          console.log(data)
+          //console.log(data)
         }
       } catch (error) {
-        console.log(error)
+        //console.log(error)
       }
     }
   return (

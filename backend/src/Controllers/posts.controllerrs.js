@@ -483,7 +483,7 @@ export const getFollowers = asyncHandler( async (req, res, next)=>{
         const currentUser = await User.findById(userId).populate("followers");
 
         const followers = currentUser?.followers
-        console.log(followers)
+        // console.log(followers)
         if(!followers){
             throw new apiError(404, "failed to fetch followings")
         }
@@ -500,7 +500,7 @@ export const getFollowings = asyncHandler( async (req, res, next)=>{
         const currentUser = await User.findById(userId).populate("followings");
 
         const followings = currentUser?.followings
-        console.log(followings)
+        // console.log(followings)
         if(!followings){
             throw new apiError(404, "failed to fetch followings")
         }

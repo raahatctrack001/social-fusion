@@ -20,7 +20,7 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
         }
         // alert(data)
         if(data.success){
-            console.log(data)
+            //console.log(data)
             // alert(data.message);
             setfollowers(data?.data)
         }
@@ -44,11 +44,11 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
     //     }
     //   })
     //   .then((response)=>{
-    //     console.log("resonse: ", response);
+    //     //console.log("resonse: ", response);
     //     return response.json();
     //   })
     //   .then((data)=>{
-    //       console.log(data.message)          
+    //       //console.log(data.message)          
     //       if(currentUser?.followings?.includes(follower?._id)){
     //         setFollowersCount(followersCount-1)
     //       }
@@ -60,7 +60,7 @@ const FollowersPopup = ({ follower, isHovered, setIsHovered }) => {
     //   })
     // } catch (error) {
     //     alert(error.message);
-    //     console.log(error);
+    //     //console.log(error);
     // }
   }
 

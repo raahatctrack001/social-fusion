@@ -6,7 +6,7 @@ import { users } from '../dataSeeders/author50';
 import DisplayContent from './DisplayContent';
 
 const PostCard = ({ post }) => {
-  console.log("postcard", post)
+  //console.log("postcard", post)
 
   const navigate = useNavigate();
   return (   

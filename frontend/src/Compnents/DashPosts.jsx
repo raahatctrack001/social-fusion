@@ -15,8 +15,8 @@ const DashPosts = () => {
                 const response = await fetch(apiEndPoints.getPostOfUserAddress(currentUser?._id));
                 
                 const data = await response.json();
-                console.log("response", response);
-                console.log("data", data);
+                //console.log("response", response);
+                //console.log("data", data);
                 if(!response.ok){
                     throw new Error(response.message || "network response is not ok")
                 }
@@ -25,7 +25,7 @@ const DashPosts = () => {
                 }
 
             } catch (error) {
-                console.log(error);
+                //console.log(error);
             }
         })()
     }, [])

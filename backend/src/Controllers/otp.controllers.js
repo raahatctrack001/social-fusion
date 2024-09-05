@@ -29,7 +29,7 @@ export const sendEmailToUser = asyncHandler(async (req, res, next)=>{
 export const createAndSendOTP = asyncHandler(async (req, res, next) => {
     try {
         const { email } = req.body;
-        console.log(email)
+        // console.log(email)
         const user = await User.findOne({email});
         if(user){
           throw new apiError(409, "User with this email already exists. Please try logging in or use forgot password feature inside sign in page to restore account!")

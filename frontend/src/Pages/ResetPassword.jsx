@@ -27,7 +27,7 @@ function resetPassword() {
         setFormData({...formData, [e.target.id]: e.target.value});
     }
 
-    console.log(formData);
+    //console.log(formData);
     
     const handleUpdatePassword = async(e)=>{
         e.preventDefault();
@@ -48,7 +48,7 @@ function resetPassword() {
             }
 
             const data = await response.json();
-            // console.log(data);
+            // //console.log(data);
             if(data.success){
                 setShowPopup(true)
                 setSuccess(data.message);
@@ -60,7 +60,7 @@ function resetPassword() {
             setError(data.message);
         } catch (error) {
             setError(error.message);
-            console.log(error);
+            //console.log(error);
         }
         finally{
           setTimeout(() => {            

@@ -24,7 +24,7 @@ function ResetForgotPassword() {
     const [seeRepeatPassword, setSeeRepeatPassword] = useState(false)
     const [loading, setLoading] = useState(false);
     const [showPopup, setShowPopup] = useState(false); 
-    console.log(token)
+    //console.log(token)
     useEffect(()=>{
         (async()=>{
             try {
@@ -34,7 +34,7 @@ function ResetForgotPassword() {
                 if(!response.ok){
                     throw new Error(data.message || "Network response wasn't ok while verification of reset password token")
                 }
-                console.log(data)
+                //console.log(data)
                 if(data.success === false){
                   alert("done");
                   navigate('/sign-in');
@@ -52,7 +52,7 @@ function ResetForgotPassword() {
         setFormData({...formData, [e.target.id]: e.target.value});
     }
 
-    console.log(formData);
+    //console.log(formData);
     
     const handleResetForgotPassword = async(e)=>{
         e.preventDefault();

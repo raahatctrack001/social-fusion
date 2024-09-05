@@ -43,15 +43,15 @@ export const replyComment = asyncHandler(async (req, res, next) => {
         const { parentCommentId, userId } = req.params;
         const { content } = req.body;
 
-        console.log(req.params);
-        console.log(req.body)
+        // console.log(req.params);
+        // console.log(req.body)
 
         if (!content || content.trim() === '') {
             throw new apiError(404, "Write some content in the comment box to post!");
         }
 
         const parentComment = await Comment.findById(parentCommentId);
-        console.log(parentComment);
+        // console.log(parentComment);
         if (!parentComment) {
             throw new apiError(404, "Parent comment doesn't exist");
         }
@@ -107,7 +107,7 @@ export const getComment = asyncHandler(async (req, res, next)=>{
 })
 
 export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
-    console.log(req.params?.postId)
+    // console.log(req.params?.postId)
     await Post
             .findById(req.params?.postId)
             .populate({path: "comments", populate: {
@@ -118,7 +118,7 @@ export const getCommentsOnPost = asyncHandler(async (req, res, next)=>{
                 if(!post){
                     throw new apiError(404, "post doesn't exist! ")
                 }
-                console.log(post)
+                // console.log(post)
                 res.status(200).json(new apiResponse(200, "comments fetched", post?.comments))
             })
 
@@ -171,7 +171,7 @@ export const updateComment = asyncHandler(async (req, res, next)=>{
         }
 
         const { editedContent } = req.body;
-        console.log(editedContent);
+        // console.log(editedContent);
 
         if(editedContent === '' || editedContent.trim() === ''){
             throw new apiError(401, "write something to comment")
@@ -184,7 +184,7 @@ export const updateComment = asyncHandler(async (req, res, next)=>{
         currentComment.content = editedContent.trim(),
         currentComment.edited = true;
         await currentComment.save();
-        console.log("comment edited!")
+        // console.log("comment edited!")
         return res.status(200).json( new apiResponse(200, "comment edited", currentComment));
         
     } catch (error) {
