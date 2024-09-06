@@ -38,6 +38,7 @@ import Chatroom from "./Pages/Chatroom"
 // import resetPassword from "./Compnents/ResetForgotPassword"
 import ResetForgotPassword from "./Compnents/ResetForgotPassword"
 import ResetTokenSent from "./Compnents/ResetPassword/ResetTokenSent"
+import ImageEditor from "./Compnents/testComponents/ImageEditor"
 
 
 function App() {  
@@ -59,7 +60,7 @@ function App() {
                     <Route path="/contacts" element={<ContactPage />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/notifications" element={<UnderDevelopment />} />
-                    <Route path="/chatroom" element={<Chatroom />} />
+                    <Route path="/chatroom" element={<UnderDevelopment />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
@@ -71,10 +72,10 @@ function App() {
                   <Route path="/register/profile" element={<CreateProfile />} />
                   <Route path="/sign-in" element={<SignIn />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
-                  <Route path="/test-route" element={<SelectHighlightPopup />} />
-                  <Route path="/*" element={<ResetTokenSent isOpen={true} email={'sfsdfsfs2@dseu.ac.in'} />} />
+                  <Route path="/test-route" element={<ImageEditor />} />
+                  <Route path="/*" element={< UnderDevelopment/>} />
                 </Routes>
-                {/* <FooterComp /> */}
+                <FooterComp />
           </BrowserRouter>
           
 }
