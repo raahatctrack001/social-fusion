@@ -34,7 +34,7 @@ export const createPost = asyncHandler(async (req, res, next)=>{
         if(!req.user){
             throw new apiError(401, "Unauthorized! please login")
         }
-        const { title, content, category } = req.body;
+        const { title, content, category, thumbnail } = req.body;
         if([title, content, category].some(field=>field?.trim()?0:1)){
             throw new apiError(404, "Title of Content for post is missing!")
         }
@@ -54,7 +54,7 @@ export const createPost = asyncHandler(async (req, res, next)=>{
                 title,
                 content,
                 category,
-                // imagesURLs: fileURLs,
+                thumbnail,
                 author: req.user?._id
             })
             .then((post)=>{

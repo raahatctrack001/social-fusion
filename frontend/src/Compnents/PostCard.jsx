@@ -8,6 +8,7 @@ import DisplayContent from './DisplayContent';
 const PostCard = ({ post }) => {
   //console.log("postcard", post)
 
+  console.log(post);
   const navigate = useNavigate();
   return (   
       <div className=' w-full flex border flex-col p-2 rounded-lg object-contain cursor-pointer ' onClick={()=>navigate(`/posts/post/${post?._id}`)} >
@@ -19,7 +20,7 @@ const PostCard = ({ post }) => {
           <Button outline pill> <HiUserAdd /> </Button>
         </div> */}
         <hr className='mt-2'/>
-        <img className='max-h-52 w-full flex justify-center items-center' src={(post?.thumbnail?.length > 0 && post.thumbnail.at(-1)) != 'null' && post.thumbnail.at(-1) || "https://images.squarespace-cdn.com/content/v1/57263bf8f8baf385ff61bb09/1535668320137-NZQPOXCGLFT34I9E4Z1E/Screen+Shot+2018-08-30+at+6.17.10+PM.png"} alt="" />
+        <img className='max-h-52 w-full flex justify-center items-center' src={(post?.thumbnail?.length > 0 && post.thumbnail.at(-1)) || "https://images.squarespace-cdn.com/content/v1/57263bf8f8baf385ff61bb09/1535668320137-NZQPOXCGLFT34I9E4Z1E/Screen+Shot+2018-08-30+at+6.17.10+PM.png"} alt="" />
         <div>
           {post?.aiGenerated && <span className='bg-red-700 text-white font-semibold rounded-lg px-1'> Test Post</span>}
           <p className='font-semibold md:text-sm font-serif mt-1'> {post?.title?.length > 50 ? post.title.substring(0, 50)+"..." : post.title} </p>

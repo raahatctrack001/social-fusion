@@ -67,8 +67,8 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
     if(req.user?._id != req.params?.userId){
         throw new apiError(401, "Unothorized Attempt!")
     }
-    const {username, email, fullName, bio} = req.body;
-    const userData = [username, email, fullName];
+    const {username, fullName, bio} = req.body;
+    const userData = [username, fullName];
     
     try {
         if(userData.some(field=>field?.trim()?0:1)){
@@ -79,7 +79,7 @@ export const updateUser = asyncHandler(async (req, res, next)=>{
             throw new apiError(403, "username and email shouldn't be similar")
         }
         
-        const result = updateUserSchema.safeParse({username, email, fullName, bio})
+        const result = updateUserSchema.safeParse({username, fullName, bio})
         if(!result.success){
             throw new apiError(406, result?.error?.errors[0]?.message)
         }
@@ -112,7 +112,6 @@ export const getUsers = asyncHandler(async (req, res, next)=>{
         .skip((page-1)*10)
         .limit(10)
         .select("-password")
-        .sort({createAt: -1})
         .then((users)=>{
             if(!users){
                 throw new apiError(404, "users doesn't exist")

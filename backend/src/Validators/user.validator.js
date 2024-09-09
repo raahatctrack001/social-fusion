@@ -30,7 +30,7 @@ export const userSchema = z.object({
 export const updateUserSchema = z.object({
   username: usernameSchema,
   fullName: fullNameSchema, 
-  bio?: bioSchema,
+  bio: bioSchema,
 });
 
 export const uniqueIdValidator = (userEmail)=>{

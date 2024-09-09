@@ -18,7 +18,6 @@ const ProfileEditPage = () => {
 
   const [formData, setFormData] = useState({
     username: currentUser?.username || '',
-    email: currentUser?.email || '',
     fullName: currentUser?.fullName || '',
     bio: currentUser?.bio || '',
   });
@@ -109,18 +108,6 @@ const ProfileEditPage = () => {
           />
         </div>
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium  m-1">Email</label>
-          <TextInput
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            required
-          />
-        </div>
 
         <div>
           <label htmlFor="fullName" className="block text-sm font-medium  m-1">Full Name</label>
