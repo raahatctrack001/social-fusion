@@ -50,7 +50,9 @@ const FeaturesPage = () => {
     'Filters and snaps.',
     'Event creation and management.',
     'In-app notifications for likes, comments, and follows.',
-    'Integration with third-party apps and services.',
+    'Integration with third-party apps and services.',	 
+    'Todo List to organise your task effectively',
+    'Schedule events or celebrate events on schedule without being awake',
   ];
 
   return (

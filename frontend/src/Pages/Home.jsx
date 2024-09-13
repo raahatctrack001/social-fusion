@@ -58,7 +58,7 @@ const Home = () => {
         setPostData(fetchedData)
         const total = data?.data?.totalCount;
         setTotalPost(Math.floor(total/9+1))
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
       })
       .catch((err)=>{
         throw new Error("Error fetching posts", err);
@@ -218,11 +218,11 @@ const Home = () => {
         {/* Follow/Unfollow Button */}
         {author?._id !== currentUser?._id ? 
           (<Button 
-            onClick={() => handleToggleFollowButtonClick(author)}
-            className={`px-4 py-2 rounded-lg ${currentUser?.followings?.includes(author?._id) ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'} transition-colors duration-300`}>
-            {currentUser?.followings?.includes(author?._id) ? 'Following' : 'Follow'}
+            onClick={(e) =>{ e.stopPropagation(), handleToggleFollowButtonClick(author)}}
+            className={`h-7 w-16 md:h-10 md:w-24 ml-7 flex justify-center items-center rounded-lg ${currentUser?.followings?.includes(author?._id) ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'} transition-colors duration-300`}>
+            {currentUser?.followings?.includes(author?._id) ? 'unfollow' : 'Follow'}
           </Button>) :
-          (<Button disabled className="px-4 py-2 bg-gray-500 text-white rounded-lg">You</Button>)
+          (<Button disabled className="bg-gray-500 text-white rounded-lg">You</Button>)
         }
       </div>
     )) : <div>No Users! Be the first to sign in.</div>}

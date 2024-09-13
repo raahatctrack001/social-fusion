@@ -288,6 +288,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
             </div>
             <div className='max-w-lg'>
               <img className='rounded-lg' src={author?.profilePic.at(-1)} alt="" />
+              
             </div>
           </div>
         </div>
@@ -322,19 +323,24 @@ const AuthorHeader = ({ author, setAuthor }) => {
               <span onClick={()=>{storyRef.current.click()}} className='flex justify-start items-center gap-1 hover:text-lg cursor-pointer text-nowrap'> <HiPlus /> Add Story</span>
             </div>}
             <div 
-              className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex justify-center items-center`}>
+              className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex flex-col justify-center items-center`}>
               <img 
                 onClick={()=>setShowStory(!showStory)}
                 src={author.profilePic.at(-1) || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
                 alt="Author" 
                 className="w-32 h-32 rounded-full  object-cover cursor-pointer"
               />
+              <div>
+              {
+                author?.lastActive && <Alert disabled color={`${author?.isActive ? 'success' : 'failure'}`} className='h-5 w-auto justify-center items-center'><span className=' flex justify-center items-center text-nowrap text-xs font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
+              }
+              </div>
 
             </div>
           </div>
           
           <div>
-            <div className='flex md:flex-row justify-center items-center gap-4 border-b md:border-0 w-full'>
+            <div className='flex md:flex-row mt-2  justify-center items-center gap-4 border-b md:border-0 w-full'>
     
                 <div className="flex flex-col justify-between w-full ">
                   <div className='flex justify-between'>
@@ -427,10 +433,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
             {author.bio && 
               <p className="m-2 border p-2 rounded-lg flex justify-start">{author.bio||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam vel beatae voluptate corporis unde ducimus, distinctio sint quisquam debitis, repellat at saepe, quo adipisci officia recusandae delectus nemo nobis doloribus eius quas quod consequuntur. Aliquid amet rem quas dolore laborum praesentium molestias iste, harum quidem quod assumenda fugit ullam? "}</p>}
         </div>
-        {
-          author?.lastActive && <Alert disabled color={`${author?.isActive ? 'success' : 'warning'}`} className='w-full justify-center items-center'><span className='text-xl font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
-
-        }
+        
       <div 
         className='w-full flex items-center overflow-x-scroll gap-3 pb-2 pl-2 h-40'>
   {/* Highlight creation button */}
