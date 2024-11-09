@@ -135,6 +135,12 @@ export const searchPosts = asyncHandler(async (req, res, next) => {
 });
 
 export const getPosts = asyncHandler(async (req, res, next)=>{
+     // Example: Adding a default 'status' field to all posts
+    //  await Post.updateMany(
+    //     { status: { $isHidden: false } },  // Only target documents without 'status'
+    //     { $set: { isHidden: false } }    // Add the 'status' field with default value
+    //   );
+    // return;
     const { page } = req.params;
     try {        
         const totalCount = await Post.countDocuments({});
@@ -150,10 +156,12 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
                 if(posts.length == 0){
                     throw new apiError(404, "posts doesn't exist!")
                 }
+                const filteredPost = posts.filter(post=>post.isHidden===false);
+                console.log(filteredPost.length);
                 res
                     .status(200)
                     .json(
-                        new apiResponse(200, "posts fetched!, Populating", {posts, totalCount})
+                        new apiResponse(200, "posts fetched!, Populating", {posts: filteredPost, totalCount})
                     )
             })
             .catch(error=>next(error));
@@ -171,13 +179,34 @@ export const getPost = asyncHandler(async (req, res, next)=>{
                 if(!post){
                     throw new apiError(404, "post doesn't exists!")
                 }
+                const filteredPost = post?.isHidden ? null : post;
                 return res
                         .status(200)
                         .json(
-                            new apiResponse(200, "post fetched!", post)
+                            new apiResponse(200, filteredPost ? "post fetched!" : "No Post found", filteredPost)
                         )
             })
             .catch(error=>next(error))
+    } catch (error) {
+        next(error);
+    }
+})
+
+export const getHiddenPosts = asyncHandler(async(req, res, next)=>{
+    try {
+        const posts = await Post.find({
+            author: req.params?.userId,
+            isHidden: true
+        })
+        .populate("author");
+        if(posts.length === 0){
+            throw new apiError(404, "No Hidden Posts yet!")
+        }
+
+        return res.status(200)
+                    .json( 
+                        new apiResponse(200, "hidden posts found", posts)
+                    )
     } catch (error) {
         next(error);
     }
@@ -200,6 +229,7 @@ export const getPostOfUser = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
 export const deletePost = asyncHandler(async (req, res, next)=>{
 
     try {
@@ -280,6 +310,7 @@ export const likePost = asyncHandler(async(req, res, next)=>{
 })
 
 export const updatePost = asyncHandler(async (req, res, next)=>{
+   
     try {
         if(!req.user){
             throw new apiError(401, "Unauthorized! please login")
@@ -528,4 +559,26 @@ export const getLikersOfPost = asyncHandler (async (req, res, next)=>{
         next(error)
     }
 })
+
+export const hideUnhidePost = asyncHandler(async (req, res, next)=>{
+    try {
+        const { postId } = req.params;
+        const postToHide = await Post.findById(postId);
+        if(!postToHide){
+            throw apiError(404, "Post to be hide or unhide, doesn't found")
+        }
+
+        postToHide.isHidden ? postToHide.isHidden = false : postToHide.isHidden = true;
+        await postToHide.save();
+
+        return res
+            .status(200)
+            .json(
+                new apiResponse(202, `${postToHide.isHidden ? "post is hidden now" : "post is visible  now"}`, postToHide)
+            )
+    } catch (error) {
+        next(error)
+    }
+})
+
 

@@ -26,6 +26,7 @@ export  const apiEndPoints = {
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
     getPostOfUserAddress: (userId)=>`/api/v1/posts/user-posts/${userId}`,
+    getHiddenPosts: (userId)=>`/api/v1/posts/hidden-posts/${userId}`,
     searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,
     getPostsAddress : (currentPage)=> `/api/v1/posts/get-posts/${currentPage}`,
     deletePostAddress : (postId)=> `/api/v1/posts/delete-post/${postId}`,
@@ -38,6 +39,7 @@ export  const apiEndPoints = {
     getFollowersAddress: (userId)=>`/api/v1/posts/get-followers/${userId}`,
     toggleCommentSectionAddress: (postId)=>`api/v1/posts/toggle-comment-section/${postId}`,
     getLikersOfPost: (postId)=>`/api/v1/posts/likers-of-post/${postId}`,
+    hideUnhidePost: (postId)=> `/api/v1/posts/hide-unhide-post/${postId}`,
     
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,
     replyCommentAddress : (parentId, userId)=> `/api/v1/comments/reply-comment/${parentId}/${userId}`,

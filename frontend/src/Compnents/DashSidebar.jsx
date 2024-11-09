@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import React, { useState } from 'react'
-import { HiDocument, HiDotsHorizontal, HiSave, HiUserGroup, HiXCircle } from 'react-icons/hi'
+import { HiChevronDoubleDown, HiChevronDoubleUp, HiDocument, HiDotsHorizontal, HiSave, HiUserGroup, HiXCircle } from 'react-icons/hi'
 import { HiBars3, HiChartBar, HiCog, HiDocumentCheck, HiHome, HiPencil, HiUser } from 'react-icons/hi2'
 import { Link } from 'react-router-dom'
 
@@ -50,6 +50,11 @@ const DashSidebar = () => {
             <Link to={'/dashboard?tab=settings'} className="dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1">
               <div className="flex justify-start items-center gap-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1">
                   <HiCog className='text-2xl md:text-3xl'/> { isOpen && <span className=''> Settings </span>}
+                </div>
+            </Link>
+            <Link to={'/dashboard?tab=hidden-posts'} className="dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1">
+              <div className="flex justify-start items-center gap-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1">
+                  <HiChevronDoubleDown className='text-2xl md:text-3xl'/> { isOpen && <span className=''> Hidden Posts </span>}
                 </div>
             </Link>
           </div>

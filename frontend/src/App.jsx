@@ -60,7 +60,7 @@ function App() {
                     <Route path="/contacts" element={<ContactPage />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/notifications" element={<UnderDevelopment />} />
-                    <Route path="/chatroom" element={<UnderDevelopment />} />
+                    <Route path="/chatroom" element={<Chatroom />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />

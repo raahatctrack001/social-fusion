@@ -69,9 +69,15 @@ const postSchema = new mongoose.Schema({
     aiGenerated: {
         type: Boolean,
         default: false,
+    }, 
+    isHidden: {
+        type: Boolean,
+        default: false
+    },
+    isPrivate: { //to enable user to post the blog that is only meant for them and not public.
+        type: Boolean,
+        default: false,
     }
-
-
 },
 { timestamps: true })
 

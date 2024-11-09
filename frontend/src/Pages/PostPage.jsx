@@ -59,8 +59,8 @@ const PostPage = () => {
     fetchPostData();
   }, [postId]);
   
-  if(!post)
-    return <NotFoundPage />
+  // if(!post)
+  //   return <NotFoundPage />
   
   const calculateReadingTime = (content, wordsPerMinute = 250) => {
     const text = content.replace(/<[^>]*>/g, '');
@@ -167,7 +167,11 @@ const PostPage = () => {
 
 //console.log("postpage post", post)
 
-
+  if(post?.isHidden || !post){
+    return <div className='min-h-screen w-full flex justify-center items-center'>
+       <h1 className='w-full max-w-lg bg-gray-800 grid place-items-center py-5 rounded-xl'> Post is unavailable or hidden by user! </h1>
+    </div>
+  }
   return (
     <div className='m-5 md:mx-16 lg:mx-28 xl:mx-52 '>
       <h1 className='font-bold text-xl md:text-3xl font-serif mb-3 border-b-2'> { post.title } </h1>

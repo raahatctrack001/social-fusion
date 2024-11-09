@@ -16,7 +16,9 @@ import {
     getFollowers,
     getFollowings,
     getLikersOfPost,
-    getPostOfUser
+    getPostOfUser,
+    hideUnhidePost,
+    getHiddenPosts
 } from "../Controllers/posts.controllerrs.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 
@@ -27,6 +29,7 @@ router.route("/create-post").post(upload.any(), isUserLoggedIn, createPost);
 router.route("/search-posts").post(isUserLoggedIn, searchPosts);
 router.route("/get-posts/:page").get(isUserLoggedIn, getPosts);
 router.route("/get-post/:postId").get(isUserLoggedIn, getPost);
+router.route("/hidden-posts/:userId").get(isUserLoggedIn, getHiddenPosts);
 router.route("/user-posts/:userId").get(isUserLoggedIn, getPostOfUser);
 router.route("/delete-post/:postId").delete(isUserLoggedIn, deletePost);
 router.route("/edit-post/:postId").put(upload.any(), isUserLoggedIn, updatePost);
@@ -38,4 +41,7 @@ router.route("/toggle-comment-section/:postId").patch(isUserLoggedIn, toggleDisa
 router.route("/get-followers/:userId").get(isUserLoggedIn, getFollowers);
 router.route("/get-followings/:userId").get(isUserLoggedIn, getFollowings);
 router.route("/likers-of-post/:postId").get(isUserLoggedIn, getLikersOfPost);
+router.route("/hide-unhide-post/:postId").patch(isUserLoggedIn, hideUnhidePost);
+
+
 export default router;

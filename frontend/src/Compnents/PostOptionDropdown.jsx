@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiBan, HiBookmark, HiChartBar, HiChat, HiChatAlt, HiChatAlt2, HiClock, HiDotsVertical, HiExternalLink, HiFlag, HiLink, HiOutlineLink, HiPencil, HiShare, HiStar, HiThumbUp, HiTrash } from 'react-icons/hi';
+import { HiBan, HiBookmark, HiChartBar, HiChat, HiChatAlt, HiChatAlt2, HiChevronDoubleDown, HiChevronDoubleUp, HiChevronUp, HiClock, HiDotsVertical, HiExternalLink, HiFlag, HiLink, HiOutlineLink, HiPencil, HiShare, HiShieldCheck, HiStar, HiThumbUp, HiTrash } from 'react-icons/hi';
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -75,6 +75,22 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
         //console.log(error)
       }
     }
+
+  const handleHideUnhidePost = async ()=>{
+    const response = await fetch(apiEndPoints.hideUnhidePost(post?._id), {
+      method: "PATCH"
+    })
+
+    const data = await response.json();
+    if(!response.ok){
+      console.log(data.success || "error while fetching network response")
+    }
+
+    if(data.success){
+      setPost(data.data)
+      console.log(data.message)
+    }
+  }
   return (
     <div className="relative inline-block text-left z-10">
   {/* post delete modal starts here*/}
@@ -116,6 +132,10 @@ function PostOptionsDropdown({enableComment, toggleComment, post, setPost }) {
             <div className="py-1">
                 {currentUser?._id === post?.author?._id && 
                 <div>
+                    <div onClick={handleHideUnhidePost} className="flex items-center px-4 py-2  dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
+                      <HiChevronDoubleUp className="w-5 h-5 mr-3 " />
+                      <span>Hide Post</span>
+                    </div>
                     <div onClick={handleUpdatePostClick} className="flex items-center px-4 py-2  dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1 cursor-pointer">
                       <HiPencil className="w-5 h-5 mr-3 " />
                       <span>Update Post</span>

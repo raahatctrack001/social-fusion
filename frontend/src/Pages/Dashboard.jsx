@@ -17,6 +17,7 @@ import DashUsers from '../Compnents/DashAudience';
 import DashAnalytics from '../Compnents/DashAnalytics';
 import DashSettings from '../Compnents/DashSettings';
 import DashAudience from '../Compnents/DashAudience';
+import HiddenPosts from '../Compnents/HiddenPosts';
 // import { join } from 'path';
 
 const Dashboard = () => {
@@ -57,6 +58,7 @@ const Dashboard = () => {
       {tab === 'users' && <DashAudience />} 
       {tab === 'analytics' && <DashAnalytics />} 
       {tab === 'settings' && <DashSettings />} 
+      {tab === 'hidden-posts' && <HiddenPosts />}
       </div>
     </div>
   );

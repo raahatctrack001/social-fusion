@@ -9,6 +9,7 @@ import PageLoader from '../PageLoader'
 import EmojiPickerComponent from './EmojiPicker'
 import EmojiPicker from 'emoji-picker-react'
 import { useFetcher, useNavigate } from 'react-router-dom'
+import { formatDistanceToNow } from 'date-fns'
 
 
 
@@ -26,12 +27,12 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
     const messagesEndRef = useRef(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // Scroll to bottom when messages change
-        if (messagesEndRef.current) {
-          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, [messageToDisplay]);
+    // useEffect(() => {
+    //     // Scroll to bottom when messages change
+    //     if (messagesEndRef.current) {
+    //       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    //   }, []);
     
     
     // get messages of two users
@@ -165,7 +166,20 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
                     <p className='font-bold text-xl'> 
                     {conversation?.participants[0]?._id === currentUser?._id ? conversation?.name[1] : conversation?.name[0]} 
                     </p>
-                    <p className='text-xs font-light tracking-widest'> last seen: 3 min ago</p>
+                    <p> last seen recently </p>
+                    {/* <p className=''>
+                        <span className='hidden md:inline'>Last seen: </span> 
+                        {   
+                            (conversation.participants[0]?._id == currentUser?._id  ? conversation.participants[1].lastActive : conversation?.participants[0]?.lastActive) 
+                               ? formatDistanceToNow(new Date(
+                                   conversation.participants[0]._id == currentUser?._id ? 
+                                    conversation.participants[1].lastActive : 
+                                    conversation.participants[0].lastActive                                
+                                ), { addSuffix: true }
+                               ) 
+                               : 'No activity recorded'
+                        }
+                    </p>                     */}
                 </div>
             </div>
             <div className='flex justify-center items-center gap-4 pr-10'>

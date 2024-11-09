@@ -137,7 +137,7 @@ const Author = () => {
           <span className=' md:h-14 items-center border-b-2 p-2  flex flex-col md:flex-row justify-center font-semibold'> <span className='mr-2'>Total Posts</span> {authorData?.posts?.length} </span>
           
           {postData.length > 0 ? <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-5 w-full p-5'>   
-            {postData.length && postData.map((post, index) => (
+            {postData.length > 0 && postData.map((post, index) => (
                 <div className='p-1 border-2 border-gray-800 rounded-xl max-w-80 max-h-96 shadow-2xl hover:shadow-black dark:hover:shadow-white overflow-hidden' key={index} >
                   {/* <AuthorCard author={post?.author} /> */}
                   {showLikers[post?._id] && <LikersPopup postId={post?._id} setIsHovered={setShowLikers}/>}
