@@ -300,8 +300,8 @@ const AuthorHeader = ({ author, setAuthor }) => {
             <input ref={profileRef} type='file' className='hidden' onChange={handleDPChange}/>
             { author?._id === currentUser?._id && !showDropdown &&
             <div onClick={()=>setShowDropdown(!showDropdown)}
-              className='w-10 h-10 bg-white absolute border rounded-full top-20 left-24 flex justify-center items-center cursor-pointer'>
-              <HiPencil className='text-2xl text-gray-950 relative' 
+              className='w-10 h-10 bg-white absolute border rounded-full top-24 left-24 flex justify-center items-center cursor-pointer'>
+              <HiPencil className='text-2xl text-gray-950' 
             />
             </div>}
             {currentUser?._id !== author?._id && <span onClick={()=>{setShowDP(!showDP)}} className={`flex justify-start items-center absolute top-24 left-[105px] p-1 ${author?.isActive ? 'bg-green-500':'bg-red-500'} rounded-lg cursor-pointer gap-1 text-nowrap`}> 
@@ -330,11 +330,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 alt="Author" 
                 className="w-32 h-32 rounded-full  object-cover cursor-pointer"
               />
-              <div>
-              {
-                author?.lastActive && <Alert disabled color={`${author?.isActive ? 'success' : 'failure'}`} className='h-5 w-auto justify-center items-center'><span className=' flex justify-center items-center text-nowrap text-xs font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
-              }
-              </div>
+              
 
             </div>
           </div>
@@ -345,6 +341,11 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 <div className="flex flex-col justify-between w-full ">
                   <div className='flex justify-between'>
                     <div>
+                    <div>
+              {
+                author?.lastActive && <Alert disabled color={`${author?.isActive ? 'success' : 'failure'}`} className='h-5 w-auto justify-center items-center'><span className=' flex justify-center items-center text-nowrap text-xs font-bold'>{author?.isActive ? "Active" : `Last Seen: ${formatDistanceToNow(new Date(author?.lastActive), {addSuffix:true})}`}</span></Alert>
+              }
+              </div>
                         {author?.aiGenerated && <p className='bg-red-500 text-white font-semi-bold rounded-lg flex justify-center px-2'> Test UserId: {author?._id.substring(0, 5)+"..."} </p>}
                         <h2 className="text-xl font-bold flex  ml-5 md:ml-10 justify-start">{author.fullName}</h2>
                         <p className="flex  ml-5 md:ml-10 justify-start">@{author.username}</p>
