@@ -121,6 +121,7 @@ export const registerUser = asyncHandler(async (req, res, next)=>{
 })
 
 export const loginUser = asyncHandler(async (req, res, next) => {
+    
     const { userEmail, password: pass} = req.body;
     // console.log(req.body)
     try {

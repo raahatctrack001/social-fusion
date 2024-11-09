@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import ApiResponse from './Utils/apiResponse.js';
 import path from 'path';
-
+import bcryptjs from 'bcryptjs';
 
 const app = express();
 
@@ -25,6 +25,7 @@ import otpRouter from './Routes/otp.router.js';
 import storyRouter from './Routes/story.routes.js';
 import conversationRouter from './Routes/message routes/conversation.routes.js';
 import messageRouter from './Routes/message routes/message.route.js';
+import User from './Models/user.model.js';
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter);
@@ -50,4 +51,6 @@ app.use((err, req, res, next)=>{
         new ApiResponse(err.statusCode||400, err.message||"something went wrong", err)
     );
 });
+
+
 export default app;

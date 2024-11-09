@@ -11,7 +11,8 @@ databaseConnection()
         console.log(`mongodb connection has been established at`, connectionInstance.connection.host)
         const server = app.listen(port, ()=>{
             console.log(`server is up and live on ${port}`)
-        })       
+        }) 
+             
     })
     .catch((error)=>{
         console.log("trying to connect database", error);
