@@ -111,11 +111,13 @@ const ShowPosts = ({heading, postData}) => {
             {post?.author?._id !== currentUser?._id ? (
               <button 
                 onClick={() => handleToggleFollowButtonClick(post?.author)}
-                className="border rounded-lg px-3 py-1 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 text-sm font-medium">
+                className="border rounded-lg px-3 py-1 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 text-sm font-medium"
+                title={currentUser?.followings?.includes(post?.author?._id) ? "Unfollow" : "Follow"} // Tooltip text for follow/unfollow
+              >
                 {currentUser?.followings?.includes(post?.author?._id) ? (
                   <div className="flex gap-1 items-center">
                     <HiUser className="text-lg" />
-                    <HiCheckCircle className="text-green-500 text-xs" />
+                    <HiCheckCircle className="text-red-500 text-xs" />
                   </div>
                 ) : (
                   <div className="flex items-center">
@@ -124,11 +126,12 @@ const ShowPosts = ({heading, postData}) => {
                   </div>
                 )}
               </button>
-            ) : (
-              <button disabled className="text-gray-400 dark:text-gray-500">
-                <HiBadgeCheck />
-              </button>
-            )}
+              ) : (
+          <button disabled className="text-gray-400 dark:text-gray-500" title="This is you">
+            <HiBadgeCheck />
+          </button>
+        )}
+
           </div>
           
           <div className="relative group">
