@@ -18,7 +18,9 @@ import {
     getLikersOfPost,
     getPostOfUser,
     hideUnhidePost,
-    getHiddenPosts
+    getHiddenPosts,
+    searchPostUsingCategory,
+    getSuggestedPostForHome
 } from "../Controllers/posts.controllerrs.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 
@@ -42,6 +44,8 @@ router.route("/get-followers/:userId").get(isUserLoggedIn, getFollowers);
 router.route("/get-followings/:userId").get(isUserLoggedIn, getFollowings);
 router.route("/likers-of-post/:postId").get(isUserLoggedIn, getLikersOfPost);
 router.route("/hide-unhide-post/:postId").patch(isUserLoggedIn, hideUnhidePost);
+router.route('/search-post-by-category').get(isUserLoggedIn, searchPostUsingCategory);
+router.route('/suggested-post-for-home/:userId').get(isUserLoggedIn, getSuggestedPostForHome);
 
 
 export default router;

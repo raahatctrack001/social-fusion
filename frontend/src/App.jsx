@@ -39,6 +39,9 @@ import Chatroom from "./Pages/Chatroom"
 import ResetForgotPassword from "./Compnents/ResetForgotPassword"
 import ResetTokenSent from "./Compnents/ResetPassword/ResetTokenSent"
 import ImageEditor from "./Compnents/testComponents/ImageEditor"
+import PreferredCategory from "./Pages/PreferredCategory"
+import UserAtHome from "./Compnents/UserAtHome"
+import StartSuggestion from "./Pages/StartSuggestion"
 
 
 function App() {  
@@ -61,6 +64,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/notifications" element={<UnderDevelopment />} />
                     <Route path="/chatroom" element={<Chatroom />} />
+                    <Route path="/select-preference" element={<StartSuggestion />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
@@ -73,7 +77,7 @@ function App() {
                   <Route path="/sign-in" element={<SignIn />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
                   <Route path="/test-route" element={<ImageEditor />} />
-                  <Route path="/*" element={< UnderDevelopment/>} />
+                  <Route path="/*" element={< StartSuggestion/>} />
                 </Routes>
                 <FooterComp />
           </BrowserRouter>

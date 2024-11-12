@@ -10,6 +10,7 @@ import {
     registerUser,
     resetPassword,
     updatePassword,
+    updatePreference,
     verifyResetPasswordToken, 
 } from '../Controllers/auth.controllers.js'; 
 import { upload } from '../Middlewares/multer.middleware.js';   
@@ -41,5 +42,6 @@ router.route("/verify-reset-password-token/:token").post(verifyResetPasswordToke
 router.route("/reset-password/:token").patch(upload.none(), resetPassword);
 router.route("/delete-user").delete(isUserLoggedIn, deleteUser);
 router.route("/is-email-verified").post(upload.none(), isEmailVerified);
+router.route("/save-preferred-category/:userId").patch(upload.none(), updatePreference);
 export default router;
 

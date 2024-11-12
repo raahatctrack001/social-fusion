@@ -379,3 +379,26 @@ export const deleteUser = asyncHandler(async (req, res)=>{
         next(error)
     }
 })
+
+//first time login
+export const updatePreference = asyncHandler(async (req, res, next) => {
+    const { userId } = req.params;
+    const selectedCategory = req.body.selectedCategory;
+    
+    try {
+        
+        const currentUser = await User.findByIdAndUpdate(userId, {
+            $set: {
+                preferredCategory: selectedCategory,
+            }
+        }, {new: true});
+
+        if(!currentUser){
+            throw new apiError(404, "failed to update selected category");
+        }
+        return res.status(201).json(new apiResponse(201, "User updated with preferred category", currentUser));
+
+    } catch (error) {
+        next(error);
+    }
+});

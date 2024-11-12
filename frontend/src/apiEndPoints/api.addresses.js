@@ -8,6 +8,7 @@ export  const apiEndPoints = {
     sendResetPasswordToken: ()=>`/api/v1/auth/forgot-password`,
     verifyResetPasswordToken: (token)=>`/api/v1/auth/verify-reset-password-token/${token}`,
     resetForgotPasswordAddress: (token)=>`/api/v1/auth/reset-password/${token}`,
+    updatePreference: (userId)=>`/api/v1/auth/save-preferred-category/${userId}`,
     
     getUserAddress : (userId)=> `/api/v1/users/get-user/${userId}`,
     getUsersAddress : (currentPage)=> `/api/v1/users/get-users/${currentPage}`,
@@ -27,7 +28,8 @@ export  const apiEndPoints = {
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
     getPostOfUserAddress: (userId)=>`/api/v1/posts/user-posts/${userId}`,
     getHiddenPosts: (userId)=>`/api/v1/posts/hidden-posts/${userId}`,
-    searchPostsAddress: (query)=>`/api/v1/posts/search-posts?searchTerm=${query}`,
+    searchPostsAddress: (query, page)=>`/api/v1/posts/search-posts?searchTerm=${query}&page=${page}`,
+    searchPostByCategory: (query, page)=>`/api/v1/posts/search-post-by-category?category=${query}&page=${page}`,
     getPostsAddress : (currentPage)=> `/api/v1/posts/get-posts/${currentPage}`,
     deletePostAddress : (postId)=> `/api/v1/posts/delete-post/${postId}`,
     updatePostAddress : (postId)=> `/api/v1/posts/edit-post/${postId}`,
@@ -40,6 +42,7 @@ export  const apiEndPoints = {
     toggleCommentSectionAddress: (postId)=>`api/v1/posts/toggle-comment-section/${postId}`,
     getLikersOfPost: (postId)=>`/api/v1/posts/likers-of-post/${postId}`,
     hideUnhidePost: (postId)=> `/api/v1/posts/hide-unhide-post/${postId}`,
+    getHomePostSuggestion: (userId, page)=>`api/v1/posts/suggested-post-for-home/${userId}?page=${page}`,
     
     createCommentAddress : (postId, userId)=> `/api/v1/comments/create-comment/${postId}/${userId}`,
     replyCommentAddress : (parentId, userId)=> `/api/v1/comments/reply-comment/${parentId}/${userId}`,

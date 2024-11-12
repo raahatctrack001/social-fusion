@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PostCard from './PostCard'
 import { Button } from 'flowbite-react'
 import NotFoundPage from '../Pages/NotFoundPage'
@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateSuccess } from '../redux/slices/user.slice'
 import LikersPopup from './PostLikersPopup'
 import SharePopup from './ShareURL'
+import CategoriesPost from './CategorisedPost'
+import PageLoader from './PageLoader'
 
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
@@ -22,6 +24,11 @@ const ShowPosts = ({heading, postData}) => {
     const [postId, setPostId] = useState(null);
     const [share, setShare] = useState(false);
     const [postToShare, setPostToShare] = useState(false);
+    const [mountedPosts, setMountedPosts] = useState();
+    
+    useEffect(()=>{
+      setMountedPosts(postData);
+    }, [postData])
 
     const handleToggleFollowButtonClick = async (author)=>{
       // //console.log("post", post);
@@ -69,15 +76,22 @@ const ShowPosts = ({heading, postData}) => {
       // }
     }
 
+    if(!mountedPosts){
+      <PageLoader />
+    }
+   
     
   return (
     <div className="container mx-auto p-4">
   <div className="flex flex-col mb-14">
-    <h1 className="text-center font-bold text-3xl tracking-widest py-4 mt-5"> 
-      {heading} 
-    </h1>
+    <div>
+      <h1 className="text-center font-bold text-3xl tracking-widest py-4 mt-5"> 
+        {heading} 
+      </h1>
+      
+    </div>
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-4">
-      {postData?.length ? postData.map((post, index) => (
+      {mountedPosts?.length ? mountedPosts.map((post, index) => (
         <div className="shadow-lg dark:hover:shadow-white border border-gray-200 dark:border-gray-700 rounded-lg w-full hover:shadow-xl transition duration-300 ease-in-out" key={index}>
           {share && (
             <SharePopup 
@@ -121,7 +135,7 @@ const ShowPosts = ({heading, postData}) => {
             <div className="relative p-4 bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
               <PostCard post={post} />
             </div>
-            <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-3 bg-gray-100 dark:bg-gray-700 rounded-b-lg">
+            <div className="absolute bottom-24 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-3 bg-gray-100 dark:bg-gray-700 rounded-b-lg">
               <button 
                 onClick={() => handleShowLikers(post)} 
                 className="text-sm text-blue-500 dark:text-blue-300">

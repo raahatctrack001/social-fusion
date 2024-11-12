@@ -71,6 +71,9 @@ export default function SignIn() {
         dispatch(signInSuccess(data.data));
         navigate("/")
         localStorage.setItem("currentUser", JSON.stringify(data?.data))
+        if(localStorage.getItem("askPreferredCategory")){
+          navigate('/select-preference')
+        }
        }
        else{
         setError(data.message);
@@ -85,7 +88,7 @@ export default function SignIn() {
       setLoading(false)
     }
   };
-  
+  console.log("localstorageitem", localStorage.getItem("askPreferredCategory"));
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

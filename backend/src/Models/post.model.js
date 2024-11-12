@@ -14,8 +14,6 @@ const postSchema = new mongoose.Schema({
     }, 
     thumbnail:[{
         type: String,
-        default: 'https://cdn.pixabay.com/photo/2019/04/29/13/20/post-it-4166054_1280.png',
-        require: true,
     }],
     author: {
         type: mongoose.Schema.Types.ObjectId,

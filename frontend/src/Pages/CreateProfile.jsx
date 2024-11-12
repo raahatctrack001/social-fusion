@@ -94,6 +94,8 @@ export default function CreateProfile() {
         setMessage(data.message);
         localStorage.removeItem("registerationData");
         localStorage.removeItem("profileData");
+        
+        localStorage.setItem("askPreferredCategory", true);
         setShowSuccessPopup(true);
       } else {
         setError(data.message);

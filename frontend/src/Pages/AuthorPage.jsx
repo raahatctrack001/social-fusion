@@ -19,7 +19,7 @@ import StoryViewer from '../Compnents/StoryViewer'
 const Author = () => {
   const { authorId } = useParams();
   const { currentUser } = useSelector(state=>state.user)
-  const [postData, setPostData] = useState();
+  const [postData, setPostData] = useState([]);
   const [authorData, setAuthorData] = useState([]);
   const [error, setError] = useState();
   const [selectedPost, setSelectedPost] = useState(null);
@@ -49,7 +49,6 @@ const Author = () => {
             // //console.log(author)
             if(author.success){
               setAuthorData(author.data);
-              setPostData(author?.data?.posts)
             }
         })()
       } catch (error) {
@@ -58,6 +57,23 @@ const Author = () => {
       }
   }, [ authorId ])
   // //console.log(authorData)
+
+  useEffect(()=>{
+    (async ()=>{
+      try {
+        const response = await fetch(apiEndPoints.getPostOfUserAddress(authorId));
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data.message || "network response wasn't ok")
+        }
+        if(data.success){
+          setPostData(data.data);
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    })();
+  }, [authorId])
 
   useEffect(()=>{
     (async()=>{

@@ -118,6 +118,10 @@ const userSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    preferredCategory: [{
+        type: String,
+        default: "All Category"
+    }],
     refreshToken: {
         type: String,
         default: "",

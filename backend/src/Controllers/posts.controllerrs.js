@@ -87,8 +87,10 @@ export const createPost = asyncHandler(async (req, res, next)=>{
 })
 
 export const searchPosts = asyncHandler(async (req, res, next) => {
+    
+    console.log("search bar page", req.query)
     try {
-      const startIndex = parseInt(req.query.startIndex) || 0;
+      const startIndex = parseInt(req.query.page-1) || 0;
       const limit = parseInt(req.query.limit) || 9;
       const sortDirection = req.query.order === 'asc' ? 1 : -1;
       const posts = await Post.find({
@@ -581,4 +583,93 @@ export const hideUnhidePost = asyncHandler(async (req, res, next)=>{
     }
 })
 
+export const searchPostUsingCategory = asyncHandler(async (req, res, next)=>{
+    const { page } = req.query;
+    console.log(req.query)
+    const posts = await Post.find({
+        category:req.query.category
+    })
+    .skip(page-1)
+    .limit(9)
 
+    return res.status(200)
+        .json(new apiResponse(200, "posts fetched", post))
+})
+
+const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));  // Get a random index between 0 and i
+        [array[i], array[j]] = [array[j], array[i]];    // Swap elements at index i and j
+    }
+    return array;
+};
+
+export const getSuggestedPostForHome = asyncHandler(async (req, res, next) => {
+    console.log("req.params", req.params);
+    console.log("req.query", req.query);
+
+    try {
+        const { userId } = req.params;
+        const { page = 1, pageSize = 5 } = req.query;  // Default to page 1, 9 posts per page
+
+        const currentUser = await User.findById(userId);
+        if (!currentUser) {
+            throw new apiError(404, "user not found");
+        }
+
+        // Fetch posts from followings
+        const followings = currentUser.followings;
+        const postsByFollowings = await Post.find({
+            author: { $in: followings }
+        })
+            .skip((page - 1) * pageSize)  // Apply pagination correctly
+            .limit(pageSize)
+            .populate("author");
+
+        const documentCountByFollowings = await Post.countDocuments({
+            author: { $in: followings }
+        });
+
+        console.log('document by following', documentCountByFollowings)
+        // Fetch posts by preferred categories
+        const categories = currentUser.preferredCategory;
+        console.log("categories", categories);
+
+        let postsByCategory = [];
+        let documentCountByCategory = 0;
+        if(categories.length != 0){
+            postsByCategory = await Post.find({
+                category: { $in: categories[0].split(",") }
+            })
+                .skip((page - 1) * pageSize)  // Apply pagination correctly
+                .limit(pageSize)
+                .populate("author");
+
+            documentCountByCategory = await Post.countDocuments({
+                category: { $in: categories[0].split(",") }
+            });
+        }
+        console.log("by category", documentCountByCategory);
+        console.log("by following", documentCountByFollowings)
+
+        // Merge and shuffle posts from both followings and categories
+        const mergedPosts = shuffleArray([...postsByCategory, ...postsByFollowings]);
+
+        // Calculate total count of posts
+        const totalPosts = documentCountByCategory + documentCountByFollowings;
+
+        // Paginate merged posts manually if necessary
+        // Note: The below pagination could be optimized if required, as the merged list may be larger
+        // const totalMergedPosts = mergedPosts.slice(0, totalPosts); // Limit to the total posts
+        // const paginatedPosts = totalMergedPosts.slice((page - 1) * pageSize, page * pageSize);
+
+        return res.status(200)
+            .json(new apiResponse(200, "Posts have been fetched", {
+                posts: mergedPosts,
+                totalCount: totalPosts,
+            }));
+
+    } catch (error) {
+        next(error);
+    }
+});

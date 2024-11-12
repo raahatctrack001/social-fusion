@@ -13,6 +13,7 @@ import SharePopup from '../Compnents/ShareURL';
 import { formatDistanceToNow } from 'date-fns';
 import PostComment from '../Compnents/PostComment';
 import LikersPopup from '../Compnents/PostLikersPopup';
+import PageLoader from '../Compnents/PageLoader';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -167,7 +168,10 @@ const PostPage = () => {
 
 //console.log("postpage post", post)
 
-  if(post?.isHidden || !post){
+  if(!post){
+    return <PageLoader info={"Please wait, content is loading"} />
+  }
+  if(post?.isHidden){
     return <div className='min-h-screen w-full flex justify-center items-center'>
        <h1 className='w-full max-w-lg bg-gray-800 grid place-items-center py-5 rounded-xl'> Post is unavailable or hidden by user! </h1>
     </div>
