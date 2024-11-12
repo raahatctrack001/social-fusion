@@ -85,7 +85,7 @@ export default function PostAtHome(){
       </h1>
       <button
         onClick={sendToSelectCategory} 
-        className='p-2 px-4 rounded-lg font-semibold'>
+        className='p-2 px-4 rounded-lg font-semibold bg-gray-400 text-black'>
         Add Categories
       </button>
     </div>

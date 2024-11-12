@@ -87,14 +87,13 @@ export const createPost = asyncHandler(async (req, res, next)=>{
 })
 
 export const searchPosts = asyncHandler(async (req, res, next) => {
-    
-    console.log("search bar page", req.query)
+    console.log("searching posts")
     try {
       const startIndex = parseInt(req.query.page-1) || 0;
       const limit = parseInt(req.query.limit) || 9;
       const sortDirection = req.query.order === 'asc' ? 1 : -1;
       const posts = await Post.find({
-        isHidden: false,
+        // isHidden: false,
         ...(req.query.userId && { userId: req.query.userId }),
         ...(req.query.category && { category: req.query.category }),
         // ...(req.query.slug && { slug: req.query.slug }),
