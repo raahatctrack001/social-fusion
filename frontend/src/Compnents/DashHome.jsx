@@ -86,7 +86,7 @@ const DashHome = () => {
       return <PageLoader />
     }
   return (
-    <div className="flex min-h-screen dark:bg-[rgb(16,23,42)]">
+    <div className="flex min-h-screen dark:bg-[rgb(16,23,42)] pl-10">
       
       {/* delete modal starts here */}
       <Modal show={showModal} onClose={() => setShowModal(false)}>
@@ -125,10 +125,10 @@ const DashHome = () => {
 
           {/* Key Metrics */}
           <div className="flex flex-col gap-4 mb-8">
-            <div className=" rounded-lg shadow-md">
-            {/* <h3 className="text-lg font-semibold mb-2">Recent Posts</h3> */}
+            {/* <div className=" rounded-lg shadow-md">
+            <h3 className="text-lg font-semibold mb-2">Recent Posts</h3>
               <RecentPostsTable heading={"Recent Posts"} displayPosts={recentPosts} />
-            </div>
+            </div> */}
             <div className='flex justify-between '>
               <div className=" p-6 rounded-lg shadow-md order-2 w-1/4 border-2">
                 <h1 className="text-lg font-semibold mb-2">Traffic Stats:</h1>
@@ -158,9 +158,9 @@ const DashHome = () => {
                   <Table.HeadCell>Status</Table.HeadCell>
                   <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
-                <Table.Body>
+                <Table.Body >
                   {postData?.length > 0 && postData.map((post, index) => (
-                    currentUser?._id === post?.author?._id && <Table.Row key={index}>
+                    currentUser?._id === post?.author?._id && <Table.Row key={index} className='border-2 dark:border-white border-gray-800'>
                       <Table.Cell><div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
                       <Table.Cell> {post?.author ? <div className='cursor-pointer font-bold text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "You" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
                       <Table.Cell>{post.category}</Table.Cell>

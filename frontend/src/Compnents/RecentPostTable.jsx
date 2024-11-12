@@ -18,7 +18,7 @@ const RecentPostsTable = ({heading, displayPosts }) => {
         <Table.Body>
           {displayPosts && displayPosts.length > 0 ? (
             displayPosts.map((post) => (
-              <Table.Row key={post._id} className=''>
+              <Table.Row key={post._id}  >
                 <Table.Cell className=' dark:text-blue-300 text-blue-500 cursor-pointer' onClick={()=>{navigate(`/posts/post/${post?._id}`)}}>{post?.title}</Table.Cell>
                 <Table.Cell className=' dark:text-blue-300 text-blue-500 cursor-pointer' onClick={()=>{navigate(`/posts/post/${post?._id}`)}}>
                     <DisplayContent content=   {post?.content.length > 50 ? `${post?.content.slice(0, 50)}...` : post?.content} />

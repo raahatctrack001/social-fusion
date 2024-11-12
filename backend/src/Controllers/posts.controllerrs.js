@@ -94,6 +94,7 @@ export const searchPosts = asyncHandler(async (req, res, next) => {
       const limit = parseInt(req.query.limit) || 9;
       const sortDirection = req.query.order === 'asc' ? 1 : -1;
       const posts = await Post.find({
+        isHidden: false,
         ...(req.query.userId && { userId: req.query.userId }),
         ...(req.query.category && { category: req.query.category }),
         // ...(req.query.slug && { slug: req.query.slug }),
@@ -148,7 +149,7 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
         const totalCount = await Post.countDocuments({});
 
         await Post
-            .find({})
+            .find({isHidden: false})
             .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
             .skip((page-1)*9)
             .limit(9)
@@ -181,11 +182,10 @@ export const getPost = asyncHandler(async (req, res, next)=>{
                 if(!post){
                     throw new apiError(404, "post doesn't exists!")
                 }
-                const filteredPost = post?.isHidden ? null : post;
                 return res
                         .status(200)
                         .json(
-                            new apiResponse(200, filteredPost ? "post fetched!" : "No Post found", filteredPost)
+                            new apiResponse(200, "post fetched!", post)
                         )
             })
             .catch(error=>next(error))
@@ -371,7 +371,7 @@ export const allPostAnalytics = asyncHandler(async (req, res, next) => {
     threeMonthsAgo.setMonth(now.getMonth() - 3);
 
     try {
-        const allPosts = await Post.find()
+        const allPosts = await Post.find({})
             .populate("author")
             .sort({ createdAt: -1 });
 
@@ -585,15 +585,20 @@ export const hideUnhidePost = asyncHandler(async (req, res, next)=>{
 
 export const searchPostUsingCategory = asyncHandler(async (req, res, next)=>{
     const { page } = req.query;
-    console.log(req.query)
     const posts = await Post.find({
         category:req.query.category
     })
-    .skip(page-1)
+    .skip((page-1)*9)
     .limit(9)
+    .populate('author')
 
-    return res.status(200)
-        .json(new apiResponse(200, "posts fetched", post))
+    const totalCount = await Post.countDocuments({
+        category: req.query.category
+    })
+
+    return res
+        .status(200)
+        .json(new apiResponse(200, "posts fetched using category", {posts, totalCount}))
 })
 
 const shuffleArray = (array) => {

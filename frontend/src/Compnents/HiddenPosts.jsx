@@ -11,7 +11,7 @@ const HiddenPosts = () => {
     (async ()=>{
         const response = await fetch(apiEndPoints.getHiddenPosts(currentUser?._id), {method: "GET"});
         const data = await response.json();
-        console.log("hidden post is a hit now.")
+        console.log("Hidden post is a hit now.")
         if(!response.ok){
             console.log(data.message || "error network response")
         }

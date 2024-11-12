@@ -23,7 +23,7 @@ import SharePopup from './ShareURL';
 // import { signInSuccess } from '../redux/slices/user.slice';
 // import { current } from '@reduxjs/toolkit';
 
-const AuthorHeader = ({ author, setAuthor }) => {
+const AuthorHeader = ({ author, setAuthor, postCount }) => {
   const [followersCount, setFollowersCount] = useState(author?.followers?.length)
   // const [followingCount, setFollowingCount] = useState(author?.followings?.length)
   // //console.log(author)
@@ -386,7 +386,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                           <p className="">Following</p>
                         </div>
                         <div className="text-center ">
-                          <p className="text-lg font-semibold">{author.posts.length}</p>
+                          <p className="text-lg font-semibold">{postCount}</p>
                           <p className="">Posts</p>
                         </div>
                     </div>
@@ -422,7 +422,7 @@ const AuthorHeader = ({ author, setAuthor }) => {
                 <p className="">Following</p>
               </div>
               <div className="text-center ">
-                <p className="text-lg font-semibold">{author.posts.length}</p>
+                <p className="text-lg font-semibold">{postCount}</p>
                 <p className="">Posts</p>
               </div>          
             </div>

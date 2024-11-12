@@ -7,6 +7,7 @@ import CustomDropdown from '../Compnents/CustomDropdown';
 import NotFoundPage from './NotFoundPage';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import PostCategoryDropdown from '../Compnents/PostCategoryDropdown';
 
 export default function PostAtHome(){
     const { currentUser } = useSelector(state=>state.user);
@@ -94,7 +95,13 @@ export default function PostAtHome(){
 
 return (
 <div className='flex flex-col flex-1'>
-    <div className='overflow-y-scroll' style={{ height: '53rem' }} onScroll={handlePostScroll}>  
+    {/* <div className='px-10 relative top-10'>
+      <PostCategoryDropdown />
+    </div> */}
+    {/* <div>
+      <CategorisedPost />
+    </div> */}
+    <div className='overflow-y-scroll' style={{ height: '53rem' }} onScroll={handlePostScroll}> 
       {postData.length > 0 && 
         <ShowPosts heading={`Suggested posts`} postData={postData} /> }
     </div>

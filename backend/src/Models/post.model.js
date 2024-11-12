@@ -38,6 +38,10 @@ const postSchema = new mongoose.Schema({
             ref:'User'
         }
     ],
+    popularityScore: {
+        type: Number,
+        default: 0,
+    },
     category: {
         type: String,
         required:true,
@@ -79,5 +83,18 @@ const postSchema = new mongoose.Schema({
 },
 { timestamps: true })
 
+// Method to calculate and update popularity score
+postSchema.methods.calculatePopularityScore = function () {
+    this.popularityScore = (this.likes * 0.2) + (this.comments * 0.4) + (this.shares * 0.3) + (this.views * 0.1);
+    return this.popularityScore;
+  };
+  
+// Middleware to recalculate popularityScore before saving if any engagement field is modified
+postSchema.pre("save", function (next) {
+    this.calculatePopularityScore();
+    next();
+  });
+
+  
 const Post = new mongoose.model("Post", postSchema);
 export default Post

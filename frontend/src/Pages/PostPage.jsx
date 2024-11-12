@@ -33,7 +33,7 @@ const PostPage = () => {
   const postUrl = `${window.location.origin}/posts/post/${post?._id}`;
 
   const dispatch = useDispatch();
-  
+  //scroll to top
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
@@ -166,12 +166,12 @@ const PostPage = () => {
     }
   }
 
-//console.log("postpage post", post)
-
+console.log("postpage post", post)
   if(!post){
     return <PageLoader info={"Please wait, content is loading"} />
   }
-  if(post?.isHidden){
+  console.log("post", post)
+  if(post.isHidden && post.author?._id !== currentUser?._id){
     return <div className='min-h-screen w-full flex justify-center items-center'>
        <h1 className='w-full max-w-lg bg-gray-800 grid place-items-center py-5 rounded-xl'> Post is unavailable or hidden by user! </h1>
     </div>

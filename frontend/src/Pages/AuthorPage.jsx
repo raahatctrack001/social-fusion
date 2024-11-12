@@ -147,10 +147,10 @@ const Author = () => {
         ))}
       </div>
 
-        <AuthorHeader author = {authorData} setAuthor={setAuthorData}/>
+        <AuthorHeader author = {authorData} setAuthor={setAuthorData} postCount={postData.length}/>
 
         <div className='border-2 w-full min-h-screen flex flex-col rounded-3xl'>
-          <span className=' md:h-14 items-center border-b-2 p-2  flex flex-col md:flex-row justify-center font-semibold'> <span className='mr-2'>Total Posts</span> {authorData?.posts?.length} </span>
+          <span className=' md:h-14 items-center border-b-2 p-2  flex flex-col md:flex-row justify-center font-semibold'> <span className='mr-2'>Total Posts</span> {postData?.length} </span>
           
           {postData.length > 0 ? <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-5 w-full p-5'>   
             {postData.length > 0 && postData.map((post, index) => (

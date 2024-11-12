@@ -162,7 +162,7 @@ const ShowPosts = ({heading, postData}) => {
           </div>
         </div>
       )) : (
-        <div className="flex justify-center items-center w-full">
+        <div className="w-full grid place-items-center">
           <NotFoundPage />
         </div>
       )}
