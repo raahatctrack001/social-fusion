@@ -10,14 +10,18 @@ import EmojiPickerComponent from './EmojiPicker'
 import EmojiPicker from 'emoji-picker-react'
 import { useFetcher, useNavigate } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
+import PostWhileChatting from './PostWhileChatting'
 
 
 
 const ConversationPage = ({conversationId, conversations, setConversations }) => {
     const { theme } = useSelector(state=>state.theme)
+    const focusRef = useRef();
     const { currentUser } = useSelector(state=>state.user);
     const [conversation, setConversation] = useState(null);
     const [messageContent, setMessageContent] = useState('');
+    const [triggerUserPostInChat, setTriggerUserPostInChat] = useState(false);
+    const [triggerMyPostInChat, setTriggerMyPostInChat] = useState(false);
     const [messageToDisplay, setMessagesToDisplay] = useState([]);
     const [showEmojis, setShowEmojis] = useState(false);
     const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
@@ -101,6 +105,25 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
         })()
     }, [conversationId])
     
+    useEffect(()=>{
+        focusRef.current.focus();
+    }, [messageContent])
+    useEffect(()=>{
+        if(messageContent.length >= 7 && messageContent.slice(-7) === '...your'){
+            setTriggerUserPostInChat(true);
+        }
+        else{
+            setTriggerUserPostInChat(false)
+        }
+
+        if(messageContent.length >= 7 && messageContent.slice(-7) === '...mine'){
+            setTriggerMyPostInChat(true)
+        }
+        else{
+            setTriggerMyPostInChat(false);
+        }
+    }, [messageContent])
+
     const sendMessageClick = async ()=>{
         // console.log("message clicked with following details");
         // console.log("sender: ", currentUser.fullName);
@@ -113,7 +136,8 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
             }
             const formData = new FormData();
             formData.append("message", messageContent);
-            const response = await fetch(apiEndPoints.sendPrivateMessageAddress(currentUser?._id, conversation?.participants[1]?._id, conversation?._id),
+            const receiverId = currentUser?._id === conversation?.participants[0]?._id ? currentUser?._id : conversation.participants[1]._id;
+            const response = await fetch(apiEndPoints.sendPrivateMessageAddress(currentUser?._id, receiverId, conversation?._id),
             {  
                 method: "POST",
                 body: formData,
@@ -147,7 +171,7 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
     
 
        
-
+    console.log(messageToDisplay);
     // if(!conversation){
     // return <div className='w-full grid place-items-center'> <PageLoader /> </div>
     // }
@@ -192,6 +216,23 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
 
         {/* //message box */}
         <MessageBox messages={messageToDisplay} scrollToLastMessage={messagesEndRef}/>
+        {triggerUserPostInChat && <div className='w-full flex justify-center items-center'>
+            <PostWhileChatting
+                setMessageContent={setMessageContent}
+                isOpen={triggerUserPostInChat}
+                onClose={()=>setTriggerUserPostInChat(!triggerUserPostInChat)}  
+                userId={currentUser ?._id == conversation.participants[0]?._id ? conversation.participants[1]?._id  : conversation.participants[0]?._id} />
+        </div>}
+        {triggerMyPostInChat && <div className='w-full flex justify-center items-center'>
+            <PostWhileChatting 
+                setMessageContent={setMessageContent}
+                userId={currentUser?._id} 
+                isOpen={triggerMyPostInChat}
+                onClose={()=>setTriggerMyPostInChat(!triggerMyPostInChat)}
+                />
+        </div>}
+
+        
         <div className="relative bottom- p-1 md:px-4 md:py-2 dark:bg-gray-800">
             <div className="flex gap-2 items-center dark:bg-gray-700 rounded-full py-2 px-4">
             <div className="relative group hidden md:inline">
@@ -222,7 +263,6 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
                 <HiOutlinePaperClip
                     onClick={()=>setShowAttachmentOptions(!showAttachmentOptions)} 
                     className="text-lg md:text-xl dark:text-white cursor-pointer hover:text-green-500" />
-
                 <TextInput
                     className="flex-grow dark:bg-gray-600 dark:text-white placeholder-gray-400 rounded-full md:py-2 md:px-4 focus:outline-none"
                     placeholder="Type a message..."
@@ -231,6 +271,7 @@ const ConversationPage = ({conversationId, conversations, setConversations }) =>
                     value={messageContent}
                     onFocus={()=>setShowEmojis(false)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { sendMessageClick(); } }}
+                    ref={focusRef}
                 />
 
                 {

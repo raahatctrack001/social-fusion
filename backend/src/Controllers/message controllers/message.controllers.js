@@ -11,7 +11,10 @@ export const sendPrivateMessage = asyncHandler(async (req, res, next)=>{
     // return;
     try {
         const { senderId, receiverId, conversationId } = req.params;
-        const { message } = req.body;
+        const { message, mediaURL, mediaType, } = req.body;
+        if(!message && !mediaURL){
+            throw new apiError(404, "Please type message or send some media")
+        }
         if(!senderId){
             throw new apiError(404, "senderId is misssing");
         }
@@ -41,8 +44,10 @@ export const sendPrivateMessage = asyncHandler(async (req, res, next)=>{
             sender: senderId,
             receivers: [receiverId],
             conversation: conversationId,
-            content: message,
+            content: message || "",
             status: "sent",
+            mediaURL: mediaURL || "",
+            mediaTypes: mediaType || "none"            
         })
         // console.log("sent message: ", createMessage);
         if(!createMessage){
@@ -94,4 +99,58 @@ export const getAllMessageOfUserWithAnotherUser = asyncHandler(async (req, res, 
     }
     
     
+})
+
+export const sendPost = asyncHandler(async (req, res, next)=>{
+    try {
+        const { senderId } = req.params;
+        const {message, users, mediaURL, mediaType } = req.body;
+
+        const conversations = await Promise.all(
+            users.map(async (userId) => {
+                return await Conversation.findOne({
+                    participants: { $all: [senderId, userId], $size: 2 } // Ensures only two participants
+                })
+            })
+        );
+
+        // Filter out any null values if a conversation does not exist for a user
+        const filteredConversations = conversations.filter(conversation => conversation !== null);
+        console.log(filteredConversations)
+        // Map each conversation to create a message and wait for all to complete
+        const messages = await Promise.all(
+            filteredConversations.map(async (conversation) => {
+                const receiverId = senderId === conversation.participants[0].toString() ? 
+                                   conversation.participants[1] : 
+                                   conversation.participants[0];
+            
+                const createMessage = await Message.create({
+                    sender: senderId,
+                    receivers: [receiverId],
+                    conversation: conversation._id,
+                    content: message || "",
+                    status: "sent",
+                    mediaURL: mediaURL || "",
+                    mediaTypes: mediaType || "none"
+                });
+
+                const updatedConverstaion = await Conversation.findByIdAndUpdate(conversation?._id, {
+                    $set: {
+                        lastMessage: createMessage, // as in schema its objectId not string
+                    }
+                },{new: true}).populate(["participants", "lastMessage"])
+                
+                if(!updatedConverstaion){
+                    throw new apiError(404, "failed to udpate conversation!")
+                }
+                return createMessage;
+            })
+        );
+        
+        
+        console.log("messaged sent", messages);
+        return res.status(200).json(new apiResponse(200, 'message sent', messages));
+    } catch (error) {
+        next(error)
+    }  
 })

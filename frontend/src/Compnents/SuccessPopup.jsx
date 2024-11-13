@@ -11,9 +11,7 @@ const SuccessPopup = ({heading, info, setShowPopup }) => {
 
   const handleClickOk = ()=>{
     setShowPopup(false)
-    if(heading == "Account Created!" || "Reset Password Success!"){
-      navigate('/sign-in')
-    }
+    
   }
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${darkTheme ? 'bg-gray-900 bg-opacity-90' : 'bg-white bg-opacity-90'}`}>

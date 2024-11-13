@@ -3,8 +3,20 @@ import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { BsWhatsapp, BsInstagram, BsTwitter, BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Button } from "flowbite-react";
 import QRCodeGenerator from "./QRCodeGenerator";
+import UserAtHome from "./UserAtHome";
+import ShareWithUser from "./ShareWithUser";
+import { useSelector } from "react-redux";
+import { apiEndPoints } from "../apiEndPoints/api.addresses";
+import SuccessPopup from "./SuccessPopup";
+import { useNavigate } from "react-router-dom";
+
 function SharePopup({ postUrl, heading, onClose }) {
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const { currentUser } = useSelector(state=>state.user);
+
+  const navigate = useNavigate();
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(postUrl);
@@ -45,8 +57,65 @@ function SharePopup({ postUrl, heading, onClose }) {
     }
   };
 
+  const handleShareToUserClick = async ()=>{
+    try {
+        const response = await fetch(apiEndPoints.sendPost(currentUser?._id), {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json" // Make sure to include this header
+          },
+          body: JSON.stringify(
+              { 
+                users: selectedUsers,
+                mediaURL: postUrl,
+                mediaType: "link" 
+              }
+
+          )
+        });
+        const data = await response.json();
+
+        if(!response.ok){
+          alert(data.message || "network response isn't ok while sharing posts")
+        }
+
+        if(data.success){
+          if(data.data?.length === 0)
+              alert("You can only share media with whom you have previous conversation")
+          console.log("shared to users who are not in contact", data);
+          setShowSuccessPopup(true);
+          // alert(data.message);
+          setSelectedUsers([]);
+          navigate('/chatroom?tab=chat')
+        }
+        
+        console.log("else part of datra.success", data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex justify-center items-center gap-5 bg-black bg-opacity-50 z-50">
+      {
+        showSuccessPopup && <SuccessPopup 
+                              setShowPopup={setShowSuccessPopup} 
+                              heading={`Post Shared`} 
+                              info={"Visit chatroom for more discussion."}  
+                            />
+      }
+      <div className="flex flex-col">
+        <ShareWithUser heading={"Share with"} selectedUsers = {selectedUsers} setSelectedUsers = {setSelectedUsers}/>
+        {
+          selectedUsers.length > 0 && 
+            <Button 
+              className="relative bottom-40" 
+              outline
+               onClick={handleShareToUserClick}
+            > 
+               Share with {selectedUsers.length} users 
+            </Button>
+        }
+      </div>
       <div className="dark:bg-gray-800 bg-gray-200 p-6 rounded-lg shadow-lg w-full md:w-3/4 lg:w-1/2">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">{heading ||"Share Post"}</h2>

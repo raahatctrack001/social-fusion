@@ -27,6 +27,7 @@ export  const apiEndPoints = {
     createPostAddress : ()=> `/api/v1/posts/create-post/`,
     getPostAddress : (postId)=> `/api/v1/posts/get-post/${postId}`,
     getPostOfUserAddress: (userId)=>`/api/v1/posts/user-posts/${userId}`,
+    getPostOfUserInChat: (userId)=>`/api/v1/posts/get-post-in-chat/${userId}`,
     getHiddenPosts: (userId)=>`/api/v1/posts/hidden-posts/${userId}`,
     searchPostsAddress: (query, page)=>`/api/v1/posts/search-posts?searchTerm=${query}&page=${page}`,
     searchPostByCategory: (query, page)=>`/api/v1/posts/search-post-by-category?category=${query}&page=${page}`,
@@ -78,4 +79,5 @@ export  const apiEndPoints = {
 
     sendPrivateMessageAddress: (senderId, receiverId, conversationId)=>`/api/v1/message/send-message/${senderId}/${receiverId}/${conversationId}`,
     getAllMessageOfUserWithAnotherUserAddress:(senderId, receiverId, conversationId)=>`/api/v1/message/get-all-messages/${senderId}/${receiverId}/${conversationId}`,
+    sendPost: (senderId)=>`/api/v1/message/send-post/${senderId}`,
 }

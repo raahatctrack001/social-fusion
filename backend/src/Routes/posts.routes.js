@@ -20,7 +20,8 @@ import {
     hideUnhidePost,
     getHiddenPosts,
     searchPostUsingCategory,
-    getSuggestedPostForHome
+    getSuggestedPostForHome,
+    getPostOfUserInChat
 } from "../Controllers/posts.controllerrs.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 
@@ -33,6 +34,7 @@ router.route("/get-posts/:page").get(isUserLoggedIn, getPosts);
 router.route("/get-post/:postId").get(isUserLoggedIn, getPost);
 router.route("/hidden-posts/:userId").get(isUserLoggedIn, getHiddenPosts);
 router.route("/user-posts/:userId").get(isUserLoggedIn, getPostOfUser);
+router.route("/get-post-in-chat/:userId").get(isUserLoggedIn, getPostOfUserInChat);
 router.route("/delete-post/:postId").delete(isUserLoggedIn, deletePost);
 router.route("/edit-post/:postId").put(upload.any(), isUserLoggedIn, updatePost);
 router.route("/like-post/:postId/:userId").post(isUserLoggedIn, likePost);

@@ -8,15 +8,13 @@ const messageSchema = new mongoose.Schema({
     receivers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
-    }],
-    
+    }],    
     conversation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Conversation',
     },
     content: {
         type: String,
-        required: true,
         trim: true,
     },
     status: {
@@ -32,7 +30,7 @@ const messageSchema = new mongoose.Schema({
     },
     mediaTypes: {
         type: String,
-        enum: ["image", "video", "file", "none"],
+        enum: ["image", "video", "file", "link", "none"],
         default: "none"
     },
     isDeleted: {

@@ -160,7 +160,7 @@ const DashHome = () => {
                 </Table.Head>
                 <Table.Body >
                   {postData?.length > 0 && postData.map((post, index) => (
-                    currentUser?._id === post?.author?._id && <Table.Row key={index} className='border-2 dark:border-white border-gray-800'>
+                    currentUser?._id === post?.author?._id && <Table.Row key={index} className=''>
                       <Table.Cell><div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
                       <Table.Cell> {post?.author ? <div className='cursor-pointer font-bold text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "You" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
                       <Table.Cell>{post.category}</Table.Cell>

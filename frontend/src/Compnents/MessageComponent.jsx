@@ -136,6 +136,7 @@ const MessageComponent = () => {
     // if(conversations.length === 0){
     //     return <div> No active conversation </div>
     // }
+    console.log("conversations", conversations)
     return (
     <div className='flex w-full h-[825px]'>
         {createConversationLoading && <LoaderPopup loading={createConversationLoading} setLoading={setCreateConversationLoading} info={"creating/opening conversation please wait!"} />}
@@ -188,13 +189,14 @@ const MessageComponent = () => {
                                     {conversation?.participants[0]?._id === currentUser?._id ? conversation?.name[1] : conversation?.name[0]} 
                                     </p>
                                     <p>
-                                      {conversation?.lastMessage?.content?.length
-                                        ? conversation.lastMessage.content.substring(0, 30) + "..."
-                                        : conversation?.lastMessage?.content || 
-                                          `${conversation?.participants[0]?._id === currentUser?._id
-                                            ? conversation?.participants[1]?.fullName
-                                            : conversation?.participants[0]?.fullName
-                                          } started a conversation...`
+                                      {
+                                        conversation.lastMessage ? (conversation.lastMessage?.content?.length > 0 ? 
+                                                (conversation.lastMessage?.content?.length > 30 ? (conversation.lastMessage?.content.substr(0, 30)) : (conversation.lastMessage?.content)): 
+                                                (conversation.lastMessage?.mediaURL.length > 30 ? (conversation.lastMessage?.mediaURL?.substr(0, 30)) : (conversation.lastMessage?.mediaURL))) : 
+                                            (`${conversation?.participants[0]?._id === currentUser?._id
+                                              ? conversation?.participants[1]?.fullName
+                                              : conversation?.participants[0]?.fullName
+                                            } started a conversation...`)
                                       }
                                     </p>                                  
                                 </div>
