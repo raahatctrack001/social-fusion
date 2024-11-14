@@ -33,14 +33,38 @@ export const createBook = asyncHandler(async (req, res, next)=>{
 export const getBooksOfUser = asyncHandler(async (req, res, next)=>{
     try {
         const { userId } = req.params;
+        const { page = 1 } = req.query; 
         const books = await Book.find({
             author: userId
         })
+        .skip((page-1)*8)
+        .limit(8)
+        .sort({createdAt: -1})
         .populate("author");
         
         return res.status(200)
             .json(new apiResponse(200, "Authors book fetched", books))
     } catch (error) {
         next(error)
+    }
+})
+
+export const updateBook = asyncHandler(async (req, res, next)=>{
+    const { userId, bookId } = req.params;
+    
+    try {
+        const updatedBook = await Book.findById(bookId);
+        if(updatedBook?.author != userId){
+            throw new apiError(404, "Book not found to update")
+        }
+
+        const bookUpdated = await Book.findByIdAndUpdate(bookId, req.body, {new: true});
+        if(!bookUpdated){
+            throw new apiError(401, "failed to add summary")
+        }
+        return res.status(200)
+            .json(new apiResponse(200, "summary has been added", bookUpdated))
+    } catch (error) {
+        next(error);
     }
 })

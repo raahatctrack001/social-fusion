@@ -43,6 +43,8 @@ import PreferredCategory from "./Pages/PreferredCategory"
 import UserAtHome from "./Compnents/UserAtHome"
 import StartSuggestion from "./Pages/StartSuggestion"
 import WriteBook from "./Pages/Book/WriteBook"
+import EditBook from "./Pages/Book/EditBook"
+import BookSummaryPage from "./Pages/Book/BookSummary"
 
 
 function App() {  
@@ -67,6 +69,8 @@ function App() {
                     <Route path="/chatroom" element={<Chatroom />} />
                     <Route path="/select-preference" element={<StartSuggestion />} />
                     <Route path="/write-book" element={<WriteBook />} />
+                    <Route path="/books/book/:bookId" element={<EditBook />} />
+                    <Route path="/books/book-detail" element={<BookSummaryPage />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
@@ -79,7 +83,7 @@ function App() {
                   <Route path="/sign-in" element={<SignIn />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
                   <Route path="/test-route" element={<ImageEditor />} />
-                  <Route path="/*" element={< StartSuggestion/>} />
+                  <Route path="/*" element={< UnderDevelopment />} />
                 </Routes>
                 <FooterComp />
           </BrowserRouter>

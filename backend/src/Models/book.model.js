@@ -53,6 +53,9 @@ const bookSchema = new mongoose.Schema({
         enum: ["FREE", "PREMIUM"],
         default: "FREE",
     },
+    publishedDate: {
+        type: Date,
+    },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
