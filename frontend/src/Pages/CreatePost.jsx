@@ -10,6 +10,7 @@ import CustomDropdown from '../Compnents/CustomDropdown';
 import { useSelector } from 'react-redux';
 import LoaderPopup from '../Compnents/Loader';
 import "../Compnents/CustomJoditStyles.css"
+import EditorForSummary from './Book/EditorForSummary';
 
 const CreatePost = ({ placeholder }) => {
   const categories = [
@@ -238,6 +239,7 @@ const CreatePost = ({ placeholder }) => {
           </div>
             <CopyInput url={imageUrl}/>
           </div>}
+          
           <JoditEditor
             ref={editor}
             value={content}

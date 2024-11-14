@@ -80,4 +80,7 @@ export  const apiEndPoints = {
     sendPrivateMessageAddress: (senderId, receiverId, conversationId)=>`/api/v1/message/send-message/${senderId}/${receiverId}/${conversationId}`,
     getAllMessageOfUserWithAnotherUserAddress:(senderId, receiverId, conversationId)=>`/api/v1/message/get-all-messages/${senderId}/${receiverId}/${conversationId}`,
     sendPost: (senderId)=>`/api/v1/message/send-post/${senderId}`,
+
+    createBook: (userId)=>`/api/v1/book/create-book/${userId}`,
+    getBooks: (userId)=>`/api/v1/book/get-books/${userId}`,
 }

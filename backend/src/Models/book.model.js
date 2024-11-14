@@ -1,30 +1,58 @@
 import mongoose from 'mongoose'
-
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         trim: true
     },
     content: {
         type: String,
-        require: true
+        required: true
     }, 
-    thumbnail:[{
-        type: String,
-    }],
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
+    category: {
+        type: String,
+        default: "Uncategorised"
+    },
+    genre: {
+        type: String,
+    },
+    isOpenSource: {
+        type: Boolean,
+        deafult: false,
+    },
     contributors: [{
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     }],
-    reviews: [{
-
+    summary: {
+        type: String,
+    },
+    coverPage:[{
+        type: String,
     }],
+    // reviews: [{
+    //     type: postReview,
+    //     required: true,
+    // }],
+    price: {
+        type: Number, 
+        default: 0,
+    },
+    subscribers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
+    bookType: {
+        type: String,
+        enum: ["FREE", "PREMIUM"],
+        default: "FREE",
+    },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
@@ -39,19 +67,22 @@ const bookSchema = new mongoose.Schema({
     }],
     shares: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref:'User'
+            sender: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+                required: true,
+            },
+            receivers: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            }]
         }
     ],
     popularityScore: {
         type: Number,
         default: 0,
     },
-    category: {
-        type: String,
-        required:true,
-        default: "Uncategorised"
-    },
+    
     imagesURLs: [{
         url: { 
             type: String 
@@ -71,7 +102,7 @@ const bookSchema = new mongoose.Schema({
     status: {
         type: String, 
         enum: ["Draft", "Published"],
-        default: "Published"
+        default: "Draft"
     },
     aiGenerated: {
         type: Boolean,

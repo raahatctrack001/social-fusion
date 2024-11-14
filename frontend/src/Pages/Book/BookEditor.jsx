@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import LoaderPopup from '../../Compnents/Loader';
 import "../../Compnents/CustomJoditStyles.css"
 import CopyInput from '../../Compnents/CopyInput';
+import EditorForSummary from './EditorForSummary';
 
 export default function BookEditor({heading, placeholder }){
   const categories = [
@@ -34,9 +35,12 @@ export default function BookEditor({heading, placeholder }){
   const editor = useRef(null);
   const thumbnailRef = useRef(null);
   const filePickerRef = useRef();
+  
+  const { currentUser } = useSelector(state=>state.user);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const [error, setError] = useState(null);
+  // const [addSummary, setAddSummary] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);  
   const [imageUrl, setImageUrl] = useState(null);
   const [thumbnailURL, setThumbnailURL] = useState(null);
@@ -161,9 +165,9 @@ export default function BookEditor({heading, placeholder }){
         formData.append("title", title);
         formData.append("content", content);
         formData.append("category", selectedCategory);
-        formData.append("thumbnail", thumbnailURL);
-        
-        const response = await fetch(apiEndPoints.createPostAddress(), {
+        formData.append("frontPage", thumbnailURL);
+        console.log(apiEndPoints.createBook(currentUser?._id));
+        const response = await fetch(apiEndPoints.createBook(currentUser?._id), {
           method: "POST",
           body:formData,
         })
@@ -191,7 +195,14 @@ export default function BookEditor({heading, placeholder }){
     <div className='w-full border-2 border-rose-900 md:px-10 rounded-lg'>
 
       {loading && <LoaderPopup loading={loading} info="We are uploading your file" setLoading={setLoading} />}
-      
+      {/* {
+        addSummary && <div className=''>       
+          <EditorForSummary         
+            placeholder={"Add brief summary about your book"}
+            onClose={setAddSummary}
+            />
+          </div>
+      } */}
          
     <h1 className='flex justify-center items-center py-2 text-3xl border-b-2'> {heading ||  "Continue Writing Book" } </h1>  
     {theme === 'dark' && <p className='w-full grid place-items-center font-bold text-red-700'> Please switch to light mode for better experience while writing post! </p>    }
@@ -207,9 +218,21 @@ export default function BookEditor({heading, placeholder }){
             <Button outline onClick={()=>filePickerRef.current.click()} color={''} className='w-1/4  h-8 md:h-10 mb-1 flex items-center border-2 hover:bg-gray-500 '> <span className='flex items-center justify-center mr-1'> <HiUpload /></span> <span className='hidden md:inline mr-1'>Insert</span> Image </Button>
           </div>
 
-          <div>
+          <div className='flex gap-2'>
             <TextInput onChange={handleThumbnailUPload} ref={thumbnailRef} className='hidden' type='file' />
-            <Button onClick={()=>thumbnailRef.current.click()} className=' border-2 mb-1 w-full hover:bg-gray-500' color={''}  outline> {thumbnailURL ? "Update thumbnail image" : "Upload Thumbnail Image"} </Button>
+            <Button 
+              onClick={()=>thumbnailRef.current.click()} 
+              className=' border-2 mb-1 w-full hover:bg-gray-500' 
+              color={''}  outline>
+                 {thumbnailURL ? "Update first page image" : "Upload first page image"} 
+            </Button>
+
+            {/* <Button 
+              onClick={()=>setAddSummary(true)} 
+              className=' border-2 mb-1 w-full hover:bg-gray-500' 
+              color={''}  outline> 
+              Add Summary 
+            </Button> */}
           </div>
           <div className=''>
             
@@ -244,6 +267,7 @@ export default function BookEditor({heading, placeholder }){
           </div>
             <CopyInput url={imageUrl}/>
           </div>}
+
           <JoditEditor
             ref={editor}
             value={content}

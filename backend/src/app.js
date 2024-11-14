@@ -26,6 +26,7 @@ import storyRouter from './Routes/story.routes.js';
 import conversationRouter from './Routes/message routes/conversation.routes.js';
 import messageRouter from './Routes/message routes/message.route.js';
 import User from './Models/user.model.js';
+import bookRouter from './Routes/book.route.js';
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/posts', postRouter);
@@ -37,6 +38,7 @@ app.use('/api/v1/otp', otpRouter);
 app.use('/api/v1/story', storyRouter);
 app.use('/api/v1/conversation', conversationRouter);
 app.use('/api/v1/message', messageRouter)
+app.use('/api/v1/book', bookRouter);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, '/frontend/dist')));

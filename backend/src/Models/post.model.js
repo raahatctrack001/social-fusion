@@ -3,22 +3,30 @@ import mongoose from 'mongoose'
 const postSchema = new mongoose.Schema({
     title: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         trim: true
     },
     content: {
         type: String,
-        require: true
+        required: true
     }, 
-    thumbnail:[{
-        type: String,
-    }],
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
+    isOpenSource: {
+        type: Boolean,
+        default: false,
+    },
+    contributors: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    thumbnail:[{
+        type: String,
+    }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
@@ -35,6 +43,7 @@ const postSchema = new mongoose.Schema({
             sender: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User',
+                required: true,
             },
             receivers: [{
                 type: mongoose.Schema.Types.ObjectId,
