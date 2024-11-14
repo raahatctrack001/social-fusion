@@ -1,6 +1,6 @@
 
 import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { HiBell, HiChat, HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiMoon, HiOutlineBell, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiUserAdd, HiViewGrid, HiX } from "react-icons/hi";
+import { HiBell, HiBookOpen, HiChat, HiCog, HiCurrencyDollar, HiDatabase, HiDocumentAdd, HiDocumentSearch, HiLockClosed, HiLockOpen, HiLogin, HiLogout, HiMoon, HiOutlineBell, HiPencil, HiSearch, HiSearchCircle, HiStatusOnline, HiSun, HiUserAdd, HiViewGrid, HiX } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 // import { current } from "@reduxjs/toolkit";
@@ -146,6 +146,7 @@ export default function Header() {
                <Dropdown.Item href="/edit-profile" icon={HiPencil}>Update Profile</Dropdown.Item>
                {/* <Dropdown.Item href=  icon={HiLockOpen}>Update Password</Dropdown.Item> */}
                <Dropdown.Item href="/create-post" icon={HiDocumentAdd}>Create Post</Dropdown.Item>
+               <Dropdown.Item href="/write-book" icon={HiBookOpen}> Write Book </Dropdown.Item>
                <Dropdown.Divider />
                <Dropdown.Item icon={HiLogout} onClick={handleSignOut}>Sign out</Dropdown.Item>
             </Dropdown>  

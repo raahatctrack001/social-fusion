@@ -142,17 +142,17 @@ const ShowPosts = ({heading, postData}) => {
               <button 
                 onClick={() => handleShowLikers(post)} 
                 className="text-sm text-blue-500 dark:text-blue-300">
-                Likes {post?.likes?.length || 0}
+                Likes ({post?.likes?.length || 0})
               </button>
               <button 
                 disabled 
                 className="text-sm text-green-500 dark:text-green-300">
-                Comments {post?.comments?.length || 0}
+                Comments ({post?.comments?.length || 0})
               </button>
               <button 
                 onClick={() => { setPostToShare(post); setShare(true); }} 
                 className="text-sm text-red-500 dark:text-red-300">
-                Share {post?.shares?.length || 0}
+                Share ({[...new Set(post.shares.flatMap(share => share.receivers))].length || 0})
               </button>
             </div>
             {showLikers[post?._id] && (

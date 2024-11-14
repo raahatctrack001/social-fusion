@@ -11,17 +11,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark: {
-          primary: '#1e1e1e',
-          secondary: '#2d2d2d',
-          accent: '#ff6f61', // Danger color
-        },
-        light: {
-          primary: '#ffffff',
-          secondary: '#f0f0f0',
-          accent: '#007acc', // Trust color
-          danger: '#ff6f61',
-        },
+        'editor-bg-light': 'var(--editor-bg-light)',
+        'editor-text-light': 'var(--editor-text-light)',
+        'editor-bg-dark': 'var(--editor-bg-dark)',
+        'editor-text-dark': 'var(--editor-text-dark)',
       },
       fontFamily: {
         technical: ['Roboto Mono', 'monospace'],

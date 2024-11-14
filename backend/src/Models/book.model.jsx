@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const postSchema = new mongoose.Schema({
+const bookSchema = new mongoose.Schema({
     title: {
         type: String,
         require: true,
@@ -19,6 +19,12 @@ const postSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    contributors: [{
+
+    }],
+    reviews: [{
+
+    }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
@@ -31,16 +37,12 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-    shares: [{
-            sender: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-            },
-            receivers: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            }]
-    }],
+    shares: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ],
     popularityScore: {
         type: Number,
         default: 0,
@@ -79,7 +81,7 @@ const postSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isPrivate: { //to enable user to post the blog that is only meant for them and not public.
+    isPrivate: { //to enable user to book the blog that is only meant for them and not public.
         type: Boolean,
         default: false,
     }
@@ -87,17 +89,17 @@ const postSchema = new mongoose.Schema({
 { timestamps: true })
 
 // Method to calculate and update popularity score
-postSchema.methods.calculatePopularityScore = function () {
+bookSchema.methods.calculatePopularityScore = function () {
     this.popularityScore = (this.likes * 0.2) + (this.comments * 0.4) + (this.shares * 0.3) + (this.views * 0.1);
     return this.popularityScore;
   };
   
 // Middleware to recalculate popularityScore before saving if any engagement field is modified
-postSchema.pre("save", function (next) {
+bookSchema.pre("save", function (next) {
     this.calculatePopularityScore();
     next();
   });
 
   
-const Post = new mongoose.model("Post", postSchema);
-export default Post
+const Book = new mongoose.model("Book", bookSchema);
+export default Book

@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import Conversation from "../../Models/messageSchema/conversation.model.js";
 import Message from "../../Models/messageSchema/message.model.js";
+import Post from "../../Models/post.model.js";
 import User from "../../Models/user.model.js";
 import apiError from "../../Utils/apiError.js";
 import apiResponse from "../../Utils/apiResponse.js";
@@ -116,8 +118,21 @@ export const sendPost = asyncHandler(async (req, res, next)=>{
 
         // Filter out any null values if a conversation does not exist for a user
         const filteredConversations = conversations.filter(conversation => conversation !== null);
-        console.log(filteredConversations)
-        // Map each conversation to create a message and wait for all to complete
+        const receivers = filteredConversations
+                        .map(conversation => senderId == conversation.participants[0] ? conversation.participants[1] : conversation.participants[0]);
+
+        
+        
+        const postId = mediaURL.split("/").at(-1);
+        const postToShare = await Post.findById(postId);
+        postToShare.shares.push({
+            sender: new mongoose.Types.ObjectId(senderId),
+            receivers: receivers, 
+        })
+
+        await postToShare.save();
+        
+        console.log(postToShare);
         const messages = await Promise.all(
             filteredConversations.map(async (conversation) => {
                 const receiverId = senderId === conversation.participants[0].toString() ? 
@@ -151,6 +166,7 @@ export const sendPost = asyncHandler(async (req, res, next)=>{
         console.log("messaged sent", messages);
         return res.status(200).json(new apiResponse(200, 'message sent', messages));
     } catch (error) {
+        console.log(error)
         next(error)
     }  
 })

@@ -159,9 +159,21 @@ const Author = () => {
                   {showLikers[post?._id] && <LikersPopup postId={post?._id} setIsHovered={setShowLikers}/>}
                 <div className="relative group max-w-sm p-4 bg-white rounded-lg shadow-md dark:bg-gray-800 object-contain ">  
                   <div className="absolute bottom-4 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
-                      <button onClick={()=>setShowLikers({[post?._id]: true})} className="text-blue-500 dark:text-blue-300">Likes {post?.likes?.length || 0}</button>
-                      <button disabled onClick={()=>alert("button clicked!")} className="cursor-not-allowed text-green-500 dark:text-green-300">Comments { post?.comments?.length || 0}</button>
-                      <button onClick={()=>{setPostToShare(post);setShare(true)}} className=" text-red-500 dark:text-red-300">Shares {post?.shares?.length || 0}</button>
+                      <button 
+                          onClick={()=>setShowLikers({[post?._id]: true})} 
+                          className="text-blue-500 dark:text-blue-300">
+                            Likes ({post?.likes?.length || 0})
+                      </button>
+                      <button disabled 
+                          onClick={()=>alert("button clicked!")} 
+                          className="cursor-not-allowed text-green-500 dark:text-green-300">
+                            Comments ({ post?.comments?.length || 0})
+                      </button>
+                      <button 
+                          onClick={()=>{setPostToShare(post);setShare(true)}} 
+                          className=" text-red-500 dark:text-red-300">
+                            Shares ({[... new Set(post.shares?.flatMap(share=>share.receivers))].length || 0})
+                      </button>
                     </div>
                     {share && <SharePopup postUrl={`${window.location.origin}/posts/post/${postToShare?._id}`} heading={"share post"} onClose={setShare}/>}
                     <PostCard post={post}  />

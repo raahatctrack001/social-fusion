@@ -14,6 +14,7 @@ import { formatDistanceToNow } from 'date-fns';
 import PostComment from '../Compnents/PostComment';
 import LikersPopup from '../Compnents/PostLikersPopup';
 import PageLoader from '../Compnents/PageLoader';
+import { set } from 'lodash';
 
 const PostPage = () => {
   const { currentUser } = useSelector(state=>state.user);
@@ -30,6 +31,8 @@ const PostPage = () => {
   const [showLikers, setShowLikers] = useState(false)
   const [showPopup, setShowPopup] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [shareCount, setShareCount] = useState(0);
+
   const postUrl = `${window.location.origin}/posts/post/${post?._id}`;
 
   const dispatch = useDispatch();
@@ -50,6 +53,11 @@ const PostPage = () => {
           setPost(post.data);
           setAuthor(post.data.author);
           setLikes(post.data.likes.length); // Set likes count based on the fetched data
+          const sharedList = post?.data?.shares;
+          const uniqueReceivers = [
+            ...new Set(sharedList.flatMap(share => share.receivers))
+          ];
+          setShareCount(uniqueReceivers.length);
         }
       } catch (error) {
         //console.log("error fetching post!", error);
@@ -239,30 +247,43 @@ console.log("postpage post", post)
                 {showLikers[post?._id] && <LikersPopup postId={post?._id} isHovered={showLikers} setIsHovered={setShowLikers} />}
               <div onClick={handleLikePostClick}> 
                 {currentUser?.likedPosts?.includes(post?._id) ? 
-                <div className='flex justify-center items-center gap-1'> <HiHeart className='text-white-500 cursor-pointer text-red-700 hover:text-lg'/><span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} >  {likes||0}</span> </div>: 
-                <div className='flex justify-center items-center gap-1'> <HiOutlineHeart className='text-white-500 cursor-pointer hover:text-lg' /> <span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} > {likes||0} </span></div>}
+                <div className='flex justify-center items-center gap-1'> 
+                  <HiHeart title='like' className='text-white-500 cursor-pointer text-red-700 hover:text-lg'/>
+                    <span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} >  
+                        ({likes||0})
+                    </span> 
+                </div>: 
+                
+                <div className='flex justify-center items-center gap-1'> 
+                  <HiOutlineHeart title='like' className='text-white-500 cursor-pointer hover:text-lg' /> 
+                    <span className='hover:text-xl cursor-pointer' onClick={()=>setShowLikers({[post?._id]: true})} > 
+                        ({likes||0}) 
+                    </span>
+                </div>}
+
               </div>
               
             
               {post?.enableComments ?
                 <div >
 
-                  <HiOutlineChatAlt2 className='text-white-500 cursor-pointer hover:text-lg'/> 
+                  <HiOutlineChatAlt2 title='comment' className='text-white-500 cursor-pointer hover:text-lg'/> 
                                   
                 </div> :    
               
               <Button disabled className='h-10'> <HiOutlineBan /> </Button>} 
                 
-              <HiOutlineShare onClick={()=>setShowPopup(true)}  className='text-white-500 cursor-pointer hover:text-lg'/>
+              <HiOutlineShare title='Share' onClick={()=>setShowPopup(true)}  className='text-white-500 cursor-pointer hover:text-lg'/>
               {showPopup && (
-                <div className='w-full'>
+                <div className='w-full' >
                   <SharePopup postUrl={postUrl} onClose={() => setShowPopup(false)} />
                 </div>
 
               )}
+              ({shareCount})
           </div> 
           { currentUser?._id !== post?.author?._id && 
-          <div onClick={handleSavePostClick}>
+          <div onClick={handleSavePostClick} title='Bookmark'>
             {currentUser?.savedPosts?.includes(post?._id) ? <HiBookmark className='text-black-500 text-red-800 cursor-pointer hover:text-lg'/> : <HiOutlineBookmark className='text-black-500 cursor-pointer hover:text-lg'/>}
           </div>}
         </div>

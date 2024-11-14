@@ -42,6 +42,7 @@ import ImageEditor from "./Compnents/testComponents/ImageEditor"
 import PreferredCategory from "./Pages/PreferredCategory"
 import UserAtHome from "./Compnents/UserAtHome"
 import StartSuggestion from "./Pages/StartSuggestion"
+import WriteBook from "./Pages/Book/WriteBook"
 
 
 function App() {  
@@ -65,6 +66,7 @@ function App() {
                     <Route path="/notifications" element={<UnderDevelopment />} />
                     <Route path="/chatroom" element={<Chatroom />} />
                     <Route path="/select-preference" element={<StartSuggestion />} />
+                    <Route path="/write-book" element={<WriteBook />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
