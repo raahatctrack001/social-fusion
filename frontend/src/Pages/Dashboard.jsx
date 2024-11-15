@@ -20,6 +20,8 @@ import DashAudience from '../Compnents/DashAudience';
 import HiddenPosts from '../Compnents/HiddenPosts';
 import MyBooks from '../Compnents/MyBooks';
 import AuthorsBook from './Book/AuthorsBook';
+// import PublishedBooks from './Book/PublishedBooks';
+import PublishedBooksOfAuthor from './Book/PublishedBooksOfAuthor';
 // import { join } from 'path';
 
 const Dashboard = () => {
@@ -62,6 +64,7 @@ const Dashboard = () => {
       {tab === 'settings' && <DashSettings />} 
       {tab === 'hidden-posts' && <HiddenPosts />}
       {tab === 'books' && <AuthorsBook />}
+      {tab === 'published-books' && <PublishedBooksOfAuthor />}
       </div>
     </div>
   );

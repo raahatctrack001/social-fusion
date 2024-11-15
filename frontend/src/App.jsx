@@ -47,6 +47,7 @@ import EditBook from "./Pages/Book/EditBook"
 import BookSummaryPage from "./Pages/Book/BookSummary"
 import EbookPage from "./Pages/Book/EBookPage"
 import EBookSubmissionForm from "./Pages/Book/EBookSubmissionForm"
+import PublishedBooksOfAuthor from "./Pages/Book/PublishedBooksOfAuthor"
 
 
 function App() {  
@@ -75,6 +76,8 @@ function App() {
                     <Route path="/books/book-detail" element={<BookSummaryPage />} />
                     <Route path="/book/preview/:bookId" element={<EbookPage />} />
                     <Route path="/books/book/publish/:bookId" element={<EBookSubmissionForm />} />
+                    
+                    <Route path="/books/published/:authorId" element={<PublishedBooksOfAuthor />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />

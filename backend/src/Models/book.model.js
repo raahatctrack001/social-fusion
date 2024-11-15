@@ -56,6 +56,9 @@ const bookSchema = new mongoose.Schema({
     publishedDate: {
         type: Date,
     },
+    lastRevisedDate: {
+        type: Date,
+    },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'

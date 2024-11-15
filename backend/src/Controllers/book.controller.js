@@ -4,6 +4,7 @@ import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import User from "../Models/user.model.js";
+
 export const createBook = asyncHandler(async (req, res, next)=>{
     const { userId } = req.params;
   
@@ -87,4 +88,65 @@ export const getBook = asyncHandler(async (req, res, next)=>{
     } catch (error) {
         next(error)
     }
+})
+
+export const publishBook = asyncHandler(async (req, res, next)=>{
+    const { bookId, userId } = req.params;
+    try {
+        const { isOpenSource, bookType, price } = req.body;
+        if(req.user?._id != userId){
+            throw new apiError(403, "you can only publish your own book")
+        }
+
+        const publishedBook = await Book.findByIdAndUpdate(bookId, {
+            $set: {
+                isOpenSource,
+                bookType,
+                price,
+                publishedDate: new Date(),
+                status: "PUBLISHED",
+            }
+        }, {new: true})
+
+
+        console.log(publishedBook)
+        if(!publishedBook){
+            throw new apiError(401, "Failed to publish book")
+        }
+        return res.status(201).json(new apiResponse(201, "Book Published and live now on sale", publishedBook));
+    } catch (error) {
+        next(error)
+    }
+}
+
+)
+
+export const getPublishedBookOfAuthor = asyncHandler(async (req, res, next)=>{
+   try {
+        const { userId } = req.params;
+        const { page = 1} = req.query;
+
+        if(req.user?._id != userId){
+            throw new apiError(403, "Unauthorized attempt")
+        }
+
+        const publishedBooks = await Book.find({
+            status: "PUBLISHED",
+            author: userId,
+            isHidden: false,
+        })
+        .skip((page-1)*9)
+        .limit(9)
+        .sort({createdAt: -1})
+
+
+        if(!publishedBooks){
+            throw new apiError(404, "failed to fetched published books")
+        }
+
+        return res.status(200)
+            .json(new apiResponse(200, "fetched published posts", publishedBooks))
+   } catch (error) {
+        next(error)    
+   }
 })
