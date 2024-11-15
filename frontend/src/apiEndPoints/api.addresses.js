@@ -84,4 +84,5 @@ export  const apiEndPoints = {
     createBook: (userId)=>`/api/v1/book/create-book/${userId}`,
     getBooks: (userId, page)=>`/api/v1/book/get-books/${userId}?page=${page}`,
     updatedBook: (bookId, userId)=>`/api/v1/book/update-book/${bookId}/${userId}`,
+    getBook: (bookId)=>`/api/v1/book/get-book/${bookId}`,
 }

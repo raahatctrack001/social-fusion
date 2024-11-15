@@ -69,6 +69,8 @@ export default function AuthorsBook() {
     localStorage.setItem("bookDetail", JSON.stringify({title: book.title, summary: book.summary}))
     navigate('/books/book-detail')
   }
+
+  
   return (
     <div className="pl-16 author-books-dashboard px-4 py-6">
       <h2 className="text-2xl font-bold mb-4"> My Books </h2>
@@ -85,7 +87,7 @@ export default function AuthorsBook() {
                 alt={`${book.title} cover`}
                 className="w-full h-48 object-cover rounded-md mb-3"
                 />
-
+              
               <h3 className="text-lg font-semibold mb-1">{book.title}</h3>
               <p className="text-xs text-gray-400 mb-1">Genre: {book.category || "not known now"}</p>
               <p className="text-xs text-gray-400 mb-1">Pages: {Math.floor(book.content.length / 300) || 1}</p>
@@ -116,7 +118,11 @@ export default function AuthorsBook() {
                             <HiPencil />  Continue Editing 
                         </div>
                     </Button>
-                    <Button outline className='flex gap-1 justify-start items-center '>
+                    <Button 
+                      outline 
+                      className='flex gap-1 justify-start items-center '
+                      onClick={()=>{ localStorage.setItem("bookToPreview", JSON.stringify(book)), navigate(`/book/preview/${book._id}`)}}
+                    >
                        Preview
                     </Button>
                     </div>
@@ -125,7 +131,9 @@ export default function AuthorsBook() {
             </div>
           ))
         ) : (
-          <p className="text-gray-600 dark:text-gray-400">No books found for this author.</p>
+          <div className="text-gray-600 dark:text-gray-400 w-full min-h-screen flex justify-center items-center flex-col">You haven't written any book yet.
+            <Button color={'warning'} onClick={()=>navigate('/write-book')}> Start writing your first book </Button>  
+          </div>
         )}
       </div>
       {loading && <p>Loading more books...</p>}

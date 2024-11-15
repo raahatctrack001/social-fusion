@@ -45,6 +45,8 @@ import StartSuggestion from "./Pages/StartSuggestion"
 import WriteBook from "./Pages/Book/WriteBook"
 import EditBook from "./Pages/Book/EditBook"
 import BookSummaryPage from "./Pages/Book/BookSummary"
+import EbookPage from "./Pages/Book/EBookPage"
+import EBookSubmissionForm from "./Pages/Book/EBookSubmissionForm"
 
 
 function App() {  
@@ -71,6 +73,8 @@ function App() {
                     <Route path="/write-book" element={<WriteBook />} />
                     <Route path="/books/book/:bookId" element={<EditBook />} />
                     <Route path="/books/book-detail" element={<BookSummaryPage />} />
+                    <Route path="/book/preview/:bookId" element={<EbookPage />} />
+                    <Route path="/books/book/publish/:bookId" element={<EBookSubmissionForm />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />

@@ -16,8 +16,15 @@ export default function EditorForSummary({ placeholder, onClose, theme, summaryC
     const editor = useRef(null);
 
     const onSubmit = async () => {
-        setLoading(true)
+        setLoading(true);
+        setError(null);
         try {
+            if(summaryContent === content){
+                alert("no changes has been made in summary")
+                setLoading(false);
+                onClose(false)
+                return;
+            }
             const formData = new FormData();
             formData.append("summary", content);
             console.log(apiEndPoints.updatedBook(bookId, currentUser?._id));

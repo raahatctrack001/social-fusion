@@ -56,7 +56,8 @@ export default function EditBook({ placeholder }){
   // Correct usage of useMemo
   const config = useMemo(() => ({
     readonly: false, // all options from https://xdsoft.net/jodit/docs/
-    placeholder: placeholder || 'Start formatting you story...'
+    placeholder: placeholder || 'Start formatting you story...',
+    mode: 'dark'
   }), [placeholder]);
 
   // console.log(content)
@@ -175,6 +176,14 @@ export default function EditBook({ placeholder }){
     }
   }
   // console.log(selectedCategory)
+  const handlePublishClick = ()=>{
+    if(!bookData.summary){
+      alert("Please add summary from button located at the top of editor before you publish the book.")
+      return;
+    }
+
+    navigate(`/books/book/publish/${bookData._id}`)
+  }
   return (
 
     <div className='w-full border-2 md:px-10 rounded-lg'>
@@ -226,7 +235,7 @@ export default function EditBook({ placeholder }){
                 color={''}  
                 outline
             > 
-                Add Summary 
+                Update Summary 
             </Button>
             
           </div>
@@ -283,7 +292,10 @@ export default function EditBook({ placeholder }){
 
           </div>
           {error && <Alert color={"failure"} className='flex justify-center items-center'><span>{error}</span></Alert>}
-          <Button onClick={handlePostUpdate} color={"warning"} className='w-full my-2'> Update now </Button>
+          <div className='flex gap-2'>            
+            <Button onClick={handlePostUpdate} color={"warning"} className='w-full my-2'> Update Draft </Button>
+            {bookData && <Button color={'failure'} className='w-full my-2' onClick={handlePublishClick}> Publish Now </Button>}
+          </div>
       </div>
     </div>
   );

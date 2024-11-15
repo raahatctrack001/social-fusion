@@ -4,7 +4,6 @@ import apiError from "../Utils/apiError.js";
 import apiResponse from "../Utils/apiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import User from "../Models/user.model.js";
-
 export const createBook = asyncHandler(async (req, res, next)=>{
     const { userId } = req.params;
   
@@ -66,5 +65,26 @@ export const updateBook = asyncHandler(async (req, res, next)=>{
             .json(new apiResponse(200, "summary has been added", bookUpdated))
     } catch (error) {
         next(error);
+    }
+})
+
+export const getBook = asyncHandler(async (req, res, next)=>{
+    try {
+        const { bookId } = req.params;
+        console.log(bookId)
+        if(!bookId){
+            throw new apiError(404, "bookId doesn't found!")
+        }
+
+        const getBook = await Book.findById(bookId);
+        console.log(getBook)
+        if(!getBook){
+            throw new apiError(404, "Book not found")
+        }
+
+        return res.status(200)
+            .json(new apiResponse(200, "Book fetched", getBook))
+    } catch (error) {
+        next(error)
     }
 })
