@@ -129,7 +129,7 @@ export const sendPost = asyncHandler(async (req, res, next)=>{
             sender: new mongoose.Types.ObjectId(senderId),
             receivers: receivers, 
         })
-
+        await postToShare.calculatePopularityScore();
         await postToShare.save();
         
         console.log(postToShare);
@@ -164,6 +164,8 @@ export const sendPost = asyncHandler(async (req, res, next)=>{
         
         
         console.log("messaged sent", messages);
+        
+
         return res.status(200).json(new apiResponse(200, 'message sent', messages));
     } catch (error) {
         console.log(error)

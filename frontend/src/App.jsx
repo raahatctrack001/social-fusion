@@ -48,6 +48,11 @@ import BookSummaryPage from "./Pages/Book/BookSummary"
 import EbookPage from "./Pages/Book/EBookPage"
 import EBookSubmissionForm from "./Pages/Book/EBookSubmissionForm"
 import PublishedBooksOfAuthor from "./Pages/Book/PublishedBooksOfAuthor"
+// import ShowBooks from "./Pages/Book/ShowBooks"
+import AvailableBooks from "./Pages/Book/AvailableBooks"
+import PricingPlan from "./Pages/Book/PremiumPricing"
+import StartContribution from "./Compnents/Books/ContributionGuideline"
+import ContributionGuideline from "./Compnents/Books/ContributionGuideline"
 
 
 function App() {  
@@ -76,8 +81,10 @@ function App() {
                     <Route path="/books/book-detail" element={<BookSummaryPage />} />
                     <Route path="/book/preview/:bookId" element={<EbookPage />} />
                     <Route path="/books/book/publish/:bookId" element={<EBookSubmissionForm />} />
-                    
+                    <Route path="/published-books" element={<AvailableBooks />} />
                     <Route path="/books/published/:authorId" element={<PublishedBooksOfAuthor />} />
+                    <Route path="/start-contribution/:authorId/:bookId/:contributorId" element={<ContributionGuideline />} />
+                    <Route path="/contribution/:contributionId/:bookId" element={<UnderDevelopment />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />
@@ -90,7 +97,7 @@ function App() {
                   <Route path="/sign-in" element={<SignIn />} />
                   {/* <Route path="/test-route" element={<LandingPage />} /> */}
                   <Route path="/test-route" element={<ImageEditor />} />
-                  <Route path="/*" element={< UnderDevelopment />} />
+                  <Route path="/*" element={< PricingPlan />} />
                 </Routes>
                 <FooterComp />
           </BrowserRouter>

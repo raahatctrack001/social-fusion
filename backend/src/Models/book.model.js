@@ -26,10 +26,7 @@ const bookSchema = new mongoose.Schema({
         type: Boolean,
         deafult: false,
     },
-    contributors: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }],
+    contributors: [],
     summary: {
         type: String,
     },

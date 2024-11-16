@@ -38,7 +38,7 @@ router.route("/get-post-in-chat/:userId").get(isUserLoggedIn, getPostOfUserInCha
 router.route("/delete-post/:postId").delete(isUserLoggedIn, deletePost);
 router.route("/edit-post/:postId").put(upload.any(), isUserLoggedIn, updatePost);
 router.route("/like-post/:postId/:userId").post(isUserLoggedIn, likePost);
-router.route("/all-post-analytics").get(isUserLoggedIn, allPostAnalytics);
+router.route("/all-post-analytics/:userId").get(isUserLoggedIn, allPostAnalytics);
 router.route("/save-post/:postId/:userId").post(isUserLoggedIn, savePost);
 router.route("/saved-posts/:userId").get(isUserLoggedIn, getSavedPosts);
 router.route("/toggle-comment-section/:postId").patch(isUserLoggedIn, toggleDisableComment)

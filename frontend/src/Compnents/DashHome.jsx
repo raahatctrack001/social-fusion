@@ -7,23 +7,26 @@ import RecentPostsTable from '../Compnents/RecentPostTable';
 import DashSidebar from '../Compnents/DashSidebar';
 import { useNavigate } from 'react-router-dom';
 import PageLoader from './PageLoader';
+import DashHomePosts from './Posts/DashboardPosts';
+import CustomDropdown from './CustomDropdown';
 // import { join } from 'path';
 
 const DashHome = () => {
-    const { currentUser } = useSelector(state=>state.user)
+    const { currentUser } = useSelector(state=>state.user);
+    const [currentPage, setCurrentPage] = useState(1);
     const [postData, setPostData] = useState([]);
-    const [postsLastWeek, setPostsLastWeek] = useState(null);
-    const [postsLastTwoWeeks, setPostsLastTwoWeeks] = useState(null);
-    const [postsLastMonth, setPostsLastMonth] = useState(null);
-    const [postsLastThreeMonths, setPostsLastThreeMonths] = useState(null);
-    const [recentPosts, setRecentPosts] = useState(null);
-    const [popularPosts, setPopularPosts] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [error, setError] = useState('');
-    const [postToDelete, setPostToDelete] = useState(null);
-    const navigate = useNavigate();
+    const [postsLastWeek, setPostsLastWeek] = useState([]);
+    const [postsLastTwoWeeks, setPostsLastTwoWeeks] = useState([]);
+    const [postsLastMonth, setPostsLastMonth] = useState([]);
+    const [postsLastThreeMonths, setPostsLastThreeMonths] = useState([]);
+    const [recentPosts, setRecentPosts] = useState([]);
+    const [popularPosts, setPopularPosts] = useState([]);
+    const [selectedOption, setSelectedOption] = useState('');
+    const [postToDisplay, setPostToDisplay] = useState([]);
+
+  
     useEffect(()=>{
-        fetch(apiEndPoints.allPostAnalytics())
+        fetch(apiEndPoints.allPostAnalytics(currentUser?._id, currentPage))
           .then((posts)=>{
             if(!posts){
               throw new Error("network response wasn't ok for dashboard!");
@@ -38,77 +41,45 @@ const DashHome = () => {
             setPostsLastTwoWeeks(data.data.postsLastTwoWeeks)
             setPostsLastMonth(data.data.postsLastMonth)
             setPostsLastThreeMonths(data.data.postsLastThreeMonths)
-            setRecentPosts(data.data.allPosts?.slice(0, 5))
-            setPopularPosts(data.data.allPosts?.slice(10, 17))
+            setPostToDisplay(data.data.allPosts)
           })
           .catch((err)=>{
             console.log(err)
           })
-        }, [])
+        }, [currentPage])
 
-    const handleUpdatePostClick = (post)=>{
-        localStorage.setItem("postToUpdate", JSON.stringify(post))
-        navigate(`/edit-post/${post?._id}`)
-      }
-      const handleDeletePost = (post)=>{
-        setShowModal(!showModal);
-        setPostToDelete(post);
-        handleDeletePostClick();
-      }
-      const handleDeletePostClick = async()=>{
-        console.log("we are in right place to delete post section!")
-        try {
-          // console.log(apiEndPoints.deletePostAddress(post?._id))
-          // return;
-          const response = await fetch(apiEndPoints.deletePostAddress(postToDelete?._id), {
-            method: "DELETE"
-          })
-          
-          if(!response.ok){
-            throw new Error(response.message||"Network response isn't ok!")
-          }
-    
-          const data = await response.json();
-    
-          console.log("response", response);
-          console.log("data", data);
-          if(data.success){
-            alert(data?.message);
-            window.location.reload();
-            // navigate(`/authors/author/${currentUser?._id}`)
-          }
-        } catch (error) {
-          setError("failed to delete post, please try again later!")
-          console.log(error)
+
+    useEffect(()=>{
+        let posts = [];
+        if(selectedOption === dropDownOptions[0]){
+          posts = postData
         }
-      }
-    if(postData.length == 0){
-      return <PageLoader />
-    }
+        else if(selectedOption === dropDownOptions[1]){
+          posts = postsLastWeek
+        }
+        else if(selectedOption === dropDownOptions[2]){
+          posts = postsLastTwoWeeks
+        }
+        else if(selectedOption === dropDownOptions[3]){
+          posts = postsLastMonth
+        }
+        else if(selectedOption === dropDownOptions[4]){
+          posts = postsLastThreeMonths
+        }
+  
+        setPostToDisplay(posts);     
+        }, [selectedOption])      
+   console.log("postdata to send", postToDisplay);
+
+  const dropDownOptions = ["All Posts", "Last Week", "Last 15 days", "Last Month", "Last Three Months"];
+  const handleOptionSelect = (value)=>{
+    console.log("post before", value);
+    setSelectedOption(value)
+  }  
   return (
     <div className="flex min-h-screen dark:bg-[rgb(16,23,42)] pl-10">
       
-      {/* delete modal starts here */}
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <Modal.Header>
-            <Alert color={"warning"}> Warning </Alert>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="space-y-6">
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete this post? This action cannot be undone.
-              </p>
-            </div>
-          </Modal.Body>
-          <Modal.Footer className='flex justify-between'>
-            <Button color="failure" onClick={handleDeletePostClick}>
-              Yes, Delete this post.
-            </Button>
-            <Button color="gray" onClick={() => setShowModal(false)}>
-              Cancel
-            </Button>
-          </Modal.Footer>
-        </Modal>
+      
 
         {/* delete modal ends here */}
 
@@ -148,34 +119,13 @@ const DashHome = () => {
           </div>
 
           {/* Post Management Table */}
-          <h2 className="text-2xl font-semibold mb-4 ">Manage Posts</h2>
-          <div className='border-2 rounded-lg p-2'>
-            <Table className=''>
-                <Table.Head>
-                  <Table.HeadCell>Title</Table.HeadCell>
-                  <Table.HeadCell>Author</Table.HeadCell>
-                  <Table.HeadCell>Category</Table.HeadCell>
-                  <Table.HeadCell>Status</Table.HeadCell>
-                  <Table.HeadCell>Actions</Table.HeadCell>
-                </Table.Head>
-                <Table.Body >
-                  {postData?.length > 0 && postData.map((post, index) => (
-                    currentUser?._id === post?.author?._id && <Table.Row key={index} className=''>
-                      <Table.Cell><div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
-                      <Table.Cell> {post?.author ? <div className='cursor-pointer font-bold text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "You" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
-                      <Table.Cell>{post.category}</Table.Cell>
-                      <Table.Cell>Published</Table.Cell>
-                      <Table.Cell>
-                        <div className='flex gap-1'>
-                          <Button onClick={()=>handleUpdatePostClick(post)} color={'warning'} size="xs">Edit</Button>
-                          <Button onClick={()=>handleDeletePost(post)} color={'failure'} size="xs">Delete</Button>
-                        </div>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-            </Table>
+          <div className='flex justify-between'>
+            <h2 className="text-2xl font-semibold mb-4 ">Manage Posts</h2>
+            <div className='w-full max-w-sm'>
+              <CustomDropdown defaultValue={dropDownOptions[0]} options={dropDownOptions} onSelect={handleOptionSelect}/>
+            </div>
           </div>
+          <DashHomePosts posts={postToDisplay} />
 
         </main>
       </div>

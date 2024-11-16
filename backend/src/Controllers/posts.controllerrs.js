@@ -327,6 +327,7 @@ export const likePost = asyncHandler(async(req, res, next)=>{
         currentPost.updatedAt = new Date(); // Update the timestamp
 
         await currentUser.save();
+        await currentPost.calculatePopularityScore();
         await currentPost.save();
 
         // console.log('reached at the end')
@@ -385,6 +386,11 @@ export const updatePost = asyncHandler(async (req, res, next)=>{
 })
 
 export const allPostAnalytics = asyncHandler(async (req, res, next) => {
+    const { userId } = req.params;
+    const { page } = req.query;
+
+    console.log(req.params)
+
     const now = new Date();
 
     const oneWeekAgo = new Date(now);
@@ -400,7 +406,8 @@ export const allPostAnalytics = asyncHandler(async (req, res, next) => {
     threeMonthsAgo.setMonth(now.getMonth() - 3);
 
     try {
-        const allPosts = await Post.find({})
+        const totalPostCount = await Post.countDocuments({author: userId})
+        const allPosts = await Post.find({author: userId})
             .populate("author")
             .sort({ createdAt: -1 });
 
@@ -433,6 +440,7 @@ export const allPostAnalytics = asyncHandler(async (req, res, next) => {
             .status(200)
             .json(
                 new apiResponse(200, "post analytics has been retrieved", {
+                    totalPostCount,
                     allPosts,
                     postsLastWeek,
                     postsLastTwoWeeks,

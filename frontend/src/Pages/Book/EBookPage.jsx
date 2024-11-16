@@ -4,10 +4,12 @@ import { apiEndPoints } from "../../apiEndPoints/api.addresses";
 import PageLoader from "../../Compnents/PageLoader";
 import DisplayContent from "../../Compnents/DisplayContent";
 import { Button } from "flowbite-react";
+import { useSelector } from "react-redux";
 
 function EbookPage() {
     const bookData = JSON.parse(localStorage.getItem("bookToPreview"));
-    console.log(bookData);
+    console.log( "bookData", bookData);
+    const { currentUser } = useSelector(state=>state.user);
     const [book, setBook] = useState(bookData);
     const [pages, setPages] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -33,7 +35,7 @@ function EbookPage() {
     }
   
     const { title, content, coverPage, author } = book;
-  
+    // console.log(bookData)
     // Split content into pages
     useEffect(() => {
       if (content) {
@@ -61,13 +63,20 @@ function EbookPage() {
         localStorage.setItem("bookToPublish", JSON.stringify(book));
         navigate(`/books/book/publish/${book?._id}`);
     }
+    if(bookData?.author?._id !== currentUser?._id && bookData.bookType === "PREMIUM"){
+      if(!bookData?.subscribers?.includes(currentUser?._id) || !currentUser?.isPremiumUser)
+        return <div className="w-full min-h-screen flex justify-center items-center">
+          You are neither a premium user nor you have subscriber to this book.
+        </div>
+    }
     return (
       <div className="ebook-container min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
         {/* Cover Section */}
         <div className="w-full flex justify-center items-center">
-            <Button
+            {bookData?.status !== "PUBLISHED" && <Button
                 onClick={handlePublishNowclick} 
-                className="w-full max-w-7xl relative top-32" color={'warning'} > Publish Now </Button>
+                className="w-full max-w-7xl relative top-32" color={'warning'} > Publish Now 
+            </Button>}
         </div>
         <div
           className="cover-page w-full h-screen bg-cover bg-center flex items-center justify-center text-white"

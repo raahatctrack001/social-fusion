@@ -30,6 +30,7 @@ export default function PublishedBooksOfAuthor() {
       console.log(data);
 
       if (data.success) {
+        // console.log(data)
         setBooks((prevBooks) => [...prevBooks, ...data.data]);
         setHasMore(data.data.length > 0);  // If the current page has no data, set hasMore to false
       }
@@ -100,13 +101,33 @@ export default function PublishedBooksOfAuthor() {
                         <DisplayContent content={book.summary.substr(0, 200)} /> : 
                         <DisplayContent content={book.summary} />}
                 </p>}
-              <p className="text-xs font-semibold text-green-600 mb-1">Type: <span className='font-bold'> {book.bookType} </span></p>
+              <p className={`text-xs font-semibold ${book.bookType === "FREE" ? "text-green-600": "text-yellow-300" } mb-1`}>Type: <span className='font-bold'> {book.bookType} </span></p>
               <div className='flex justify-between mt-5'>
                 <Button 
                     className="cursor-pointer hover:underline" 
                     onClick={()=>handleShowDetails(book)}
                     >View Details</Button>
               </div>
+              {  book?.author === currentUser?._id && 
+                    <div className='flex gap-2 mt-2 justify-between'>
+                    <Button 
+                        color={'warning'}
+                        onClick={()=>handleContinueEditingButtonClick(book)} 
+                        className='cursor-pointer font-bold hover:text-gray-500 order-1'
+                        > 
+                        <div className='flex gap-1 justify-start items-center '> 
+                            <HiPencil />  Continue Editing 
+                        </div>
+                    </Button>
+                    <Button 
+                      outline 
+                      className='flex gap-1 justify-start items-center '
+                      onClick={()=>{ localStorage.setItem("bookToPreview", JSON.stringify(book)), navigate(`/book/preview/${book._id}`)}}
+                    >
+                       Preview
+                    </Button>
+                    </div>
+                }
             </div>
           ))
         ) : (

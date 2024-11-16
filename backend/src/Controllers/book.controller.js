@@ -139,7 +139,6 @@ export const getPublishedBookOfAuthor = asyncHandler(async (req, res, next)=>{
         .limit(9)
         .sort({createdAt: -1})
 
-
         if(!publishedBooks){
             throw new apiError(404, "failed to fetched published books")
         }
@@ -149,4 +148,21 @@ export const getPublishedBookOfAuthor = asyncHandler(async (req, res, next)=>{
    } catch (error) {
         next(error)    
    }
+})
+
+export const getAllPublishedBooks = asyncHandler(async (req, res, next)=>{
+    try {
+        const books = await Book.find({
+            status: "PUBLISHED"
+        })
+        .populate("author")
+        if(!books){
+            throw new apiError(404, "No book published yet")
+        }
+
+        return res.status(200)
+            .json(new apiResponse(200, "books fetched", books))
+    } catch (error) {
+        next(error);
+    }
 })

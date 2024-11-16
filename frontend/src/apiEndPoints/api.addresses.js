@@ -35,7 +35,7 @@ export  const apiEndPoints = {
     deletePostAddress : (postId)=> `/api/v1/posts/delete-post/${postId}`,
     updatePostAddress : (postId)=> `/api/v1/posts/edit-post/${postId}`,
     likePostAddress : (postId, userId)=> `/api/v1/posts/like-post/${postId}/${userId}`,
-    allPostAnalytics: ()=>`/api/v1/posts/all-post-analytics`,
+    allPostAnalytics: (userId, page)=>`/api/v1/posts/all-post-analytics/${userId}/?page=${page}`,
     savePostAddress : (postId, userId)=> `/api/v1/posts/save-post/${postId}/${userId}`,
     getSavedPostAddress: (userId)=>`/api/v1/posts/saved-posts/${userId}`,
     getFollowingsAddress: (userId)=>`/api/v1/posts/get-followings/${userId}`,
@@ -87,4 +87,8 @@ export  const apiEndPoints = {
     getBook: (bookId)=>`/api/v1/book/get-book/${bookId}`,
     publishBook: (bookId, userId)=>`/api/v1/book/publish-book/${bookId}/${userId}`,
     getPublishedBooksOfAuthor: (userId, page)=>`/api/v1/book/published-book-author/${userId}?page=${page}`,
+    getAllPublishedBooks: ()=>`/api/v1/book/published-books`,
+
+    startContribution: (authorId, bookId, contributorId)=>`/api/v1/contribution/start-contribution/${authorId}/${bookId}/${contributorId}`,
+    
 }

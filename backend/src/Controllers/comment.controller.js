@@ -30,8 +30,10 @@ export const createComment = asyncHandler(async (req, res, next)=>{
         currentPost?.comments?.push(newComment);
         currentUser?.comments?.push(newComment);
 
+        await currentPost.calculatePopularityScore();
         await currentPost.save();
         await currentUser.save();
+        
         return res.status(200).json(new apiResponse(200, "commend added", {newComment, currentUser}))
     } catch (error) {
         next(error)

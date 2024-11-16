@@ -87,17 +87,16 @@ export default function AuthorsBook() {
                 alt={`${book.title} cover`}
                 className="w-full h-48 object-cover rounded-md mb-3"
                 />
-              
               <h3 className="text-lg font-semibold mb-1">{book.title}</h3>
               <p className="text-xs text-gray-400 mb-1">Genre: {book.category || "not known now"}</p>
               <p className="text-xs text-gray-400 mb-1">Pages: {Math.floor(book.content.length / 300) || 1}</p>
-              <p className="text-xs text-gray-400 mb-1">Published: {new Date(book.createdAt).toLocaleDateString()}</p>
+              {book.status === "PUBLISHED" && <p className="text-xs mb-1 text-yellow-300 font-bold">Published: {new Date(book.publishedDate || book.createdAt).toLocaleDateString()}</p>}
               <p className="text-xs text-gray-400 mb-1">Rating: {book.starRating || 0}</p>
               
               {showSummary && <BookSummary summary={book.summary || "No Description by author"} isOpen={showSummary} onClose={setShowSummary}/>}
               {book.summary && <p 
                 className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 mb-3">
-                    Description: {book.summary?.length > 200 ? 
+                    Description {book.summary?.length > 200 ? 
                         <DisplayContent content={book.summary.substr(0, 200)} /> : 
                         <DisplayContent content={book.summary} />}
                 </p>}

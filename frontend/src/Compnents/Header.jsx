@@ -182,7 +182,7 @@ export default function Header() {
           {/* <Button outline className="md:hidden"> <span className="flex justify-center items-center gap-2"> switch to dark theme <HiSun /></span> </Button> */}
 
           <Navbar.Link className="text-sm" href="/about" active = {path === '/about'} >About</Navbar.Link>
-          <Navbar.Link className="text-sm" href="/services" active = {path === '/services'} >Services</Navbar.Link>
+          <Navbar.Link className="text-sm" href="/published-books" active = {path === '/published-books'} >Books</Navbar.Link>
           <Navbar.Link className="text-sm" href="/notifications" active = {path === '/notifications'} >
           <span className="md:hidden flex justify-start items-center"> Notification </span> 
 
