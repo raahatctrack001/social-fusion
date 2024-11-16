@@ -5,19 +5,23 @@ import { apiEndPoints } from "../../apiEndPoints/api.addresses";
 import { useSelector } from "react-redux";
 import PageLoader from "../PageLoader";
 
-export default function DashHomePosts({posts}){
-    const [postData, setPostData] = useState([]);
+export default function DashHomePosts({posts, setPosts}){
+    const [postData, setPostData] = useState(posts);
     const navigate = useNavigate();
     const [postToDelete, setPostToDelete] = useState(null);
   
     const { currentUser } = useSelector(state=>state.user)
     const [showModal, setShowModal] = useState(false);
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
         setPostData(posts);
     }, [posts])
+
     const handleDeletePostClick = async()=>{
         console.log("we are in right place to delete post section!")
+        setLoading(true);
         try {
           // console.log(apiEndPoints.deletePostAddress(post?._id))
           // return;
@@ -34,13 +38,19 @@ export default function DashHomePosts({posts}){
           console.log("response", response);
           console.log("data", data);
           if(data.success){
-            alert(data?.message);
-            window.location.reload();
+            console.log(data)
+            // alert(data?.message);
+            setPostData(prevData=>prevData.filter(post=>post?._id != data.data?._id));
+            setShowModal(false);
+            // window.location.reload();
             // navigate(`/authors/author/${currentUser?._id}`)
           }
         } catch (error) {
           setError("failed to delete post, please try again later!")
           console.log(error)
+        }
+        finally{
+          setLoading(false);
         }
       }
 
@@ -52,6 +62,35 @@ export default function DashHomePosts({posts}){
         setShowModal(!showModal);
         setPostToDelete(post);
         handleDeletePostClick();
+      }
+
+      const handleHideUnhidePost = async (postId)=>{
+        try {
+          setLoading(true)
+          const response = await fetch(apiEndPoints.hideUnhidePost(postId), {
+            method: "PATCH"
+          })
+      
+          const data = await response.json();
+          if(!response.ok){
+            console.log(data.success || "error while fetching network response")
+          }
+      
+          if(data.success){
+            window.location.reload();
+          }
+        } catch (error) {
+          console.log(error)
+        }
+        finally{
+          setLoading(false);
+        }
+          
+      }
+
+      console.log(postData);
+      if(loading){
+        return <PageLoader info={"Updating Dashboard"} />
       }
       if(postData.length == 0){
         return <div className="w-full min-h-screen flex justify-center items-center">
@@ -85,7 +124,7 @@ export default function DashHomePosts({posts}){
     <Table className=''>
         <Table.Head>
           <Table.HeadCell>Title</Table.HeadCell>
-          <Table.HeadCell>Author</Table.HeadCell>
+          <Table.HeadCell>isHidden</Table.HeadCell>
           <Table.HeadCell>Category</Table.HeadCell>
           <Table.HeadCell>Status</Table.HeadCell>
           <Table.HeadCell>Actions</Table.HeadCell>
@@ -94,7 +133,15 @@ export default function DashHomePosts({posts}){
           {postData?.length > 0 && postData.map((post, index) => (
             currentUser?._id === post?.author?._id && <Table.Row key={index} className=''>
               <Table.Cell><div className='cursor-pointer text-blue-600' onClick={()=>navigate(`/posts/post/${post?._id}`)}>{post?.title}</div></Table.Cell>
-              <Table.Cell> {post?.author ? <div className='cursor-pointer font-bold text-blue-600' onClick={()=>navigate(`/authors/author/${post?.author?._id}`)}>{ currentUser._id === post?.author?._id ? "You" :  post?.author?.fullName} </div> : <div> SF User </div>}</Table.Cell>
+              <Table.Cell> 
+                <Button 
+                    onClick={()=>handleHideUnhidePost(post?._id)}
+                    outline={!post?.isHidden}
+                    color={'success'} 
+                    className="h-5 flex justify-center items-center"> 
+                        {post?.isHidden ? "UNHIDE" : "HIDE"} 
+                </Button> 
+              </Table.Cell>
               <Table.Cell>{post.category}</Table.Cell>
               <Table.Cell>Published</Table.Cell>
               <Table.Cell>

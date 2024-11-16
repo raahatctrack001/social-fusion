@@ -125,7 +125,7 @@ const DashHome = () => {
               <CustomDropdown defaultValue={dropDownOptions[0]} options={dropDownOptions} onSelect={handleOptionSelect}/>
             </div>
           </div>
-          <DashHomePosts posts={postToDisplay} />
+          <DashHomePosts posts={postToDisplay} setPosts={setPostToDisplay} />
 
         </main>
       </div>
