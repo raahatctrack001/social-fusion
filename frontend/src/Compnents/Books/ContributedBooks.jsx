@@ -7,6 +7,7 @@ import { Button } from 'flowbite-react';
 import PageLoader from '../../Compnents/PageLoader';
 import DisplayContent from '../../Compnents/DisplayContent';
 import BookSummary from '../../Pages/Book/BookSummary';
+import ChangeHistory from './changeHistory';
 
 export default function ContributedBooks() {
   const { currentUser } = useSelector(state => state.user);
@@ -17,7 +18,8 @@ export default function ContributedBooks() {
   const [showSummary, setShowSummary] = useState(false);
   const navigate = useNavigate();
   const observer = useRef();  // Create a ref for the observer
-
+  const [showProgress, setShowProgess] = useState(false);
+  const [contributionData, setContributionData] = useState([]);
   // Fetch books by page
   const fetchBooks = async (page) => {
     try {
@@ -29,7 +31,6 @@ export default function ContributedBooks() {
       }
 
       if (data.success) {
-        const contributedData = data.data;
         
         setBooks(data?.data);
         setHasMore(data.data.length > 0);  // If the current page has no data, set hasMore to false
@@ -63,13 +64,17 @@ export default function ContributedBooks() {
 
   if (loading && books.length === 0) return <PageLoader info={"Loading your books"} />;
   const handleContinueContributingButtonClick = (book)=>{
-    localStorage.setItem("bookToUpdate", JSON.stringify(book?.documentId))
-    navigate(`/books/book/${book?._id}`)
+    localStorage.setItem("bookToContribute", JSON.stringify(book))
+    navigate(`/contribution/${book._id}/${book?._id}`)
   }
 
   const handleShowDetails = (book)=>{
     localStorage.setItem("bookDetail", JSON.stringify({title: book.documentId?.documentId?.title, summary: book.documentId?.summary}))
     navigate('/books/book-detail')
+  }
+
+  if(showProgress){
+    return <ChangeHistory isOpen={showProgress} onClose={setShowProgess} data={contributionData} />
   }
 
   
@@ -104,10 +109,22 @@ export default function ContributedBooks() {
                 </p>}
               <p className="text-xs font-semibold text-green-600 mb-1">Type: <span className='font-bold'> {book.documentId?.bookType} </span></p>
               <div className='flex justify-between mt-5'>
-                <Button 
-                    className="cursor-pointer hover:underline" 
-                    onClick={()=>handleShowDetails(book)}
-                    >View Details</Button>
+                {book.contributedContent?.length > 0 ? 
+                    <Button 
+                        color={'success'}
+                        className="cursor-pointer hover:underline" 
+                        onClick={()=>{
+                            setContributionData(book.contributedContent);
+                            setShowProgess(true)
+                        }}
+                        > See Progress
+                    </Button>:
+                    <Button 
+                        className="cursor-pointer hover:underline" 
+                        onClick={()=>handleShowDetails(book)}
+                        >View Details
+                    </Button>            
+                }
                 {  book?.contributor === currentUser?._id && 
                     <div className='flex gap-2'>
                     <Button 

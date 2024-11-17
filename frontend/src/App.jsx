@@ -53,6 +53,7 @@ import AvailableBooks from "./Pages/Book/AvailableBooks"
 import PricingPlan from "./Pages/Book/PremiumPricing"
 import StartContribution from "./Compnents/Books/ContributionGuideline"
 import ContributionGuideline from "./Compnents/Books/ContributionGuideline"
+import ContributeBook from "./Pages/Book/ContributeBook"
 
 
 function App() {  
@@ -84,7 +85,7 @@ function App() {
                     <Route path="/published-books" element={<AvailableBooks />} />
                     <Route path="/books/published/:authorId" element={<PublishedBooksOfAuthor />} />
                     <Route path="/start-contribution/:authorId/:bookId/:contributorId" element={<ContributionGuideline />} />
-                    <Route path="/contribution/:contributionId/:bookId" element={<UnderDevelopment />} />
+                    <Route path="/contribution/:contributionId/:bookId" element={<ContributeBook />} />
                   </Route>
                   
                   <Route path="/subah-ko-bhoola-sham-ko-ghar-aya/reset-forgot-password/:token" element={<ResetForgotPassword />} />

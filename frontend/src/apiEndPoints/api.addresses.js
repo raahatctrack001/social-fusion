@@ -91,4 +91,5 @@ export  const apiEndPoints = {
 
     startContribution: (authorId, bookId, contributorId)=>`/api/v1/contribution/start-contribution/${authorId}/${bookId}/${contributorId}`,
     getContributedBooks: (userId)=>`/api/v1/contribution/get-contributed-books/${userId}`,    
+    updateContriution:( contributionId, bookId, contributorId)=>`/api/v1/contribution/update-contribution/${contributionId}/${bookId}/${contributorId}`,
 }

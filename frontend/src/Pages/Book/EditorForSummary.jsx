@@ -38,6 +38,7 @@ export default function EditorForSummary({ placeholder, onClose, theme, summaryC
                 onClose(false);
             }
         } catch (error) {
+            alert(error.message)
             console.log(error)
         }
         finally{

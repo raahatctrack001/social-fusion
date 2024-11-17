@@ -81,3 +81,32 @@ export const getContributedBook = asyncHandler(async (req, res, next)=>{
         next(error)
     }
 })
+
+export const updateContribution = asyncHandler(async (req, res, next)=>{
+    console.log(req.params);
+    console.log(req.query);
+    console.log(req.body);
+
+    const { message, content } = req.body;
+    try {
+        const contributionDetail = await Contribution
+            .findById(req.params.contributionId);
+
+        if(!contributionDetail){
+            throw new apiError(404, "contributon detail doesn't exist")
+        }
+        contributionDetail.contributedContent.push(req.body);
+        await contributionDetail.save();
+            
+
+        if(!contributionDetail){
+            throw new apiError(500, "Failed to updated contribution to this book")
+        }
+
+        console.log(contributionDetail)
+        return res.status(200)
+            .json( new apiResponse(200, "Contribution Updated", contributionDetail));
+    } catch (error) {
+        next(error)
+    }
+})
