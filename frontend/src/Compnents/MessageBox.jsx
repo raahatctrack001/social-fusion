@@ -23,7 +23,31 @@ const MessageBox = ({ messages, scrollToLastMessage }) => {
                 <div className={`inline-block px-4 py-2 mx-3 rounded-lg ${message.sender === currentUser?._id ? 'dark:bg-gray-500 bg-gray-200' : 'dark:bg-red-800 bg-red-100'}`}>
                   <div className='flex justify-center items-center'> 
                     <div className='flex flex-col max-w-3/4'>
-                      {message.content && <div className='max-w-3/4'> <p>{message.content}</p> </div>}
+                      {message.content && <div className='max-w-3/4'> 
+                        <p>
+                          {
+                            message.content.indexOf("/posts/post") != -1 ? <div>
+                              {(() => {
+                                const linkStartIndex = message.content.indexOf("/posts/post");
+                                const linkLength = linkStartIndex+37;
+                                const nextSubstr = message.content.substr(linkStartIndex+linkLength-2);
+                                // console.log("nextsubstr", nextSubstr)
+                                if(nextSubstr.length > 0){
+                                  return <div> 
+                                      <PostInMessageBox postLink={message.content.substr(linkStartIndex, linkLength)} />
+                                      <p> {nextSubstr.slice(1)} </p>
+                                    </div> 
+                                }
+                                else{
+                                  return <p> {message.content} </p>
+                                }
+
+                              })()}
+                            </div> :
+                              message.content
+                          }
+                        </p> 
+                    </div>}
                       {message.mediaTypes === "link" && <PostInMessageBox postLink={message.mediaURL} />}
                       { message.createdAt && 
                       <p className="text-xs w-full flex justify-end">{format(new Date(message.createdAt),  'h:mm a')}</p>

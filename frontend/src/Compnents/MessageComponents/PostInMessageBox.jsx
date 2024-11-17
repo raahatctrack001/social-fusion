@@ -7,7 +7,7 @@ export default function PostInMessageBox({ postLink }) {
     const postId = postLink.split("/").at(-1);
     const [post, setPost] = useState();
     const navigate = useNavigate();
-
+    console.log(postLink)
     useEffect(()=>{
         (async ()=>{
             try {
@@ -60,11 +60,11 @@ export default function PostInMessageBox({ postLink }) {
             </div>
         </div>
     
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-2 line-clamp-1">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-2 line-clamp-1 truncate">
             {post.title.length > 30 ? post.title.substring(0, 30) + "..." : post.title}
         </h2>
 
-        <p className="text-sm text-gray-700 dark:text-gray-400 line-clamp-3">
+        <p className="text-sm text-gray-700 dark:text-gray-400 line-clamp-3 truncate">
 
             <DisplayContent content = {post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content} />
         </p>

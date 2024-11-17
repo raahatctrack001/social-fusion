@@ -37,17 +37,47 @@ export const startContribution = asyncHandler(async (req, res, next)=>{
             documentType: "BOOK",
             documentId: book?._id,
             contributor: contributorId,
-            originalContent: book?.content,
+            originalData: {
+                title: book?.title,
+                content: book?.content,
+                summary: book?.summary,
+            }
         })
         
         if(!contributionDetail){
             throw new apiError(500, "Failed to create contribution space")
         }
         return res.status(201)
-            .json(new apiResponse(201, "Contribution space has been craeted", {details: contributionDetail, book}))
+            .json(new apiResponse(201, "Contribution space has been craeted", {details: [contributionDetail], book}))
 
     } catch (error) {
         next(error)
     }
 
+})
+
+export const getContributedBook = asyncHandler(async (req, res, next)=>{
+    try {        
+        const { userId } = req.params;
+        console.log()
+        const contributedBooks = await Contribution.find({
+            contributor: userId
+        })
+        .populate('documentId');
+
+        // const books = await Promise.all(
+        //     contributedBooks.map(book=>Book.findById(book?.documentId))
+        // )
+
+        // console.log("books", books)
+        // console.log(contributedBooks)
+        if(!contributedBooks){
+            throw new apiError(404, "No contribution found")
+        }
+
+        return res.status(200)
+            .json( new apiResponse(200, "contributed books fetched", contributedBooks));
+    } catch (error) {
+        next(error)
+    }
 })

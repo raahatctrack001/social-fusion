@@ -108,6 +108,7 @@ export const sendPost = asyncHandler(async (req, res, next)=>{
         const { senderId } = req.params;
         const {message, users, mediaURL, mediaType } = req.body;
 
+        
         const conversations = await Promise.all(
             users.map(async (userId) => {
                 return await Conversation.findOne({
@@ -122,17 +123,18 @@ export const sendPost = asyncHandler(async (req, res, next)=>{
                         .map(conversation => senderId == conversation.participants[0] ? conversation.participants[1] : conversation.participants[0]);
 
         
-        
+        console.log("checkpoint 1");
         const postId = mediaURL.split("/").at(-1);
         const postToShare = await Post.findById(postId);
         postToShare.shares.push({
-            sender: new mongoose.Types.ObjectId(senderId),
+            sender: senderId,
             receivers: receivers, 
         })
-        await postToShare.calculatePopularityScore();
+        // await postToShare.calculatePopularityScore();
         await postToShare.save();
         
         console.log(postToShare);
+        console.log("checkpiont 2")
         const messages = await Promise.all(
             filteredConversations.map(async (conversation) => {
                 const receiverId = senderId === conversation.participants[0].toString() ? 

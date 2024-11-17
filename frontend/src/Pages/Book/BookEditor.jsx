@@ -165,7 +165,7 @@ export default function BookEditor({heading, placeholder }){
         formData.append("title", title);
         formData.append("content", content);
         formData.append("category", selectedCategory);
-        formData.append("frontPage", thumbnailURL);
+        formData.append("coverPage", thumbnailURL);
         console.log(apiEndPoints.createBook(currentUser?._id));
         const response = await fetch(apiEndPoints.createBook(currentUser?._id), {
           method: "POST",

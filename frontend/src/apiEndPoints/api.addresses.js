@@ -90,5 +90,5 @@ export  const apiEndPoints = {
     getAllPublishedBooks: ()=>`/api/v1/book/published-books`,
 
     startContribution: (authorId, bookId, contributorId)=>`/api/v1/contribution/start-contribution/${authorId}/${bookId}/${contributorId}`,
-    
+    getContributedBooks: (userId)=>`/api/v1/contribution/get-contributed-books/${userId}`,    
 }

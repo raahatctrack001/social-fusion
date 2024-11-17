@@ -71,7 +71,7 @@ export default function SignIn() {
         dispatch(signInSuccess(data.data));
         navigate("/")
         localStorage.setItem("currentUser", JSON.stringify(data?.data))
-        if(localStorage.getItem("askPreferredCategory")){
+        if(localStorage.getItem("askPreferredCategory") || data.data?.preferredCategory.length == 0){
           navigate('/select-preference')
         }
        }

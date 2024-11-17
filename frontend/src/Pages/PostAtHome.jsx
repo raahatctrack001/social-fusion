@@ -6,8 +6,9 @@ import CategorisedPost from '../Compnents/CategorisedPost';
 import CustomDropdown from '../Compnents/CustomDropdown';
 import NotFoundPage from './NotFoundPage';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PostCategoryDropdown from '../Compnents/PostCategoryDropdown';
+import { Button } from 'flowbite-react';
 
 export default function PostAtHome(){
     const { currentUser } = useSelector(state=>state.user);
@@ -102,6 +103,20 @@ return (
       <CategorisedPost />
     </div> */}
     <div className='overflow-y-scroll' style={{ height: '53rem' }} onScroll={handlePostScroll}> 
+    <div className='w-full flex flex-col gap-2 justify-center items-center mt-5 mr-3'>
+    {/* <Link to="/create-post" className="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-md">
+      <span className="w-fullName h-full bg-gradient-to-br from-[#ff8a05] via-[#ff5478] to-[#ff00c6] group-hover:from-[#ff00c6] group-hover:via-[#ff5478] group-hover:to-[#ff8a05] absolute"></span>
+      <span className="relative px-6 py-3 transition-all ease-out bg-gray-900 rounded-md group-hover:bg-opacity-0 duration-400">
+          <span className="relative text-white">Create Blog</span>
+      </span>
+    </Link> */}
+      <h2 className='text-xl font-bold '> Start your journey... </h2>
+      <Button 
+        onClick={()=>navigate("/create-post")} 
+        className='w-full max-w-7xl bg-purple-400 font-bold mr-3' outline > 
+          Create Blog 
+      </Button>
+    </div>
       {postData.length > 0 && 
         <ShowPosts heading={`Suggested posts`} postData={postData} /> }
     </div>

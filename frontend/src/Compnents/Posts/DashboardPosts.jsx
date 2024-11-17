@@ -124,7 +124,7 @@ export default function DashHomePosts({posts, setPosts}){
     <Table className=''>
         <Table.Head>
           <Table.HeadCell>Title</Table.HeadCell>
-          <Table.HeadCell>isHidden</Table.HeadCell>
+          <Table.HeadCell> Visibility </Table.HeadCell>
           <Table.HeadCell>Category</Table.HeadCell>
           <Table.HeadCell>Status</Table.HeadCell>
           <Table.HeadCell>Actions</Table.HeadCell>

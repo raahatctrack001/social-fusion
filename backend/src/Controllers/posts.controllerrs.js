@@ -327,7 +327,7 @@ export const likePost = asyncHandler(async(req, res, next)=>{
         currentPost.updatedAt = new Date(); // Update the timestamp
 
         await currentUser.save();
-        await currentPost.calculatePopularityScore();
+        // await currentPost.calculatePopularityScore();
         await currentPost.save();
 
         // console.log('reached at the end')

@@ -83,7 +83,7 @@ export default function AuthorsBook() {
                 className="book-card p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"
                 >
               <img
-                src={book.coverImage || "https://static.vecteezy.com/system/resources/previews/020/422/215/non_2x/a4-size-book-cover-template-pastel-color-hand-drawn-floral-background-for-notebooks-books-reports-diaries-leaflets-school-books-vector.jpg"}
+                src={book.coverPage.length > 0 ? book.coverPage.at(-1) : "https://static.vecteezy.com/system/resources/previews/020/422/215/non_2x/a4-size-book-cover-template-pastel-color-hand-drawn-floral-background-for-notebooks-books-reports-diaries-leaflets-school-books-vector.jpg"}
                 alt={`${book.title} cover`}
                 className="w-full h-48 object-cover rounded-md mb-3"
                 />

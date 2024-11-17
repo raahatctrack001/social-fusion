@@ -14,7 +14,7 @@ import EditorForSummary from './EditorForSummary';
 export default function EditBook({ placeholder }){
     const bookData = JSON.parse(localStorage.getItem("bookToUpdate"));
     console.log("data from local storage", bookData)
-
+  const { currentUser } = useSelector(state=>state.user)
   const categories = [
     'Technology',
     'Health & Wellness',
@@ -103,12 +103,13 @@ export default function EditBook({ placeholder }){
       try {
         // console.log(e.target.files[0]);
         const formData = new FormData();
-        formData.append("coverPage", e.target.files[0]);
+        formData.append("postImage", e.target.files[0]);
 
         const response = await fetch('/api/v1/users/image-upload', {
           method:"POST",
           body: formData,
         })
+
 
         // console.log("response: ", response);
         if(!response.ok){
@@ -152,7 +153,7 @@ export default function EditBook({ placeholder }){
         formData.append("coverPage", thumbnailURL);
         
         
-        const response = await fetch(apiEndPoints.updatePostAddress(bookData?._id), {
+        const response = await fetch(apiEndPoints.updatedBook(bookData?._id, currentUser?._id), {
             method: "PUT",
             body: formData,
         })
@@ -176,7 +177,19 @@ export default function EditBook({ placeholder }){
     }
   }
   // console.log(selectedCategory)
-  const handlePublishClick = ()=>{
+  const handlePublishClick = async (e)=>{
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("category", selectedCategory);
+    formData.append("coverPage", thumbnailURL);
+    
+    
+    await fetch(apiEndPoints.updatePostAddress(bookData?._id), {
+        method: "PUT",
+        body: formData,
+    })
+
     if(!bookData.summary){
       alert("Please add summary from button located at the top of editor before you publish the book.")
       return;

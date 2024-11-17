@@ -8,17 +8,23 @@ import User from "../Models/user.model.js";
 export const createBook = asyncHandler(async (req, res, next)=>{
     const { userId } = req.params;
   
-    const { title, content, category, frontPage } = req.body;
+    const { title, content, category, coverPage } = req.body;
+    console.log(coverPage)
     try {
         const createdBook = await Book.create({
             title,
             content,
             category,
-            frontPage,
+            coverPage,
             author: userId,
         });
         if(!createdBook){
             throw new apiError(404, "Failed to create book")
+        }
+
+        if(coverPage && createdBook.coverPage.length > 0 && createdBook.coverPage.at(-1) != coverPage){
+            createdBook.coverPage.push(coverPage);
+            await createdBook.save();
         }
         console.log("book creation successfull", createdBook)
         return res.status(201)
@@ -51,7 +57,7 @@ export const getBooksOfUser = asyncHandler(async (req, res, next)=>{
 
 export const updateBook = asyncHandler(async (req, res, next)=>{
     const { userId, bookId } = req.params;
-    
+    console.log(req.body)
     try {
         const updatedBook = await Book.findById(bookId);
         if(updatedBook?.author != userId){
@@ -61,6 +67,11 @@ export const updateBook = asyncHandler(async (req, res, next)=>{
         const bookUpdated = await Book.findByIdAndUpdate(bookId, req.body, {new: true});
         if(!bookUpdated){
             throw new apiError(401, "failed to add summary")
+        }
+        const { coverPage } = req.body; 
+        if(coverPage && bookUpdated.coverPage.at(-1) != coverPage){
+            bookUpdated.coverPage.push(coverPage);
+            await updateBook.save();
         }
         return res.status(200)
             .json(new apiResponse(200, "summary has been added", bookUpdated))
@@ -93,22 +104,16 @@ export const getBook = asyncHandler(async (req, res, next)=>{
 export const publishBook = asyncHandler(async (req, res, next)=>{
     const { bookId, userId } = req.params;
     try {
-        const { isOpenSource, bookType, price } = req.body;
+        
         if(req.user?._id != userId){
             throw new apiError(403, "you can only publish your own book")
         }
-
-        const publishedBook = await Book.findByIdAndUpdate(bookId, {
-            $set: {
-                isOpenSource,
-                bookType,
-                price,
-                publishedDate: new Date(),
-                status: "PUBLISHED",
-            }
-        }, {new: true})
-
-
+        const publishedBook = await Book.findByIdAndUpdate(
+                bookId, 
+                {...req.body, publishedDate: new Date(), status: "PUBLISHED"}, 
+                {new: true}
+            );
+        
         console.log(publishedBook)
         if(!publishedBook){
             throw new apiError(401, "Failed to publish book")

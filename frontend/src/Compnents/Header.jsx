@@ -112,7 +112,13 @@ export default function Header() {
     <Navbar fluid rounded className="lg:px-10 border-b-2">
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">Social Fusion</span>
+        <div className="flex gap-2">
+          <img className="w-10 h-10 rounded-full" src="./public/logo.png" alt="" />
+          <span 
+            className="self-center flex justify-center items-center gap-2 whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">
+            Social Fusion
+          </span>
+        </div>
       </Navbar.Brand>
 
       {currentUser && 

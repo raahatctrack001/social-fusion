@@ -30,7 +30,7 @@ export const createComment = asyncHandler(async (req, res, next)=>{
         currentPost?.comments?.push(newComment);
         currentUser?.comments?.push(newComment);
 
-        await currentPost.calculatePopularityScore();
+        // await currentPost.calculatePopularityScore();
         await currentPost.save();
         await currentUser.save();
         

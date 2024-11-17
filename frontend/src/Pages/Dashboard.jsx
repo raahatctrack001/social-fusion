@@ -22,6 +22,7 @@ import MyBooks from '../Compnents/MyBooks';
 import AuthorsBook from './Book/AuthorsBook';
 // import PublishedBooks from './Book/PublishedBooks';
 import PublishedBooksOfAuthor from './Book/PublishedBooksOfAuthor';
+import ContributedBook from '../Compnents/Books/ContributedBooks';
 // import { join } from 'path';
 
 const Dashboard = () => {
@@ -65,6 +66,7 @@ const Dashboard = () => {
       {tab === 'hidden-posts' && <HiddenPosts />}
       {tab === 'books' && <AuthorsBook />}
       {tab === 'published-books' && <PublishedBooksOfAuthor />}
+      {tab === 'contributions' && <ContributedBook />}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import React, { useState } from 'react'
-import { HiBookOpen, HiChevronDoubleDown, HiChevronDoubleUp, HiDocument, HiDotsHorizontal, HiSave, HiUserGroup, HiXCircle } from 'react-icons/hi'
+import { HiBookOpen, HiChevronDoubleDown, HiChevronDoubleUp, HiCollection, HiDocument, HiDotsHorizontal, HiSave, HiUserGroup, HiXCircle } from 'react-icons/hi'
 import { HiBars3, HiChartBar, HiCheckBadge, HiCog, HiDocumentCheck, HiHome, HiMiniBookOpen, HiPencil, HiUser } from 'react-icons/hi2'
 import { Link } from 'react-router-dom'
 
@@ -53,6 +53,14 @@ const DashSidebar = () => {
                   title="Published Books" // Tooltip for My Posts
                 >
                   <HiCheckBadge className='text-2xl md:text-3xl'/> {isOpen && <span className=''> Published Books </span>}
+                </div>
+            </Link>
+            <Link to={'/dashboard?tab=contributions'}>
+                <div 
+                  className="flex justify-start items-center gap-2 dark:hover:bg-gray-500 hover:bg-gray-200 hover:rounded-lg hover:mx-2 hover:mt-1"
+                  title="Contributions" // Tooltip for My Posts
+                >
+                  <HiCollection className='text-2xl md:text-3xl'/> {isOpen && <span className=''> Contribution </span>}
                 </div>
             </Link>
             <Link to={'/dashboard?tab=saved-posts'}>

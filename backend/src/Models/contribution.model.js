@@ -12,7 +12,8 @@ const contributorSchema = new mongoose.Schema({
         required: true,
     },
     documentId: {
-        type: String,
+        type: mongoose.Types.ObjectId,
+        ref: "Book",
         required: true,
     },
     contributor: {
@@ -20,13 +21,27 @@ const contributorSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    originalContent: {
-        type: String,
-        require: true,
+    originalData: {
+        title: {
+            type: String,
+        },
+        content: {
+            type: String,
+        },
+        summary: {
+            type: String,
+        },
     },
-    contributedContent: {
-        type: String,
-    }
+    contributedContent:[{
+        message: {
+            type: String,
+            required: true,
+        },
+        content: {
+            type: String,
+            required: true,
+        }
+    }]
 }, {timestamps: true})
 
 const Contribution = new mongoose.model("contribution", contributorSchema);
