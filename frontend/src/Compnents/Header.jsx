@@ -113,7 +113,7 @@ export default function Header() {
       <Navbar.Brand href="/">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
         <div className="flex gap-2">
-          <img className="w-10 h-10 rounded-full" src="./public/logo.png" alt="" />
+          {/* <img className="w-10 h-10 rounded-full" src="./public/logo.png" alt="" /> */}
           <span 
             className="self-center flex justify-center items-center gap-2 whitespace-nowrap md:text-xl font-bold md:border-x-2 md:border-x-gray-900 dark:border-x-white px-2 rounded-2xl ">
             Social Fusion
