@@ -145,19 +145,20 @@ export const getPosts = asyncHandler(async (req, res, next)=>{
     // return;
     const { page } = req.params;
     try {        
-        const totalCount = await Post.countDocuments({});
+        const totalCount = await Post.countDocuments();
 
         await Post
-            .find({isHidden: false})
+            .find()
             .populate("author") //fix this ... password and refresh token is getting exposed!                                                                                                 
-            .skip((page-1)*9)
-            .limit(9)
+            // .skip((page-1)*9)
+            // .limit(9)
             .sort({createdAt: -1})
             .then((posts)=>{
                 // console.log(posts)
                 if(posts.length == 0){
                     throw new apiError(404, "posts doesn't exist!")
                 }
+                console.log(posts.length)
                 const filteredPost = posts.filter(post=>post.isHidden===false);
                 console.log(filteredPost.length);
                 res

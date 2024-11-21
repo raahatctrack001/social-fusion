@@ -30,6 +30,7 @@ export default function AvailableBooks() {
           throw new Error(data.message || "Failed to fetch books.");
         }
 
+        console.log("book data", data)
         if (data.success) {
           setBooks(data.data);
         }

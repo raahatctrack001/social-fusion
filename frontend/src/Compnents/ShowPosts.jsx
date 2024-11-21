@@ -13,6 +13,7 @@ import LikersPopup from './PostLikersPopup'
 import SharePopup from './ShareURL'
 import CategoriesPost from './CategorisedPost'
 import PageLoader from './PageLoader'
+import CustomDropdown from './CustomDropdown'
 
 const ShowPosts = ({heading, postData}) => {
     const { currentUser } = useSelector(state=>state?.user)
@@ -25,7 +26,11 @@ const ShowPosts = ({heading, postData}) => {
     const [share, setShare] = useState(false);
     const [postToShare, setPostToShare] = useState(false);
     const [mountedPosts, setMountedPosts] = useState();
-    
+    const [totalPosts, setTotalPosts] = useState([]);
+    const [suggestedPosts, setSuggestedPosts] = useState(postData);
+    const [postToDisplay, setPostToDisplay] = useState(postData);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [defaultValue, setDefaultValue] = useState("");
     useEffect(()=>{
       setMountedPosts(postData);
     }, [postData])
@@ -80,15 +85,71 @@ const ShowPosts = ({heading, postData}) => {
       <PageLoader />
     }
    
+    useEffect(()=>{
+      (async ()=>{
+        const response = await fetch(apiEndPoints.getPostsAddress());
+        const data = await response.json();
+        if(!response.ok){
+          throw new Error(data.message || "network response wasn't ok while fetching posts")
+        } 
+
+        if(data.success){
+          console.log(data)
+          setTotalPosts(data.data.posts)
+        }
+      })()
+    }, [])
     
+
+    const categories = [
+      'Technology',
+      'Health & Wellness',
+      'Business & Finance',
+      'Education',
+      'Entertainment',
+      'Lifestyle',
+      'Travel',
+      'Food & Drink',
+      'Fashion',
+      'Sports',
+      'Art & Design',
+      'Science',
+      'DIY & Crafts',
+      'Personal Development',
+      'Uncategorised'
+    ];
+
+  const handleCategorySelect = (value)=>{
+    setSelectedCategory(value)
+  }
+
+  useEffect(()=>{
+    console.log("selcted category", selectedCategory)
+    if(!selectedCategory){
+      setMountedPosts(suggestedPosts);     
+      return;
+    }
+    console.log(selectedCategory)
+    console.log("hello this is postToDisplay:::")
+    const filteredData = totalPosts.filter(post=>post.category === selectedCategory);
+    setMountedPosts(filteredData);
+    
+    // console.log("filterd data", filteredData)
+  }, [selectedCategory])
+  // console.log(postToDisplay)
+  
   return (
     <div className="container mx-auto p-4">
   <div className="flex flex-col mb-14">
-    <div>
-      <h1 className="text-center font-bold text-3xl tracking-widest py-4 mt-5"> 
-        {heading} 
+    <div className='flex justify-between items-center'>
+      <h1 className="text-center flex gap-2 justify-center items-center relative left-5 font-bold text-3xl tracking-widest py-4 mt-5">        
+        {selectedCategory ? "Categorised Result": heading} 
+        {selectedCategory && <Button outline onClick={()=>window.location.reload()}> Clear Category </Button>}
       </h1>
-      
+      <div className='w-full max-w-md mr-5 relative right-16'>
+        <CustomDropdown defaultValue={defaultValue} options={ categories} onSelect={handleCategorySelect} />
+
+      </div>
     </div>
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-4">
       {mountedPosts?.length ? mountedPosts.map((post, index) => (
@@ -166,7 +227,7 @@ const ShowPosts = ({heading, postData}) => {
         </div>
       )) : (
         <div className="w-full grid place-items-center">
-          <NotFoundPage />
+          <h1> No Post Found! </h1>
         </div>
       )}
     </div>

@@ -23,9 +23,9 @@ const CustomDropdown = ({ defaultValue, options, onSelect }) => {
         value={selectedOption}
         onChange={handleChange}
         style={{ width: '100%', padding: '10px', fontSize: '16px' }}
-        className="dark:bg-[rgb(16,23,42)] rounded-lg"
+        className="dark:bg-[rgb(16,23,42)] rounded-lg border-2 border-blue-500"
       >
-        <option value={defaultValue || ""} disabled>
+        <option value={""} disabled>
           {defaultValue || "Please Select Category"}
         </option>
         {options.map((option, index) => (
