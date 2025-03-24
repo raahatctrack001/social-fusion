@@ -152,7 +152,6 @@ const About = () => {
               feature.upcoming ?
               feature.complete === false && <h1 className='w-52 grid place-items-center bg-yellow-400 text-white rounded-lg'> Upcoming </h1> :
               feature.complete === false && <h1 className='w-52 grid place-items-center bg-red-400 text-white rounded-lg'> Under evelopment queue </h1>
-
             }
             
             <div className="text-6xl text-center mb-4">{feature.icon}</div>

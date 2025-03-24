@@ -136,7 +136,7 @@ export default function Header() {
       {currentUser ?
       <div className=" flex gap-2" >
           <span className={`h-2 w-2 ${currentUser?.isActive ? "bg-green-600": "bg-red-600"} rounded-full relative top-1 left-12`}></span>
-          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden lg:inline" src={currentUser.profilePic.at(-1)} alt={currentUser.username} />
+          <img onClick={()=>navigate(`authors/author/${currentUser?._id}`)} className="h-10 w-10 aspect-w-1 aspect-h-1 rounded-full cursor-pointer hidden lg:inline" src={currentUser.profilePic.at(-1) || "https://tse3.mm.bing.net/th?id=OIP.dCpgPQ0i-xX2gZ-yonm54gHaHa&pid=Api&P=0&h=180"} alt={currentUser.username} />
           <div ref={dropdownRef} className=""> 
             <Dropdown label={currentUser?.fullName?.split(' ')[0].length > 10 ? currentUser?.fullName?.substr(0,10) : currentUser?.fullName.split(' ')[0]} outline arrowIcon={false}>
                <Dropdown.Header>

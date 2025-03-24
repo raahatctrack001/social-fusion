@@ -287,7 +287,7 @@ const AuthorHeader = ({ author, setAuthor, postCount }) => {
               <div onClick={()=>setShowDP(!showDP)} className="relative bottom-1 right-1 cursor-pointer"> <HiXCircle className="text-red-700 text-lg"/> </div>
             </div>
             <div className='max-w-lg'>
-              <img className='rounded-lg' src={author?.profilePic.at(-1)} alt="" />
+              <img className='rounded-lg' src={author?.profilePic.at(-1) || "https://tse3.mm.bing.net/th?id=OIP.dCpgPQ0i-xX2gZ-yonm54gHaHa&pid=Api&P=0&h=180"} alt="" />
               
             </div>
           </div>
@@ -326,7 +326,7 @@ const AuthorHeader = ({ author, setAuthor, postCount }) => {
               className={`w-36 h-36 ${stories?.length === 0 ? "bg-white dark:dark:bg-[rgb(16,23,42)]" : "bg-green-500"} rounded-full flex flex-col justify-center items-center`}>
               <img 
                 onClick={()=>setShowStory(!showStory)}
-                src={author.profilePic.at(-1) || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
+                src={author?.profilePic.at(-1) || "https://cdn4.sharechat.com/img_964705_8720d06_1675620962136_sc.jpg?tenant=sc&referrer=tag-service&f=136_sc.jpg"} 
                 alt="Author" 
                 className="w-32 h-32 rounded-full  object-cover cursor-pointer"
               />
