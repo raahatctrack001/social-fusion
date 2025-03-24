@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Alert, Button, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import {
   HiArrowCircleRight,
@@ -7,12 +7,9 @@ import {
   HiEyeOff,
   HiInformationCircle, 
 } from "react-icons/hi";
-import { Link, useNavigate } from 'react-router-dom'
-import { passwordSchema } from "../../../backend/src/Validators/user.validator";
+import { Link } from 'react-router-dom'
 import { apiEndPoints } from "../apiEndPoints/api.addresses";
-import { useRecoilState } from "recoil";
-import { profileState, registrationState } from "../store/userAtom";
-import { isBuffer } from "lodash";
+
 import LoaderPopup from "../Compnents/Loader";
 import OtpPopup from "../Compnents/OtpPopup";
 // import { register } from "module";
@@ -44,12 +41,12 @@ export default function Register() {
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [seePassword, setSeePassword] = useState(false);
   const [repeatPasswordFocus, setRepeatPasswordFocus] = useState(false);
-  const [agree, setAgree] = useState(false);
+
   const validationResults = validatePassword(registerData.password);
   const [showOTPBox, setShowOTPBox] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const navigate = useNavigate();
+
 
   const handleRegister = async (e)=>{
     e.preventDefault();
@@ -67,6 +64,21 @@ export default function Register() {
 
       if(registerData["password"] !== registerData["repeatPassword"]){
         setError("Looks like your passwords are in a disagreement. Maybe one needs to apologize?")
+        return;
+      }
+
+      const result = validatePassword(registerData.password);
+      if(!result.hasLowerCase){
+        setError("Lowercase letter missing!")
+        return;
+      }if(!result.hasUpperCase){
+        setError("Uppercase letter missing!")
+        return;
+      }if(!result.hasNumber){
+        setError("Numeric letter missing!")
+        return;
+      }if(!result.hasSpecialChar){
+        setError("Special character missing!")
         return;
       }
 
@@ -121,7 +133,7 @@ export default function Register() {
             <h1 className=" flex lg:mb-10 justify-center items-center text-3xl tracking-widest md:tracking-normal md:text-6xl font-bold mb-2 flex-nowrap"> Register Here </h1>
             <div className="border mt-5 pt-3 flex justify-center items-center gap-5 mb-5  rounded-lg px-3">
               {/* <p className="flex-1 w-full self-center whitespace-nowrap text-xl md:text-2xl xl:text-3xl font-bold  p-2 rounded-2xl text-gray-900 mb-5 flex justify-center">Soul Echo </p> */}
-              <span className="flex-3 font-semibold text-lg pb-4 ">Unleash your soul's voice <span className="hidden md:inline">—share your deepest thoughts and stories with us.</span></span>
+              <span className="flex-3 font-semibold text-lg pb-4 ">Unleash your soul&apos;s voice <span className="hidden md:inline">—share your deepest thoughts and stories with us.</span></span>
             </div>
             <p className="hidden md:inline font-semibold"> Your voice is unique, and your story is powerful. Join our community and share your journey with the world. Together, we inspire, connect, and grow. Register today and become a part of something extraordinary.</p>
           </div>     
@@ -180,7 +192,7 @@ export default function Register() {
                   (registerData.password && registerData.repeatPassword &&
                   repeatPasswordFocus)&&((registerData.password == registerData.repeatPassword) ? 
                   (<HiCheck className="w-10 text-2xl" />) : 
-                  (<p> password didn't matched </p>))}
+                  (<p> password didn&apos;t matched </p>))}
               </div>
             </div>
             <TextInput 

@@ -30,7 +30,7 @@ export default function UserAtHome({heading}){
         const response = await fetch(apiEndPoints.getUsersAddress(currentUserPage));
         if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();
-        setUsers(prevUsers => [...prevUsers, ...data.data?.safeUsers]);
+        setUsers(prevUsers => [...prevUsers, ...data?.data?.safeUsers]);
       } catch (err) {
         console.error("Error fetching users", err);
       } finally {
